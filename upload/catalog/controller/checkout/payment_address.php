@@ -51,6 +51,8 @@ class ControllerCheckoutPaymentAddress extends Controller {
 			$data['payment_address_custom_field'] = array();
 		}
 
+		$data['language'] = $this->config->get('config_language');
+
 		$this->response->setOutput($this->load->view('checkout/payment_address', $data));
 	}
 
@@ -61,12 +63,12 @@ class ControllerCheckoutPaymentAddress extends Controller {
 
 		// Validate if customer is logged in.
 		if (!$this->customer->isLogged()) {
-			$json['redirect'] = $this->url->link('checkout/checkout', '', true);
+			$json['redirect'] = $this->url->link('checkout/checkout', 'language=' . $this->config->get('config_language'));
 		}
 
 		// Validate cart has products and has stock.
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-			$json['redirect'] = $this->url->link('checkout/cart');
+			$json['redirect'] = $this->url->link('checkout/cart', 'language=' . $this->config->get('config_language'));
 		}
 
 		// Validate minimum quantity requirements.
@@ -82,7 +84,7 @@ class ControllerCheckoutPaymentAddress extends Controller {
 			}
 
 			if ($product['minimum'] > $product_total) {
-				$json['redirect'] = $this->url->link('checkout/cart');
+				$json['redirect'] = $this->url->link('checkout/cart', 'language=' . $this->config->get('config_language'));
 
 				break;
 			}
@@ -146,7 +148,7 @@ class ControllerCheckoutPaymentAddress extends Controller {
 					if ($custom_field['location'] == 'address') {
 						if ($custom_field['required'] && empty($this->request->post['custom_field'][$custom_field['location']][$custom_field['custom_field_id']])) {
 							$json['error']['custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
-						} elseif (($custom_field['type'] == 'text') && !empty($custom_field['validation']) && !filter_var($this->request->post['custom_field'][$custom_field['location']][$custom_field['custom_field_id']], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => $custom_field['validation'])))) {
+						} elseif (($custom_field['type'] == 'text') && !empty($custom_field['validation']) && !filter_var($this->request->post['custom_field'][$custom_field['location']][$custom_field['custom_field_id']], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/' . html_entity_decode($custom_field['validation'], ENT_QUOTES, 'UTF-8') . '/')))) {
 							$json['error']['custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
 						}
 					}

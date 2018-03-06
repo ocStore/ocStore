@@ -10,8 +10,8 @@ class ControllerExtensionPaymentAlipay extends Controller {
 		$config = array (
 			'app_id'               => $this->config->get('payment_alipay_app_id'),
 			'merchant_private_key' => $this->config->get('payment_alipay_merchant_private_key'),
-			'notify_url'           => HTTPS_SERVER . "payment_callback/alipay",
-			'return_url'           => $this->url->link('checkout/success'),
+			'notify_url'           => HTTP_SERVER . "payment_callback/alipay",
+			'return_url'           => $this->url->link('checkout/success', 'language=' . $this->config->get('config_language')),
 			'charset'              => "UTF-8",
 			'sign_type'            => "RSA2",
 			'gateway_url'          => $this->config->get('payment_alipay_test') == "sandbox" ? "https://openapi.alipaydev.com/gateway.do" : "https://openapi.alipay.com/gateway.do",
@@ -45,8 +45,8 @@ class ControllerExtensionPaymentAlipay extends Controller {
 		$config = array (
 			'app_id'               => $this->config->get('payment_alipay_app_id'),
 			'merchant_private_key' => $this->config->get('payment_alipay_merchant_private_key'),
-			'notify_url'           => HTTPS_SERVER . "payment_callback/alipay",
-			'return_url'           => $this->url->link('checkout/success'),
+			'notify_url'           => HTTP_SERVER . "payment_callback/alipay",
+			'return_url'           => $this->url->link('checkout/success', 'language=' . $this->config->get('config_language')),
 			'charset'              => "UTF-8",
 			'sign_type'            => "RSA2",
 			'gateway_url'          => $this->config->get('payment_alipay_test') == "sandbox" ? "https://openapi.alipaydev.com/gateway.do" : "https://openapi.alipay.com/gateway.do",

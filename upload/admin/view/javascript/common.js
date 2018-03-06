@@ -45,15 +45,10 @@ $(document).ready(function() {
 		$('[data-toggle=\'tooltip\']').tooltip({container: 'body'});
 	});
 
-	// https://github.com/opencart/opencart/issues/2595
-	$.event.special.remove = {
-		remove: function(o) {
-			if (o.handler) {
-				o.handler.apply(this, arguments);
-			}
-		}
-	}
-	
+	$('.date button, .time button, .datetime button').on('click', function() {
+		$(this).parent().parent().datetimepicker('toggle');
+	});
+
 	// tooltip remove
 	$('[data-toggle=\'tooltip\']').on('remove', function() {
 		$(this).tooltip('destroy');
@@ -63,7 +58,16 @@ $(document).ready(function() {
 	$(document).on('click', '[data-toggle=\'tooltip\']', function(e) {
 		$('body > .tooltip').remove();
 	});
-	
+
+	// https://github.com/opencart/opencart/issues/2595
+	$.event.special.remove = {
+		remove: function(o) {
+			if (o.handler) {
+				o.handler.apply(this, arguments);
+			}
+		}
+	}
+
 	$('#button-menu').on('click', function(e) {
 		e.preventDefault();
 		
@@ -125,6 +129,7 @@ $(document).ready(function() {
 				dataType: 'html',
 				beforeSend: function() {
 					$button.prop('disabled', true);
+
 					if ($icon.length) {
 						$icon.attr('class', 'fa fa-circle-o-notch fa-spin');
 					}
@@ -153,6 +158,25 @@ $(document).ready(function() {
 
 			$element.popover('destroy');
 		});
+	});
+
+	// table dropdown responsive fix
+	$('.table-responsive').on('shown.bs.dropdown', function(e) {
+		var t = $(this),
+			m = $(e.target).find('.dropdown-menu'),
+			tb = t.offset().top + t.height(),
+			mb = m.offset().top + m.outerHeight(true),
+			d = 20;
+
+		if (t[0].scrollWidth > t.innerWidth()) {
+			if (mb + d > tb) {
+				t.css('padding-bottom', ((mb + d) - tb));
+			}
+		} else {
+			t.css('overflow', 'visible');
+		}
+	}).on('hidden.bs.dropdown', function() {
+		$(this).css({'padding-bottom': '', 'overflow': ''});
 	});
 });
 

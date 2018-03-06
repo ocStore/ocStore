@@ -19,9 +19,13 @@ class Document {
 	private $styles = array();
 	private $scripts = array();
 	private $og_image;
+	private $image;
+	private $url;
+	private $type;
+	private $price;
 
 	/**
-     * 
+     *
      *
      * @param	string	$title
      */
@@ -30,8 +34,8 @@ class Document {
 	}
 
 	/**
-     * 
-	 * 
+     *
+	 *
 	 * @return	string
      */
 	public function getTitle() {
@@ -47,7 +51,7 @@ class Document {
 	}
 
 	/**
-     * 
+     *
      *
      * @param	string	$description
      */
@@ -56,10 +60,10 @@ class Document {
 	}
 
 	/**
-     * 
+     *
      *
      * @param	string	$description
-	 * 
+	 *
 	 * @return	string
      */
 	public function getDescription() {
@@ -67,7 +71,7 @@ class Document {
 	}
 
 	/**
-     * 
+     *
      *
      * @param	string	$keywords
      */
@@ -77,15 +81,15 @@ class Document {
 
 	/**
      *
-	 * 
+	 *
 	 * @return	string
      */
 	public function getKeywords() {
 		return $this->keywords;
 	}
-	
+
 	/**
-     * 
+     *
      *
      * @param	string	$href
 	 * @param	string	$rel
@@ -98,8 +102,8 @@ class Document {
 	}
 
 	/**
-     * 
-	 * 
+     *
+	 *
 	 * @return	array
      */
 	public function getLinks() {
@@ -107,7 +111,7 @@ class Document {
 	}
 
 	/**
-     * 
+     *
      *
      * @param	string	$href
 	 * @param	string	$rel
@@ -122,8 +126,8 @@ class Document {
 	}
 
 	/**
-     * 
-	 * 
+     *
+	 *
 	 * @return	array
      */
 	public function getStyles() {
@@ -131,7 +135,7 @@ class Document {
 	}
 
 	/**
-     * 
+     *
      *
      * @param	string	$href
 	 * @param	string	$postion
@@ -141,10 +145,10 @@ class Document {
 	}
 
 	/**
-     * 
+     *
      *
      * @param	string	$postion
-	 * 
+	 *
 	 * @return	array
      */
 	public function getScripts($postion = 'header') {

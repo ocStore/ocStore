@@ -119,7 +119,7 @@ class ModelCatalogProduct extends Model {
 				}
 
 				if (!empty($data['filter_description'])) {
-					$sql .= " OR pd.description LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
+					$sql .= " OR pd.description LIKE '%" . $this->db->escape((string)$data['filter_name']) . "%'";
 				}
 			}
 
@@ -205,7 +205,10 @@ class ModelCatalogProduct extends Model {
 		$query = $this->db->query($sql);
 
 		foreach ($query->rows as $result) {
+			// for never get one more time with same product id
+			if(!isset($product_data[$result['product_id']])){
 			$product_data[$result['product_id']] = $this->getProduct($result['product_id']);
+			}	
 		}
 
 		return $product_data;
@@ -476,7 +479,7 @@ class ModelCatalogProduct extends Model {
 				}
 
 				if (!empty($data['filter_description'])) {
-					$sql .= " OR pd.description LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
+					$sql .= " OR pd.description LIKE '%" . $this->db->escape((string)$data['filter_name']) . "%'";
 				}
 			}
 

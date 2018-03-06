@@ -24,7 +24,7 @@
       </ul>
     </div>
     {% endif %}
-    <div class="panel-body" id="search-container">
+    <div class="card-body" id="search-container">
       <div class="alert alert-danger" id="search-error" style="display:none;"></div>
       <div class="well">
         <div class="row">
@@ -40,7 +40,7 @@
       </div>
       <div class="well"> {{ text_not_in_catalog }}<a href="{{ url_advanced }}" id="create_new" class="btn btn-primary"><i class="fa fa-plus-circle"></i> {{ button_new }}</a> </div>
     </div>
-    <div class="panel-body" id="search-result-container" style="display:none;">
+    <div class="card-body" id="search-result-container" style="display:none;">
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
@@ -55,18 +55,18 @@
         </tbody>
       </table>
     </div>
-    <div class="panel-body" id="chosen-product" style="display:none;">
+    <div class="card-body" id="chosen-product" style="display:none;">
       <div id="chosen-product-preview" class="well" style="display:none;"></div>
       <div class="panel">
-        <div class="panel-body">
-          <form method="POST" action="{{ form_action }}" class="form-horizontal">
+        <div class="card-body">
+          <form method="POST" action="{{ form_action }}">
             <input type="hidden" name="asin" value="" />
             <input type="hidden" name="marketplace" value="{{ default_marketplace }}" />
             <input type="hidden" name="product_id" value="{{ product_id }}" />
             <input type="hidden" name="quantity" value="{{ quantity }}" id="quantity" />
             <ul class="nav nav-tabs">
               <li class="active"><a href="#required-info" data-toggle="tab">{{ tab_required }}</a></li>
-              <li><a href="#additional-info" data-toggle="tab">{{ tab_additional }}</a></li>
+              <li class="nav-item"><a href="#additional-info" data-toggle="tab">{{ tab_additional }}</a></li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="required-info">
@@ -87,11 +87,11 @@
                   <div class="col-sm-10">
                     <select name="condition" id="condition" class="form-control">
                       {% for value, title in conditions %}
-                      {% if value == default_condition %}
-                      <option selected="selected" value="{{ value }}">{{ title }}</option>
-                      {% else %}
-                      <option value="{{ value }}">{{ title }}</option>
-                      {% endif %}
+                        {% if value == default_condition %}
+                          <option selected="selected" value="{{ value }}">{{ title }}</option>
+                        {% else %}
+                          <option value="{{ value }}">{{ title }}</option>
+                        {% endif %}
                       {% endfor %}
                     </select>
                   </div>
@@ -129,37 +129,37 @@
                   <label class="col-sm-2 control-label" for="sale_price">{{ entry_sale_date }}</label>
                   <div class="col-sm-3">
                     <div class="input-group date">
-                      <input type="text" class="form-control" id="sale_from" data-date-format="YYYY-MM-DD" placeholder="{{ entry_from }}" name="sale_from">
-                      <span class="input-group-btn">
+                      <input type="text" class="form-control" id="sale_from" data-date-format="YYYY-MM-DD" data-locale="{{ datepicker }}" placeholder="{{ entry_from }}" name="sale_from">
+                      <div class="input-group-btn">
                       <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i></button>
-                      </span> </div>
+                      </div> </div>
                   </div>
                   <div class="col-sm-3">
                     <div class="input-group date">
-                      <input type="text" class="form-control" id="sale_to" data-date-format="YYYY-MM-DD" placeholder="{{ entry_to }}" name="sale_to">
-                      <span class="input-group-btn">
+                      <input type="text" class="form-control" id="sale_to" data-date-format="YYYY-MM-DD" data-locale="{{ datepicker }}" placeholder="{{ entry_to }}" name="sale_to">
+                      <div class="input-group-btn">
                       <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i></button>
-                      </span> </div>
+                      </div> </div>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-sm-2 control-label" for="start_selling">{{ entry_start_selling }}</label>
                   <div class="col-sm-3">
                     <div class="input-group date">
-                      <input type="text" class="form-control" id="start_selling" data-date-format="YYYY-MM-DD" placeholder="{{ entry_start_selling }}" name="start_selling">
-                      <span class="input-group-btn">
+                      <input type="text" class="form-control" id="start_selling" data-date-format="YYYY-MM-DD" data-locale="{{ datepicker }}" placeholder="{{ entry_start_selling }}" name="start_selling">
+                      <div class="input-group-btn">
                       <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i></button>
-                      </span> </div>
+                      </div> </div>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-sm-2 control-label" for="input-date-restock">{{ entry_restock_date }}</label>
                   <div class="col-sm-3">
                     <div class="input-group date">
-                      <input type="text" class="form-control" id="input-date-restock" data-date-format="YYYY-MM-DD" placeholder="{{ entry_restock_date }}" name="restock_date">
-                      <span class="input-group-btn">
+                      <input type="text" class="form-control" id="input-date-restock" data-date-format="YYYY-MM-DD" data-locale="{{ datepicker }}" placeholder="{{ entry_restock_date }}" name="restock_date">
+                      <div class="input-group-btn">
                       <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i></button>
-                      </span> </div>
+                      </div> </div>
                   </div>
                 </div>
               </div>
@@ -340,20 +340,8 @@
   });
 </script>
 <script type="text/javascript"><!--
-$('.date').datetimepicker({
-	language: '{{ datepicker }}',
-	pickTime: false
-});
-
-$('.datetime').datetimepicker({
-	language: '{{ datepicker }}',
-	pickDate: true,
-	pickTime: true
-});
-
-$('.time').datetimepicker({
-	language: '{{ datepicker }}',
-	pickDate: false
-});
+$('.date').datetimepicker();
+$('.time').datetimepicker();
+$('.datetime').datetimepicker();
 //--></script>
 {{ footer }}

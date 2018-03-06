@@ -13,32 +13,30 @@
       <h1>{{ heading_title }}</h1>
       <ul class="breadcrumb">
         {% for breadcrumb in breadcrumbs %}
-        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+          <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
         {% endfor %}
       </ul>
     </div>
   </div>
   <div class="container-fluid">{% if error_warning %}
-    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
+      <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>
     {% endif %}
     {% if success %}
-    <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
+      <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>
     {% endif %}
     <div class="row">
       <div id="filter-product" class="col-md-3 col-md-push-9 col-sm-12 hidden-sm hidden-xs">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title"><i class="fa fa-filter"></i> {{ text_filter }}</h3>
-          </div>
-          <div class="panel-body">
+        <div class="card">
+          <div class="card-header"><i class="fa fa-filter"></i> {{ text_filter }}</div>
+          <div class="card-body">
             <div class="form-group">
               <label class="control-label" for="input-name">{{ entry_name }}</label>
 			  <div class="input-group">
-              <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+              <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
 			  <div class="input-group-btn">
                     <button type="button" id="button-clear-input-name" class="btn btn-default"><i class="fa fa-times"></i></button>
 			</div>
@@ -47,7 +45,7 @@
             <div class="form-group">
               <label class="control-label" for="input-model">{{ entry_model }}</label>
 			  <div class="input-group">
-              <input type="text" name="filter_model" value="{{ filter_model }}" placeholder="{{ entry_model }}" id="input-model" class="form-control" />
+              <input type="text" name="filter_model" value="{{ filter_model }}" placeholder="{{ entry_model }}" id="input-model" class="form-control"/>
             <div class="input-group-btn">
                     <button type="button" id="button-clear-input-model" class="btn btn-default"><i class="fa fa-times"></i></button>
                   </div>
@@ -57,23 +55,23 @@
                  <label class="control-label" for="input-category-name">{{ entry_category }}</label> <label class="control-label pull-right" for="input-sub-category">{{ entry_sub_category }} <input type="checkbox" class="checkbox-inline" name="filter_sub_category" id="input-sub-category" class="form-control"{{ filter_sub_category}}    {% if filter_sub_category %} checked="checked" {% endif %} /></label>
                 <div class="clearfix"></div>
 				<div class="input-group">
-                  <input type="text" name="filter_category_name" value="{{ filter_category_name }}" placeholder="{{ entry_category }}" id="input-category-name" class="form-control" />
+                  <input type="text" name="filter_category_name" value="{{ filter_category_name }}" placeholder="{{ entry_category }}" id="input-category-name" class="form-control"/>
                   <div class="input-group-btn">
                     <button type="button" id="button-clear-input-category-name" class="btn btn-default"><i class="fa fa-times"></i></button>
                   </div>
                 </div>
-                <input type="hidden" name="filter_category" value="{{ filter_category }}" id="input-category" class="form-control" />
+                <input type="hidden" name="filter_category" value="{{ filter_category }}" id="input-category" class="form-control"/>
               </div>
 			  
 			<div class="form-group">
               <label class="control-label" for="input-manufacturer-name">{{ entry_manufacturer }}</label>
 			  <div class="input-group">
-				<input type="text" name="filter_manufacturer_name" value="{{ filter_manufacturer_name }}" placeholder="{{ entry_manufacturer }}" id="input-manufacturer" class="form-control" />
+				<input type="text" name="filter_manufacturer_name" value="{{ filter_manufacturer_name }}" placeholder="{{ entry_manufacturer }}" id="input-manufacturer" class="form-control"/>
 				
 				<div class="input-group-btn">
                     <button type="button" id="button-clear-input-manufacturer" class="btn btn-default"><i class="fa fa-times"></i></button>
 				</div>
-				  <input type="hidden" name="filter_manufacturer_id" value="{{ filter_manufacturer_id }}" id="input-manufacturer-id" class="form-control" />
+				  <input type="hidden" name="filter_manufacturer_id" value="{{ filter_manufacturer_id }}" id="input-manufacturer-id" class="form-control"/>
 				</div>
 			</div>
 				
@@ -81,12 +79,12 @@
 			<div class="form-group">
                 <label class="control-label" for="input-manufacturer-name">{{ entry_manufacturer }}</label>
                 <div class="input-group">
-                  <input type="text" name="filter_manufacturer_name" value="{{ filter_manufacturer_name }}" placeholder="{{ entry_manufacturer }}" id="input-manufacturer-name" class="form-control" />
+                  <input type="text" name="filter_manufacturer_name" value="{{ filter_manufacturer_name }}" placeholder="{{ entry_manufacturer }}" id="input-manufacturer-name" class="form-control"/>
                   <div class="input-group-btn">
                     <button type="button" id="button-clear-input-manufacturer-name" class="btn btn-default"><i class="fa fa-times"></i></button>
                   </div>
                 </div>
-                <input type="hidden" name="filter_manufacturer" value="{{ filter_manufacturer_name }}" id="input-manufacturer" class="form-control" />
+                <input type="hidden" name="filter_manufacturer" value="{{ filter_manufacturer_name }}" id="input-manufacturer" class="form-control"/>
               </div>
 			  -->
 			<div class="form-group">
@@ -94,7 +92,7 @@
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="input-group">
-                      <input type="text" name="filter_price_min" value="{{ filter_price_min }}" placeholder="{{ entry_min }}" id="input-price-min" class="form-control" />
+                      <input type="text" name="filter_price_min" value="{{ filter_price_min }}" placeholder="{{ entry_min }}" id="input-price-min" class="form-control"/>
                       <div class="input-group-btn">
                         <button type="button" id="button-clear-input-price-min" class="btn btn-default"><i class="fa fa-times"></i></button>
                       </div>
@@ -102,7 +100,7 @@
                   </div>
                   <div class="col-sm-6 pull-right">
                     <div class="input-group">
-                      <input type="text" name="filter_price_max" value="{{ filter_price_max }}" placeholder="{{ entry_max }}" id="input-price-max" class="form-control" />
+                      <input type="text" name="filter_price_max" value="{{ filter_price_max }}" placeholder="{{ entry_max }}" id="input-price-max" class="form-control"/>
                       <div class="input-group-btn">
                         <button type="button" id="button-clear-input-price-max" class="btn btn-default"><i class="fa fa-times"></i></button>
                       </div>
@@ -115,7 +113,7 @@
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="input-group">
-                      <input type="text" name="filter_quantity_min" value="{{ filter_quantity_min }}" placeholder="{{ entry_min }}" id="input-quantity-min" class="form-control" />
+                      <input type="text" name="filter_quantity_min" value="{{ filter_quantity_min }}" placeholder="{{ entry_min }}" id="input-quantity-min" class="form-control"/>
                       <div class="input-group-btn">
                         <button type="button" id="button-clear-input-quantity-min" class="btn btn-default"><i class="fa fa-times"></i></button>
                       </div>
@@ -123,7 +121,7 @@
                   </div>
                   <div class="col-sm-6 pull-right">
                     <div class="input-group">
-                      <input type="text" name="filter_quantity_max" value="{{ filter_quantity_max }}" placeholder="{{ entry_max }}" id="input-quantity-max" class="form-control" />
+                      <input type="text" name="filter_quantity_max" value="{{ filter_quantity_max }}" placeholder="{{ entry_max }}" id="input-quantity-max" class="form-control"/>
                       <div class="input-group-btn">
                         <button type="button" id="button-clear-input-quantity-max" class="btn btn-default"><i class="fa fa-times"></i></button>
                       </div>
@@ -132,80 +130,18 @@
                 </div>
 			</div>
             <div class="form-group">
-              <label class="control-label" for="input-status">{{ entry_status }}</label>
-              <select name="filter_status" id="input-status" class="form-control">
+              <label class="control-label" for="input-status">{{ entry_status }}</label> <select name="filter_status" id="input-status" class="form-control">
                 <option value=""></option>
-                
-                
-                
-                  
-                
-
-                  {% if filter_status == '1' %}
-
-                
-                
-                  
-                
-                
-                <option value="1" selected="selected">{{ text_enabled }}</option>
-                
-                
-                
-                  
-                
-
-                  {% else %}
-
-                
-                
-                  
-                
-                
-                <option value="1">{{ text_enabled }}</option>
-                
-                
-                
-                  
-                
-
-                  {% endif %}
-                  {% if filter_status == '0' %}
-
-                
-                
-                  
-                
-                
-                <option value="0" selected="selected">{{ text_disabled }}</option>
-                
-                
-                
-                  
-                
-
-                  {% else %}
-
-                
-                
-                  
-                
-                
-                <option value="0">{{ text_disabled }}</option>
-                
-                
-                
-                  
-                
-
-                  {% endif %}
-
-
-              
-              
-                
-              
-              
+                {% if filter_status == '1' %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                {% endif %}
+                {% if filter_status == '0' %}
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% else %}
+                  <option value="0">{{ text_disabled }}</option>
+                {% endif %}
               </select>
             </div>
 			<div class="form-group">
@@ -232,24 +168,22 @@
         </div>
       </div>
       <div class="col-md-9 col-md-pull-3 col-sm-12">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
-          </div>
-          <div class="panel-body">
+        <div class="card">
+          <div class="card-header"><i class="fa fa-list"></i> {{ text_list }}</div>
+          <div class="card-body">
             <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-product">
               <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                      <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').trigger('click');"/></td>
                       <td class="text-center">{{ column_image }}</td>
-                      <td class="text-left">{% if sort == 'pd.name' %} <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a> {% else %} <a href="{{ sort_name }}">{{ column_name }}</a> {% endif %}</td>
-                      <td class="text-left">{% if sort == 'p.model' %} <a href="{{ sort_model }}" class="{{ order|lower }}">{{ column_model }}</a> {% else %} <a href="{{ sort_model }}">{{ column_model }}</a> {% endif %}</td>
-                      <td class="text-right">{% if sort == 'p.price' %} <a href="{{ sort_price }}" class="{{ order|lower }}">{{ column_price }}</a> {% else %} <a href="{{ sort_price }}">{{ column_price }}</a> {% endif %}</td>
-                      <td class="text-right">{% if sort == 'p.quantity' %} <a href="{{ sort_quantity }}" class="{{ order|lower }}">{{ column_quantity }}</a> {% else %} <a href="{{ sort_quantity }}">{{ column_quantity }}</a> {% endif %}</td>
-                      <td class="text-left">{% if sort == 'p.status' %} <a href="{{ sort_status }}" class="{{ order|lower }}">{{ column_status }}</a> {% else %} <a href="{{ sort_status }}">{{ column_status }}</a> {% endif %}</td>
-                      <td class="text-left">{% if sort == 'p.noindex' %} <a href="{{ sort_noindex }}" class="{{ order|lower }}">{{ column_noindex }}</a> {% else %} <a href="{{ sort_noindex }}">{{ column_noindex }}</a> {% endif %}</td>
+                      <td class="text-left">{% if sort == 'pd.name' %}<a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>{% else %}<a href="{{ sort_name }}">{{ column_name }}</a> {% endif %}</td>
+					  <td class="text-left">{% if sort == 'p.model' %}<a href="{{ sort_model }}" class="{{ order|lower }}">{{ column_model }}</a>{% else %}<a href="{{ sort_model }}">{{ column_model }}</a> {% endif %}</td>
+                      <td class="text-right">{% if sort == 'p.price' %}<a href="{{ sort_price }}" class="{{ order|lower }}">{{ column_price }}</a>{% else %}<a href="{{ sort_price }}">{{ column_price }}</a> {% endif %}</td>
+                      <td class="text-right">{% if sort == 'p.quantity' %}<a href="{{ sort_quantity }}" class="{{ order|lower }}">{{ column_quantity }}</a>{% else %}<a href="{{ sort_quantity }}">{{ column_quantity }}</a> {% endif %}</td>
+                      <td class="text-left">{% if sort == 'p.status' %}<a href="{{ sort_status }}" class="{{ order|lower }}">{{ column_status }}</a>{% else %}<a href="{{ sort_status }}">{{ column_status }}</a> {% endif %}</td>
+                      <td class="text-left">{% if sort == 'p.noindex' %}<a href="{{ sort_noindex }}" class="{{ order|lower }}">{{ column_noindex }}</a>{% else %}<a href="{{ sort_noindex }}">{{ column_noindex }}</a> {% endif %}</td>
 					  <td class="text-right">{{ column_action }}</td>
                     </tr>
                   </thead>
@@ -259,11 +193,11 @@
                   {% for product in products %}
                   <tr>
                     <td class="text-center">{% if product.product_id in selected %}
-                      <input type="checkbox" name="selected[]" value="{{ product.product_id }}" checked="checked" />
+                      <input type="checkbox" name="selected[]" value="{{ product.product_id }}" checked="checked"/>
                       {% else %}
                       <input type="checkbox" name="selected[]" value="{{ product.product_id }}" />
                       {% endif %}</td>
-                    <td class="text-center">{% if product.image %} <img src="{{ product.image }}" alt="{{ product.name }}" class="img-thumbnail" /> {% else %} <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span> {% endif %}</td>
+                    <td class="text-center">{% if product.image %} <img src="{{ product.image }}" alt="{{ product.name }}" class="img-thumbnail"/> {% else %} <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span> {% endif %}</td>
                     <td class="text-left">{{ product.name }}</td>
                     <td class="text-left">{{ product.model }}</td>
                     <td class="text-right">{% if product.special %} <span style="text-decoration: line-through;">{{ product.price }}</span><br/>
@@ -286,7 +220,6 @@
                   </tr>
                   {% endif %}
                     </tbody>
-                  
                 </table>
               </div>
             </form>
@@ -299,7 +232,8 @@
       </div>
     </div>
   </div>
-  <script type="text/javascript"><!--
+</div>
+<script type="text/javascript"><!--
 $('#button-filter').on('click', function() {
 	var url = '';
 
@@ -372,11 +306,11 @@ $('#button-clear-filter').on('click', function() {
 $('button[form=\'form-product\']').on('click', function(e) {
 	$('#form-product').attr('action', $(this).attr('formaction'));
 });
-  
+
 $('input[name=\'filter_name\']').autocomplete({
 	'source': function(request, response) {
 		$.ajax({
-			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
 			dataType: 'json',
 			success: function(json) {
 				response($.map(json, function(item) {
@@ -400,7 +334,7 @@ $('#button-clear-input-name').on('click',function(){
 $('input[name=\'filter_model\']').autocomplete({
 	'source': function(request, response) {
 		$.ajax({
-			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_model=' +  encodeURIComponent(request),
+			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_model=' + encodeURIComponent(request),
 			dataType: 'json',
 			success: function(json) {
 				response($.map(json, function(item) {

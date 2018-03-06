@@ -6,12 +6,7 @@ class ControllerCommonHeader extends Controller {
 	public function index() {
 		$data['title'] = $this->document->getTitle();
 
-		if ($this->request->server['HTTPS']) {
-			$data['base'] = HTTPS_SERVER;
-		} else {
-			$data['base'] = HTTP_SERVER;
-		}
-
+		$data['base'] = HTTP_SERVER;
 		$data['description'] = $this->document->getDescription();
 		$data['keywords'] = $this->document->getKeywords();
 		$data['links'] = $this->document->getLinks();
@@ -27,22 +22,28 @@ class ControllerCommonHeader extends Controller {
 		if (!isset($this->request->get['user_token']) || !isset($this->session->data['user_token']) || ($this->request->get['user_token'] != $this->session->data['user_token'])) {
 			$data['logged'] = '';
 
-			$data['home'] = $this->url->link('common/dashboard', '', true);
+			$data['home'] = $this->url->link('common/login');
 		} else {
 			$data['logged'] = true;
 
-			$data['home'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true);
-			$data['logout'] = $this->url->link('common/logout', 'user_token=' . $this->session->data['user_token'], true);
-			$data['profile'] = $this->url->link('common/profile', 'user_token=' . $this->session->data['user_token'], true);
-			$data['new_category'] = $this->url->link('catalog/category/add', 'user_token=' . $this->session->data['user_token'], true);
-			$data['new_customer'] = $this->url->link('user/user/add', 'user_token=' . $this->session->data['user_token'], true);
-			$data['new_download'] = $this->url->link('catalog/download/add', 'user_token=' . $this->session->data['user_token'], true);
-			$data['new_manufacturer'] = $this->url->link('catalog/manufacturer/add', 'user_token=' . $this->session->data['user_token'], true);
-			$data['new_product'] = $this->url->link('catalog/product/add', 'user_token=' . $this->session->data['user_token'], true);
+			$data['home'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']);
+			$data['logout'] = $this->url->link('common/logout', 'user_token=' . $this->session->data['user_token']);
+			$data['profile'] = $this->url->link('common/profile', 'user_token=' . $this->session->data['user_token']);
+			$data['new_category'] = $this->url->link('catalog/category/add', 'user_token=' . $this->session->data['user_token']);
+			$data['new_customer'] = $this->url->link('user/user/add', 'user_token=' . $this->session->data['user_token']);
+			$data['new_download'] = $this->url->link('catalog/download/add', 'user_token=' . $this->session->data['user_token']);
+			$data['new_manufacturer'] = $this->url->link('catalog/manufacturer/add', 'user_token=' . $this->session->data['user_token']);
+			$data['new_product'] = $this->url->link('catalog/product/add', 'user_token=' . $this->session->data['user_token']);
 		
 			$this->load->model('user/user');
-	
 			$this->load->model('tool/image');
+
+			$data['firstname'] = '';
+			$data['lastname'] = '';
+			$data['user_group'] = '';
+			$data['image'] = $this->model_tool_image->resize('profile.png', 45, 45);
+						
+			$this->load->model('user/user');
 	
 			$user_info = $this->model_user_user->getUser($this->user->getId());
 	
@@ -54,15 +55,8 @@ class ControllerCommonHeader extends Controller {
 	
 				if (is_file(DIR_IMAGE . $user_info['image'])) {
 					$data['image'] = $this->model_tool_image->resize($user_info['image'], 45, 45);
-				} else {
-					$data['image'] = $this->model_tool_image->resize('profile.png', 45, 45);
 				}
-			} else {
-				$data['firstname'] = '';
-				$data['lastname'] = '';
-				$data['user_group'] = '';
-				$data['image'] = '';
-			}			
+			} 		
 			
 			// Online Stores
 			$data['stores'] = array();

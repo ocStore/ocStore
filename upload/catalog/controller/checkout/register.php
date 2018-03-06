@@ -64,7 +64,7 @@ class ControllerCheckoutRegister extends Controller {
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
 
 			if ($information_info) {
-				$data['text_agree'] = sprintf($this->language->get('text_agree'), $this->url->link('information/information/agree', 'information_id=' . $this->config->get('config_account_id'), true), $information_info['title'], $information_info['title']);
+				$data['text_agree'] = sprintf($this->language->get('text_agree'), $this->url->link('information/information/agree', 'language=' . $this->config->get('config_language') . '&information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
 			} else {
 				$data['text_agree'] = '';
 			}
@@ -73,7 +73,7 @@ class ControllerCheckoutRegister extends Controller {
 		}
 
 		$data['shipping_required'] = $this->cart->hasShipping();
-		
+
 		$this->response->setOutput($this->load->view('checkout/register', $data));
 	}
 
@@ -84,12 +84,12 @@ class ControllerCheckoutRegister extends Controller {
 
 		// Validate if customer is already logged out.
 		if ($this->customer->isLogged()) {
-			$json['redirect'] = $this->url->link('checkout/checkout', '', true);
+			$json['redirect'] = $this->url->link('checkout/checkout', 'language=' . $this->config->get('config_language'));
 		}
 
 		// Validate cart has products and has stock.
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-			$json['redirect'] = $this->url->link('checkout/cart');
+			$json['redirect'] = $this->url->link('checkout/cart', 'language=' . $this->config->get('config_language'));
 		}
 
 		// Validate minimum quantity requirements.
@@ -105,7 +105,7 @@ class ControllerCheckoutRegister extends Controller {
 			}
 
 			if ($product['minimum'] > $product_total) {
-				$json['redirect'] = $this->url->link('checkout/cart');
+				$json['redirect'] = $this->url->link('checkout/cart', 'language=' . $this->config->get('config_language'));
 
 				break;
 			}
@@ -191,7 +191,7 @@ class ControllerCheckoutRegister extends Controller {
 			foreach ($custom_fields as $custom_field) {
 				if ($custom_field['required'] && empty($this->request->post['custom_field'][$custom_field['location']][$custom_field['custom_field_id']])) {
 					$json['error']['custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
-				} elseif (($custom_field['type'] == 'text') && !empty($custom_field['validation']) && !filter_var($this->request->post['custom_field'][$custom_field['location']][$custom_field['custom_field_id']], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => $custom_field['validation'])))) {
+				} elseif (($custom_field['type'] == 'text') && !empty($custom_field['validation']) && !filter_var($this->request->post['custom_field'][$custom_field['location']][$custom_field['custom_field_id']], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/' . html_entity_decode($custom_field['validation'], ENT_QUOTES, 'UTF-8') . '/')))) {
 					$json['error']['custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
 				}
 			}
@@ -235,7 +235,7 @@ class ControllerCheckoutRegister extends Controller {
 					$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 				}
 			} else {
-				$json['redirect'] = $this->url->link('account/success');
+				$json['redirect'] = $this->url->link('account/success', 'language=' . $this->config->get('config_language'));
 			}
 
 			unset($this->session->data['guest']);

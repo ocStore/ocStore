@@ -49,6 +49,8 @@ These instructions are for a manual installation using FTP, cPanel or other web 
 
 8. Если вы загрузили скомпилированную версию с папкой «vendor» - она должна быть загружена выше корневой директории (в той же папке, где public_html или httpdocs)
 
+9. Если вы загрузили скомпилированную версию с папкой «vendor» - это должно быть загружено над веб-корнем (так что в той же папке, где public_html или httpdocs)
+
 - Установка на Windows -
 
 1. Загрузите все ваши файлы и папки на ваш сервер из папки «Upload». Можно разархивировать в любое место на Ваш выбор. Наприммер /wwwroot/store или /wwwroot
@@ -57,16 +59,6 @@ These instructions are for a manual installation using FTP, cPanel or other web 
 
 3. Для Windows убедитесь, что папки и файлы доступны для записи
 
-		system/storage/cache/
-		system/storage/download/
-		system/storage/logs/
-		system/storage/modification/
-		system/storage/session/
-		system/storage/upload/
-		system/storage/vendor/
-		image/
-		image/cache/
-		image/catalog/
 		config.php
 		admin/config.php
 

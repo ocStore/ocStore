@@ -34,7 +34,7 @@
           <div class="col-sm-12 text-right"> <a class="btn btn-primary" id="button-filter"><i class="fa fa-filter"></i> {{ button_filter }}</a> <a class="btn btn-primary" id="button-search"><i class="fa fa-search"></i> {{ button_search }}</a> </div>
         </div>
       </div>
-      <form id="bulk-list-form" class="form-horizontal">
+      <form id="bulk-list-form">
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
@@ -58,7 +58,7 @@
               <td class="text-right">{{ product.search_status }}</td>
               <td class="text-right">{% if product.matches is not null %}{{ product.matches }}{% else %}-{% endif %}</td>
               <td class="text-left" id="result-{{ product.product_id }}">
-                {% if product.matches !== null %}
+                {% if product.matches is defined and product.matches is not null %}
                   {% set checked = false %}
                   {% if product.matches > 0 %}
                     <input class="amazon-listing" type="radio" name="products[{{ product.product_id }}]" value=""/> {{ text_dont_list }}<br/>
@@ -117,10 +117,10 @@
             <div class="form-group">
               <label for="input-start" class="control-label">{{ entry_start_selling }}</label>
               <div class="input-group date">
-                <input type="text" class="form-control" id="input-start" data-date-format="YYYY-MM-DD" placeholder="{{ entry_start_selling }}" name="start_selling">
-                <span class="input-group-btn">
+                <input type="text" class="form-control" id="input-start" data-date-format="YYYY-MM-DD" data-locale="{{ datepicker }}" placeholder="{{ entry_start_selling }}" name="start_selling">
+                <div class="input-group-btn">
                 <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i></button>
-                </span> </div>
+                </div> </div>
             </div>
           </div>
         </div>

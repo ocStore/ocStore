@@ -4,6 +4,8 @@ $registry = new Registry();
 
 // Config
 $config = new Config();
+
+// Load the default config
 $config->load('default');
 $config->load($application_config);
 $registry->set('config', $config);
@@ -105,7 +107,7 @@ if ($config->get('session_autostart')) {
 
 	$session->start($session_id);
 
-	setcookie($config->get('session_name'), $session->getId(), ini_get('session.cookie_lifetime'), ini_get('session.cookie_path'), ini_get('session.cookie_domain'));
+	setcookie($config->get('session_name'), $session->getId(), (ini_get('session.cookie_lifetime') ? (time() + ini_get('session.cookie_lifetime')) : 0), ini_get('session.cookie_path'), ini_get('session.cookie_domain'));
 }
 
 // Cache
@@ -113,15 +115,12 @@ $registry->set('cache', new Cache($config->get('cache_engine'), $config->get('ca
 
 // Url
 if ($config->get('url_autostart')) {
-	$registry->set('url', new Url($config->get('site_url'), $config->get('site_ssl')));
+	$registry->set('url', new Url($config->get('site_url')));
 }
 
 // Language
 $language = new Language($config->get('language_directory'));
 $registry->set('language', $language);
-
-// OpenBay Pro
-$registry->set('openbay', new Openbay($registry));
 
 // Document
 $registry->set('document', new Document());

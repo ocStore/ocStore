@@ -1,30 +1,28 @@
 <?php
 class ModelExtensionTotalCoupon extends Model {
 	public function getCoupon($code) {
-		$status = true;
-
 		$coupon_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "coupon` WHERE code = '" . $this->db->escape($code) . "' AND ((date_start = '0000-00-00' OR date_start < NOW()) AND (date_end = '0000-00-00' OR date_end > NOW())) AND status = '1'");
 
 		if ($coupon_query->num_rows) {
 			if ($coupon_query->row['total'] > $this->cart->getSubTotal()) {
-				$status = false;
+				return false;
 			}
 
 			$coupon_total = $this->getTotalCouponHistoriesByCoupon($code);
 
 			if ($coupon_query->row['uses_total'] > 0 && ($coupon_total >= $coupon_query->row['uses_total'])) {
-				$status = false;
+				return false;
 			}
 
 			if ($coupon_query->row['logged'] && !$this->customer->getId()) {
-				$status = false;
+				return false;
 			}
 
 			if ($this->customer->getId()) {
 				$customer_total = $this->getTotalCouponHistoriesByCustomerId($code, $this->customer->getId());
 				
 				if ($coupon_query->row['uses_customer'] > 0 && ($customer_total >= $coupon_query->row['uses_customer'])) {
-					$status = false;
+					return false;
 				}
 			}
 
@@ -68,31 +66,29 @@ class ModelExtensionTotalCoupon extends Model {
 				}
 
 				if (!$product_data) {
-					$status = false;
+					return false;
 				}
 			}
 		} else {
-			$status = false;
+			return false;
 		}
 
-		if ($status) {
-			return array(
-				'coupon_id'     => $coupon_query->row['coupon_id'],
-				'code'          => $coupon_query->row['code'],
-				'name'          => $coupon_query->row['name'],
-				'type'          => $coupon_query->row['type'],
-				'discount'      => $coupon_query->row['discount'],
-				'shipping'      => $coupon_query->row['shipping'],
-				'total'         => $coupon_query->row['total'],
-				'product'       => $product_data,
-				'date_start'    => $coupon_query->row['date_start'],
-				'date_end'      => $coupon_query->row['date_end'],
-				'uses_total'    => $coupon_query->row['uses_total'],
-				'uses_customer' => $coupon_query->row['uses_customer'],
-				'status'        => $coupon_query->row['status'],
-				'date_added'    => $coupon_query->row['date_added']
-			);
-		}
+		return array(
+			'coupon_id'     => $coupon_query->row['coupon_id'],
+			'code'          => $coupon_query->row['code'],
+			'name'          => $coupon_query->row['name'],
+			'type'          => $coupon_query->row['type'],
+			'discount'      => $coupon_query->row['discount'],
+			'shipping'      => $coupon_query->row['shipping'],
+			'total'         => $coupon_query->row['total'],
+			'product'       => $product_data,
+			'date_start'    => $coupon_query->row['date_start'],
+			'date_end'      => $coupon_query->row['date_end'],
+			'uses_total'    => $coupon_query->row['uses_total'],
+			'uses_customer' => $coupon_query->row['uses_customer'],
+			'status'        => $coupon_query->row['status'],
+			'date_added'    => $coupon_query->row['date_added']
+		);
 	}
 
 	public function getTotal($total) {

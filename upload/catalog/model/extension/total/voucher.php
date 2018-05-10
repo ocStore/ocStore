@@ -11,8 +11,6 @@ class ModelExtensionTotalVoucher extends Model {
 	}
 
 	public function getVoucher($code) {
-		$status = true;
-
 		$voucher_query = $this->db->query("SELECT *, vtd.name AS theme FROM " . DB_PREFIX . "voucher v LEFT JOIN " . DB_PREFIX . "voucher_theme vt ON (v.voucher_theme_id = vt.voucher_theme_id) LEFT JOIN " . DB_PREFIX . "voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE v.code = '" . $this->db->escape($code) . "' AND vtd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND v.status = '1'");
 
 		if ($voucher_query->num_rows) {
@@ -26,13 +24,13 @@ class ModelExtensionTotalVoucher extends Model {
 				$order_query = $this->db->query("SELECT order_id FROM `" . DB_PREFIX . "order` WHERE order_id = '" . (int)$voucher_query->row['order_id'] . "' AND order_status_id IN(" . implode(",", $implode) . ")");
 
 				if (!$order_query->num_rows) {
-					$status = false;
+					return false;
 				}
 
 				$order_voucher_query = $this->db->query("SELECT order_voucher_id FROM `" . DB_PREFIX . "order_voucher` WHERE order_id = '" . (int)$voucher_query->row['order_id'] . "' AND voucher_id = '" . (int)$voucher_query->row['voucher_id'] . "'");
 
 				if (!$order_voucher_query->num_rows) {
-					$status = false;
+					return false;
 				}
 			}
 
@@ -45,29 +43,27 @@ class ModelExtensionTotalVoucher extends Model {
 			}
 
 			if ($amount <= 0) {
-				$status = false;
+				return false;
 			}
 		} else {
-			$status = false;
+			return false;
 		}
 
-		if ($status) {
-			return array(
-				'voucher_id'       => $voucher_query->row['voucher_id'],
-				'code'             => $voucher_query->row['code'],
-				'from_name'        => $voucher_query->row['from_name'],
-				'from_email'       => $voucher_query->row['from_email'],
-				'to_name'          => $voucher_query->row['to_name'],
-				'to_email'         => $voucher_query->row['to_email'],
-				'voucher_theme_id' => $voucher_query->row['voucher_theme_id'],
-				'theme'            => $voucher_query->row['theme'],
-				'message'          => $voucher_query->row['message'],
-				'image'            => $voucher_query->row['image'],
-				'amount'           => $amount,
-				'status'           => $voucher_query->row['status'],
-				'date_added'       => $voucher_query->row['date_added']
-			);
-		}
+		return array(
+			'voucher_id'       => $voucher_query->row['voucher_id'],
+			'code'             => $voucher_query->row['code'],
+			'from_name'        => $voucher_query->row['from_name'],
+			'from_email'       => $voucher_query->row['from_email'],
+			'to_name'          => $voucher_query->row['to_name'],
+			'to_email'         => $voucher_query->row['to_email'],
+			'voucher_theme_id' => $voucher_query->row['voucher_theme_id'],
+			'theme'            => $voucher_query->row['theme'],
+			'message'          => $voucher_query->row['message'],
+			'image'            => $voucher_query->row['image'],
+			'amount'           => $amount,
+			'status'           => $voucher_query->row['status'],
+			'date_added'       => $voucher_query->row['date_added']
+		);
 	}
 
 	public function getTotal($total) {

@@ -46,15 +46,23 @@ class ControllerCommonCart extends Controller {
 
 			array_multisort($sort_order, SORT_ASC, $totals);
 		}
+		
+		$products = $this->cart->getProducts();
+		
+		$count_products = 0;
+		
+		foreach ($products as $product) {
+			$count_products += $product['quantity'];
+		}
 
-		$data['text_items'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));
+		$data['text_items'] = sprintf($this->language->get('text_items'), $count_products + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));
 
 		$this->load->model('tool/image');
 		$this->load->model('tool/upload');
 
 		$data['products'] = array();
 
-		foreach ($this->cart->getProducts() as $product) {
+		foreach ($products as $product) {
 			if ($product['image']) {
 				$image = $this->model_tool_image->resize($product['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_height'));
 			} else {
@@ -126,7 +134,7 @@ class ControllerCommonCart extends Controller {
 		foreach ($totals as $total) {
 			$data['totals'][] = array(
 				'title' => $total['title'],
-				'text'  => $this->currency->format($total['value'], $this->session->data['currency']),
+				'text'  => $this->currency->format($total['value'], $this->session->data['currency'])
 			);
 		}
 

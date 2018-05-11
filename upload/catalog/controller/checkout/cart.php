@@ -16,9 +16,20 @@ class ControllerCheckoutCart extends Controller {
 			'text' => $this->language->get('heading_title'),
 			'href' => $this->url->link('checkout/cart', 'language=' . $this->config->get('config_language'))
 		);
+		
+		$products = $this->cart->getProducts();
+		
+		$hasstock = true;
+		
+		foreach ($products as $product) {
+			if (!$product['stock']) {
+				$hasstock = false;
+				break;
+			}
+		}
 
-		if ($this->cart->hasProducts() || !empty($this->session->data['vouchers'])) {
-			if (!$this->cart->hasStock() && (!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning'))) {
+		if ($products || !empty($this->session->data['vouchers'])) {
+			if (!$hasstock && (!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning'))) {
 				$data['error_warning'] = $this->language->get('error_stock');
 			} elseif (isset($this->session->data['error'])) {
 				$data['error_warning'] = $this->session->data['error'];
@@ -62,8 +73,6 @@ class ControllerCheckoutCart extends Controller {
 			);
 
 			$data['products'] = array();
-
-			$products = $this->cart->getProducts();
 
 			foreach ($products as $product) {
 				$product_total = 0;
@@ -216,8 +225,6 @@ class ControllerCheckoutCart extends Controller {
 			$data['continue'] = $this->url->link('common/home', 'language=' . $this->config->get('config_language'));
 
 			$data['checkout'] = $this->url->link('checkout/checkout', 'language=' . $this->config->get('config_language'));
-
-			$this->load->model('setting/extension');
 
 			$data['modules'] = array();
 

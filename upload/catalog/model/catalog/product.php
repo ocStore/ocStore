@@ -1,7 +1,7 @@
 <?php
 class ModelCatalogProduct extends Model {
 	public function updateViewed($product_id) {
-		$this->db->query("UPDATE " . DB_PREFIX . "product SET viewed = (viewed + 1) WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("UPDATE LOW_PRIORITY " . DB_PREFIX . "product SET viewed = (viewed + 1) WHERE product_id = '" . (int)$product_id . "'");
 	}
 
 	public function getProduct($product_id) {

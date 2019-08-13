@@ -134,7 +134,7 @@ class ModelBlogCategory extends Model {
 		}
 		
 		// SEO URL
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE query = 'category_id=" . (int)$category_id . "'");
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE query = 'blog_category_id=" . (int)$blog_category_id . "'");
 
 		if (isset($data['category_seo_url'])) {
 			foreach ($data['category_seo_url'] as $store_id => $language) {

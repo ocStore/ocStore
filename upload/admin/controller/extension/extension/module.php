@@ -156,6 +156,8 @@ class ControllerExtensionExtensionModule extends Controller {
 					$module_data = array();
 					$modules = $this->model_setting_module->getModulesByCode($extension);
 					foreach ($modules as $module) {
+						$setting_info = json_decode($module['setting'], true);
+
 						$module_data[] = array(
 						'module_id' => $module['module_id'],
 						'name'      => $module['name'],

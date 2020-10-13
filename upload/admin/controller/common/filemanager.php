@@ -19,9 +19,21 @@ class ControllerCommonFileManager extends Controller {
 		// Make sure we have the correct directory
 		if (isset($this->request->get['directory'])) {
 			$directory = rtrim(DIR_IMAGE . 'catalog/' . str_replace('*', '', $this->request->get['directory']), '/');
+		} else if (!empty($this->session->data['file_manager_directory'])) {
+			$directory = $this->session->data['file_manager_directory'];
 		} else {
 			$directory = DIR_IMAGE . 'catalog';
 		}
+
+		if (!file_exists($directory)) $directory = DIR_IMAGE . 'catalog';
+		$this->session->data['file_manager_directory'] = $directory;
+		
+		$path = '/' . trim(utf8_substr($directory, utf8_strlen(DIR_IMAGE . 'catalog')), '/');
+		
+		if ($directory != DIR_IMAGE . 'catalog' && !isset($this->request->get['directory'])) $this->request->get['directory'] = $path;
+		
+		$data['heading_title'] = $this->language->get('heading_title') . ' - ' . $path;
+		
 
 		if (isset($this->request->get['page'])) {
 			$page = $this->request->get['page'];
@@ -125,11 +137,11 @@ class ControllerCommonFileManager extends Controller {
 		$url = '';
 
 		if (isset($this->request->get['directory'])) {
-			$pos = strrpos($this->request->get['directory'], '/');
-
-			if ($pos) {
-				$url .= '&directory=' . urlencode(substr($this->request->get['directory'], 0, $pos));
-			}
+			$dir_part = explode('/', $this->request->get['directory']);
+			
+			array_pop($dir_part);
+			
+			$url .= '&directory=' . urlencode(implode('/', $dir_part));
 		}
 
 		if (isset($this->request->get['target'])) {

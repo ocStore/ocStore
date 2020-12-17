@@ -85,7 +85,7 @@
                       <td class="text-left">{{ modification.status }}</td>
                       <td class="text-left">{{ modification.date_added }}</td>
                       <td class="text-right">{% if modification.link %}
-                        <a href="{{ modification.link }}" data-toggle="tooltip" title="{{ button_link }}" class="btn btn-info" target="_blank"><i class="fa fa-link"></i></a>
+                        <a href="{{ modification.link }}" data-toggle="tooltip" title="{{ button_link }}" class="btn btn-info" rel="noreferrer" target="_blank"><i class="fa fa-link"></i></a>
                         {% else %}
                         <button type="button" class="btn btn-info" disabled="disabled"><i class="fa fa-link"></i></button>
                         {% endif %}

@@ -14,7 +14,7 @@ final class DB {
 	public function __construct($registry) {
 		$this->db = $registry->get('db');
 		
-		$this->expire = ini_get('session.gc_maxlifetime');
+		$this->expire = ini_get('session.cookie_lifetime') > 0 ? ini_get('session.cookie_lifetime') : ini_get('session.gc_maxlifetime');
 		
 		// Очистка устаревших сессий в таблице oc_session
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "session` WHERE expire < '" . $this->db->escape(date('Y-m-d H:i:s')) . "'");

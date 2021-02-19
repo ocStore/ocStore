@@ -52,6 +52,14 @@ class SeoPro {
 	
 	public function prepareRoute($parts) {
 		
+		// check double slashes
+		$current_url = $this->request->server['REQUEST_URI'];
+		if (preg_match('!/{2,}!', $current_url) ){
+			$url = preg_replace('!/{2,}!', '/', $current_url);
+			$this->response->redirect($url, 301);
+			exit;
+		}
+		
 		if (!empty($parts) && is_array($parts)) {
 
 			foreach($parts as $id => $part) {
@@ -125,6 +133,14 @@ class SeoPro {
 			$this->request->get['route'] = 'blog/category';
 		} 
 		//end blog
+		
+		// fix https://demo.ocstore.com/desktops/mac/about_us etc
+		if ((isset($this->request->get['path']) && isset($this->request->get['manufacturer_id'])) || (isset($this->request->get['path']) && isset($this->request->get['information_id'])) || (isset($this->request->get['manufacturer_id']) && isset($this->request->get['product_id'])) ||	(isset($this->request->get['manufacturer_id']) && isset($this->request->get['information_id']))) {
+			$this->request->get['route'] = 'error/not_found';
+			return [];
+		}
+				
+				
 		return $parts;
 	}
 	
@@ -530,6 +546,8 @@ class SeoPro {
 		}
 
 		$url = str_replace('&amp;', '&', $host . ltrim($uri, '/'));
+		//fix utm on homepage https://demo.ocstore.com/?utm_medium=test
+		$url = str_replace(HTTPS_SERVER . '?', rtrim(HTTPS_SERVER, '/').'?', $url); 
 		$seo = str_replace('&amp;', '&', $this->url->link($route, $this->getQueryString(array('_route_', 'route')), $_SERVER['HTTPS']));
 	
 

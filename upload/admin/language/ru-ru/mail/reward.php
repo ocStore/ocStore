@@ -1,0 +1,8 @@
+<?php
+// *	@source		See SOURCE.txt for source and other copyright.
+// *	@license	GNU General Public License version 3; see LICENSE.txt
+
+// Text
+$_['text_subject']  = '%s - Бонусные баллы';
+$_['text_received'] = 'Вы получили %s бонусных баллов!';
+$_['text_total']    = 'Общее число бонусных баллов %s.';

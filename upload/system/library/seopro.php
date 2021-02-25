@@ -156,9 +156,6 @@ class SeoPro {
 				$route = 'product/product';
 				$path = '';
 				$product_id = $data['product_id'];
-				if (isset($data['path'])) {
-					$path = $this->getCategoryByProduct($product_id);
-				}
 				
 				//start add valide get-param
 				if ($this->valide_get_param) {
@@ -174,6 +171,11 @@ class SeoPro {
 				
 				unset($data);
 				$data['route'] = $route;
+				
+				if ($this->config->get('config_seo_url_include_path')) {
+					$data['path'] = $this->getCategoryByProduct($product_id);
+					if (!$data['path']) unset($data['path']);
+				}
 				
 				if ($path && $this->config->get('config_seo_url_include_path')) {
 					$data['path'] = $path;

@@ -100,7 +100,7 @@ class SeoPro {
 				unset($parts[$id]);
 			}	
 		
-			if(!$query) {
+			if (!empty($query)) {
 				$this->request->get['route'] = 'error/not_found';
 				return [];
 			}

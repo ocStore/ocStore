@@ -406,7 +406,9 @@ class ModelBlogArticle extends Model {
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "article_related WHERE article_id = '" . (int)$article_id . "'");
 
 		foreach ($query->rows as $result) {
-			$article_related_data[] = $result['related_id'];
+			if ($result['related_id'] != $article_id) {
+				$article_related_data[] = $result['related_id'];
+			}
 		}
 
 		return $article_related_data;

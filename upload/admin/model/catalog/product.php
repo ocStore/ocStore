@@ -455,8 +455,10 @@ class ModelCatalogProduct extends Model {
 				foreach ($categories as $category) {
 					$implode_data[] = "p2c.category_id = '" . (int)$category['category_id'] . "'";
 				}
-				
-				$sql .= " AND (" . implode(' OR ', $implode_data) . ")";
+
+				if ($implode_data) {
+					$sql .= " AND (" . implode(' OR ', $implode_data) . ")";
+				}
 			} else {
 				if ((int)$data['filter_category'] > 0) {
 					$sql .= " AND p2c.category_id = '" . (int)$data['filter_category'] . "'";
@@ -803,8 +805,10 @@ class ModelCatalogProduct extends Model {
 				foreach ($categories as $category) {
 					$implode_data[] = "p2c.category_id = '" . (int)$category['category_id'] . "'";
 				}
-				
-				$sql .= " AND (" . implode(' OR ', $implode_data) . ")";
+
+				if ($implode_data) {
+					$sql .= " AND (" . implode(' OR ', $implode_data) . ")";
+				}
 			} else {
 				if ((int)$data['filter_category'] > 0) {
 					$sql .= " AND p2c.category_id = '" . (int)$data['filter_category'] . "'";

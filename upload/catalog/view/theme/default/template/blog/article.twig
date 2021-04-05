@@ -65,7 +65,6 @@
       {% if products %}
       <h3>{{ text_related_product }}</h3>
       <div class="row"> {% set i = 0 %}
-        {% for product in products %}
         {% if column_left and column_right %}
         {% set class = 'col-xs-8 col-sm-6' %}
         {% elseif column_left or column_right %}
@@ -73,6 +72,7 @@
         {% else %}
         {% set class = 'col-xs-6 col-sm-3' %}
         {% endif %}
+        {% for product in products %}
         <div class="{{ class }}">
           <div class="product-thumb transition">
             <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
@@ -111,7 +111,6 @@
 		{% if articles %}
       <h3>{{ text_related }}</h3>
       <div class="row"> {% set i = 0 %}
-        {% for article in articles %}
         {% if column_left and column_right %}
         {% set class = 'col-xs-8 col-sm-6' %}
         {% elseif column_left or column_right %}
@@ -119,6 +118,7 @@
         {% else %}
         {% set class = 'col-xs-6 col-sm-3' %}
         {% endif %}
+        {% for article in articles %}
         <div class="{{ class }}">
           <div class="product-thumb transition">
             <div class="image"><a href="{{ article.href }}"><img src="{{ article.thumb }}" alt="{{ article.name }}" title="{{ article.name }}" class="img-responsive" /></a></div>
@@ -402,4 +402,4 @@ $(document).ready(function() {
   
 });
 --></script>
-{{ footer }} 
+{{ footer }}

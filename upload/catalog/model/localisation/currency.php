@@ -1,7 +1,7 @@
 <?php
 class ModelLocalisationCurrency extends Model {
 	public function getCurrencyByCode($currency) {
-		$query = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "currency` WHERE `code` = '" . $this->db->escape($currency) . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "currency` WHERE `code` = '" . $this->db->escape($currency) . "' AND `status` = '1'");
 
 		return $query->row;
 	}

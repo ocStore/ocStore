@@ -37,9 +37,14 @@
       </div>
     </div>
   </div>
-  {% if categories %}
-  <script type="text/javascript"><!--
+{% if categories %}
+<script type="text/javascript"><!--
+if (window.sessionStorage.getItem('extension')) {
+	$('select[name="type"]').val(window.sessionStorage.getItem('extension'));
+}
+
 $('select[name="type"]').on('change', function() {
+	window.sessionStorage.setItem('extension', $('select[name="type"]').val());
 	$.ajax({
 		url: $('select[name="type"]').val(),
 		dataType: 'html',
@@ -112,6 +117,6 @@ $('#extension').on('click', '.btn-danger, .btn-warning', function(e) {
 	}
 });
 //--></script>
-  {% endif %}
+{% endif %}
 </div>
-{{ footer }} 
+{{ footer }}

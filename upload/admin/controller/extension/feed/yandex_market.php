@@ -28,6 +28,8 @@ class ControllerExtensionFeedYandexMarket extends Controller {
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=feed', true));
 		}
 
+		$data['help_desc_html'] = htmlspecialchars($this->language->get('help_desc_html'));
+
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
 		} else {
@@ -160,12 +162,20 @@ class ControllerExtensionFeedYandexMarket extends Controller {
 			$data['feed_yandex_market_vendorcode'] = 'sku';
 		}
 
+		if (isset($this->request->post['feed_yandex_market_barcode'])) {
+			$data['feed_yandex_market_barcode'] = $this->request->post['feed_yandex_market_barcode'];
+		} elseif ($this->config->has('feed_yandex_market_barcode')) {
+			$data['feed_yandex_market_barcode'] = $this->config->get('feed_yandex_market_barcode');
+		} else {
+			$data['feed_yandex_market_barcode'] = 'ean';
+		}
+
 		if (isset($this->request->post['feed_yandex_market_image'])) {
 			$data['feed_yandex_market_image'] = $this->request->post['feed_yandex_market_image'];
 		} elseif ($this->config->has('feed_yandex_market_image')) {
 			$data['feed_yandex_market_image'] = $this->config->get('feed_yandex_market_image');
 		} else {
-			$data['feed_yandex_market_image'] = '1';
+			$data['feed_yandex_market_image'] = 1;
 		}
 
 		if (isset($this->request->post['feed_yandex_market_image_width'])) {
@@ -173,7 +183,7 @@ class ControllerExtensionFeedYandexMarket extends Controller {
 		} elseif ($this->config->has('feed_yandex_market_image_width')) {
 			$data['feed_yandex_market_image_width'] = $this->config->get('feed_yandex_market_image_width');
 		} else {
-			$data['feed_yandex_market_image_width'] = '600';
+			$data['feed_yandex_market_image_width'] = 600;
 		}
 
 		if (isset($this->request->post['feed_yandex_market_image_height'])) {
@@ -181,7 +191,7 @@ class ControllerExtensionFeedYandexMarket extends Controller {
 		} elseif ($this->config->has('feed_yandex_market_image_height')) {
 			$data['feed_yandex_market_image_height'] = $this->config->get('feed_yandex_market_image_height');
 		} else {
-			$data['feed_yandex_market_image_height'] = '600';
+			$data['feed_yandex_market_image_height'] = 600;
 		}
 
 		if (isset($this->request->post['feed_yandex_market_image_quantity'])) {
@@ -189,7 +199,23 @@ class ControllerExtensionFeedYandexMarket extends Controller {
 		} elseif ($this->config->has('feed_yandex_market_image_quantity')) {
 			$data['feed_yandex_market_image_quantity'] = $this->config->get('feed_yandex_market_image_quantity');
 		} else {
-			$data['feed_yandex_market_image_quantity'] = '10';
+			$data['feed_yandex_market_image_quantity'] = 10;
+		}
+
+		if (isset($this->request->post['feed_yandex_market_desc_html'])) {
+			$data['feed_yandex_market_desc_html'] = $this->request->post['feed_yandex_market_desc_html'];
+		} elseif ($this->config->has('feed_yandex_market_desc_html')) {
+			$data['feed_yandex_market_desc_html'] = $this->config->get('feed_yandex_market_desc_html');
+		} else {
+			$data['feed_yandex_market_desc_html'] = 1;
+		}
+
+		if (isset($this->request->post['feed_yandex_market_param'])) {
+			$data['feed_yandex_market_param'] = $this->request->post['feed_yandex_market_param'];
+		} elseif ($this->config->has('feed_yandex_market_param')) {
+			$data['feed_yandex_market_param'] = $this->config->get('feed_yandex_market_param');
+		} else {
+			$data['feed_yandex_market_param'] = 0;
 		}
 
 		if (isset($this->request->post['feed_yandex_market_main_category'])) {
@@ -197,7 +223,7 @@ class ControllerExtensionFeedYandexMarket extends Controller {
 		} elseif ($this->config->has('feed_yandex_market_main_category')) {
 			$data['feed_yandex_market_main_category'] = $this->config->get('feed_yandex_market_main_category');
 		} else {
-			$data['feed_yandex_market_main_category'] = '1';
+			$data['feed_yandex_market_main_category'] = 1;
 		}
 
 		$this->load->model('catalog/category');
@@ -258,10 +284,24 @@ class ControllerExtensionFeedYandexMarket extends Controller {
 			$data['feed_yandex_market_out_of_stock'] = 5;
 		}
 
+		if (isset($this->request->post['feed_yandex_market_preorder'])) {
+			$data['feed_yandex_market_preorder'] = $this->request->post['feed_yandex_market_preorder'];
+		} elseif ($this->config->get('feed_yandex_market_preorder')) {
+			$data['feed_yandex_market_preorder'] = $this->config->get('feed_yandex_market_preorder');
+		} else {
+			$data['feed_yandex_market_preorder'] = 8;
+		}
+
 		if (isset($this->request->post['feed_yandex_market_quantity_status'])) {
 			$data['feed_yandex_market_quantity_status'] = $this->request->post['feed_yandex_market_quantity_status'];
 		} else {
 			$data['feed_yandex_market_quantity_status'] = $this->config->get('feed_yandex_market_quantity_status');
+		}
+
+		if (isset($this->request->post['feed_yandex_market_from_charset'])) {
+			$data['feed_yandex_market_from_charset'] = $this->request->post['feed_yandex_market_from_charset'];
+		} else {
+			$data['feed_yandex_market_from_charset'] = $this->config->get('feed_yandex_market_from_charset');
 		}
 
 		$data['data_feed'] = HTTP_CATALOG . 'index.php?route=extension/feed/yandex_market' . ($this->config->get('feed_yandex_market_secret_key') ? '&secret_key=' . $this->config->get('feed_yandex_market_secret_key') : false);

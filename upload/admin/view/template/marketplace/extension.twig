@@ -40,11 +40,13 @@
 {% if categories %}
 <script type="text/javascript"><!--
 if (window.sessionStorage.getItem('extension')) {
-	$('select[name="type"]').val(window.sessionStorage.getItem('extension'));
+	$('select[name="type"]').val(window.sessionStorage.getItem('extension').replace('user_token=', 'user_token=' + getURLVar('user_token')));
 }
 
 $('select[name="type"]').on('change', function() {
-	window.sessionStorage.setItem('extension', $('select[name="type"]').val());
+	if ($('select[name="type"]').val()) {
+		window.sessionStorage.setItem('extension', $('select[name="type"]').val().replace(getURLVar('user_token'), ''));
+	}
 	$.ajax({
 		url: $('select[name="type"]').val(),
 		dataType: 'html',

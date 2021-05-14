@@ -551,14 +551,14 @@ class ControllerExtensionFeedYandexMarket extends Controller {
 				$field = preg_replace('#<(\w*)\s(.*)>#iU', '<$1>', $field);
 				$field = strip_tags($field, '<h1><h2><h3><h4><h5><h6><ul><li><p><br>');
 				$field = str_replace('<br>', '<br/>', $field);
-				$field = "<![CDATA[" . mb_substr($field, 0, 3000) . "]]>";
+				$field = "<![CDATA[" . utf8_substr($field, 0, 3000) . "]]>";
 			} else {
 				$field = strip_tags($field);
 				$from = array('"', '&', '>', '<', '\'');
 				$to = array('&quot;', '&amp;', '&gt;', '&lt;', '&apos;');
 				$field = str_replace($from, $to, $field);
 				if ($this->desc_html == false && $key == 'description') {
-					$field = mb_substr($field, 0, 3000);
+					$field = utf8_substr($field, 0, 3000);
 				}
 			}
 

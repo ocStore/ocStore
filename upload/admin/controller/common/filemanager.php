@@ -1,6 +1,21 @@
 <?php
 class ControllerCommonFileManager extends Controller {
 	public function index() {
+		if (isset($this->request->get['directory'])) {
+			$this->session->data['filemanager_directory'] = $this->request->get['directory'];
+			if (isset($this->request->get['page'])) {
+				$this->session->data['filemanager_page'] = $this->request->get['page'];
+			}
+		} else {
+			if (isset($this->request->get['parent'])) {
+				unset($this->session->data['filemanager_directory']);
+				unset($this->session->data['filemanager_page']);
+			} else {
+				$this->request->get['directory'] = (isset($this->session->data['filemanager_directory']) ? $this->session->data['filemanager_directory'] : null);
+				$this->request->get['page'] = (isset($this->session->data['filemanager_page']) ? $this->session->data['filemanager_page'] : null);
+			}
+		}
+
 		$this->load->language('common/filemanager');
 
 		// Find which protocol to use to pass the full image link back
@@ -123,6 +138,7 @@ class ControllerCommonFileManager extends Controller {
 
 		// Parent
 		$url = '';
+		$url .= '&parent=1';
 
 		if (isset($this->request->get['directory'])) {
 			$pos = strrpos($this->request->get['directory'], '/');

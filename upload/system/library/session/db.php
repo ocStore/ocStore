@@ -14,11 +14,14 @@ final class DB {
 	public function __construct($registry) {
 		$this->db = $registry->get('db');
 		
-		$this->expire = ini_get('session.gc_maxlifetime');
+		$this->expire = ini_get('session.cookie_lifetime') > 0 ? ini_get('session.cookie_lifetime') : ini_get('session.gc_maxlifetime');
+		
+		// Очистка устаревших сессий в таблице oc_session
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "session` WHERE expire < '" . $this->db->escape(date('Y-m-d H:i:s')) . "'");
 	}
 	
 	public function read($session_id) {
-		$query = $this->db->query("SELECT `data` FROM `" . DB_PREFIX . "session` WHERE session_id = '" . $this->db->escape($session_id) . "' AND expire > " . (int)time());
+		$query = $this->db->query("SELECT `data` FROM `" . DB_PREFIX . "session` WHERE session_id = '" . $this->db->escape($session_id) . "' AND expire > '" . $this->db->escape(date('Y-m-d H:i:s')) . "'");
 		
 		if ($query->num_rows) {
 			return json_decode($query->row['data'], true);
@@ -41,8 +44,11 @@ final class DB {
 		return true;
 	}
 	
-	public function gc($expire) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "session` WHERE expire < " . ((int)time() + $expire));
+	public function gc($expire = 0) {
+		// $this->db->query("DELETE FROM `" . DB_PREFIX . "session` WHERE expire < " . ((int)time() + $expire));
+		
+		// FIX: Поле expire имеет формат datetime. $expire - лишний аргумент функции, т.к. вермя жизни уже включено в поле expire таблицы oc_session
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "session` WHERE expire < '" . $this->db->escape(date('Y-m-d H:i:s')) . "'");
 		
 		return true;
 	}

@@ -383,9 +383,9 @@ class ControllerMailOrder extends Controller {
 
 			$this->load->model('tool/upload');
 			
-			$data['products'] = array();
-
 			$order_products = $this->model_checkout_order->getOrderProducts($order_id);
+			
+			$data['products'] = array();
 
 			foreach ($order_products as $order_product) {
 				$option_data = array();

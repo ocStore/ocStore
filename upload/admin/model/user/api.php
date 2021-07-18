@@ -119,5 +119,9 @@ class ModelUserApi extends Model {
 	
 	public function deleteApiSessionBySessionId($session_id) {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "api_session` WHERE session_id = '" . $this->db->escape($session_id) . "'");
-	}		
+	}	
+
+	public function deleteApiSessionBySessonId($session_id) {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "api_session` WHERE session_id = '" . $this->db->escape($session_id) . "'");
+	}
 }

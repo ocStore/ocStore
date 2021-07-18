@@ -83,8 +83,8 @@ class ControllerExtensionFeedYandexTurbo extends Controller {
 			$output .= '<currencyId>' . $offers_currency . '</currencyId>' . $this->eol;
 			$output .= '<categoryId>' . $product['category_id'] . '</categoryId>' . $this->eol;
 			$output .= '<picture>' . $this->model_tool_image->resize($product['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height')) . '</picture>' . $this->eol;
-			$output .= '<name><![CDATA[' . $this->prepareField($product['name']) . ']]></name>' . $this->eol;
-			$output .= '<description><![CDATA[' . $this->prepareField($product['description']) . ']]></description>' . $this->eol; 
+			$output .= '<name><![CDATA[' . html_entity_decode(html_entity_decode($product['name'], ENT_QUOTES, 'UTF-8')) . ']]></name>' . $this->eol;
+			$output .= '<description><![CDATA[' . html_entity_decode(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8')) . ']]></description>' . $this->eol;
 			$output .= '</offer>' . $this->eol;
 		}
 		

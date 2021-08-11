@@ -28,7 +28,7 @@ CREATE TABLE `oc_address` (
   `custom_field` text NOT NULL,
   PRIMARY KEY (`address_id`),
   KEY `customer_id` (`customer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -49,7 +49,7 @@ CREATE TABLE `oc_googleshopping_target` (
   `roas` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`advertise_google_target_id`),
   KEY `store_id` (`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
 
@@ -66,7 +66,7 @@ CREATE TABLE `oc_api` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`api_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -80,7 +80,7 @@ CREATE TABLE `oc_api_ip` (
   `api_id` int(11) NOT NULL,
   `ip` varchar(40) NOT NULL,
   PRIMARY KEY (`api_ip_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -97,7 +97,7 @@ CREATE TABLE `oc_api_session` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`api_session_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -111,7 +111,7 @@ CREATE TABLE `oc_attribute` (
   `attribute_group_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`attribute_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_attribute`
@@ -142,7 +142,7 @@ CREATE TABLE `oc_attribute_description` (
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`attribute_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_attribute_description`
@@ -183,7 +183,7 @@ CREATE TABLE `oc_attribute_group` (
   `attribute_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`attribute_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_attribute_group`
@@ -207,7 +207,7 @@ CREATE TABLE `oc_attribute_group_description` (
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`attribute_group_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_attribute_group_description`
@@ -235,7 +235,7 @@ CREATE TABLE `oc_banner` (
   `name` varchar(64) NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`banner_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_banner`
@@ -262,7 +262,7 @@ CREATE TABLE `oc_banner_image` (
   `image` varchar(255) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`banner_image_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_banner_image`
@@ -339,7 +339,7 @@ CREATE TABLE `oc_category` (
   `noindex` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`category_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_category`
@@ -403,7 +403,7 @@ CREATE TABLE `oc_category_description` (
   `meta_h1` varchar(255) NOT NULL,
   PRIMARY KEY (`category_id`,`language_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_category_description`
@@ -498,7 +498,7 @@ CREATE TABLE `oc_category_filter` (
   `category_id` int(11) NOT NULL,
   `filter_id` int(11) NOT NULL,
   PRIMARY KEY (`category_id`,`filter_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -512,7 +512,7 @@ CREATE TABLE `oc_category_path` (
   `path_id` int(11) NOT NULL,
   `level` int(11) NOT NULL,
   PRIMARY KEY (`category_id`,`path_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_category_path`
@@ -604,7 +604,7 @@ CREATE TABLE `oc_googleshopping_category` (
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`google_product_category`,`store_id`),
   KEY `category_id_store_id` (`category_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
 
@@ -618,7 +618,7 @@ CREATE TABLE `oc_category_to_layout` (
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
   PRIMARY KEY (`category_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -631,7 +631,7 @@ CREATE TABLE `oc_category_to_store` (
   `category_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   PRIMARY KEY (`category_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_category_to_store`
@@ -693,7 +693,7 @@ CREATE TABLE `oc_country` (
   `postcode_required` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`country_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_country`
@@ -977,7 +977,7 @@ CREATE TABLE `oc_coupon` (
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`coupon_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_coupon`
@@ -999,7 +999,7 @@ CREATE TABLE `oc_coupon_category` (
   `coupon_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`coupon_id`,`category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1016,7 +1016,7 @@ CREATE TABLE `oc_coupon_history` (
   `amount` decimal(15,4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`coupon_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1030,7 +1030,7 @@ CREATE TABLE `oc_coupon_product` (
   `coupon_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   PRIMARY KEY (`coupon_product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1050,7 +1050,7 @@ CREATE TABLE `oc_currency` (
   `status` tinyint(1) NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`currency_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_currency`
@@ -1093,7 +1093,7 @@ CREATE TABLE `oc_customer` (
   `code` varchar(40) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1110,7 +1110,7 @@ CREATE TABLE `oc_customer_activity` (
   `ip` varchar(40) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_activity_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1138,7 +1138,7 @@ CREATE TABLE `oc_customer_affiliate` (
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1153,7 +1153,7 @@ CREATE TABLE `oc_customer_approval` (
   `type` varchar(9) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_approval_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1167,7 +1167,7 @@ CREATE TABLE `oc_customer_group` (
   `approval` int(1) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`customer_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_customer_group`
@@ -1189,7 +1189,7 @@ CREATE TABLE `oc_customer_group_description` (
   `name` varchar(32) NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`customer_group_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_customer_group_description`
@@ -1211,7 +1211,7 @@ CREATE TABLE `oc_customer_history` (
   `comment` text NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1230,7 +1230,7 @@ CREATE TABLE `oc_customer_login` (
   PRIMARY KEY (`customer_login_id`),
   KEY `email` (`email`),
   KEY `ip` (`ip`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1246,7 +1246,7 @@ CREATE TABLE `oc_customer_ip` (
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_ip_id`),
   KEY `ip` (`ip`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1262,7 +1262,7 @@ CREATE TABLE `oc_customer_online` (
   `referer` text NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`ip`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1279,7 +1279,7 @@ CREATE TABLE `oc_customer_reward` (
   `points` int(8) NOT NULL DEFAULT '0',
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_reward_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1296,7 +1296,7 @@ CREATE TABLE `oc_customer_transaction` (
   `amount` decimal(15,4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_transaction_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1318,7 +1318,7 @@ CREATE TABLE `oc_customer_search` (
   `ip` varchar(40) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_search_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1332,7 +1332,7 @@ CREATE TABLE `oc_customer_wishlist` (
   `product_id` int(11) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_id`,`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1350,7 +1350,7 @@ CREATE TABLE `oc_custom_field` (
   `status` tinyint(1) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`custom_field_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1364,7 +1364,7 @@ CREATE TABLE `oc_custom_field_customer_group` (
   `customer_group_id` int(11) NOT NULL,
   `required` tinyint(1) NOT NULL,
   PRIMARY KEY (`custom_field_id`,`customer_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1378,7 +1378,7 @@ CREATE TABLE `oc_custom_field_description` (
   `language_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`custom_field_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1392,7 +1392,7 @@ CREATE TABLE `oc_custom_field_value` (
   `custom_field_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`custom_field_value_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1407,7 +1407,7 @@ CREATE TABLE `oc_custom_field_value_description` (
   `custom_field_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`custom_field_value_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1422,7 +1422,7 @@ CREATE TABLE `oc_download` (
   `mask` varchar(128) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`download_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1436,7 +1436,7 @@ CREATE TABLE `oc_download_description` (
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`download_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1453,7 +1453,7 @@ CREATE TABLE `oc_event` (
   `status` tinyint(1) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`event_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_event`
@@ -1562,7 +1562,7 @@ CREATE TABLE `oc_extension` (
   `type` varchar(32) NOT NULL,
   `code` varchar(32) NOT NULL,
   PRIMARY KEY (`extension_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_extension`
@@ -1633,7 +1633,7 @@ CREATE TABLE `oc_extension_install` (
   `filename` varchar(255) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`extension_install_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1648,7 +1648,7 @@ CREATE TABLE `oc_extension_path` (
   `path` varchar(255) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`extension_path_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1662,7 +1662,7 @@ CREATE TABLE `oc_filter` (
   `filter_group_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`filter_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1677,7 +1677,7 @@ CREATE TABLE `oc_filter_description` (
   `filter_group_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`filter_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1690,7 +1690,7 @@ CREATE TABLE `oc_filter_group` (
   `filter_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`filter_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1704,7 +1704,7 @@ CREATE TABLE `oc_filter_group_description` (
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`filter_group_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1720,7 +1720,7 @@ CREATE TABLE `oc_geo_zone` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`geo_zone_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_geo_zone`
@@ -1744,7 +1744,7 @@ CREATE TABLE `oc_information` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `noindex` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`information_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_information`
@@ -1773,7 +1773,7 @@ CREATE TABLE `oc_information_description` (
   `meta_keyword` varchar(255) NOT NULL,
   `meta_h1` varchar(255) NOT NULL,
   PRIMARY KEY (`information_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_information_description`
@@ -1801,7 +1801,7 @@ CREATE TABLE `oc_information_to_layout` (
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
   PRIMARY KEY (`information_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -1814,7 +1814,7 @@ CREATE TABLE `oc_information_to_store` (
   `information_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   PRIMARY KEY (`information_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_information_to_store`
@@ -1844,7 +1844,7 @@ CREATE TABLE `oc_language` (
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`language_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_language`
@@ -1865,7 +1865,7 @@ CREATE TABLE `oc_layout` (
   `layout_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`layout_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_layout`
@@ -1904,7 +1904,7 @@ CREATE TABLE `oc_layout_module` (
   `position` varchar(14) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`layout_module_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_layout_module`
@@ -1948,7 +1948,7 @@ CREATE TABLE `oc_layout_route` (
   `store_id` int(11) NOT NULL,
   `route` varchar(64) NOT NULL,
   PRIMARY KEY (`layout_route_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_layout_route`
@@ -1984,7 +1984,7 @@ CREATE TABLE `oc_length_class` (
   `length_class_id` int(11) NOT NULL AUTO_INCREMENT,
   `value` decimal(15,8) NOT NULL,
   PRIMARY KEY (`length_class_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_length_class`
@@ -2008,7 +2008,7 @@ CREATE TABLE `oc_length_class_description` (
   `title` varchar(32) NOT NULL,
   `unit` varchar(4) NOT NULL,
   PRIMARY KEY (`length_class_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_length_class_description`
@@ -2041,7 +2041,7 @@ CREATE TABLE `oc_location` (
   `comment` text NOT NULL,
   PRIMARY KEY (`location_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2057,7 +2057,7 @@ CREATE TABLE `oc_manufacturer` (
   `sort_order` int(3) NOT NULL,
   `noindex` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`manufacturer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_manufacturer`
@@ -2087,7 +2087,7 @@ CREATE TABLE `oc_manufacturer_description` (
   `meta_keyword` varchar(255) NOT NULL,
   `meta_title` varchar(255) NOT NULL,
   `meta_h1` varchar(255) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `oc_manufacturer_description`
@@ -2118,7 +2118,7 @@ CREATE TABLE `oc_manufacturer_to_store` (
   `manufacturer_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   PRIMARY KEY (`manufacturer_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_manufacturer_to_store`
@@ -2144,7 +2144,7 @@ CREATE TABLE `oc_manufacturer_to_layout` (
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
   PRIMARY KEY (`manufacturer_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2161,7 +2161,7 @@ CREATE TABLE `oc_marketing` (
   `clicks` int(5) NOT NULL DEFAULT '0',
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`marketing_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -------------------------------------------------------------
 
@@ -2182,7 +2182,7 @@ CREATE TABLE `oc_modification` (
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`modification_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Table structure for table `oc_modification_backup`
@@ -2196,7 +2196,7 @@ CREATE TABLE `oc_modification_backup` (
   `xml` mediumtext NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`backup_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -------------------------------------------------------------
 
@@ -2210,7 +2210,7 @@ CREATE TABLE `oc_module` (
   `code` varchar(32) NOT NULL,
   `setting` text NOT NULL,
   PRIMARY KEY (`module_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_module`
@@ -2239,7 +2239,7 @@ CREATE TABLE `oc_option` (
   `type` varchar(32) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`option_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_option`
@@ -2270,7 +2270,7 @@ CREATE TABLE `oc_option_description` (
   `language_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`option_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_option_description`
@@ -2313,7 +2313,7 @@ CREATE TABLE `oc_option_value` (
   `image` varchar(255) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`option_value_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_option_value`
@@ -2348,7 +2348,7 @@ CREATE TABLE `oc_option_value_description` (
   `option_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`option_value_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_option_value_description`
@@ -2440,7 +2440,7 @@ CREATE TABLE `oc_order` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`order_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2457,7 +2457,7 @@ CREATE TABLE `oc_order_history` (
   `comment` text NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`order_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2476,7 +2476,7 @@ CREATE TABLE `oc_order_option` (
   `value` text NOT NULL,
   `type` varchar(32) NOT NULL,
   PRIMARY KEY (`order_option_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2498,7 +2498,7 @@ CREATE TABLE `oc_order_product` (
   `reward` int(8) NOT NULL,
   PRIMARY KEY (`order_product_id`),
   KEY `order_id` (`order_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2529,7 +2529,7 @@ CREATE TABLE `oc_order_recurring` (
   `status` tinyint(4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`order_recurring_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2546,7 +2546,7 @@ CREATE TABLE `oc_order_recurring_transaction` (
   `amount` decimal(10,4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`order_recurring_transaction_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2562,7 +2562,7 @@ CREATE TABLE `oc_order_shipment` (
   `shipping_courier_id` varchar(255) NOT NULL DEFAULT '',
   `tracking_number` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`order_shipment_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2576,7 +2576,7 @@ CREATE TABLE `oc_shipping_courier` (
   `shipping_courier_code` varchar(255) NOT NULL DEFAULT '',
   `shipping_courier_name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`shipping_courier_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `oc_shipping_courier`
@@ -2602,7 +2602,7 @@ CREATE TABLE `oc_order_status` (
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
   PRIMARY KEY (`order_status_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_order_status`
@@ -2654,7 +2654,7 @@ CREATE TABLE `oc_order_total` (
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`order_total_id`),
   KEY `order_id` (`order_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2677,7 +2677,7 @@ CREATE TABLE `oc_order_voucher` (
   `message` text NOT NULL,
   `amount` decimal(15,4) NOT NULL,
   PRIMARY KEY (`order_voucher_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2720,7 +2720,7 @@ CREATE TABLE `oc_product` (
   `date_modified` datetime NOT NULL,
   `noindex` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product`
@@ -2779,7 +2779,7 @@ CREATE TABLE `oc_googleshopping_product` (
   `is_modified` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`product_advertise_google_id`),
   UNIQUE KEY `product_id_store_id` (`product_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
 
@@ -2797,7 +2797,7 @@ CREATE TABLE `oc_googleshopping_product_status` (
   `item_level_issues` text NOT NULL,
   `google_expiration_date` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`product_id`,`store_id`,`product_variation_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
 
@@ -2811,7 +2811,7 @@ CREATE TABLE `oc_googleshopping_product_target` (
   `store_id` int(11) NOT NULL DEFAULT '0',
   `advertise_google_target_id` int(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`product_id`,`advertise_google_target_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
 
@@ -2826,7 +2826,7 @@ CREATE TABLE `oc_product_attribute` (
   `language_id` int(11) NOT NULL,
   `text` text NOT NULL,
   PRIMARY KEY (`product_id`,`attribute_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_attribute`
@@ -2858,7 +2858,7 @@ CREATE TABLE `oc_product_description` (
   `meta_h1` varchar(255) NOT NULL,
   PRIMARY KEY (`product_id`,`language_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_description`
@@ -2866,13 +2866,13 @@ CREATE TABLE `oc_product_description` (
 
 INSERT INTO `oc_product_description` (`product_id`, `language_id`, `name`, `description`, `tag`, `meta_title`, `meta_description`, `meta_keyword`, `meta_h1`) VALUES
 (33, 2, 'Samsung SyncMaster 941BW', '&lt;p&gt;Imagine the advantages of going big without slowing down. The big 19&quot; \r\n941BW monitor combines wide aspect ratio with fast pixel response time, \r\nfor bigger images, more room to work and crisp motion. In addition, the \r\nexclusive MagicBright 2, MagicColor and MagicTune technologies help \r\ndeliver the ideal image in every situation, while sleek, narrow bezels \r\nand adjustable stands deliver style just the way you want it. With the \r\nSamsung 941BW widescreen analog/digital LCD monitor, it''s not hard to \r\nimagine.&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
-(49, 2, 'Samsung Galaxy Tab 10.1', '&lt;p&gt;Samsung Galaxy Tab 10.1, is the world’s thinnest tablet, measuring 8.6 \r\nmm thickness, running with Android 3.0 Honeycomb OS on a 1GHz dual-core \r\nTegra 2 processor, similar to its younger brother Samsung Galaxy Tab \r\n8.9.&lt;/p&gt;&lt;p&gt;\r\n&lt;br&gt;&lt;/p&gt;&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 gives pure Android 3.0 experience, adding its \r\nnew TouchWiz UX or TouchWiz 4.0 – includes a live panel, which lets you \r\nto customize with different content, such as your pictures, bookmarks, \r\nand social feeds, sporting a 10.1 inches WXGA capacitive touch screen \r\nwith 1280 x 800 pixels of resolution, equipped with 3 megapixel rear \r\ncamera with LED flash and a 2 megapixel front camera, HSPA+ connectivity\r\n up to 21Mbps, 720p HD video recording capability, 1080p HD playback, \r\nDLNA support, Bluetooth 2.1, USB 2.0, gyroscope, Wi-Fi 802.11 a/b/g/n, \r\nmicro-SD slot, 3.5mm headphone jack, and SIM slot, including the Samsung\r\n Stick – a Bluetooth microphone that can be carried in a pocket like a \r\npen and sound dock with powered subwoofer.&lt;/p&gt;&lt;p&gt;\r\n&lt;br&gt;&lt;/p&gt;&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 will come in 16GB / 32GB / 64GB verities and \r\npre-loaded with Social Hub, Reader’s Hub, Music Hub and Samsung Mini \r\nApps Tray – which gives you access to more commonly used apps to help \r\nease multitasking and it is capable of Adobe Flash Player 10.2, powered \r\nby 6860mAh battery that gives you 10hours of video-playback time.&amp;nbsp;äö&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
+(49, 2, 'Samsung Galaxy Tab 10.1', '&lt;p&gt;Samsung Galaxy Tab 10.1, is the world’s thinnest tablet, measuring 8.6 \r\nmm thickness, running with Android 3.0 Honeycomb OS on a 1GHz dual-core \r\nTegra 2 processor, similar to its younger brother Samsung Galaxy Tab \r\n8.9.&lt;/p&gt;&lt;p&gt;\r\n&lt;br&gt;&lt;/p&gt;&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 gives pure Android 3.0 experience, adding its \r\nnew TouchWiz UX or TouchWiz 4.0 – includes a live panel, which lets you \r\nto customize with different content, such as your pictures, bookmarks, \r\nand social feeds, sporting a 10.1 inches WXGA capacitive touch screen \r\nwith 1280 x 800 pixels of resolution, equipped with 3 megapixel rear \r\ncamera with LED flash and a 2 megapixel front camera, HSPA+ connectivity\r\n up to 21Mbps, 720p HD video recording capability, 1080p HD playback, \r\nDLNA support, Bluetooth 2.1, USB 2.0, gyroscope, Wi-Fi 802.11 a/b/g/n, \r\nmicro-SD slot, 3.5mm headphone jack, and SIM slot, including the Samsung\r\n Stick – a Bluetooth microphone that can be carried in a pocket like a \r\npen and sound dock with powered subwoofer.&lt;/p&gt;&lt;p&gt;\r\n&lt;br&gt;&lt;/p&gt;&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 will come in 16GB / 32GB / 64GB verities and \r\npre-loaded with Social Hub, Reader’s Hub, Music Hub and Samsung Mini \r\nApps Tray – which gives you access to more commonly used apps to help \r\nease multitasking and it is capable of Adobe Flash Player 10.2, powered \r\nby 6860mAh battery that gives you 10hours of video-playback time.&amp;nbsp;ao&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
 (42, 1, 'Apple Cinema 30&quot;', '&lt;p&gt;\r\n	&lt;font face=&quot;helvetica,geneva,arial&quot; size=&quot;2&quot;&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The 30-inch Apple Cinema HD Display delivers an amazing 2560 x 1600 pixel resolution. Designed specifically for the creative professional, this display provides more space for easier access to all the tools and palettes needed to edit, format and composite your work. Combine this display with a Mac Pro, MacBook Pro, or PowerMac G5 and there''s no limit to what you can achieve. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The Cinema HD features an active-matrix liquid crystal display that produces flicker-free images that deliver twice the brightness, twice the sharpness and twice the contrast ratio of a typical CRT display. Unlike other flat panels, it''s designed with a pure digital interface to deliver distortion-free images that never need adjusting. With over 4 million digital pixels, the display is uniquely suited for scientific and technical applications such as visualizing molecular structures or analyzing geological data. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;Offering accurate, brilliant color performance, the Cinema HD delivers up to 16.7 million colors across a wide gamut allowing you to see subtle nuances between colors from soft pastels to rich jewel tones. A wide viewing angle ensures uniform color from edge to edge. Apple''s ColorSync technology allows you to create custom profiles to maintain consistent color onscreen and in print. The result: You can confidently use this display in all your color-critical applications. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;Housed in a new aluminum design, the display has a very thin bezel that enhances visual accuracy. Each display features two FireWire 400 ports and two USB 2.0 ports, making attachment of desktop peripherals, such as iSight, iPod, digital and still cameras, hard drives, printers and scanners, even more accessible and convenient. Taking advantage of the much thinner and lighter footprint of an LCD, the new displays support the VESA (Video Electronics Standards Association) mounting interface standard. Customers with the optional Cinema Display VESA Mount Adapter kit gain the flexibility to mount their display in locations most appropriate for their work environment. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The Cinema HD features a single cable design with elegant breakout for the USB 2.0, FireWire 400 and a pure digital connection using the industry standard Digital Video Interface (DVI) interface. The DVI connection allows for a direct pure-digital connection.&lt;br&gt;\r\n	&lt;/font&gt;&lt;/font&gt;&lt;/p&gt;\r\n&lt;h3&gt;\r\n	Features:&lt;/h3&gt;\r\n&lt;p&gt;\r\n	Unrivaled display performance&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch (viewable) active-matrix liquid crystal display provides breathtaking image quality and vivid, richly saturated color.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for 2560-by-1600 pixel resolution for display of high definition still and video imagery.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Wide-format design for simultaneous display of two full pages of text and graphics.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Industry standard DVI connector for direct attachment to Mac- and Windows-based desktops and notebooks&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Incredibly wide (170 degree) horizontal and vertical viewing angle for maximum visibility and color performance.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Lightning-fast pixel response for full-motion digital video playback.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for 16.7 million saturated colors, for use in all graphics-intensive applications.&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Simple setup and operation&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Single cable with elegant breakout for connection to DVI, USB and FireWire ports&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Built-in two-port USB 2.0 hub for easy connection of desktop peripheral devices.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Two FireWire 400 ports to support iSight and other desktop peripherals&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Sleek, elegant design&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Huge virtual workspace, very small footprint.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Narrow Bezel design to minimize visual impact of using dual displays&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Unique hinge design for effortless adjustment&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for VESA mounting solutions (Apple Cinema Display VESA Mount Adapter sold separately)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;h3&gt;\r\n	Technical specifications&lt;/h3&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen size (diagonal viewable image size)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Apple Cinema HD Display: 30 inches (29.7-inch viewable)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen type&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Thin film transistor (TFT) active-matrix liquid crystal display (AMLCD)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Resolutions&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		2560 x 1600 pixels (optimum resolution)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		2048 x 1280&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1920 x 1200&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1280 x 800&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1024 x 640&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Display colors (maximum)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		16.7 million&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Viewing angle (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		170° horizontal; 170° vertical&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Brightness (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch Cinema HD Display: 400 cd/m2&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Contrast ratio (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		700:1&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Response time (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		16 ms&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Pixel pitch&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch Cinema HD Display: 0.250 mm&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen treatment&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Antiglare hardcoat&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;User controls (hardware and software)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Display Power,&lt;/li&gt;\r\n	&lt;li&gt;\r\n		System sleep, wake&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Brightness&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Monitor tilt&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Connectors and cables&lt;/b&gt;&lt;br&gt;\r\n	Cable&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		DVI (Digital Visual Interface)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		FireWire 400&lt;/li&gt;\r\n	&lt;li&gt;\r\n		USB 2.0&lt;/li&gt;\r\n	&lt;li&gt;\r\n		DC power (24 V)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Connectors&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Two-port, self-powered USB 2.0 hub&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Two FireWire 400 ports&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Kensington security port&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;VESA mount adapter&lt;/b&gt;&lt;br&gt;\r\n	Requires optional Cinema Display VESA Mount Adapter (M9649G/A)&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Compatible with VESA FDMI (MIS-D, 100, C) compliant mounting solutions&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Electrical requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Input voltage: 100-240 VAC 50-60Hz&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Maximum power when operating: 150W&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Energy saver mode: 3W or less&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Environmental requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Operating temperature: 50° to 95° F (10° to 35° C)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Storage temperature: -40° to 116° F (-40° to 47° C)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Operating humidity: 20% to 80% noncondensing&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Maximum operating altitude: 10,000 feet&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Agency approvals&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		FCC Part 15 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN55022 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN55024&lt;/li&gt;\r\n	&lt;li&gt;\r\n		VCCI Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		AS/NZS 3548 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		CNS 13438 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ICES-003 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ISO 13406 part 2&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MPR II&lt;/li&gt;\r\n	&lt;li&gt;\r\n		IEC 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		UL 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		CSA 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ENERGY STAR&lt;/li&gt;\r\n	&lt;li&gt;\r\n		TCO ''03&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Size and weight&lt;/b&gt;&lt;br&gt;\r\n	30-inch Apple Cinema HD Display&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Height: 21.3 inches (54.3 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Width: 27.2 inches (68.8 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Depth: 8.46 inches (21.5 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Weight: 27.5 pounds (12.5 kg)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;System Requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Mac Pro, all graphic options&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MacBook Pro&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Power Mac G5 (PCI-X) with ATI Radeon 9650 or better or NVIDIA GeForce 6800 GT DDL or better&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Power Mac G5 (PCI Express), all graphics options&lt;/li&gt;\r\n	&lt;li&gt;\r\n		PowerBook G4 with dual-link DVI support&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Windows PC and graphics card that supports DVI ports with dual-link digital bandwidth and VESA DDC standard for plug-and-play setup&lt;/li&gt;\r\n&lt;/ul&gt;\r\n', '', '', '', '', ''),
 (42, 2, 'Apple Cinema 30&quot;', '&lt;p&gt;\r\n	&lt;font face=&quot;helvetica,geneva,arial&quot; size=&quot;2&quot;&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The 30-inch Apple Cinema HD Display delivers an amazing 2560 x 1600 pixel resolution. Designed specifically for the creative professional, this display provides more space for easier access to all the tools and palettes needed to edit, format and composite your work. Combine this display with a Mac Pro, MacBook Pro, or PowerMac G5 and there''s no limit to what you can achieve. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The Cinema HD features an active-matrix liquid crystal display that produces flicker-free images that deliver twice the brightness, twice the sharpness and twice the contrast ratio of a typical CRT display. Unlike other flat panels, it''s designed with a pure digital interface to deliver distortion-free images that never need adjusting. With over 4 million digital pixels, the display is uniquely suited for scientific and technical applications such as visualizing molecular structures or analyzing geological data. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;Offering accurate, brilliant color performance, the Cinema HD delivers up to 16.7 million colors across a wide gamut allowing you to see subtle nuances between colors from soft pastels to rich jewel tones. A wide viewing angle ensures uniform color from edge to edge. Apple''s ColorSync technology allows you to create custom profiles to maintain consistent color onscreen and in print. The result: You can confidently use this display in all your color-critical applications. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;Housed in a new aluminum design, the display has a very thin bezel that enhances visual accuracy. Each display features two FireWire 400 ports and two USB 2.0 ports, making attachment of desktop peripherals, such as iSight, iPod, digital and still cameras, hard drives, printers and scanners, even more accessible and convenient. Taking advantage of the much thinner and lighter footprint of an LCD, the new displays support the VESA (Video Electronics Standards Association) mounting interface standard. Customers with the optional Cinema Display VESA Mount Adapter kit gain the flexibility to mount their display in locations most appropriate for their work environment. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The Cinema HD features a single cable design with elegant breakout for the USB 2.0, FireWire 400 and a pure digital connection using the industry standard Digital Video Interface (DVI) interface. The DVI connection allows for a direct pure-digital connection.&lt;br&gt;\r\n	&lt;/font&gt;&lt;/font&gt;&lt;/p&gt;\r\n&lt;h3&gt;\r\n	Features:&lt;/h3&gt;\r\n&lt;p&gt;\r\n	Unrivaled display performance&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch (viewable) active-matrix liquid crystal display provides breathtaking image quality and vivid, richly saturated color.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for 2560-by-1600 pixel resolution for display of high definition still and video imagery.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Wide-format design for simultaneous display of two full pages of text and graphics.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Industry standard DVI connector for direct attachment to Mac- and Windows-based desktops and notebooks&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Incredibly wide (170 degree) horizontal and vertical viewing angle for maximum visibility and color performance.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Lightning-fast pixel response for full-motion digital video playback.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for 16.7 million saturated colors, for use in all graphics-intensive applications.&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Simple setup and operation&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Single cable with elegant breakout for connection to DVI, USB and FireWire ports&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Built-in two-port USB 2.0 hub for easy connection of desktop peripheral devices.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Two FireWire 400 ports to support iSight and other desktop peripherals&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Sleek, elegant design&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Huge virtual workspace, very small footprint.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Narrow Bezel design to minimize visual impact of using dual displays&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Unique hinge design for effortless adjustment&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for VESA mounting solutions (Apple Cinema Display VESA Mount Adapter sold separately)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;h3&gt;\r\n	Technical specifications&lt;/h3&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen size (diagonal viewable image size)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Apple Cinema HD Display: 30 inches (29.7-inch viewable)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen type&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Thin film transistor (TFT) active-matrix liquid crystal display (AMLCD)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Resolutions&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		2560 x 1600 pixels (optimum resolution)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		2048 x 1280&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1920 x 1200&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1280 x 800&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1024 x 640&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Display colors (maximum)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		16.7 million&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Viewing angle (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		170° horizontal; 170° vertical&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Brightness (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch Cinema HD Display: 400 cd/m2&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Contrast ratio (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		700:1&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Response time (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		16 ms&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Pixel pitch&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch Cinema HD Display: 0.250 mm&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen treatment&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Antiglare hardcoat&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;User controls (hardware and software)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Display Power,&lt;/li&gt;\r\n	&lt;li&gt;\r\n		System sleep, wake&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Brightness&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Monitor tilt&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Connectors and cables&lt;/b&gt;&lt;br&gt;\r\n	Cable&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		DVI (Digital Visual Interface)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		FireWire 400&lt;/li&gt;\r\n	&lt;li&gt;\r\n		USB 2.0&lt;/li&gt;\r\n	&lt;li&gt;\r\n		DC power (24 V)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Connectors&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Two-port, self-powered USB 2.0 hub&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Two FireWire 400 ports&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Kensington security port&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;VESA mount adapter&lt;/b&gt;&lt;br&gt;\r\n	Requires optional Cinema Display VESA Mount Adapter (M9649G/A)&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Compatible with VESA FDMI (MIS-D, 100, C) compliant mounting solutions&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Electrical requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Input voltage: 100-240 VAC 50-60Hz&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Maximum power when operating: 150W&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Energy saver mode: 3W or less&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Environmental requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Operating temperature: 50° to 95° F (10° to 35° C)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Storage temperature: -40° to 116° F (-40° to 47° C)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Operating humidity: 20% to 80% noncondensing&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Maximum operating altitude: 10,000 feet&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Agency approvals&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		FCC Part 15 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN55022 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN55024&lt;/li&gt;\r\n	&lt;li&gt;\r\n		VCCI Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		AS/NZS 3548 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		CNS 13438 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ICES-003 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ISO 13406 part 2&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MPR II&lt;/li&gt;\r\n	&lt;li&gt;\r\n		IEC 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		UL 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		CSA 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ENERGY STAR&lt;/li&gt;\r\n	&lt;li&gt;\r\n		TCO ''03&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Size and weight&lt;/b&gt;&lt;br&gt;\r\n	30-inch Apple Cinema HD Display&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Height: 21.3 inches (54.3 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Width: 27.2 inches (68.8 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Depth: 8.46 inches (21.5 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Weight: 27.5 pounds (12.5 kg)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;System Requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Mac Pro, all graphic options&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MacBook Pro&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Power Mac G5 (PCI-X) with ATI Radeon 9650 or better or NVIDIA GeForce 6800 GT DDL or better&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Power Mac G5 (PCI Express), all graphics options&lt;/li&gt;\r\n	&lt;li&gt;\r\n		PowerBook G4 with dual-link DVI support&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Windows PC and graphics card that supports DVI ports with dual-link digital bandwidth and VESA DDC standard for plug-and-play setup&lt;/li&gt;\r\n&lt;/ul&gt;', '', '', '', '', ''),
-(30, 1, 'Canon EOS 5D', '&lt;p&gt;\r\n	Canon''s press material for the EOS 5D states that it ''defines (a) new D-SLR category'', while we''re not typically too concerned with marketing talk this particular statement is clearly pretty accurate. The EOS 5D is unlike any previous digital SLR in that it combines a full-frame (35 mm sized) high resolution sensor (12.8 megapixels) with a relatively compact body (slightly larger than the EOS 20D, although in your hand it feels noticeably ''chunkier''). The EOS 5D is aimed to slot in between the EOS 20D and the EOS-1D professional digital SLR''s, an important difference when compared to the latter is that the EOS 5D doesn''t have any environmental seals. While Canon don''t specifically refer to the EOS 5D as a ''professional'' digital SLR it will have obvious appeal to professionals who want a high quality digital SLR in a body lighter than the EOS-1D. It will also no doubt appeal to current EOS 20D owners (although lets hope they''ve not bought too many EF-S lenses...) äë&lt;/p&gt;\r\n', '', '', '', '', ''),
+(30, 1, 'Canon EOS 5D', '&lt;p&gt;\r\n	Canon''s press material for the EOS 5D states that it ''defines (a) new D-SLR category'', while we''re not typically too concerned with marketing talk this particular statement is clearly pretty accurate. The EOS 5D is unlike any previous digital SLR in that it combines a full-frame (35 mm sized) high resolution sensor (12.8 megapixels) with a relatively compact body (slightly larger than the EOS 20D, although in your hand it feels noticeably ''chunkier''). The EOS 5D is aimed to slot in between the EOS 20D and the EOS-1D professional digital SLR''s, an important difference when compared to the latter is that the EOS 5D doesn''t have any environmental seals. While Canon don''t specifically refer to the EOS 5D as a ''professional'' digital SLR it will have obvious appeal to professionals who want a high quality digital SLR in a body lighter than the EOS-1D. It will also no doubt appeal to current EOS 20D owners (although lets hope they''ve not bought too many EF-S lenses...) ae&lt;/p&gt;\r\n', '', '', '', '', ''),
 (47, 1, 'HP LP3065', '&lt;p&gt;\r\n	Stop your co-workers in their tracks with the stunning new 30-inch diagonal HP LP3065 Flat Panel Monitor. This flagship monitor features best-in-class performance and presentation features on a huge wide-aspect screen while letting you work as comfortably as possible - you might even forget you&amp;#39;re at the office&lt;/p&gt;\r\n', '', '', '', '', ''),
 (28, 1, 'HTC Touch HD', '&lt;p&gt;\r\n	HTC Touch - in High Definition. Watch music videos and streaming content in awe-inspiring high definition clarity for a mobile experience you never thought possible. Seductively sleek, the HTC Touch HD provides the next generation of mobile functionality, all at a simple touch. Fully integrated with Windows Mobile Professional 6.1, ultrafast 3.5G, GPS, 5MP camera, plus lots more - all delivered on a breathtakingly crisp 3.8&amp;quot; WVGA touchscreen - you can take control of your mobile world with the HTC Touch HD.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Features&lt;/strong&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Processor Qualcomm&amp;reg; MSM 7201A&amp;trade; 528 MHz&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Windows Mobile&amp;reg; 6.1 Professional Operating System&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Memory: 512 MB ROM, 288 MB RAM&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Dimensions: 115 mm x 62.8 mm x 12 mm / 146.4 grams&lt;/li&gt;\r\n	&lt;li&gt;\r\n		3.8-inch TFT-LCD flat touch-sensitive screen with 480 x 800 WVGA resolution&lt;/li&gt;\r\n	&lt;li&gt;\r\n		HSDPA/WCDMA: Europe/Asia: 900/2100 MHz; Up to 2 Mbps up-link and 7.2 Mbps down-link speeds&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Quad-band GSM/GPRS/EDGE: Europe/Asia: 850/900/1800/1900 MHz (Band frequency, HSUPA availability, and data speed are operator dependent.)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Device Control via HTC TouchFLO&amp;trade; 3D &amp;amp; Touch-sensitive front panel buttons&lt;/li&gt;\r\n	&lt;li&gt;\r\n		GPS and A-GPS ready&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Bluetooth&amp;reg; 2.0 with Enhanced Data Rate and A2DP for wireless stereo headsets&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Wi-Fi&amp;reg;: IEEE 802.11 b/g&lt;/li&gt;\r\n	&lt;li&gt;\r\n		HTC ExtUSB&amp;trade; (11-pin mini-USB 2.0)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		5 megapixel color camera with auto focus&lt;/li&gt;\r\n	&lt;li&gt;\r\n		VGA CMOS color camera&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Built-in 3.5 mm audio jack, microphone, speaker, and FM radio&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Ring tone formats: AAC, AAC+, eAAC+, AMR-NB, AMR-WB, QCP, MP3, WMA, WAV&lt;/li&gt;\r\n	&lt;li&gt;\r\n		40 polyphonic and standard MIDI format 0 and 1 (SMF)/SP MIDI&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Rechargeable Lithium-ion or Lithium-ion polymer 1350 mAh battery&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Expansion Slot: microSD&amp;trade; memory card (SD 2.0 compatible)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		AC Adapter Voltage range/frequency: 100 ~ 240V AC, 50/60 Hz DC output: 5V and 1A&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Special Features: FM Radio, G-Sensor&lt;/li&gt;\r\n&lt;/ul&gt;\r\n', '', '', '', '', ''),
-(41, 1, 'iMac', '&lt;div&gt;\r\n	Just when you thought iMac had everything, now there´s even more. More powerful Intel Core 2 Duo processors. And more memory standard. Combine this with Mac OS X Leopard and iLife ´08, and it´s more all-in-one than ever. iMac packs amazing performance into a stunningly slim space.&lt;/div&gt;\r\n', '', '', '', '', ''),
+(41, 1, 'iMac', '&lt;div&gt;\r\n	Just when you thought iMac had everything, now there?s even more. More powerful Intel Core 2 Duo processors. And more memory standard. Combine this with Mac OS X Leopard and iLife ?08, and it?s more all-in-one than ever. iMac packs amazing performance into a stunningly slim space.&lt;/div&gt;\r\n', '', '', '', '', ''),
 (40, 1, 'iPhone', '&lt;p class=&quot;intro&quot;&gt;\r\n	iPhone is a revolutionary new mobile phone that allows you to make a call by simply tapping a name or number in your address book, a favorites list, or a call log. It also automatically syncs all your contacts from a PC, Mac, or Internet service. And it lets you select and listen to voicemail messages in whatever order you want just like email.&lt;/p&gt;\r\n', '', '', '', '', ''),
 (48, 1, 'iPod Classic', '&lt;div class=&quot;cpt_product_description &quot;&gt;\r\n	&lt;div&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;More room to move.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			With 80GB or 160GB of storage and up to 40 hours of battery life, the new iPod classic lets you enjoy up to 40,000 songs or up to 200 hours of video or any combination wherever you go.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Cover Flow.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Browse through your music collection by flipping through album art. Select an album to turn it over and see the track list.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Enhanced interface.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Experience a whole new way to browse and view your music and video.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Sleeker design.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Beautiful, durable, and sleeker than ever, iPod classic now features an anodized aluminum and polished stainless steel enclosure with rounded edges.&lt;/p&gt;\r\n	&lt;/div&gt;\r\n&lt;/div&gt;\r\n&lt;!-- cpt_container_end --&gt;', '', '', '', '', ''),
 (36, 1, 'iPod Nano', '&lt;div&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Video in your pocket.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Its the small iPod with one very big idea: video. The worlds most popular music player now lets you enjoy movies, TV shows, and more on a two-inch display thats 65% brighter than before.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Cover Flow.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Browse through your music collection by flipping through album art. Select an album to turn it over and see the track list.&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Enhanced interface.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Experience a whole new way to browse and view your music and video.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Sleek and colorful.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		With an anodized aluminum and polished stainless steel enclosure and a choice of five colors, iPod nano is dressed to impress.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;iTunes.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Available as a free download, iTunes makes it easy to browse and buy millions of songs, movies, TV shows, audiobooks, and games and download free podcasts all at the iTunes Store. And you can import your own music, manage your whole media library, and sync your iPod or iPhone with ease.&lt;/p&gt;\r\n&lt;/div&gt;\r\n', '', '', '', '', ''),
@@ -2887,10 +2887,10 @@ INSERT INTO `oc_product_description` (`product_id`, `language_id`, `name`, `desc
 (49, 1, 'Samsung Galaxy Tab 10.1', '&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1, is the world&amp;rsquo;s thinnest tablet, measuring 8.6 mm thickness, running with Android 3.0 Honeycomb OS on a 1GHz dual-core Tegra 2 processor, similar to its younger brother Samsung Galaxy Tab 8.9.&lt;/p&gt;\r\n&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 gives pure Android 3.0 experience, adding its new TouchWiz UX or TouchWiz 4.0 &amp;ndash; includes a live panel, which lets you to customize with different content, such as your pictures, bookmarks, and social feeds, sporting a 10.1 inches WXGA capacitive touch screen with 1280 x 800 pixels of resolution, equipped with 3 megapixel rear camera with LED flash and a 2 megapixel front camera, HSPA+ connectivity up to 21Mbps, 720p HD video recording capability, 1080p HD playback, DLNA support, Bluetooth 2.1, USB 2.0, gyroscope, Wi-Fi 802.11 a/b/g/n, micro-SD slot, 3.5mm headphone jack, and SIM slot, including the Samsung Stick &amp;ndash; a Bluetooth microphone that can be carried in a pocket like a pen and sound dock with powered subwoofer.&lt;/p&gt;\r\n&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 will come in 16GB / 32GB / 64GB verities and pre-loaded with Social Hub, Reader&amp;rsquo;s Hub, Music Hub and Samsung Mini Apps Tray &amp;ndash; which gives you access to more commonly used apps to help ease multitasking and it is capable of Adobe Flash Player 10.2, powered by 6860mAh battery that gives you 10hours of video-playback time.&amp;nbsp;&amp;auml;&amp;ouml;&lt;/p&gt;\r\n', '', '', '', '', ''),
 (33, 1, 'Samsung SyncMaster 941BW', '&lt;div&gt;\r\n	Imagine the advantages of going big without slowing down. The big 19&amp;quot; 941BW monitor combines wide aspect ratio with fast pixel response time, for bigger images, more room to work and crisp motion. In addition, the exclusive MagicBright 2, MagicColor and MagicTune technologies help deliver the ideal image in every situation, while sleek, narrow bezels and adjustable stands deliver style just the way you want it. With the Samsung 941BW widescreen analog/digital LCD monitor, it&amp;#39;s not hard to imagine.&lt;/div&gt;\r\n', '', '', '', '', ''),
 (46, 1, 'Sony VAIO', '&lt;div&gt;\r\n	Unprecedented power. The next generation of processing technology has arrived. Built into the newest VAIO notebooks lies Intel&amp;#39;s latest, most powerful innovation yet: Intel&amp;reg; Centrino&amp;reg; 2 processor technology. Boasting incredible speed, expanded wireless connectivity, enhanced multimedia support and greater energy efficiency, all the high-performance essentials are seamlessly combined into a single chip.&lt;/div&gt;\r\n', '', '', '', '', ''),
-(30, 2, 'Canon EOS 5D', '&lt;p&gt;Canon''s press material for the EOS 5D states that it ''defines (a) new \r\nD-SLR category'', while we''re not typically too concerned with marketing \r\ntalk this particular statement is clearly pretty accurate. The EOS 5D is\r\n unlike any previous digital SLR in that it combines a full-frame (35 mm\r\n sized) high resolution sensor (12.8 megapixels) with a relatively \r\ncompact body (slightly larger than the EOS 20D, although in your hand it\r\n feels noticeably ''chunkier''). The EOS 5D is aimed to slot in between \r\nthe EOS 20D and the EOS-1D professional digital SLR''s, an important \r\ndifference when compared to the latter is that the EOS 5D doesn''t have \r\nany environmental seals. While Canon don''t specifically refer to the EOS\r\n 5D as a ''professional'' digital SLR it will have obvious appeal to \r\nprofessionals who want a high quality digital SLR in a body lighter than\r\n the EOS-1D. It will also no doubt appeal to current EOS 20D owners \r\n(although lets hope they''ve not bought too many EF-S lenses...) äë&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
+(30, 2, 'Canon EOS 5D', '&lt;p&gt;Canon''s press material for the EOS 5D states that it ''defines (a) new \r\nD-SLR category'', while we''re not typically too concerned with marketing \r\ntalk this particular statement is clearly pretty accurate. The EOS 5D is\r\n unlike any previous digital SLR in that it combines a full-frame (35 mm\r\n sized) high resolution sensor (12.8 megapixels) with a relatively \r\ncompact body (slightly larger than the EOS 20D, although in your hand it\r\n feels noticeably ''chunkier''). The EOS 5D is aimed to slot in between \r\nthe EOS 20D and the EOS-1D professional digital SLR''s, an important \r\ndifference when compared to the latter is that the EOS 5D doesn''t have \r\nany environmental seals. While Canon don''t specifically refer to the EOS\r\n 5D as a ''professional'' digital SLR it will have obvious appeal to \r\nprofessionals who want a high quality digital SLR in a body lighter than\r\n the EOS-1D. It will also no doubt appeal to current EOS 20D owners \r\n(although lets hope they''ve not bought too many EF-S lenses...) ae&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
 (47, 2, 'HP LP3065', '&lt;p&gt;Stop your co-workers in their tracks with the stunning new 30-inch \r\ndiagonal HP LP3065 Flat Panel Monitor. This flagship monitor features \r\nbest-in-class performance and presentation features on a huge \r\nwide-aspect screen while letting you work as comfortably as possible - \r\nyou might even forget you''re at the office&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
 (28, 2, 'HTC Touch HD', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;\r\n	HTC Touch - in High Definition. Watch music videos and streaming \r\ncontent in awe-inspiring high definition clarity for a mobile experience\r\n you never thought possible. Seductively sleek, the HTC Touch HD \r\nprovides the next generation of mobile functionality, all at a simple \r\ntouch. Fully integrated with Windows Mobile Professional 6.1, ultrafast \r\n3.5G, GPS, 5MP camera, plus lots more - all delivered on a \r\nbreathtakingly crisp 3.8&quot; WVGA touchscreen - you can take control of \r\nyour mobile world with the HTC Touch HD.&lt;/p&gt;&lt;p&gt;\r\n&lt;br&gt;&lt;/p&gt;&lt;p&gt;\r\n	&lt;strong&gt;Features&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;\r\n&lt;br&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;\r\n		Processor Qualcomm® MSM 7201A™ 528 MHz&lt;/li&gt;&lt;li&gt;\r\n		Windows Mobile® 6.1 Professional Operating System&lt;/li&gt;&lt;li&gt;\r\n		Memory: 512 MB ROM, 288 MB RAM&lt;/li&gt;&lt;li&gt;\r\n		Dimensions: 115 mm x 62.8 mm x 12 mm / 146.4 grams&lt;/li&gt;&lt;li&gt;\r\n		3.8-inch TFT-LCD flat touch-sensitive screen with 480 x 800 WVGA resolution&lt;/li&gt;&lt;li&gt;\r\n		HSDPA/WCDMA: Europe/Asia: 900/2100 MHz; Up to 2 Mbps up-link and 7.2 Mbps down-link speeds&lt;/li&gt;&lt;li&gt;\r\n		Quad-band GSM/GPRS/EDGE: Europe/Asia: 850/900/1800/1900 MHz (Band \r\nfrequency, HSUPA availability, and data speed are operator dependent.)&lt;/li&gt;&lt;li&gt;\r\n		Device Control via HTC TouchFLO™ 3D &amp;amp; Touch-sensitive front panel buttons&lt;/li&gt;&lt;li&gt;\r\n		GPS and A-GPS ready&lt;/li&gt;&lt;li&gt;\r\n		Bluetooth® 2.0 with Enhanced Data Rate and A2DP for wireless stereo headsets&lt;/li&gt;&lt;li&gt;\r\n		Wi-Fi®: IEEE 802.11 b/g&lt;/li&gt;&lt;li&gt;\r\n		HTC ExtUSB™ (11-pin mini-USB 2.0)&lt;/li&gt;&lt;li&gt;\r\n		5 megapixel color camera with auto focus&lt;/li&gt;&lt;li&gt;\r\n		VGA CMOS color camera&lt;/li&gt;&lt;li&gt;\r\n		Built-in 3.5 mm audio jack, microphone, speaker, and FM radio&lt;/li&gt;&lt;li&gt;\r\n		Ring tone formats: AAC, AAC+, eAAC+, AMR-NB, AMR-WB, QCP, MP3, WMA, WAV&lt;/li&gt;&lt;li&gt;\r\n		40 polyphonic and standard MIDI format 0 and 1 (SMF)/SP MIDI&lt;/li&gt;&lt;li&gt;\r\n		Rechargeable Lithium-ion or Lithium-ion polymer 1350 mAh battery&lt;/li&gt;&lt;li&gt;\r\n		Expansion Slot: microSD™ memory card (SD 2.0 compatible)&lt;/li&gt;&lt;li&gt;\r\n		AC Adapter Voltage range/frequency: 100 ~ 240V AC, 50/60 Hz DC output: 5V and 1A&lt;/li&gt;&lt;li&gt;\r\n		Special Features: FM Radio, G-Sensor&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
-(41, 2, 'iMac', '&lt;p&gt;Just when you thought iMac had everything, now there´s even more. More \r\npowerful Intel Core 2 Duo processors. And more memory standard. Combine \r\nthis with Mac OS X Leopard and iLife ´08, and it´s more all-in-one than \r\never. iMac packs amazing performance into a stunningly slim space.&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
+(41, 2, 'iMac', '&lt;p&gt;Just when you thought iMac had everything, now there?s even more. More \r\npowerful Intel Core 2 Duo processors. And more memory standard. Combine \r\nthis with Mac OS X Leopard and iLife ?08, and it?s more all-in-one than \r\never. iMac packs amazing performance into a stunningly slim space.&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
 (40, 2, 'iPhone', '&lt;p&gt;iPhone is a revolutionary new mobile phone that allows you to make a \r\ncall by simply tapping a name or number in your address book, a \r\nfavorites list, or a call log. It also automatically syncs all your \r\ncontacts from a PC, Mac, or Internet service. And it lets you select and\r\n listen to voicemail messages in whatever order you want just like \r\nemail.&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
 (48, 2, 'iPod Classic', '&lt;p&gt;&lt;strong&gt;More room to move.&lt;/strong&gt;\r\n		&lt;/p&gt;&lt;div class=&quot;cpt_product_description &quot;&gt;&lt;div&gt;&lt;p&gt;\r\n			With 80GB or 160GB of storage and up to 40 hours of battery life, the\r\n new iPod classic lets you enjoy up to 40,000 songs or up to 200 hours \r\nof video or any combination wherever you go.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Cover Flow.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Browse through your music collection by flipping through album art. Select an album to turn it over and see the track list.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Enhanced interface.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Experience a whole new way to browse and view your music and video.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Sleeker design.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Beautiful, durable, and sleeker than ever, iPod classic now features \r\nan anodized aluminum and polished stainless steel enclosure with rounded\r\n edges.&lt;/p&gt;\r\n	&lt;/div&gt;\r\n&lt;/div&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '', '', '', '', '');
 INSERT INTO `oc_product_description` (`product_id`, `language_id`, `name`, `description`, `tag`, `meta_title`, `meta_description`, `meta_keyword`, `meta_h1`) VALUES
@@ -2923,7 +2923,7 @@ CREATE TABLE `oc_product_discount` (
   `date_end` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`product_discount_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_discount`
@@ -2945,7 +2945,7 @@ CREATE TABLE `oc_product_filter` (
   `product_id` int(11) NOT NULL,
   `filter_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`filter_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -2961,7 +2961,7 @@ CREATE TABLE `oc_product_image` (
   `sort_order` int(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`product_image_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_image`
@@ -3044,7 +3044,7 @@ CREATE TABLE `oc_product_option` (
   `value` text NOT NULL,
   `required` tinyint(1) NOT NULL,
   PRIMARY KEY (`product_option_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_option`
@@ -3086,7 +3086,7 @@ CREATE TABLE `oc_product_option_value` (
   `weight` decimal(15,8) NOT NULL,
   `weight_prefix` varchar(1) NOT NULL,
   PRIMARY KEY (`product_option_value_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_option_value`
@@ -3122,7 +3122,7 @@ CREATE TABLE `oc_product_recurring` (
   `recurring_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`recurring_id`,`customer_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -3135,7 +3135,7 @@ CREATE TABLE `oc_product_related` (
   `product_id` int(11) NOT NULL,
   `related_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`related_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_related`
@@ -3160,7 +3160,7 @@ CREATE TABLE `oc_product_reward` (
   `customer_group_id` int(11) NOT NULL DEFAULT '0',
   `points` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`product_reward_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_reward`
@@ -3204,7 +3204,7 @@ CREATE TABLE `oc_product_special` (
   `date_end` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`product_special_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_special`
@@ -3228,7 +3228,7 @@ CREATE TABLE `oc_product_to_category` (
   `main_category` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`product_id`,`category_id`),
   KEY `category_id` (`category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_to_category`
@@ -3282,7 +3282,7 @@ CREATE TABLE `oc_product_to_download` (
   `product_id` int(11) NOT NULL,
   `download_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`download_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -3296,7 +3296,7 @@ CREATE TABLE `oc_product_to_layout` (
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -3309,7 +3309,7 @@ CREATE TABLE `oc_product_to_store` (
   `product_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`product_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_to_store`
@@ -3357,7 +3357,7 @@ CREATE TABLE `oc_recurring` (
   `status` tinyint(4) NOT NULL,
   `sort_order` int(11) NOT NULL,
   PRIMARY KEY (`recurring_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -3371,7 +3371,7 @@ CREATE TABLE `oc_recurring_description` (
   `language_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`recurring_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -3401,7 +3401,7 @@ CREATE TABLE `oc_return` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`return_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -3415,7 +3415,7 @@ CREATE TABLE `oc_return_action` (
   `language_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`return_action_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_return_action`
@@ -3444,7 +3444,7 @@ CREATE TABLE `oc_return_history` (
   `comment` text NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`return_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -3458,7 +3458,7 @@ CREATE TABLE `oc_return_reason` (
   `language_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`return_reason_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_return_reason`
@@ -3488,7 +3488,7 @@ CREATE TABLE `oc_return_status` (
   `language_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(32) NOT NULL,
   PRIMARY KEY (`return_status_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_return_status`
@@ -3521,7 +3521,7 @@ CREATE TABLE `oc_review` (
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`review_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -3535,7 +3535,7 @@ CREATE TABLE `oc_statistics` (
   `code` varchar(64) NOT NULL,
   `value` decimal(15,4) NOT NULL,
   PRIMARY KEY (`statistics_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 --
@@ -3580,7 +3580,7 @@ CREATE TABLE `oc_setting` (
   `value` text NOT NULL,
   `serialized` tinyint(1) NOT NULL,
   PRIMARY KEY (`setting_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_setting`
@@ -3843,7 +3843,7 @@ CREATE TABLE `oc_stock_status` (
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
   PRIMARY KEY (`stock_status_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_stock_status`
@@ -3872,7 +3872,7 @@ CREATE TABLE `oc_store` (
   `url` varchar(255) NOT NULL,
   `ssl` varchar(255) NOT NULL,
   PRIMARY KEY (`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -3888,7 +3888,7 @@ CREATE TABLE `oc_tax_class` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`tax_class_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_tax_class`
@@ -3914,7 +3914,7 @@ CREATE TABLE `oc_tax_rate` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`tax_rate_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_tax_rate`
@@ -3935,7 +3935,7 @@ CREATE TABLE `oc_tax_rate_to_customer_group` (
   `tax_rate_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
   PRIMARY KEY (`tax_rate_id`,`customer_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_tax_rate_to_customer_group`
@@ -3959,7 +3959,7 @@ CREATE TABLE `oc_tax_rule` (
   `based` varchar(10) NOT NULL,
   `priority` int(5) NOT NULL DEFAULT '1',
   PRIMARY KEY (`tax_rule_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_tax_rule`
@@ -3986,7 +3986,7 @@ CREATE TABLE `oc_theme` (
   `code` mediumtext NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`theme_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -4004,7 +4004,7 @@ CREATE TABLE `oc_translation` (
   `value` text NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`translation_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -4020,7 +4020,7 @@ CREATE TABLE `oc_upload` (
   `code` varchar(255) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`upload_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -4038,7 +4038,7 @@ CREATE TABLE `oc_seo_url` (
   PRIMARY KEY (`seo_url_id`),
   KEY `query` (`query`),
   KEY `keyword` (`keyword`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_seo_url`
@@ -4278,7 +4278,7 @@ CREATE TABLE `oc_user` (
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -4292,7 +4292,7 @@ CREATE TABLE `oc_user_group` (
   `name` varchar(64) NOT NULL,
   `permission` text NOT NULL,
   PRIMARY KEY (`user_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_user_group`
@@ -4323,7 +4323,7 @@ CREATE TABLE `oc_voucher` (
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`voucher_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -4339,7 +4339,7 @@ CREATE TABLE `oc_voucher_history` (
   `amount` decimal(15,4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`voucher_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
 
@@ -4352,7 +4352,7 @@ CREATE TABLE `oc_voucher_theme` (
   `voucher_theme_id` int(11) NOT NULL AUTO_INCREMENT,
   `image` varchar(255) NOT NULL,
   PRIMARY KEY (`voucher_theme_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_voucher_theme`
@@ -4375,7 +4375,7 @@ CREATE TABLE `oc_voucher_theme_description` (
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
   PRIMARY KEY (`voucher_theme_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_voucher_theme_description`
@@ -4397,7 +4397,7 @@ CREATE TABLE `oc_weight_class` (
   `weight_class_id` int(11) NOT NULL AUTO_INCREMENT,
   `value` decimal(15,8) NOT NULL DEFAULT '0.00000000',
   PRIMARY KEY (`weight_class_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_weight_class`
@@ -4422,7 +4422,7 @@ CREATE TABLE `oc_weight_class_description` (
   `title` varchar(32) NOT NULL,
   `unit` varchar(4) NOT NULL,
   PRIMARY KEY (`weight_class_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_weight_class_description`
@@ -4452,7 +4452,7 @@ CREATE TABLE `oc_zone` (
   `code` varchar(32) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`zone_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_zone`
@@ -4658,7 +4658,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (197, 13, 'Victoria', 'VIC', 1),
 (198, 13, 'Western Australia', 'WA', 1),
 (199, 14, 'Burgenland', 'BUR', 1),
-(200, 14, 'Kärnten', 'KAR', 1),
+(200, 14, 'Karnten', 'KAR', 1),
 (201, 14, 'Nieder&ouml;sterreich', 'NOS', 1),
 (202, 14, 'Ober&ouml;sterreich', 'OOS', 1),
 (203, 14, 'Salzburg', 'SAL', 1),
@@ -4805,7 +4805,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (344, 21, 'Antwerpen', 'VAN', 1),
 (345, 21, 'Brabant Wallon', 'WBR', 1),
 (346, 21, 'Hainaut', 'WHT', 1),
-(347, 21, 'Liège', 'WLG', 1),
+(347, 21, 'Liege', 'WLG', 1),
 (348, 21, 'Limburg', 'VLI', 1),
 (349, 21, 'Luxembourg', 'WLX', 1),
 (350, 21, 'Namur', 'WNA', 1),
@@ -4900,29 +4900,29 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (439, 28, 'Southern', 'SO', 1),
 (440, 30, 'Acre', 'AC', 1),
 (441, 30, 'Alagoas', 'AL', 1),
-(442, 30, 'Amapá', 'AP', 1),
+(442, 30, 'Amapa', 'AP', 1),
 (443, 30, 'Amazonas', 'AM', 1),
 (444, 30, 'Bahia', 'BA', 1),
-(445, 30, 'Ceará', 'CE', 1),
+(445, 30, 'Ceara', 'CE', 1),
 (446, 30, 'Distrito Federal', 'DF', 1),
-(447, 30, 'Espírito Santo', 'ES', 1),
-(448, 30, 'Goiás', 'GO', 1),
-(449, 30, 'Maranhão', 'MA', 1),
+(447, 30, 'Espirito Santo', 'ES', 1),
+(448, 30, 'Goias', 'GO', 1),
+(449, 30, 'Maranhao', 'MA', 1),
 (450, 30, 'Mato Grosso', 'MT', 1),
 (451, 30, 'Mato Grosso do Sul', 'MS', 1),
 (452, 30, 'Minas Gerais', 'MG', 1),
-(453, 30, 'Pará', 'PA', 1),
-(454, 30, 'Paraíba', 'PB', 1),
-(455, 30, 'Paraná', 'PR', 1),
+(453, 30, 'Para', 'PA', 1),
+(454, 30, 'Paraiba', 'PB', 1),
+(455, 30, 'Parana', 'PR', 1),
 (456, 30, 'Pernambuco', 'PE', 1),
-(457, 30, 'Piauí', 'PI', 1),
+(457, 30, 'Piaui', 'PI', 1),
 (458, 30, 'Rio de Janeiro', 'RJ', 1),
 (459, 30, 'Rio Grande do Norte', 'RN', 1),
 (460, 30, 'Rio Grande do Sul', 'RS', 1),
-(461, 30, 'Rondônia', 'RO', 1),
+(461, 30, 'Rondonia', 'RO', 1),
 (462, 30, 'Roraima', 'RR', 1),
 (463, 30, 'Santa Catarina', 'SC', 1),
-(464, 30, 'São Paulo', 'SP', 1),
+(464, 30, 'Sao Paulo', 'SP', 1),
 (465, 30, 'Sergipe', 'SE', 1),
 (466, 30, 'Tocantins', 'TO', 1),
 (467, 31, 'Peros Banhos', 'PB', 1),
@@ -5104,7 +5104,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (643, 41, 'Haut-Mbomou', 'HMB', 1),
 (644, 41, 'Kemo', 'KEM', 1),
 (645, 41, 'Lobaye', 'LOB', 1),
-(646, 41, 'Mambere-KadeÔ', 'MKD', 1),
+(646, 41, 'Mambere-KadeO', 'MKD', 1),
 (647, 41, 'Mbomou', 'MBO', 1),
 (648, 41, 'Nana-Mambere', 'NMM', 1),
 (649, 41, 'Ombella-M''Poko', 'OMP', 1),
@@ -5307,25 +5307,25 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (846, 52, 'Zuenoula', 'ZUE', 1),
 (847, 53, 'Bjelovarsko-bilogorska', 'BB', 1),
 (848, 53, 'Grad Zagreb', 'GZ', 1),
-(849, 53, 'Dubrovačko-neretvanska', 'DN', 1),
+(849, 53, 'Dubrovacko-neretvanska', 'DN', 1),
 (850, 53, 'Istarska', 'IS', 1),
-(851, 53, 'Karlovačka', 'KA', 1),
-(852, 53, 'Koprivničko-križevačka', 'KK', 1),
+(851, 53, 'Karlovacka', 'KA', 1),
+(852, 53, 'Koprivnicko-krizevacka', 'KK', 1),
 (853, 53, 'Krapinsko-zagorska', 'KZ', 1),
-(854, 53, 'Ličko-senjska', 'LS', 1),
-(855, 53, 'Međimurska', 'ME', 1),
-(856, 53, 'Osječko-baranjska', 'OB', 1),
-(857, 53, 'Požeško-slavonska', 'PS', 1),
+(854, 53, 'Licko-senjska', 'LS', 1),
+(855, 53, 'Medimurska', 'ME', 1),
+(856, 53, 'Osjecko-baranjska', 'OB', 1),
+(857, 53, 'Pozesko-slavonska', 'PS', 1),
 (858, 53, 'Primorsko-goranska', 'PG', 1),
-(859, 53, 'Šibensko-kninska', 'SK', 1),
-(860, 53, 'Sisačko-moslavačka', 'SM', 1),
+(859, 53, 'Sibensko-kninska', 'SK', 1),
+(860, 53, 'Sisacko-moslavacka', 'SM', 1),
 (861, 53, 'Brodsko-posavska', 'BP', 1),
 (862, 53, 'Splitsko-dalmatinska', 'SD', 1),
-(863, 53, 'Varaždinska', 'VA', 1),
-(864, 53, 'Virovitičko-podravska', 'VP', 1),
+(863, 53, 'Varazdinska', 'VA', 1),
+(864, 53, 'Viroviticko-podravska', 'VP', 1),
 (865, 53, 'Vukovarsko-srijemska', 'VS', 1),
 (866, 53, 'Zadarska', 'ZA', 1),
-(867, 53, 'Zagrebačka', 'ZG', 1),
+(867, 53, 'Zagrebacka', 'ZG', 1),
 (868, 54, 'Camaguey', 'CA', 1),
 (869, 54, 'Ciego de Avila', 'CD', 1),
 (870, 54, 'Cienfuegos', 'CI', 1),
@@ -5347,20 +5347,20 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (886, 55, 'Limassol', 'I', 1),
 (887, 55, 'Nicosia', 'N', 1),
 (888, 55, 'Paphos', 'P', 1),
-(889, 56, 'Ústecký', 'U', 1),
-(890, 56, 'Jihočeský', 'C', 1),
-(891, 56, 'Jihomoravský', 'B', 1),
-(892, 56, 'Karlovarský', 'K', 1),
-(893, 56, 'Královehradecký', 'H', 1),
-(894, 56, 'Liberecký', 'L', 1),
-(895, 56, 'Moravskoslezský', 'T', 1),
-(896, 56, 'Olomoucký', 'M', 1),
-(897, 56, 'Pardubický', 'E', 1),
-(898, 56, 'Plzeňský', 'P', 1),
+(889, 56, 'Ustecky', 'U', 1),
+(890, 56, 'Jihocesky', 'C', 1),
+(891, 56, 'Jihomoravsky', 'B', 1),
+(892, 56, 'Karlovarsky', 'K', 1),
+(893, 56, 'Kralovehradecky', 'H', 1),
+(894, 56, 'Liberecky', 'L', 1),
+(895, 56, 'Moravskoslezsky', 'T', 1),
+(896, 56, 'Olomoucky', 'M', 1),
+(897, 56, 'Pardubicky', 'E', 1),
+(898, 56, 'Plzensky', 'P', 1),
 (899, 56, 'Praha', 'A', 1),
-(900, 56, 'Středočeský', 'S', 1),
-(901, 56, 'Vysočina', 'J', 1),
-(902, 56, 'Zlínský', 'Z', 1),
+(900, 56, 'Stredocesky', 'S', 1),
+(901, 56, 'Vysocina', 'J', 1),
+(902, 56, 'Zlinsky', 'Z', 1),
 (903, 57, 'Arhus', 'AR', 1),
 (904, 57, 'Bornholm', 'BH', 1),
 (905, 57, 'Copenhagen', 'CO', 1),
@@ -5543,12 +5543,12 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1082, 71, 'Eastern Division', 'E', 1),
 (1083, 71, 'Western Division', 'W', 1),
 (1084, 71, 'Rotuma', 'R', 1),
-(1085, 72, 'Ahvenanmaan lääni', 'AL', 1),
-(1086, 72, 'Etelä-Suomen lääni', 'ES', 1),
-(1087, 72, 'Itä-Suomen lääni', 'IS', 1),
-(1088, 72, 'Länsi-Suomen lääni', 'LS', 1),
-(1089, 72, 'Lapin lääni', 'LA', 1),
-(1090, 72, 'Oulun lääni', 'OU', 1),
+(1085, 72, 'Ahvenanmaan laani', 'AL', 1),
+(1086, 72, 'Etela-Suomen laani', 'ES', 1),
+(1087, 72, 'Ita-Suomen laani', 'IS', 1),
+(1088, 72, 'Lansi-Suomen laani', 'LS', 1),
+(1089, 72, 'Lapin laani', 'LA', 1),
+(1090, 72, 'Oulun laani', 'OU', 1),
 (1114, 74, 'Ain', '01', 1),
 (1115, 74, 'Aisne', '02', 1),
 (1116, 74, 'Allier', '03', 1),
@@ -7286,14 +7286,14 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (2922, 187, 'Northern', 'N', 1),
 (2923, 187, 'Southern', 'S', 1),
 (2924, 187, 'Western', 'W', 1),
-(2925, 189, 'Banskobystrický', 'BA', 1),
-(2926, 189, 'Bratislavský', 'BR', 1),
-(2927, 189, 'Košický', 'KO', 1),
+(2925, 189, 'Banskobystricky', 'BA', 1),
+(2926, 189, 'Bratislavsky', 'BR', 1),
+(2927, 189, 'Kosicky', 'KO', 1),
 (2928, 189, 'Nitriansky', 'NI', 1),
-(2929, 189, 'Prešovský', 'PR', 1),
-(2930, 189, 'Trenčiansky', 'TC', 1),
-(2931, 189, 'Trnavský', 'TV', 1),
-(2932, 189, 'Žilinský', 'ZI', 1),
+(2929, 189, 'Presovsky', 'PR', 1),
+(2930, 189, 'Trenciansky', 'TC', 1),
+(2931, 189, 'Trnavsky', 'TV', 1),
+(2932, 189, 'Zilinsky', 'ZI', 1),
 (2933, 191, 'Central', 'CE', 1),
 (2934, 191, 'Choiseul', 'CH', 1),
 (2935, 191, 'Guadalcanal', 'GC', 1),
@@ -7435,26 +7435,26 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3073, 202, 'Shishelweni', 'S', 1),
 (3074, 203, 'Blekinge', 'K', 1),
 (3075, 203, 'Dalarna', 'W', 1),
-(3076, 203, 'Gävleborg', 'X', 1),
+(3076, 203, 'Gavleborg', 'X', 1),
 (3077, 203, 'Gotland', 'I', 1),
 (3078, 203, 'Halland', 'N', 1),
-(3079, 203, 'Jämtland', 'Z', 1),
-(3080, 203, 'Jönköping', 'F', 1),
+(3079, 203, 'Jamtland', 'Z', 1),
+(3080, 203, 'Jonkoping', 'F', 1),
 (3081, 203, 'Kalmar', 'H', 1),
 (3082, 203, 'Kronoberg', 'G', 1),
 (3083, 203, 'Norrbotten', 'BD', 1),
-(3084, 203, 'Örebro', 'T', 1),
-(3085, 203, 'Östergötland', 'E', 1),
+(3084, 203, 'Orebro', 'T', 1),
+(3085, 203, 'Ostergotland', 'E', 1),
 (3086, 203, 'Sk&aring;ne', 'M', 1),
-(3087, 203, 'Södermanland', 'D', 1),
+(3087, 203, 'Sodermanland', 'D', 1),
 (3088, 203, 'Stockholm', 'AB', 1),
 (3089, 203, 'Uppsala', 'C', 1),
-(3090, 203, 'Värmland', 'S', 1),
-(3091, 203, 'Västerbotten', 'AC', 1),
-(3092, 203, 'Västernorrland', 'Y', 1);
+(3090, 203, 'Varmland', 'S', 1),
+(3091, 203, 'Vasterbotten', 'AC', 1),
+(3092, 203, 'Vasternorrland', 'Y', 1);
 INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
-(3093, 203, 'Västmanland', 'U', 1),
-(3094, 203, 'Västra Götaland', 'O', 1),
+(3093, 203, 'Vastmanland', 'U', 1),
+(3094, 203, 'Vastra Gotaland', 'O', 1),
 (3095, 204, 'Aargau', 'AG', 1),
 (3096, 204, 'Appenzell Ausserrhoden', 'AR', 1),
 (3097, 204, 'Appenzell Innerrhoden', 'AI', 1),
@@ -7464,7 +7464,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3101, 204, 'Fribourg', 'FR', 1),
 (3102, 204, 'Gen&egrave;ve', 'GE', 1),
 (3103, 204, 'Glarus', 'GL', 1),
-(3104, 204, 'Graubünden', 'GR', 1),
+(3104, 204, 'Graubunden', 'GR', 1),
 (3105, 204, 'Jura', 'JU', 1),
 (3106, 204, 'Luzern', 'LU', 1),
 (3107, 204, 'Neuch&acirc;tel', 'NE', 1),
@@ -7480,7 +7480,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3117, 204, 'Valais', 'VS', 1),
 (3118, 204, 'Vaud', 'VD', 1),
 (3119, 204, 'Zug', 'ZG', 1),
-(3120, 204, 'Zürich', 'ZH', 1),
+(3120, 204, 'Zurich', 'ZH', 1),
 (3121, 205, 'Al Hasakah', 'HA', 1),
 (3122, 205, 'Al Ladhiqiyah', 'LA', 1),
 (3123, 205, 'Al Qunaytirah', 'QU', 1),
@@ -7676,82 +7676,82 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3313, 214, 'Tunis', 'TU', 1),
 (3314, 214, 'Zaghouan', 'ZA', 1),
 (3315, 215, 'Adana', 'ADA', 1),
-(3316, 215, 'Adıyaman', 'ADI', 1),
+(3316, 215, 'Ad?yaman', 'ADI', 1),
 (3317, 215, 'Afyonkarahisar', 'AFY', 1),
-(3318, 215, 'Ağrı', 'AGR', 1),
+(3318, 215, 'Agr?', 'AGR', 1),
 (3319, 215, 'Aksaray', 'AKS', 1),
 (3320, 215, 'Amasya', 'AMA', 1),
 (3321, 215, 'Ankara', 'ANK', 1),
 (3322, 215, 'Antalya', 'ANT', 1),
 (3323, 215, 'Ardahan', 'ARD', 1),
 (3324, 215, 'Artvin', 'ART', 1),
-(3325, 215, 'Aydın', 'AYI', 1),
-(3326, 215, 'Balıkesir', 'BAL', 1),
-(3327, 215, 'Bartın', 'BAR', 1),
+(3325, 215, 'Ayd?n', 'AYI', 1),
+(3326, 215, 'Bal?kesir', 'BAL', 1),
+(3327, 215, 'Bart?n', 'BAR', 1),
 (3328, 215, 'Batman', 'BAT', 1),
 (3329, 215, 'Bayburt', 'BAY', 1),
 (3330, 215, 'Bilecik', 'BIL', 1),
-(3331, 215, 'Bingöl', 'BIN', 1),
+(3331, 215, 'Bingol', 'BIN', 1),
 (3332, 215, 'Bitlis', 'BIT', 1),
 (3333, 215, 'Bolu', 'BOL', 1),
 (3334, 215, 'Burdur', 'BRD', 1),
 (3335, 215, 'Bursa', 'BRS', 1),
-(3336, 215, 'Çanakkale', 'CKL', 1),
-(3337, 215, 'Çankırı', 'CKR', 1),
-(3338, 215, 'Çorum', 'COR', 1),
+(3336, 215, 'Canakkale', 'CKL', 1),
+(3337, 215, 'Cank?r?', 'CKR', 1),
+(3338, 215, 'Corum', 'COR', 1),
 (3339, 215, 'Denizli', 'DEN', 1),
-(3340, 215, 'Diyarbakır', 'DIY', 1),
-(3341, 215, 'Düzce', 'DUZ', 1),
+(3340, 215, 'Diyarbak?r', 'DIY', 1),
+(3341, 215, 'Duzce', 'DUZ', 1),
 (3342, 215, 'Edirne', 'EDI', 1),
-(3343, 215, 'Elazığ', 'ELA', 1),
+(3343, 215, 'Elaz?g', 'ELA', 1),
 (3344, 215, 'Erzincan', 'EZC', 1),
 (3345, 215, 'Erzurum', 'EZR', 1),
-(3346, 215, 'Eskişehir', 'ESK', 1),
+(3346, 215, 'Eskisehir', 'ESK', 1),
 (3347, 215, 'Gaziantep', 'GAZ', 1),
 (3348, 215, 'Giresun', 'GIR', 1),
-(3349, 215, 'Gümüşhane', 'GMS', 1),
+(3349, 215, 'Gumushane', 'GMS', 1),
 (3350, 215, 'Hakkari', 'HKR', 1),
 (3351, 215, 'Hatay', 'HTY', 1),
-(3352, 215, 'Iğdır', 'IGD', 1),
+(3352, 215, 'Igd?r', 'IGD', 1),
 (3353, 215, 'Isparta', 'ISP', 1),
-(3354, 215, 'İstanbul', 'IST', 1),
-(3355, 215, 'İzmir', 'IZM', 1),
-(3356, 215, 'Kahramanmaraş', 'KAH', 1),
-(3357, 215, 'Karabük', 'KRB', 1),
+(3354, 215, 'Istanbul', 'IST', 1),
+(3355, 215, 'Izmir', 'IZM', 1),
+(3356, 215, 'Kahramanmaras', 'KAH', 1),
+(3357, 215, 'Karabuk', 'KRB', 1),
 (3358, 215, 'Karaman', 'KRM', 1),
 (3359, 215, 'Kars', 'KRS', 1),
 (3360, 215, 'Kastamonu', 'KAS', 1),
 (3361, 215, 'Kayseri', 'KAY', 1),
 (3362, 215, 'Kilis', 'KLS', 1),
-(3363, 215, 'Kırıkkale', 'KRK', 1),
-(3364, 215, 'Kırklareli', 'KLR', 1),
-(3365, 215, 'Kırşehir', 'KRH', 1),
+(3363, 215, 'K?r?kkale', 'KRK', 1),
+(3364, 215, 'K?rklareli', 'KLR', 1),
+(3365, 215, 'K?rsehir', 'KRH', 1),
 (3366, 215, 'Kocaeli', 'KOC', 1),
 (3367, 215, 'Konya', 'KON', 1),
-(3368, 215, 'Kütahya', 'KUT', 1),
+(3368, 215, 'Kutahya', 'KUT', 1),
 (3369, 215, 'Malatya', 'MAL', 1),
 (3370, 215, 'Manisa', 'MAN', 1),
 (3371, 215, 'Mardin', 'MAR', 1),
 (3372, 215, 'Mersin', 'MER', 1),
-(3373, 215, 'Muğla', 'MUG', 1),
-(3374, 215, 'Muş', 'MUS', 1),
-(3375, 215, 'Nevşehir', 'NEV', 1),
-(3376, 215, 'Niğde', 'NIG', 1),
+(3373, 215, 'Mugla', 'MUG', 1),
+(3374, 215, 'Mus', 'MUS', 1),
+(3375, 215, 'Nevsehir', 'NEV', 1),
+(3376, 215, 'Nigde', 'NIG', 1),
 (3377, 215, 'Ordu', 'ORD', 1),
 (3378, 215, 'Osmaniye', 'OSM', 1),
 (3379, 215, 'Rize', 'RIZ', 1),
 (3380, 215, 'Sakarya', 'SAK', 1),
 (3381, 215, 'Samsun', 'SAM', 1),
-(3382, 215, 'Şanlıurfa', 'SAN', 1),
+(3382, 215, 'Sanl?urfa', 'SAN', 1),
 (3383, 215, 'Siirt', 'SII', 1),
 (3384, 215, 'Sinop', 'SIN', 1),
-(3385, 215, 'Şırnak', 'SIR', 1),
+(3385, 215, 'S?rnak', 'SIR', 1),
 (3386, 215, 'Sivas', 'SIV', 1),
-(3387, 215, 'Tekirdağ', 'TEL', 1),
+(3387, 215, 'Tekirdag', 'TEL', 1),
 (3388, 215, 'Tokat', 'TOK', 1),
 (3389, 215, 'Trabzon', 'TRA', 1),
 (3390, 215, 'Tunceli', 'TUN', 1),
-(3391, 215, 'Uşak', 'USK', 1),
+(3391, 215, 'Usak', 'USK', 1),
 (3392, 215, 'Van', 'VAN', 1),
 (3393, 215, 'Yalova', 'YAL', 1),
 (3394, 215, 'Yozgat', 'YOZ', 1),
@@ -8295,16 +8295,16 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3955, 222, 'Cumbria', 'CMA', 1),
 (3956, 190, 'Pomurska', '1', 1),
 (3957, 190, 'Podravska', '2', 1),
-(3958, 190, 'Koroška', '3', 1),
+(3958, 190, 'Koroska', '3', 1),
 (3959, 190, 'Savinjska', '4', 1),
 (3960, 190, 'Zasavska', '5', 1),
 (3961, 190, 'Spodnjeposavska', '6', 1),
 (3962, 190, 'Jugovzhodna Slovenija', '7', 1),
 (3963, 190, 'Osrednjeslovenska', '8', 1),
 (3964, 190, 'Gorenjska', '9', 1),
-(3965, 190, 'Notranjsko-kraška', '10', 1),
-(3966, 190, 'Goriška', '11', 1),
-(3967, 190, 'Obalno-kraška', '12', 1),
+(3965, 190, 'Notranjsko-kraska', '10', 1),
+(3966, 190, 'Goriska', '11', 1),
+(3967, 190, 'Obalno-kraska', '12', 1),
 (3968, 33, 'Ruse', '', 1),
 (3969, 101, 'Alborz', 'ALB', 1),
 (3970, 21, 'Brussels-Capital Region', 'BRU', 1),
@@ -8317,44 +8317,44 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3978, 242, 'Cetinje', '06', 1),
 (3979, 242, 'Danilovgrad', '07', 1),
 (3980, 242, 'Herceg-Novi', '08', 1),
-(3981, 242, 'Kolašin', '09', 1),
+(3981, 242, 'Kolasin', '09', 1),
 (3982, 242, 'Kotor', '10', 1),
 (3983, 242, 'Mojkovac', '11', 1),
-(3984, 242, 'Nikšić', '12', 1),
+(3984, 242, 'Niksic', '12', 1),
 (3985, 242, 'Plav', '13', 1),
 (3986, 242, 'Pljevlja', '14', 1),
-(3987, 242, 'Plužine', '15', 1),
+(3987, 242, 'Pluzine', '15', 1),
 (3988, 242, 'Podgorica', '16', 1),
-(3989, 242, 'Rožaje', '17', 1),
-(3990, 242, 'Šavnik', '18', 1),
+(3989, 242, 'Rozaje', '17', 1),
+(3990, 242, 'Savnik', '18', 1),
 (3991, 242, 'Tivat', '19', 1),
 (3992, 242, 'Ulcinj', '20', 1),
-(3993, 242, 'Žabljak', '21', 1),
+(3993, 242, 'Zabljak', '21', 1),
 (3994, 243, 'Belgrade', '00', 1),
-(3995, 243, 'North Bačka', '01', 1),
+(3995, 243, 'North Backa', '01', 1),
 (3996, 243, 'Central Banat', '02', 1),
 (3997, 243, 'North Banat', '03', 1),
 (3998, 243, 'South Banat', '04', 1),
-(3999, 243, 'West Bačka', '05', 1),
-(4000, 243, 'South Bačka', '06', 1),
+(3999, 243, 'West Backa', '05', 1),
+(4000, 243, 'South Backa', '06', 1),
 (4001, 243, 'Srem', '07', 1),
-(4002, 243, 'Mačva', '08', 1),
+(4002, 243, 'Macva', '08', 1),
 (4003, 243, 'Kolubara', '09', 1),
 (4004, 243, 'Podunavlje', '10', 1),
-(4005, 243, 'Braničevo', '11', 1),
-(4006, 243, 'Šumadija', '12', 1),
+(4005, 243, 'Branicevo', '11', 1),
+(4006, 243, 'Sumadija', '12', 1),
 (4007, 243, 'Pomoravlje', '13', 1),
 (4008, 243, 'Bor', '14', 1),
-(4009, 243, 'Zaječar', '15', 1),
+(4009, 243, 'Zajecar', '15', 1),
 (4010, 243, 'Zlatibor', '16', 1),
 (4011, 243, 'Moravica', '17', 1),
-(4012, 243, 'Raška', '18', 1),
+(4012, 243, 'Raska', '18', 1),
 (4013, 243, 'Rasina', '19', 1),
-(4014, 243, 'Nišava', '20', 1),
+(4014, 243, 'Nisava', '20', 1),
 (4015, 243, 'Toplica', '21', 1),
 (4016, 243, 'Pirot', '22', 1),
 (4017, 243, 'Jablanica', '23', 1),
-(4018, 243, 'Pčinja', '24', 1),
+(4018, 243, 'Pcinja', '24', 1),
 (4020, 245, 'Bonaire', 'BO', 1),
 (4021, 245, 'Saba', 'SA', 1),
 (4022, 245, 'Sint Eustatius', 'SE', 1),
@@ -8368,42 +8368,42 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (4030, 248, 'Warrap', 'WR', 1),
 (4031, 248, 'Western Bahr el-Ghazal', 'BW', 1),
 (4032, 248, 'Western Equatoria', 'EW', 1),
-(4036, 117, 'Ainaži, Salacgrīvas novads', '0661405', 1),
+(4036, 117, 'Ainazi, Salacgrivas novads', '0661405', 1),
 (4037, 117, 'Aizkraukle, Aizkraukles novads', '0320201', 1),
 (4038, 117, 'Aizkraukles novads', '0320200', 1),
 (4039, 117, 'Aizpute, Aizputes novads', '0640605', 1),
 (4040, 117, 'Aizputes novads', '0640600', 1),
-(4041, 117, 'Aknīste, Aknīstes novads', '0560805', 1),
-(4042, 117, 'Aknīstes novads', '0560800', 1),
+(4041, 117, 'Akniste, Aknistes novads', '0560805', 1),
+(4042, 117, 'Aknistes novads', '0560800', 1),
 (4043, 117, 'Aloja, Alojas novads', '0661007', 1),
 (4044, 117, 'Alojas novads', '0661000', 1),
 (4045, 117, 'Alsungas novads', '0624200', 1),
-(4046, 117, 'Alūksne, Alūksnes novads', '0360201', 1),
-(4047, 117, 'Alūksnes novads', '0360200', 1),
+(4046, 117, 'Aluksne, Aluksnes novads', '0360201', 1),
+(4047, 117, 'Aluksnes novads', '0360200', 1),
 (4048, 117, 'Amatas novads', '0424701', 1),
 (4049, 117, 'Ape, Apes novads', '0360805', 1),
 (4050, 117, 'Apes novads', '0360800', 1),
 (4051, 117, 'Auce, Auces novads', '0460805', 1),
 (4052, 117, 'Auces novads', '0460800', 1),
-(4053, 117, 'Ādažu novads', '0804400', 1),
-(4054, 117, 'Babītes novads', '0804900', 1),
+(4053, 117, 'Adazu novads', '0804400', 1),
+(4054, 117, 'Babites novads', '0804900', 1),
 (4055, 117, 'Baldone, Baldones novads', '0800605', 1),
 (4056, 117, 'Baldones novads', '0800600', 1),
-(4057, 117, 'Baloži, Ķekavas novads', '0800807', 1),
+(4057, 117, 'Balozi, Kekavas novads', '0800807', 1),
 (4058, 117, 'Baltinavas novads', '0384400', 1),
 (4059, 117, 'Balvi, Balvu novads', '0380201', 1),
 (4060, 117, 'Balvu novads', '0380200', 1),
 (4061, 117, 'Bauska, Bauskas novads', '0400201', 1),
 (4062, 117, 'Bauskas novads', '0400200', 1),
-(4063, 117, 'Beverīnas novads', '0964700', 1),
-(4064, 117, 'Brocēni, Brocēnu novads', '0840605', 1),
-(4065, 117, 'Brocēnu novads', '0840601', 1),
+(4063, 117, 'Beverinas novads', '0964700', 1),
+(4064, 117, 'Broceni, Brocenu novads', '0840605', 1),
+(4065, 117, 'Brocenu novads', '0840601', 1),
 (4066, 117, 'Burtnieku novads', '0967101', 1),
 (4067, 117, 'Carnikavas novads', '0805200', 1),
 (4068, 117, 'Cesvaine, Cesvaines novads', '0700807', 1),
 (4069, 117, 'Cesvaines novads', '0700800', 1),
-(4070, 117, 'Cēsis, Cēsu novads', '0420201', 1),
-(4071, 117, 'Cēsu novads', '0420200', 1),
+(4070, 117, 'Cesis, Cesu novads', '0420201', 1),
+(4071, 117, 'Cesu novads', '0420200', 1),
 (4072, 117, 'Ciblas novads', '0684901', 1),
 (4073, 117, 'Dagda, Dagdas novads', '0601009', 1),
 (4074, 117, 'Dagdas novads', '0601000', 1),
@@ -8415,97 +8415,97 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (4080, 117, 'Durbe, Durbes novads', '0640807', 1),
 (4081, 117, 'Durbes novads', '0640801', 1),
 (4082, 117, 'Engures novads', '0905100', 1),
-(4083, 117, 'Ērgļu novads', '0705500', 1),
+(4083, 117, 'Erglu novads', '0705500', 1),
 (4084, 117, 'Garkalnes novads', '0806000', 1),
-(4085, 117, 'Grobiņa, Grobiņas novads', '0641009', 1),
-(4086, 117, 'Grobiņas novads', '0641000', 1),
+(4085, 117, 'Grobina, Grobinas novads', '0641009', 1),
+(4086, 117, 'Grobinas novads', '0641000', 1),
 (4087, 117, 'Gulbene, Gulbenes novads', '0500201', 1),
 (4088, 117, 'Gulbenes novads', '0500200', 1),
 (4089, 117, 'Iecavas novads', '0406400', 1),
-(4090, 117, 'Ikšķile, Ikšķiles novads', '0740605', 1),
-(4091, 117, 'Ikšķiles novads', '0740600', 1),
-(4092, 117, 'Ilūkste, Ilūkstes novads', '0440807', 1),
-(4093, 117, 'Ilūkstes novads', '0440801', 1),
-(4094, 117, 'Inčukalna novads', '0801800', 1),
+(4090, 117, 'Ikskile, Ikskiles novads', '0740605', 1),
+(4091, 117, 'Ikskiles novads', '0740600', 1),
+(4092, 117, 'Ilukste, Ilukstes novads', '0440807', 1),
+(4093, 117, 'Ilukstes novads', '0440801', 1),
+(4094, 117, 'Incukalna novads', '0801800', 1),
 (4095, 117, 'Jaunjelgava, Jaunjelgavas novads', '0321007', 1),
 (4096, 117, 'Jaunjelgavas novads', '0321000', 1),
 (4097, 117, 'Jaunpiebalgas novads', '0425700', 1),
 (4098, 117, 'Jaunpils novads', '0905700', 1),
 (4099, 117, 'Jelgava', '0090000', 1),
 (4100, 117, 'Jelgavas novads', '0540200', 1),
-(4101, 117, 'Jēkabpils', '0110000', 1),
-(4102, 117, 'Jēkabpils novads', '0560200', 1),
-(4103, 117, 'Jūrmala', '0130000', 1),
+(4101, 117, 'Jekabpils', '0110000', 1),
+(4102, 117, 'Jekabpils novads', '0560200', 1),
+(4103, 117, 'Jurmala', '0130000', 1),
 (4104, 117, 'Kalnciems, Jelgavas novads', '0540211', 1),
 (4105, 117, 'Kandava, Kandavas novads', '0901211', 1),
 (4106, 117, 'Kandavas novads', '0901201', 1),
-(4107, 117, 'Kārsava, Kārsavas novads', '0681009', 1),
-(4108, 117, 'Kārsavas novads', '0681000', 1),
-(4109, 117, 'Kocēnu novads ,bij. Valmieras)', '0960200', 1),
+(4107, 117, 'Karsava, Karsavas novads', '0681009', 1),
+(4108, 117, 'Karsavas novads', '0681000', 1),
+(4109, 117, 'Kocenu novads ,bij. Valmieras)', '0960200', 1),
 (4110, 117, 'Kokneses novads', '0326100', 1),
-(4111, 117, 'Krāslava, Krāslavas novads', '0600201', 1),
-(4112, 117, 'Krāslavas novads', '0600202', 1),
+(4111, 117, 'Kraslava, Kraslavas novads', '0600201', 1),
+(4112, 117, 'Kraslavas novads', '0600202', 1),
 (4113, 117, 'Krimuldas novads', '0806900', 1),
 (4114, 117, 'Krustpils novads', '0566900', 1),
-(4115, 117, 'Kuldīga, Kuldīgas novads', '0620201', 1),
-(4116, 117, 'Kuldīgas novads', '0620200', 1),
-(4117, 117, 'Ķeguma novads', '0741001', 1),
-(4118, 117, 'Ķegums, Ķeguma novads', '0741009', 1),
-(4119, 117, 'Ķekavas novads', '0800800', 1),
-(4120, 117, 'Lielvārde, Lielvārdes novads', '0741413', 1),
-(4121, 117, 'Lielvārdes novads', '0741401', 1),
-(4122, 117, 'Liepāja', '0170000', 1),
-(4123, 117, 'Limbaži, Limbažu novads', '0660201', 1),
-(4124, 117, 'Limbažu novads', '0660200', 1),
-(4125, 117, 'Līgatne, Līgatnes novads', '0421211', 1),
-(4126, 117, 'Līgatnes novads', '0421200', 1),
-(4127, 117, 'Līvāni, Līvānu novads', '0761211', 1),
-(4128, 117, 'Līvānu novads', '0761201', 1),
-(4129, 117, 'Lubāna, Lubānas novads', '0701413', 1),
-(4130, 117, 'Lubānas novads', '0701400', 1),
+(4115, 117, 'Kuldiga, Kuldigas novads', '0620201', 1),
+(4116, 117, 'Kuldigas novads', '0620200', 1),
+(4117, 117, 'Keguma novads', '0741001', 1),
+(4118, 117, 'Kegums, Keguma novads', '0741009', 1),
+(4119, 117, 'Kekavas novads', '0800800', 1),
+(4120, 117, 'Lielvarde, Lielvardes novads', '0741413', 1),
+(4121, 117, 'Lielvardes novads', '0741401', 1),
+(4122, 117, 'Liepaja', '0170000', 1),
+(4123, 117, 'Limbazi, Limbazu novads', '0660201', 1),
+(4124, 117, 'Limbazu novads', '0660200', 1),
+(4125, 117, 'Ligatne, Ligatnes novads', '0421211', 1),
+(4126, 117, 'Ligatnes novads', '0421200', 1),
+(4127, 117, 'Livani, Livanu novads', '0761211', 1),
+(4128, 117, 'Livanu novads', '0761201', 1),
+(4129, 117, 'Lubana, Lubanas novads', '0701413', 1),
+(4130, 117, 'Lubanas novads', '0701400', 1),
 (4131, 117, 'Ludza, Ludzas novads', '0680201', 1),
 (4132, 117, 'Ludzas novads', '0680200', 1),
 (4133, 117, 'Madona, Madonas novads', '0700201', 1),
 (4134, 117, 'Madonas novads', '0700200', 1),
 (4135, 117, 'Mazsalaca, Mazsalacas novads', '0961011', 1),
 (4136, 117, 'Mazsalacas novads', '0961000', 1),
-(4137, 117, 'Mālpils novads', '0807400', 1),
-(4138, 117, 'Mārupes novads', '0807600', 1),
-(4139, 117, 'Mērsraga novads', '0887600', 1),
-(4140, 117, 'Naukšēnu novads', '0967300', 1),
+(4137, 117, 'Malpils novads', '0807400', 1),
+(4138, 117, 'Marupes novads', '0807600', 1),
+(4139, 117, 'Mersraga novads', '0887600', 1),
+(4140, 117, 'Nauksenu novads', '0967300', 1),
 (4141, 117, 'Neretas novads', '0327100', 1),
-(4142, 117, 'Nīcas novads', '0647900', 1),
+(4142, 117, 'Nicas novads', '0647900', 1),
 (4143, 117, 'Ogre, Ogres novads', '0740201', 1),
 (4144, 117, 'Ogres novads', '0740202', 1),
 (4145, 117, 'Olaine, Olaines novads', '0801009', 1),
 (4146, 117, 'Olaines novads', '0801000', 1),
 (4147, 117, 'Ozolnieku novads', '0546701', 1),
-(4148, 117, 'Pārgaujas novads', '0427500', 1),
-(4149, 117, 'Pāvilosta, Pāvilostas novads', '0641413', 1),
-(4150, 117, 'Pāvilostas novads', '0641401', 1),
+(4148, 117, 'Pargaujas novads', '0427500', 1),
+(4149, 117, 'Pavilosta, Pavilostas novads', '0641413', 1),
+(4150, 117, 'Pavilostas novads', '0641401', 1),
 (4151, 117, 'Piltene, Ventspils novads', '0980213', 1),
-(4152, 117, 'Pļaviņas, Pļaviņu novads', '0321413', 1),
-(4153, 117, 'Pļaviņu novads', '0321400', 1),
-(4154, 117, 'Preiļi, Preiļu novads', '0760201', 1),
-(4155, 117, 'Preiļu novads', '0760202', 1),
+(4152, 117, 'Plavinas, Plavinu novads', '0321413', 1),
+(4153, 117, 'Plavinu novads', '0321400', 1),
+(4154, 117, 'Preili, Preilu novads', '0760201', 1),
+(4155, 117, 'Preilu novads', '0760202', 1),
 (4156, 117, 'Priekule, Priekules novads', '0641615', 1),
 (4157, 117, 'Priekules novads', '0641600', 1),
-(4158, 117, 'Priekuļu novads', '0427300', 1),
+(4158, 117, 'Priekulu novads', '0427300', 1),
 (4159, 117, 'Raunas novads', '0427700', 1),
-(4160, 117, 'Rēzekne', '0210000', 1),
-(4161, 117, 'Rēzeknes novads', '0780200', 1),
-(4162, 117, 'Riebiņu novads', '0766300', 1),
-(4163, 117, 'Rīga', '0010000', 1),
+(4160, 117, 'Rezekne', '0210000', 1),
+(4161, 117, 'Rezeknes novads', '0780200', 1),
+(4162, 117, 'Riebinu novads', '0766300', 1),
+(4163, 117, 'Riga', '0010000', 1),
 (4164, 117, 'Rojas novads', '0888300', 1),
-(4165, 117, 'Ropažu novads', '0808400', 1),
+(4165, 117, 'Ropazu novads', '0808400', 1),
 (4166, 117, 'Rucavas novads', '0648500', 1),
-(4167, 117, 'Rugāju novads', '0387500', 1),
-(4168, 117, 'Rundāles novads', '0407700', 1),
-(4169, 117, 'Rūjiena, Rūjienas novads', '0961615', 1),
-(4170, 117, 'Rūjienas novads', '0961600', 1),
+(4167, 117, 'Rugaju novads', '0387500', 1),
+(4168, 117, 'Rundales novads', '0407700', 1),
+(4169, 117, 'Rujiena, Rujienas novads', '0961615', 1),
+(4170, 117, 'Rujienas novads', '0961600', 1),
 (4171, 117, 'Sabile, Talsu novads', '0880213', 1),
-(4172, 117, 'Salacgrīva, Salacgrīvas novads', '0661415', 1),
-(4173, 117, 'Salacgrīvas novads', '0661400', 1),
+(4172, 117, 'Salacgriva, Salacgrivas novads', '0661415', 1),
+(4173, 117, 'Salacgrivas novads', '0661400', 1),
 (4174, 117, 'Salas novads', '0568700', 1),
 (4175, 117, 'Salaspils novads', '0801200', 1),
 (4176, 117, 'Salaspils, Salaspils novads', '0801211', 1),
@@ -8513,45 +8513,45 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (4178, 117, 'Saldus, Saldus novads', '0840201', 1),
 (4179, 117, 'Saulkrasti, Saulkrastu novads', '0801413', 1),
 (4180, 117, 'Saulkrastu novads', '0801400', 1),
-(4181, 117, 'Seda, Strenču novads', '0941813', 1),
-(4182, 117, 'Sējas novads', '0809200', 1),
+(4181, 117, 'Seda, Strencu novads', '0941813', 1),
+(4182, 117, 'Sejas novads', '0809200', 1),
 (4183, 117, 'Sigulda, Siguldas novads', '0801615', 1),
 (4184, 117, 'Siguldas novads', '0801601', 1),
-(4185, 117, 'Skrīveru novads', '0328200', 1),
+(4185, 117, 'Skriveru novads', '0328200', 1),
 (4186, 117, 'Skrunda, Skrundas novads', '0621209', 1),
 (4187, 117, 'Skrundas novads', '0621200', 1),
 (4188, 117, 'Smiltene, Smiltenes novads', '0941615', 1),
 (4189, 117, 'Smiltenes novads', '0941600', 1),
 (4190, 117, 'Staicele, Alojas novads', '0661017', 1),
 (4191, 117, 'Stende, Talsu novads', '0880215', 1),
-(4192, 117, 'Stopiņu novads', '0809600', 1),
-(4193, 117, 'Strenči, Strenču novads', '0941817', 1),
-(4194, 117, 'Strenču novads', '0941800', 1),
-(4195, 117, 'Subate, Ilūkstes novads', '0440815', 1),
+(4192, 117, 'Stopinu novads', '0809600', 1),
+(4193, 117, 'Strenci, Strencu novads', '0941817', 1),
+(4194, 117, 'Strencu novads', '0941800', 1),
+(4195, 117, 'Subate, Ilukstes novads', '0440815', 1),
 (4196, 117, 'Talsi, Talsu novads', '0880201', 1),
 (4197, 117, 'Talsu novads', '0880200', 1),
-(4198, 117, 'Tērvetes novads', '0468900', 1),
+(4198, 117, 'Tervetes novads', '0468900', 1),
 (4199, 117, 'Tukuma novads', '0900200', 1),
 (4200, 117, 'Tukums, Tukuma novads', '0900201', 1),
-(4201, 117, 'Vaiņodes novads', '0649300', 1),
-(4202, 117, 'Valdemārpils, Talsu novads', '0880217', 1),
+(4201, 117, 'Vainodes novads', '0649300', 1),
+(4202, 117, 'Valdemarpils, Talsu novads', '0880217', 1),
 (4203, 117, 'Valka, Valkas novads', '0940201', 1),
 (4204, 117, 'Valkas novads', '0940200', 1),
 (4205, 117, 'Valmiera', '0250000', 1),
-(4206, 117, 'Vangaži, Inčukalna novads', '0801817', 1),
-(4207, 117, 'Varakļāni, Varakļānu novads', '0701817', 1),
-(4208, 117, 'Varakļānu novads', '0701800', 1),
-(4209, 117, 'Vārkavas novads', '0769101', 1),
+(4206, 117, 'Vangazi, Incukalna novads', '0801817', 1),
+(4207, 117, 'Varaklani, Varaklanu novads', '0701817', 1),
+(4208, 117, 'Varaklanu novads', '0701800', 1),
+(4209, 117, 'Varkavas novads', '0769101', 1),
 (4210, 117, 'Vecpiebalgas novads', '0429300', 1),
 (4211, 117, 'Vecumnieku novads', '0409500', 1),
 (4212, 117, 'Ventspils', '0270000', 1),
 (4213, 117, 'Ventspils novads', '0980200', 1),
-(4214, 117, 'Viesīte, Viesītes novads', '0561815', 1),
-(4215, 117, 'Viesītes novads', '0561800', 1),
-(4216, 117, 'Viļaka, Viļakas novads', '0381615', 1),
-(4217, 117, 'Viļakas novads', '0381600', 1),
-(4218, 117, 'Viļāni, Viļānu novads', '0781817', 1),
-(4219, 117, 'Viļānu novads', '0781800', 1),
+(4214, 117, 'Viesite, Viesites novads', '0561815', 1),
+(4215, 117, 'Viesites novads', '0561800', 1),
+(4216, 117, 'Vilaka, Vilakas novads', '0381615', 1),
+(4217, 117, 'Vilakas novads', '0381600', 1),
+(4218, 117, 'Vilani, Vilanu novads', '0781817', 1),
+(4219, 117, 'Vilanu novads', '0781800', 1),
 (4220, 117, 'Zilupe, Zilupes novads', '0681817', 1),
 (4221, 117, 'Zilupes novads', '0681801', 1),
 (4222, 43, 'Arica y Parinacota', 'AP', 1),
@@ -8587,7 +8587,7 @@ CREATE TABLE `oc_zone_to_geo_zone` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`zone_to_geo_zone_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_zone_to_geo_zone`
@@ -8727,7 +8727,7 @@ CREATE TABLE `oc_blog_category` (
   `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`blog_category_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=69 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=69 ;
 
 --
 -- Dumping data for table `oc_blog_category`
@@ -8756,7 +8756,7 @@ CREATE TABLE `oc_blog_category_description` (
   `meta_h1` varchar(255) NOT NULL,
   PRIMARY KEY (`blog_category_id`,`language_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_blog_category_description`
@@ -8782,7 +8782,7 @@ CREATE TABLE `oc_blog_category_to_layout` (
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
   PRIMARY KEY (`blog_category_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_blog_category_to_layout`
@@ -8804,7 +8804,7 @@ CREATE TABLE `oc_blog_category_to_store` (
   `blog_category_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   PRIMARY KEY (`blog_category_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_blog_category_to_store`
@@ -8827,7 +8827,7 @@ CREATE TABLE `oc_blog_category_path` (
   `path_id` int(11) NOT NULL,
   `level` int(11) NOT NULL,
   PRIMARY KEY (`blog_category_id`,`path_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_blog_category_path`
@@ -8851,7 +8851,7 @@ CREATE TABLE `oc_article_to_blog_category` (
   `blog_category_id` int(11) NOT NULL,
   `main_blog_category` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`article_id`,`blog_category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_article_to_blog_category`
@@ -8886,7 +8886,7 @@ CREATE TABLE `oc_article` (
   `viewed` int(5) NOT NULL DEFAULT '0',
   `gstatus` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`article_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=120 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=120 ;
 
 --
 -- Dumping data for table `oc_article`
@@ -8915,7 +8915,7 @@ CREATE TABLE `oc_article_description` (
   `tag` text NOT NULL,
   PRIMARY KEY (`article_id`,`language_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_article_description`
@@ -8945,7 +8945,7 @@ CREATE TABLE `oc_article_image` (
   `image` varchar(255) DEFAULT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`article_image_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3981 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3981 ;
 
 -- --------------------------------------------------------
 
@@ -8958,7 +8958,7 @@ CREATE TABLE `oc_article_related` (
   `article_id` int(11) NOT NULL,
   `related_id` int(11) NOT NULL,
   PRIMARY KEY (`article_id`,`related_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -8985,7 +8985,7 @@ CREATE TABLE `oc_article_related_mn` (
   `article_id` int(11) NOT NULL,
   `manufacturer_id` int(11) NOT NULL,
   PRIMARY KEY (`article_id`,`manufacturer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_article_related_mn`
@@ -9008,7 +9008,7 @@ CREATE TABLE `oc_article_related_product` (
   `article_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   PRIMARY KEY (`article_id`,`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -9044,7 +9044,7 @@ CREATE TABLE `oc_product_related_article` (
   `article_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   PRIMARY KEY (`article_id`,`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_related_article`
@@ -9070,7 +9070,7 @@ CREATE TABLE `oc_article_related_wb` (
   `article_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`article_id`,`category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_article_related_wb`
@@ -9094,7 +9094,7 @@ CREATE TABLE `oc_article_to_download` (
   `article_id` int(11) NOT NULL,
   `download_id` int(11) NOT NULL,
   PRIMARY KEY (`article_id`,`download_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -9108,7 +9108,7 @@ CREATE TABLE `oc_article_to_layout` (
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
   PRIMARY KEY (`article_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_article_to_layout`
@@ -9131,7 +9131,7 @@ CREATE TABLE `oc_article_to_store` (
   `article_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`article_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_article_to_store`
@@ -9162,7 +9162,7 @@ CREATE TABLE `oc_review_article` (
   `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`review_article_id`),
   KEY `article_id` (`article_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `oc_review_article`
@@ -9181,7 +9181,7 @@ DROP TABLE IF EXISTS `oc_product_related_wb`;
 CREATE TABLE `oc_product_related_wb` (
   `product_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_related_wb`
@@ -9205,7 +9205,7 @@ DROP TABLE IF EXISTS `oc_product_related_mn`;
 CREATE TABLE `oc_product_related_mn` (
   `product_id` int(11) NOT NULL,
   `manufacturer_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_product_related_mn`

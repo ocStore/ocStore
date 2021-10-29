@@ -83,7 +83,7 @@ class ControllerExtensionFeedYandexMarket extends Controller {
 			$bus_type = $this->config->get('feed_yandex_market_type'); // Тип предложений - "type"
 			$bus_name = $this->config->get('feed_yandex_market_name'); // Название товара - "name"
 			$bus_model = $this->config->get('feed_yandex_market_model'); // Код товара - "model"
-			$bus_vendorCode = $this->config->get('feed_yandex_market_vendorCode'); // Артикул товара - "SKU"
+			$bus_vendorCode = $this->config->get('feed_yandex_market_vendorcode'); // Артикул товара - "SKU"
 			$bus_image = $this->config->get('feed_yandex_market_image'); // Статус товара без изображений
 			$bus_image_width = $this->config->get('feed_yandex_market_image_width'); // Ширина изображения товара
 			$bus_image_height = $this->config->get('feed_yandex_market_image_height'); // Высота изображения товара

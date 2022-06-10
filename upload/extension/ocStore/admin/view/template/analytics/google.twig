@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="float-end">
         <button type="submit" form="form-analytics" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fas fa-save"></i></button>
-        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fas fa-reply"></i></a></div>
+        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fas fa-reply"></i></a></div>
       <h1>{{ heading_title }}</h1>
       <ul class="breadcrumb">
         {% for breadcrumb in breadcrumbs %}
@@ -16,7 +16,7 @@
   <div class="container-fluid">
     {% if error_warning %}
     <div class="alert alert-danger alert-dismissible"><i class="fas fa-exclamation-circle"></i> {{ error_warning }}
-      <button type="button" class="btn-close float-end" data-dismiss="alert"></button>
+      <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button>
     </div>
     {% endif %}
     <div class="card page-default">

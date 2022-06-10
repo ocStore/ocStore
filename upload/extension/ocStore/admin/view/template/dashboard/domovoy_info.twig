@@ -1,25 +1,25 @@
-<div id="domovoy" class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-calendar"></i> {{ heading_title }}</h3>
+<div id="domovoy" class="card page-default">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-calendar"></i> {{ heading_title }}</h3>
         <button type="button" id="button-phpinfo" title="{{ text_phpinfo }}" class="btn btn-info">phpinfo</button>
         {% if phpversion %}
             <button type="button" title="{{ text_copy }}" onclick="copyToClipboard('#phpversion')" class="btn"><i
-                    class="fa fa-php"></i> <span id="phpversion">PHP {{ phpversion }}</span></button>{% endif %}
+                    class="fas fa-php"></i> <span id="phpversion">PHP {{ phpversion }}</span></button>{% endif %}
         {% if database_version %}
             <button type="button" title="{{ text_copy }}"  onclick="copyToClipboard('#database_version')" class="btn"><i
-                    class="fa fa-database"></i> <span id="database_version">{{ database_version }}</span>
+                    class="fas fa-database"></i> <span id="database_version">{{ database_version }}</span>
             </button>{% endif %}
         {% if ioncube_version %}
             <button type="button" title="{{ text_copy }}"   onclick="copyToClipboard('#ioncube_version')" class="btn"><i
-                    class="fa fa-square"></i> <span id="ioncube_version">ionCube {{ ioncube_version }}</span>
+                    class="fas fa-square"></i> <span id="ioncube_version">ionCube {{ ioncube_version }}</span>
             </button>{% endif %}
         {% if disk_free_space %}
             <button type="button" title="{{ text_copy }}"   onclick="copyToClipboard('#disk_free_space')" class="btn{% if disk_free_space_warning %} btn-danger{% endif %}"><i
-                    class="fa fa-hdd-o"></i> <span
+                    class="fas fa-hdd-o"></i> <span
                     id="disk_free_space">{{ text_disk_free_space }} {{ disk_free_space.size }}{{ disk_free_space.unit }}</span>
             </button>{% endif %}
-        <div class="pull-right">
-            <a title="{{ text_setting }}" href="{{ setting }}" class="close"><i class="fa fa-cog fa-2x "></i></a>
+        <div class="float-end">
+            <a title="{{ text_setting }}" href="{{ setting }}" class="btn-close float-end"><i class="fas fa-cog fa-2x "></i></a>
         </div>
     </div>
     <div class="alert-body"></div>
@@ -28,9 +28,9 @@
             <table class="table table-bordered">
                 <tr>
                     <td>
-                        <button type="button" value="theme" data-toggle="tooltip" title="{{ button_refresh }}"
-                                class="btn btn-warning"><i class="fa fa-refresh"></i></button>
-                        <div class="btn-group" data-toggle="buttons">
+                        <button type="button" value="theme" data-bs-toggle="tooltip" title="{{ button_refresh }}"
+                                class="btn btn-warning"><i class="fas fa-refresh"></i></button>
+                        <div class="btn-group" data-bs-toggle="buttons">
                             {% if developer_theme %}
                                 <label class="btn btn-success active" {% if not eval %}disabled="disabled"{% endif %}>
                                     <input type="radio" name="developer_theme" value="1" autocomplete="off"
@@ -59,9 +59,9 @@
                             {% endif %}</div> {{ entry_theme_cache }}
                     </td>
                     <td>
-                        <button type="button" value="sass" data-toggle="tooltip" title="{{ button_refresh }}"
-                                class="btn btn-warning"><i class="fa fa-refresh"></i></button>
-                        <div class="btn-group" data-toggle="buttons">{% if developer_sass %}
+                        <button type="button" value="sass" data-bs-toggle="tooltip" title="{{ button_refresh }}"
+                                class="btn btn-warning"><i class="fas fa-refresh"></i></button>
+                        <div class="btn-group" data-bs-toggle="buttons">{% if developer_sass %}
                                 <label class="btn btn-success active">
                                     <input type="radio" name="developer_sass" value="1" autocomplete="off" checked>
                                     {{ button_on }}</label>
@@ -79,13 +79,13 @@
                                     <input type="radio" name="developer_sass" value="0" autocomplete="off">
                                     {{ button_off }}</label>
                             {% endif %}</div> {{ entry_sass }}</td>
-                    <td class="text-right">{{ entry_modification_cache }} <a id="odmod-refresh" data-toggle="tooltip"
+                    <td class="text-right">{{ entry_modification_cache }} <a id="odmod-refresh" data-bs-toggle="tooltip"
                                                                              title="{{ button_refresh }}"
                                                                              class="btn btn-warning"><i
-                                    class="fa fa-refresh"></i></a></td>
+                                    class="fas fa-refresh"></i></a></td>
                     <td class="text-right">{{ entry_allcache }}
-                        <button type="button" value="allcache" data-toggle="tooltip" title="{{ button_refresh }}"
-                                class="btn btn-warning"><i class="fa fa-refresh"></i></button>
+                        <button type="button" value="allcache" data-bs-toggle="tooltip" title="{{ button_refresh }}"
+                                class="btn btn-warning"><i class="fas fa-refresh"></i></button>
                     </td>
                 </tr>
             </table>
@@ -99,12 +99,12 @@
         {% if folders %}
             {% for folder in folders %}
                 <li class="list-group-item">
-                    <button type="button" value="{{ folder.key }}" data-toggle="tooltip" title="{{ text_clear }}"
-                            class="btn btn-warning clearFolder" data-original-title="{{ button_refresh }}"><i
-                                class="fa fa-refresh"></i></button>
-                    <button type="button" value="{{ folder.key }}" data-toggle="tooltip" title="{{ text_calculate }}"
-                            class="btn btn-success calcFolder" data-original-title="{{ button_refresh }}"><i
-                                class="fa fa-cogs"></i></button>
+                    <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_clear }}"
+                            class="btn btn-warning clearFolder" data-bs-original-title="{{ button_refresh }}"><i
+                                class="fas fa-refresh"></i></button>
+                    <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_calculate }}"
+                            class="btn btn-success calcFolder" data-bs-original-title="{{ button_refresh }}"><i
+                                class="fas fa-cogs"></i></button>
                     {{ folder.name }}<span
                             class="textFolder">{{ folder.size }} {{ folder.files }}{% if not folder.warning_size %}{{ text_normal }}{% else %} {{ folder.warning_size }} {% endif %}</span>
                 </li>
@@ -130,7 +130,7 @@
         {% if activities %}
             {% for activity in activities %}
                 <li class="list-group-item">{{ activity.comment }}<br/>
-                    <small class="text-muted"><i class="fa fa-clock-o"></i> {{ activity.date_added }}</small></li>
+                    <small class="text-muted"><i class="fas fa-clock-o"></i> {{ activity.date_added }}</small></li>
             {% endfor %}
         {% endif %}
 
@@ -152,7 +152,7 @@
 <script type="text/javascript"><!--
     $('#button-phpinfo').on('click', function () {
         $.ajax({
-            url: 'index.php?route=extension/dashboard/domovoy/phpinfo&user_token={{ user_token }}',
+            url: 'index.php?route=extension/ocStore/dashboard/domovoy|phpinfo&user_token={{ user_token }}',
             dataType: 'html',
             beforeSend: function () {
                 $('#modal-phpinfo').button('loading');
@@ -177,7 +177,7 @@
     function setTooltip(element) {
         $(element).tooltip('enable');
         $(element).tooltip('hide')
-            .attr('data-original-title', '{{ text_copied }}')
+            .attr('data-bs-original-title', '{{ text_copied }}')
             .tooltip('show');
     }
 
@@ -200,7 +200,7 @@
     function calcFolder(element) {
 
         $.ajax({
-            url: 'index.php?route=extension/dashboard/domovoy/calc&dir=' + $(element).attr('value') + '&user_token={{ user_token }}',
+            url: 'index.php?route=extension/ocStore/dashboard/domovoy|calc&dir=' + $(element).attr('value') + '&user_token={{ user_token }}',
             dataType: 'json',
             beforeSend: function () {
                 $(element).button('loading');
@@ -231,7 +231,7 @@
         var element = this;
 
         $.ajax({
-            url: 'index.php?route=extension/dashboard/domovoy/clear&dir=' + $(element).attr('value') + '&user_token={{ user_token }}',
+            url: 'index.php?route=extension/ocStore/dashboard/domovoy|clear&dir=' + $(element).attr('value') + '&user_token={{ user_token }}',
             dataType: 'json',
             beforeSend: function () {
                 $(element).button('loading');
@@ -243,11 +243,11 @@
                 $('.alert-dismissible').remove();
 
                 if (json['error']) {
-                    $(element).parent().prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $(element).parent().prepend('<div class="alert alert-danger alert-dismissible"><i class="fas fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button></div>');
                 }
 
                 if (json['success']) {
-                    $(element).parent().prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $(element).parent().prepend('<div class="alert alert-success alert-dismissible"><i class="fas fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button></div>');
                     setTimeout(function () {
                         calcFolder(element);
                     }, 2000);
@@ -268,7 +268,7 @@
 <script type="text/javascript"><!--
     $('#domovoy input[name=\'developer_theme\'], input[name=\'developer_sass\']').on('change', function () {
         $.ajax({
-            url: 'index.php?route=common/developer/edit&user_token={{ user_token }}',
+            url: 'index.php?route=common/developer|edit&user_token={{ user_token }}',
             type: 'post',
             data: $('input[name=\'developer_theme\']:checked, input[name=\'developer_sass\']:checked'),
             dataType: 'json',
@@ -282,11 +282,11 @@
                 $('.alert-dismissible').remove();
 
                 if (json['error']) {
-                    $('#domovoy .alert-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#domovoy .alert-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fas fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button></div>');
                 }
 
                 if (json['success']) {
-                    $('#domovoy .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#domovoy .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fas fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button></div>');
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -299,7 +299,7 @@
         var element = this;
 
         $.ajax({
-            url: 'index.php?route=common/developer/' + $(element).attr('value') + '&user_token={{ user_token }}',
+            url: 'index.php?route=common/developer|' + $(element).attr('value') + '&user_token={{ user_token }}',
             dataType: 'json',
             beforeSend: function () {
                 $(element).button('loading');
@@ -311,11 +311,11 @@
                 $('.alert-dismissible').remove();
 
                 if (json['error']) {
-                    $('#domovoy .alert-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#domovoy .alert-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fas fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button></div>');
                 }
 
                 if (json['success']) {
-                    $('#domovoy .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#domovoy .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fas fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button></div>');
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -328,12 +328,12 @@
         var element = this;
 
         $.ajax({
-            url: 'index.php?route=marketplace/modification/refresh&user_token={{ user_token }}',
+            url: 'index.php?route=marketplace/modification|refresh&user_token={{ user_token }}',
             dataType: 'json',
             complete: function () {
                 $(element).button('reset');
                 $('.alert-dismissible').remove();
-                $('#domovoy .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ text_ocmod_cache_success }} <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                $('#domovoy .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fas fa-check-circle"></i> {{ text_ocmod_cache_success }} <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button></div>');
             }
         });
     });

@@ -2,10 +2,11 @@
 /**
  * @package		Domovoy
  * @author		Dinox
- * @copyright	Copyright (c) 2009 - 2021, Dinox. (https://opencartforum.com/)
+ * @copyright	Copyright (c) 2009 - 2022, Dinox. (https://opencartforum.com/)
  * @license		GPL3
  * @link		https://opencartforum.com/
  */
+ 
 // Heading
 $_['heading_h1']                = 'Домовой 1.0.1';
 $_['heading_title']             = '<strong>Домовой 1.0.1</strong>';

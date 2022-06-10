@@ -1,12 +1,14 @@
 <?php
+// *	@source		See SOURCE.txt for source and other copyright.
+// *	@license	GNU General Public License version 3; see LICENSE.txt
+
 $_['heading_title']    = 'Google Analytics';
 
 // Text
 $_['text_extension']   = 'Extensions';
 $_['text_success']	   = 'Success: You have modified Google Analytics!';
 $_['text_edit']        = 'Edit Google Analytics';
-$_['text_signup']      = 'Login to your <a href="http://www.google.com/analytics/" target="_blank"><u>Google Analytics</u></a> account and after creating your website profile copy and paste the analytics code into this field.';
-$_['text_default']     = 'Default';
+$_['text_signup']      = 'Login to your <a href="https://www.google.com/analytics/" rel="noreferrer noopener" target="_blank"><u>Google Analytics</u></a> account and after creating your website profile copy and paste the analytics code into this field.';
 
 // Entry
 $_['entry_code']       = 'Google Analytics Code';

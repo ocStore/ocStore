@@ -1,0 +1,263 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-feed" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fas fa-save"></i></button>
+        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fas fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fas fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+    <div class="card page-default">
+      <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="card-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-feed" class="form-horizontal">
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-status">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="status" id="input-status" class="form-select">
+                {% if status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-blog-category-status">{{ entry_blog_category }}</label>
+            <div class="col-sm-10">
+              <div class="row">
+                <div class="col-sm-4">
+                  <select name="blog_category_status" onchange="loading();" id="input-blog-category-status" class="form-select">
+                    <option value="1"{% if blog_category_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_enabled }}</option>
+                    <option value="0"{% if not blog_category_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <select name="blog_category_image" onchange="loading();" id="input-blog-category-image" class="form-select">
+                    <option value="1"{% if blog_category_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_enabled }}</option>
+                    <option value="0"{% if not blog_category_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" step="0.1" name="blog_category_priority" onchange="loading();" value="{{ blog_category_priority }}" id="input-blog-category-priority" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-blog-article-status">{{ entry_blog_article }}</label>
+            <div class="col-sm-10">
+              <div class="row">
+                <div class="col-sm-4">
+                  <select name="blog_article_status" onchange="loading();" id="input-blog-article-status" class="form-select">
+                    <option value="1"{% if blog_article_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_enabled }}</option>
+                    <option value="0"{% if not blog_article_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <select name="blog_article_image" onchange="loading();" id="input-blog-article-image" class="form-select">
+                    <option value="1"{% if blog_article_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_enabled }}</option>
+                    <option value="0"{% if not blog_article_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" step="0.1" name="blog_article_priority" onchange="loading();" value="{{ blog_article_priority }}" id="input-blog-article-priority" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-category-status">{{ entry_category }}</label>
+            <div class="col-sm-10">
+              <div class="row">
+                <div class="col-sm-4">
+                  <select name="category_status" onchange="loading();" id="input-category-status" class="form-select">
+                    <option value="1"{% if category_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_enabled }}</option>
+                    <option value="0"{% if not category_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <select name="category_image" onchange="loading();" id="input-category-image" class="form-select">
+                    <option value="1"{% if category_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_enabled }}</option>
+                    <option value="0"{% if not category_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" step="0.1" name="category_priority" onchange="loading();" value="{{ category_priority }}" id="input-category-priority" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-information-status">{{ entry_information }}</label>
+            <div class="col-sm-10">
+              <div class="row">
+                <div class="col-sm-4">
+                  <select name="information_status" onchange="loading();" id="input-information-status" class="form-select">
+                    <option value="1"{% if information_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_enabled }}</option>
+                    <option value="0"{% if not information_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <select name="information_image" onchange="loading();" id="input-information-image" class="form-select">
+                    <option value="1"{% if information_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_enabled }}</option>
+                    <option value="0"{% if not information_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" step="0.1" name="information_priority" onchange="loading();" value="{{ information_priority }}" id="input-information-priority" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-manufacturer-status">{{ entry_manufacturer }}</label>
+            <div class="col-sm-10">
+              <div class="row">
+                <div class="col-sm-4">
+                  <select name="manufacturer_status" onchange="loading();" id="input-manufacturer-status" class="form-select">
+                    <option value="1"{% if manufacturer_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_enabled }}</option>
+                    <option value="0"{% if not manufacturer_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <select name="manufacturer_image" onchange="loading();" id="input-manufacturer-image" class="form-select">
+                    <option value="1"{% if manufacturer_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_enabled }}</option>
+                    <option value="0"{% if not manufacturer_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" step="0.1" name="manufacturer_priority" onchange="loading();" value="{{ manufacturer_priority }}" id="input-manufacturer-priority" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-product-status">{{ entry_product }}</label>
+            <div class="col-sm-10">
+              <div class="row">
+                <div class="col-sm-4">
+                  <select name="product_status" onchange="loading();" id="input-product-status" class="form-select">
+                    <option value="1"{% if product_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_enabled }}</option>
+                    <option value="0"{% if not product_status %} selected="selected"{% endif %}>{{ entry_status }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <select name="product_image" onchange="loading();" id="input-product-image" class="form-select">
+                    <option value="1"{% if product_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_enabled }}</option>
+                    <option value="0"{% if not product_image %} selected="selected"{% endif %}>{{ entry_image }} {{ text_disabled }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" step="0.1" name="product_priority" onchange="loading();" value="{{ product_priority }}" id="input-product-priority" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_store }}</label>
+            <div class="col-sm-10">
+              <div class="form-control" style="height: 150px; overflow: auto;">
+                {% for store in stores_list %}
+                <div class="form-check">
+                  <input type="checkbox" name="stores[]" onchange="loading();" value="{{ store.store_id }}" id="input-store-{{ store.store_id }}" class="form-check-input"{% if store.store_id in stores %} checked{% endif %}/> <label for="input-store-{{ store.store_id }}" class="form-check-label">{{ store.name }}</label>
+                </div>
+                {% endfor %}
+              </div>
+              <a style="cursor:pointer;" onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a style="cursor:pointer;" onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_language }}</label>
+            <div class="col-sm-10">
+              <div class="form-control" style="height: 150px; overflow: auto;">
+                {% for language in languages_list %}
+                <div class="form-check">
+                  <input type="checkbox" name="languages[]" onchange="loading();" value="{{ language.language_id }}" id="input-language-{{ language.language_id }}" class="form-check-input"{% if language.language_id in languages %} checked{% endif %}/> <label for="input-language-{{ language.language_id }}" class="form-check-label">{{ language.name }}</label>
+                </div>
+                {% endfor %}
+              </div>
+              <a style="cursor:pointer;" onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a style="cursor:pointer;" onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="input-data-feed">{{ entry_data_feed }}</label>
+            <div class="col-sm-10">
+              <textarea rows="5" readonly id="input-data-feed" class="form-control">{{ data_feed }}</textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+function loading() {
+	var element, param = '', i;
+{% for result in results %}
+		element = document.getElementById('input-{{ result.table|replace({"_": "-"}) }}-status');
+
+		if (element && element.value > 0) {
+			param += '&{{ result.table }}_status=1';
+			
+			element = document.getElementById('input-{{ result.table|replace({"_": "-"}) }}-image');
+
+			if (element && element.value > 0) {
+				param += '&{{ result.table }}_image=1';
+			}
+
+			element = document.getElementById('input-{{ result.table|replace({"_": "-"}) }}-priority');
+
+			if (element && element.value > 0) {
+				param += '&{{ result.table }}_priority=' + element.value;
+			}
+		}
+{% endfor %}
+
+	element = document.querySelectorAll('input[name="stores[]"]');
+
+	for (i = 0; i < element.length; ++i) {
+		if (element[i].checked) {
+			param += '&stores[' + element[i].value + ']=' + element[i].value;
+		}
+	}
+
+	element = document.querySelectorAll('input[name="languages[]"]');
+
+	for (i = 0; i < element.length; ++i) {
+		if (element[i].checked) {
+		console.log(element[i]);
+			param += '&languages[' + element[i].value + ']=' + element[i].value;
+		}
+	}
+
+	param += '&start=0&limit=10000';
+
+	element = document.getElementById('input-data-feed');
+
+	if (element) {
+		element.innerText = '{{ data_feed }}' + param;
+	}
+}
+
+loading();
+//--></script>
+{{ footer }}

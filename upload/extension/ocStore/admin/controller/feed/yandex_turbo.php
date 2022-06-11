@@ -1,11 +1,15 @@
 <?php
-class ControllerExtensionFeedYandexTurbo extends Controller {
+// *	@source		See SOURCE.txt for source and other copyright.
+// *	@license	GNU General Public License version 3; see LICENSE.txt
+
+namespace Opencart\Admin\Controller\Extension\ocStore\Feed;
+class YandexTurbo extends \Opencart\System\Engine\Controller {
 	private $error = array();
-	
+
 	private $allowed = array('RUR', 'RUB', 'USD', 'EUR', 'BYR', 'BYN', 'KZT', 'UAH');
-	
+
 	public function index() {
-		$this->load->language('extension/feed/yandex_turbo');
+		$this->load->language('extension/ocStore/feed/yandex_turbo');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -39,10 +43,10 @@ class ControllerExtensionFeedYandexTurbo extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/feed/yandex_turbo', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('extension/ocStore/feed/yandex_turbo', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$data['action'] = $this->url->link('extension/feed/yandex_turbo', 'user_token=' . $this->session->data['user_token'], true);
+		$data['action'] = $this->url->link('extension/ocStore/feed/yandex_turbo', 'user_token=' . $this->session->data['user_token'], true);
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=feed', true);
 		
@@ -66,17 +70,17 @@ class ControllerExtensionFeedYandexTurbo extends Controller {
 		$data['entry_currency'] = $this->language->get('entry_currency');
 		$data['entry_made'] = $this->language->get('entry_made');
 
-		$data['data_feed'] = HTTP_CATALOG . 'index.php?route=extension/feed/yandex_turbo';
+		$data['data_feed'] = HTTP_CATALOG . 'index.php?route=extension/ocStore/feed/yandex_turbo';
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/feed/yandex_turbo', $data));
+		$this->response->setOutput($this->load->view('extension/ocStore/feed/yandex_turbo', $data));
 	}
 
 	protected function validate() {
-		if (!$this->user->hasPermission('modify', 'extension/feed/yandex_turbo')) {
+		if (!$this->user->hasPermission('modify', 'extension/ocStore/feed/yandex_turbo')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 

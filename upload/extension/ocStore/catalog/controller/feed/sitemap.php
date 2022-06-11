@@ -10,7 +10,7 @@ if (!defined('VERSION')) {
 }
 
 class Sitemap extends \Opencart\System\Engine\Controller {
-	private $setting_default = array(
+	private $setting_default = [
 		'status' => false,
 		'blog_category_status'   => false,
 		'blog_category_image'    => true,
@@ -33,11 +33,11 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 		'store_id'               => 0,
 		'language'               => 'uk-ua',
 		'language_id'            => 2,
-		'cache_status'           => true,
+		'cache_status'           => false,
 		'start'                  => 0,
 		'limit'                  => 10000,
-	);
-	private $setting = array();
+	];
+	private $setting = [];
 
 	public function index() {
 		if ($this->config->get('feed_sitemap_status')) {
@@ -49,6 +49,8 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 					$this->setting[$key] = $result;
 				}
 			}
+
+			$this->request->get['cache_status'] = $this->setting['cache_status'];
 
 			foreach ($this->setting as $key => $result) {
 				if (isset($this->request->get[$key])) {
@@ -66,7 +68,9 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				$this->setting['language_id'] = $this->setting_default['language_id'];
 			}
 
-			$this->setting['cache_status'] = false;
+			$this->config->set('config_store_id', $this->setting['store_id']);
+			$this->config->set('config_language', $this->setting['language']);
+			$this->config->set('config_language_id', $this->setting['language_id']);
 
 			if ($this->setting['cache_status']) {
 				$cache_name = 'ocStore.sitemap.' . md5(http_build_query($this->setting));
@@ -88,8 +92,12 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			$output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
 
 			if ($this->setting['blog_category_status'] && is_file(DIR_EXTENSION . 'ocStore/catalog/model/blog/category.php')) {
+				$this->setting['blog_category_priority'] = (float)round($this->setting['blog_category_priority'], 1);
+
 				if ($this->setting['blog_category_priority'] > 1) {
-					$this->setting['blog_category_priority'] = 1;
+					$this->setting['blog_category_priority'] = '1.0';
+				} else {
+					$this->setting['blog_category_priority'] = abs($this->setting['blog_category_priority']);
 				}
 
 				$this->load->model('extension/ocStore/blog/category');
@@ -98,8 +106,12 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['blog_article_status'] && is_file(DIR_EXTENSION . 'ocStore/catalog/model/blog/article.php')) {
+				$this->setting['blog_article_priority'] = (float)round($this->setting['blog_article_priority'], 1);
+
 				if ($this->setting['blog_article_priority'] > 1) {
 					$this->setting['blog_article_priority'] = 1;
+				} else {
+					$this->setting['blog_article_priority'] = abs($this->setting['blog_article_priority']);
 				}
 
 				$this->load->model('extension/ocStore/blog/article');
@@ -130,8 +142,12 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['category_status'] && is_file(DIR_APPLICATION . 'model/catalog/category.php')) {
+				$this->setting['category_priority'] = (float)round($this->setting['category_priority'], 1);
+
 				if ($this->setting['category_priority'] > 1) {
 					$this->setting['category_priority'] = 1;
+				} else {
+					$this->setting['category_priority'] = abs($this->setting['category_priority']);
 				}
 
 				$this->load->model('catalog/category');
@@ -140,8 +156,12 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['information_status'] && is_file(DIR_APPLICATION . 'model/catalog/information.php')) {
+				$this->setting['information_priority'] = (float)round($this->setting['information_priority'], 1);
+
 				if ($this->setting['information_priority'] > 1) {
 					$this->setting['information_priority'] = 1;
+				} else {
+					$this->setting['information_priority'] = abs($this->setting['information_priority']);
 				}
 
 				$this->load->model('catalog/information');
@@ -175,8 +195,12 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['manufacturer_status'] && is_file(DIR_APPLICATION . 'model/catalog/manufacturer.php')) {
+				$this->setting['manufacturer_priority'] = (float)round($this->setting['manufacturer_priority'], 1);
+
 				if ($this->setting['manufacturer_priority'] > 1) {
 					$this->setting['manufacturer_priority'] = 1;
+				} else {
+					$this->setting['manufacturer_priority'] = abs($this->setting['manufacturer_priority']);
 				}
 				
 				$this->load->model('catalog/manufacturer');
@@ -207,8 +231,12 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['product_status'] && is_file(DIR_APPLICATION . 'model/catalog/product.php')) {
+				$this->setting['product_priority'] = (float)round($this->setting['product_priority'], 1);
+
 				if ($this->setting['product_priority'] > 1) {
 					$this->setting['product_priority'] = 1;
+				} else {
+					$this->setting['product_priority'] = abs($this->setting['product_priority']);
 				}
 
 				$this->load->model('catalog/product');

@@ -3,6 +3,12 @@
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
 namespace Opencart\Catalog\Controller\Extension\ocStore\Feed;
+
+if (!defined('VERSION')) {
+	header('Refresh: 1; URL=/');
+	exit('ЗАПРЫШЧАЮ!');
+}
+
 class YandexMarket extends \Opencart\System\Engine\Controller {
 	private $shop = array();
 	private $currencies = array();
@@ -34,7 +40,7 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 			$allowed_categories = $this->config->get('feed_yandex_market_categories');
 			$allowed_manufacturers = $this->config->get('feed_yandex_market_manufacturers');
 
-			$this->load->model('extension/feed/yandex_market');
+			$this->load->model('extension/ocStore/feed/yandex_market');
 			$this->load->model('localisation/currency');
 			$this->load->model('tool/image');
 
@@ -72,7 +78,7 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 			}
 
 			// Категории <categories></categories>
-			$categories = $this->model_extension_feed_yandex_market->getCategory();
+			$categories = $this->model_extension_ocStore_feed_yandex_market->getCategory();
 
 			foreach ($categories as $category) {
 				$this->setCategory($category['name'], $category['category_id'], $category['parent_id']);
@@ -104,7 +110,7 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 				$vendor_required = false;
 			}
 
-			$products = $this->model_extension_feed_yandex_market->getProduct($allowed_categories, $allowed_manufacturers, $out_of_stock_id, $vendor_required, $bus_image, $bus_image_quantity, $bus_main_category, $bus_quantity_status);
+			$products = $this->model_extension_ocStore_feed_yandex_market->getProduct($allowed_categories, $allowed_manufacturers, $out_of_stock_id, $vendor_required, $bus_image, $bus_image_quantity, $bus_main_category, $bus_quantity_status);
 
 			foreach ($products as $product) {
 				$data = array();
@@ -186,7 +192,7 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 				if ($bus_param) {
 					$data['param'] = array();
 
-					$attributes = $this->model_extension_feed_yandex_market->getProductAttributes($product['product_id']);
+					$attributes = $this->model_extension_ocStore_feed_yandex_market->getProductAttributes($product['product_id']);
 
 					foreach ($attributes as $attribute) {
 						$data['param'][] = array(

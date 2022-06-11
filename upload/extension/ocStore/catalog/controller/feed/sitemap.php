@@ -3,6 +3,12 @@
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
 namespace Opencart\Catalog\Controller\Extension\ocStore\Feed;
+
+if (!defined('VERSION')) {
+	header('Refresh: 1; URL=/');
+	exit('ЗАПРЫШЧАЮ!');
+}
+
 class Sitemap extends \Opencart\System\Engine\Controller {
 	public function index() {
 		if ($this->config->get('feed_sitemap_status')) {

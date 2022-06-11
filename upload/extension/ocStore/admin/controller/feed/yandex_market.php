@@ -3,6 +3,12 @@
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
 namespace Opencart\Admin\Controller\Extension\ocStore\Feed;
+
+if (!defined('VERSION')) {
+	header('Refresh: 1; URL=/');
+	exit('ЗАПРЫШЧАЮ!');
+}
+
 class YandexMarket extends \Opencart\System\Engine\Controller {
 	private $error = array();
 
@@ -82,11 +88,6 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_extension'),
-			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'], true)
-		);
-
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('text_feed'),
 			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=feed', true)
 		);
 
@@ -343,10 +344,6 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 			$this->error['error_image_height_max'] = $this->language->get('error_image_height_max');
 		}
 
-		if (!$this->error) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+		return !$this->error;
 	}
 }

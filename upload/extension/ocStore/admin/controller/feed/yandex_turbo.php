@@ -3,6 +3,12 @@
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
 namespace Opencart\Admin\Controller\Extension\ocStore\Feed;
+
+if (!defined('VERSION')) {
+	header('Refresh: 1; URL=/');
+	exit('ЗАПРЫШЧАЮ!');
+}
+
 class YandexTurbo extends \Opencart\System\Engine\Controller {
 	private $error = array();
 

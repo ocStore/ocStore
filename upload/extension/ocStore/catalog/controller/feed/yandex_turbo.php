@@ -3,6 +3,12 @@
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
 namespace Opencart\Catalog\Controller\Extension\ocStore\Feed;
+
+if (!defined('VERSION')) {
+	header('Refresh: 1; URL=/');
+	exit('ЗАПРЫШЧАЮ!');
+}
+
 class YandexTurbo extends \Opencart\System\Engine\Controller {
 	private $currencies = array();
 	private $categories = array();
@@ -10,7 +16,7 @@ class YandexTurbo extends \Opencart\System\Engine\Controller {
 
 	public function index() {
 		if ($this->config->get('feed_yandex_turbo_status')) {
-			$this->load->model('extension/feed/yandex_turbo');
+			$this->load->model('extension/ocStore/feed/yandex_turbo');
 			$this->load->model('tool/image');		
 
 			$this->eol = "\n";
@@ -20,7 +26,7 @@ class YandexTurbo extends \Opencart\System\Engine\Controller {
 			$output .= '<shop>' . $this->eol;
 			$output .= '<name>' . $this->config->get('config_name') . '</name>' . $this->eol ;
 			$output .= '<company>' . $this->config->get('config_owner') . '</company>' . $this->eol ;
-			$output .= '<url>' . HTTPS_SERVER . '</url>' . $this->eol ;
+			$output .= '<url>' . HTTP_SERVER . '</url>' . $this->eol ;
 			$output .= '<phone>' . $this->config->get('config_telephone') . '</phone>' . $this->eol ;
 			$output .= '<platform>Opencart</platform>' . $this->eol ;
 			$output .= '<version>' . VERSION . '</version>' . $this->eol ;
@@ -49,7 +55,7 @@ class YandexTurbo extends \Opencart\System\Engine\Controller {
 			$output .= '</currencies>' . $this->eol;
 			$decimal = (int)$this->currency->getDecimalPlace($offers_currency);
 
-			$categories = $this->model_extension_feed_yandex_turbo->getCategories();
+			$categories = $this->model_extension_ocStore_feed_yandex_turbo->getCategories();
 			foreach ($categories as $category) {
 				$this->setCategory($category['name'], $category['category_id'], $category['parent_id']);
 			}
@@ -67,7 +73,7 @@ class YandexTurbo extends \Opencart\System\Engine\Controller {
 			$output .= '</categories>' . $this->eol;
 			$output .= '<offers>' . $this->eol;
 
-			$products = $this->model_extension_feed_yandex_turbo->getProducts();
+			$products = $this->model_extension_ocStore_feed_yandex_turbo->getProducts();
 
 			foreach ($products as $product) {
 				$output .= '<offer id="' . $product['product_id'] . '" available="' . ($product['quantity'] > 0 ? 'true' : 'false') . '">' . $this->eol;

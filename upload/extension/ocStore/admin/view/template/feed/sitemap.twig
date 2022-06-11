@@ -178,11 +178,19 @@
               <div class="form-control" style="height: 150px; overflow: auto;">
                 {% for store in stores_list %}
                 <div class="form-check">
-                  <input type="checkbox" name="stores[]" onchange="loading();" value="{{ store.store_id }}" id="input-store-{{ store.store_id }}" class="form-check-input"{% if store.store_id in stores %} checked{% endif %}/> <label for="input-store-{{ store.store_id }}" class="form-check-label">{{ store.name }}</label>
+                  <input type="checkbox" name="stores[]" onchange="loading();" value="{{ store.store_id }}" id="input-stores-{{ store.store_id }}" class="form-check-input"{% if store.store_id in stores %} checked{% endif %}/> <label for="input-store-{{ store.store_id }}" class="form-check-label">{{ store.name }}</label>
                 </div>
                 {% endfor %}
               </div>
               <a style="cursor:pointer;" onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a style="cursor:pointer;" onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+            </div>
+            <label class="col-sm-2 col-form-label" for="input-store"></label>
+            <div class="col-sm-10">
+              <select name="store_id" onchange="loading();" id="input-store" class="form-select">
+                {% for store in stores_list %}
+				<option value="{{ store.store_id }}"{% if store.store_id == store_id %} selected="selected"{% endif %}>{{ store.name }}</option>
+                {% endfor %}
+              </select>
             </div>
           </div>
           <div class="row mb-3">
@@ -191,11 +199,19 @@
               <div class="form-control" style="height: 150px; overflow: auto;">
                 {% for language in languages_list %}
                 <div class="form-check">
-                  <input type="checkbox" name="languages[]" onchange="loading();" value="{{ language.language_id }}" id="input-language-{{ language.language_id }}" class="form-check-input"{% if language.language_id in languages %} checked{% endif %}/> <label for="input-language-{{ language.language_id }}" class="form-check-label">{{ language.name }}</label>
+                  <input type="checkbox" name="languages[]" onchange="loading();" value="{{ language.language_id }}" id="input-languages-{{ language.language_id }}" class="form-check-input"{% if language.language_id in languages %} checked{% endif %}/> <label for="input-language-{{ language.language_id }}" class="form-check-label">{{ language.name }}</label>
                 </div>
                 {% endfor %}
               </div>
               <a style="cursor:pointer;" onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a style="cursor:pointer;" onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+            </div>
+            <label class="col-sm-2 col-form-label" for="input-store"></label>
+            <div class="col-sm-10">
+              <select name="language_id" onchange="loading();" id="input-store" class="form-select">
+                {% for language in languages_list %}
+				<option value="{{ language.language_id }}"{% if language.language_id == language_id %} selected="selected"{% endif %}>{{ language.name }}</option>
+                {% endfor %}
+              </select>
             </div>
           </div>
           <div class="row mb-3">
@@ -232,7 +248,7 @@ function loading() {
 		}
 {% endfor %}
 
-	element = document.querySelectorAll('input[name="stores[]"]');
+	/* element = document.querySelectorAll('input[name="stores[]"]');
 
 	for (i = 0; i < element.length; ++i) {
 		if (element[i].checked) {
@@ -247,6 +263,18 @@ function loading() {
 		console.log(element[i]);
 			param += '&languages[' + element[i].value + ']=' + element[i].value;
 		}
+	} */
+
+	element = document.querySelector('select[name="store_id"] option:checked');
+console.log(element);
+	if (element && element.value > 0) {
+		param += '&store_id=' + element.value;
+	}
+
+	element = document.querySelector('select[name="language_id"] option:checked');
+
+	if (element && element.value > 0) {
+		param += '&language_id=' + element.value;
 	}
 
 	param += '&start=0&limit=10000';

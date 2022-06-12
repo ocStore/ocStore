@@ -41,7 +41,7 @@ class YandexTurbo extends \Opencart\System\Engine\Controller {
 			$shop_currency = $this->config->get('config_currency');
 			$this->setCurrency($offers_currency, 1);
 			$currencies = $this->model_localisation_currency->getCurrencies();
-			$supported_currencies = array('RUR', 'RUB', 'USD', 'BYR', 'KZT', 'EUR', 'UAH');
+			$supported_currencies = array('RUR', 'RUB', 'USD', 'BYN', 'BYR', 'KZT', 'EUR', 'UAH');
 			$currencies = array_intersect_key($currencies, array_flip($supported_currencies));
 			foreach ($currencies as $currency) {
 				if ($currency['code'] != $offers_currency && $currency['status'] == 1) {

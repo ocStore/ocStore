@@ -233,7 +233,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				foreach ($informations as $information) {
 					if (!$this->setting['information_image'] || $this->setting['information_image'] && $information['image']) {
 						$output .= '<url>';
-						$output .= '  <loc>' . $this->url->link('information/information', 'information_id=' . $information['information_id'] . '&language=' . $this->setting['language']) . '</loc>';
+						$output .= '  <loc>' . $this->url->link('information|information', 'information_id=' . $information['information_id'] . '&language=' . $this->setting['language']) . '</loc>';
 						$output .= '  <changefreq>weekly</changefreq>';
 						if (!empty($information['date_modified'])) {
 							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($information['date_modified'])) . '</lastmod>';
@@ -274,7 +274,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				foreach ($manufacturers as $manufacturer) {
 					if (!$this->setting['manufacturer_image'] || $this->setting['manufacturer_image'] && $manufacturer['image']) {
 						$output .= '<url>';
-						$output .= '  <loc>' . $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . '&language=' . $this->setting['language']) . '</loc>';
+						$output .= '  <loc>' . $this->url->link('product/manufacturer|info', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . '&language=' . $this->setting['language']) . '</loc>';
 						$output .= '  <changefreq>weekly</changefreq>';
 						if (!empty($manufacturer['date_modified'])) {
 							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($manufacturer['date_modified'])) . '</lastmod>';

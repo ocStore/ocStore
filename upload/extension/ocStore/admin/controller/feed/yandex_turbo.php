@@ -12,7 +12,7 @@ if (!defined('VERSION')) {
 class YandexTurbo extends \Opencart\System\Engine\Controller {
 	private $error = array();
 
-	private $allowed = array('RUR', 'RUB', 'USD', 'EUR', 'BYR', 'BYN', 'KZT', 'UAH');
+	private $allowed = array('RUR', 'RUB', 'USD', 'BYN', 'BYR', 'KZT', 'EUR', 'UAH');
 
 	public function index() {
 		$this->load->language('extension/ocStore/feed/yandex_turbo');

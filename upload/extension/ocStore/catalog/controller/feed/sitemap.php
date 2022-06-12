@@ -92,13 +92,13 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			$output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
 
 			if ($this->setting['blog_category_status']) {
-				$this->setting['blog_category_priority'] = (float)round($this->setting['blog_category_priority'], 1);
-
 				if ($this->setting['blog_category_priority'] > 1) {
 					$this->setting['blog_category_priority'] = '1.0';
 				} else {
 					$this->setting['blog_category_priority'] = abs($this->setting['blog_category_priority']);
 				}
+
+				$this->setting['blog_category_priority'] = bcdiv($this->setting['blog_category_priority'], 1, 1);
 
 				$filter_data = [
 					'start' => $this->setting['start'],
@@ -133,13 +133,13 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['blog_article_status']) {
-				$this->setting['blog_article_priority'] = (float)round($this->setting['blog_article_priority'], 1);
-
 				if ($this->setting['blog_article_priority'] > 1) {
 					$this->setting['blog_article_priority'] = 1;
 				} else {
 					$this->setting['blog_article_priority'] = abs($this->setting['blog_article_priority']);
 				}
+
+				$this->setting['blog_article_priority'] = bcdiv($this->setting['blog_article_priority'], 1, 1);
 
 				$filter_data = [
 					'start' => $this->setting['start'],
@@ -174,13 +174,13 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['category_status']) {
-				$this->setting['category_priority'] = (float)round($this->setting['category_priority'], 1);
-
 				if ($this->setting['category_priority'] > 1) {
 					$this->setting['category_priority'] = 1;
 				} else {
 					$this->setting['category_priority'] = abs($this->setting['category_priority']);
 				}
+
+				$this->setting['category_priority'] = bcdiv($this->setting['category_priority'], 1, 1);
 
 				$filter_data = [
 					'start' => $this->setting['start'],
@@ -188,7 +188,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				];
 
 				$categories = $this->model_extension_ocStore_feed_sitemap->getCategories($filter_data);
-				//var_dump($categories);
+
 				foreach ($categories as $category) {
 					if (!$this->setting['category_image'] || $this->setting['category_image'] && $category['image']) {
 						$output .= '<url>';
@@ -215,13 +215,13 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['information_status']) {
-				$this->setting['information_priority'] = (float)round($this->setting['information_priority'], 1);
-
 				if ($this->setting['information_priority'] > 1) {
 					$this->setting['information_priority'] = 1;
 				} else {
 					$this->setting['information_priority'] = abs($this->setting['information_priority']);
 				}
+
+				$this->setting['information_priority'] = bcdiv($this->setting['information_priority'], 1, 1);
 
 				$filter_data = [
 					'start' => $this->setting['start'],
@@ -256,13 +256,13 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['manufacturer_status']) {
-				$this->setting['manufacturer_priority'] = (float)round($this->setting['manufacturer_priority'], 1);
-
 				if ($this->setting['manufacturer_priority'] > 1) {
 					$this->setting['manufacturer_priority'] = 1;
 				} else {
 					$this->setting['manufacturer_priority'] = abs($this->setting['manufacturer_priority']);
 				}
+
+				$this->setting['manufacturer_priority'] = bcdiv($this->setting['manufacturer_priority'], 1, 1);
 
 				$filter_data = [
 					'start' => $this->setting['start'],
@@ -297,13 +297,13 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->setting['product_status']) {
-				$this->setting['product_priority'] = (float)round($this->setting['product_priority'], 1);
-
 				if ($this->setting['product_priority'] > 1) {
 					$this->setting['product_priority'] = 1;
 				} else {
 					$this->setting['product_priority'] = abs($this->setting['product_priority']);
 				}
+
+				$this->setting['product_priority'] = bcdiv($this->setting['product_priority'], 1, 1);
 
 				$filter_data = [
 					'start' => $this->setting['start'],

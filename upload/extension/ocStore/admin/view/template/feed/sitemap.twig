@@ -233,16 +233,16 @@ function loading() {
 
 		if (element && element.value > 0) {
 			param += '&{{ result.table }}_status=1';
-			
+
 			element = document.getElementById('input-{{ result.table|replace({"_": "-"}) }}-image');
 
-			if (element && element.value > 0) {
-				param += '&{{ result.table }}_image=1';
+			if (element) {
+				param += '&{{ result.table }}_image=' + element.value;
 			}
 
 			element = document.getElementById('input-{{ result.table|replace({"_": "-"}) }}-priority');
 
-			if (element && element.value > 0) {
+			if (element) {
 				param += '&{{ result.table }}_priority=' + element.value;
 			}
 		}
@@ -266,7 +266,7 @@ function loading() {
 	} */
 
 	element = document.querySelector('select[name="store_id"] option:checked');
-console.log(element);
+
 	if (element && element.value > 0) {
 		param += '&store_id=' + element.value;
 	}

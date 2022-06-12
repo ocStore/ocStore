@@ -11,7 +11,7 @@ if (!defined('VERSION')) {
 
 class Sitemap extends \Opencart\System\Engine\Controller {
 	private $setting_default = [
-		'status' => false,
+		'status'                 => false,
 		'blog_category_status'   => false,
 		'blog_category_image'    => true,
 		'blog_category_priority' => '0.9',
@@ -91,7 +91,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			$output  = '<?xml version="1.0" encoding="UTF-8"?>';
 			$output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
 
-			if ($this->setting['blog_category_status'] && is_file(DIR_EXTENSION . 'ocStore/catalog/model/blog/category.php')) {
+			if ($this->setting['blog_category_status']) {
 				$this->setting['blog_category_priority'] = (float)round($this->setting['blog_category_priority'], 1);
 
 				if ($this->setting['blog_category_priority'] > 1) {
@@ -100,12 +100,39 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 					$this->setting['blog_category_priority'] = abs($this->setting['blog_category_priority']);
 				}
 
-				$this->load->model('extension/ocStore/blog/category');
+				$filter_data = [
+					'start' => $this->setting['start'],
+					'limit' => $this->setting['limit']
+				];
 
-				$output .= $this->getBlogCategories(0);
+				$blog_categories = $this->model_extension_ocStore_feed_sitemap->getBlogCategories($filter_data);
+
+				foreach ($blog_categories as $blog_category) {
+					if (!$this->setting['blog_category_image'] || $this->setting['blog_category_image'] && $blog_category['image']) {
+						$output .= '<url>';
+						$output .= '  <loc>' . $this->url->link('extension/ocStor/blog/category', 'blog_category_id=' . $blog_category['path'] . '&language=' . $this->setting['language']) . '</loc>';
+						$output .= '  <changefreq>weekly</changefreq>';
+						if (!empty($blog_category['date_modified'])) {
+							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($blog_category['date_modified'])) . '</lastmod>';
+						} else {
+							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP') . '</lastmod>';
+						}
+						$output .= '  <priority>' . $this->setting['blog_category_priority'] . '</priority>';
+
+						if ($this->setting['blog_category_image']) {
+							$output .= '  <image:image>';
+							$output .= '  <image:loc>' . $this->model_tool_image->resize($blog_category['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height')) . '</image:loc>';
+							$output .= '  <image:caption>' . $blog_category['name'] . '</image:caption>';
+							$output .= '  <image:title>' . $blog_category['name'] . '</image:title>';
+							$output .= '  </image:image>';
+						}
+
+						$output .= '</url>';
+					}
+				}
 			}
 
-			if ($this->setting['blog_article_status'] && is_file(DIR_EXTENSION . 'ocStore/catalog/model/blog/article.php')) {
+			if ($this->setting['blog_article_status']) {
 				$this->setting['blog_article_priority'] = (float)round($this->setting['blog_article_priority'], 1);
 
 				if ($this->setting['blog_article_priority'] > 1) {
@@ -114,17 +141,22 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 					$this->setting['blog_article_priority'] = abs($this->setting['blog_article_priority']);
 				}
 
-				$this->load->model('extension/ocStore/blog/article');
+				$filter_data = [
+					'start' => $this->setting['start'],
+					'limit' => $this->setting['limit']
+				];
 
-				$articles = $this->model_extension_ocStore_blog_article->getArticles();
+				$articles = $this->model_extension_ocStore_feed_sitemap->getBlogArticles($filter_data);
 
 				foreach ($articles as $article) {
 					if (!$this->setting['blog_article_image'] || $this->setting['blog_article_image'] && $article['image']) {
 						$output .= '<url>';
 						$output .= '  <loc>' . $this->url->link('extension/ocStor/blog/article', 'article_id=' . $article['article_id'] . '&language=' . $this->setting['language']) . '</loc>';
 						$output .= '  <changefreq>weekly</changefreq>';
-						if (isset($article['date_modified'])) {
+						if (!empty($article['date_modified'])) {
 							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($article['date_modified'])) . '</lastmod>';
+						} else {
+							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP') . '</lastmod>';
 						}
 						$output .= '  <priority>' . $this->setting['blog_article_priority'] . '</priority>';
 
@@ -141,7 +173,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				}
 			}
 
-			if ($this->setting['category_status'] && is_file(DIR_APPLICATION . 'model/catalog/category.php')) {
+			if ($this->setting['category_status']) {
 				$this->setting['category_priority'] = (float)round($this->setting['category_priority'], 1);
 
 				if ($this->setting['category_priority'] > 1) {
@@ -150,12 +182,39 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 					$this->setting['category_priority'] = abs($this->setting['category_priority']);
 				}
 
-				$this->load->model('catalog/category');
+				$filter_data = [
+					'start' => $this->setting['start'],
+					'limit' => $this->setting['limit']
+				];
 
-				$output .= $this->getCategories(0);
+				$categories = $this->model_extension_ocStore_feed_sitemap->getCategories($filter_data);
+				//var_dump($categories);
+				foreach ($categories as $category) {
+					if (!$this->setting['category_image'] || $this->setting['category_image'] && $category['image']) {
+						$output .= '<url>';
+						$output .= '  <loc>' . $this->url->link('product/category', 'path=' . $category['path'] . '&language=' . $this->setting['language']) . '</loc>';
+						$output .= '  <changefreq>weekly</changefreq>';
+						if (!empty($category['date_modified'])) {
+							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($category['date_modified'])) . '</lastmod>';
+						} else {
+							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP') . '</lastmod>';
+						}
+						$output .= '  <priority>' . $this->setting['category_priority'] . '</priority>';
+
+						if ($this->setting['category_image']) {
+							$output .= '  <image:image>';
+							$output .= '  <image:loc>' . $this->model_tool_image->resize($category['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height')) . '</image:loc>';
+							$output .= '  <image:caption>' . $category['name'] . '</image:caption>';
+							$output .= '  <image:title>' . $category['name'] . '</image:title>';
+							$output .= '  </image:image>';
+						}
+
+						$output .= '</url>';
+					}
+				}
 			}
 
-			if ($this->setting['information_status'] && is_file(DIR_APPLICATION . 'model/catalog/information.php')) {
+			if ($this->setting['information_status']) {
 				$this->setting['information_priority'] = (float)round($this->setting['information_priority'], 1);
 
 				if ($this->setting['information_priority'] > 1) {
@@ -164,26 +223,28 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 					$this->setting['information_priority'] = abs($this->setting['information_priority']);
 				}
 
-				$this->load->model('catalog/information');
+				$filter_data = [
+					'start' => $this->setting['start'],
+					'limit' => $this->setting['limit']
+				];
 
-				$informations = $this->model_catalog_information->getInformations();
+				$informations = $this->model_extension_ocStore_feed_sitemap->getInformations($filter_data);
 
 				foreach ($informations as $information) {
 					if (!$this->setting['information_image'] || $this->setting['information_image'] && $information['image']) {
 						$output .= '<url>';
 						$output .= '  <loc>' . $this->url->link('information/information', 'information_id=' . $information['information_id'] . '&language=' . $this->setting['language']) . '</loc>';
 						$output .= '  <changefreq>weekly</changefreq>';
-						if (isset($information['date_modified'])) {
+						if (!empty($information['date_modified'])) {
 							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($information['date_modified'])) . '</lastmod>';
+						} else {
+							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP') . '</lastmod>';
 						}
 						$output .= '  <priority>' . $this->setting['information_priority'] . '</priority>';
 
 						if ($this->setting['information_image']) {
 							$output .= '  <image:image>';
 							$output .= '  <image:loc>' . $this->model_tool_image->resize($information['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height')) . '</image:loc>';
-							if (!isset($information['name'])) {
-								$information['name'] = $information['title'];
-							}
 							$output .= '  <image:caption>' . $information['name'] . '</image:caption>';
 							$output .= '  <image:title>' . $information['name'] . '</image:title>';
 							$output .= '  </image:image>';
@@ -194,7 +255,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				}
 			}
 
-			if ($this->setting['manufacturer_status'] && is_file(DIR_APPLICATION . 'model/catalog/manufacturer.php')) {
+			if ($this->setting['manufacturer_status']) {
 				$this->setting['manufacturer_priority'] = (float)round($this->setting['manufacturer_priority'], 1);
 
 				if ($this->setting['manufacturer_priority'] > 1) {
@@ -202,18 +263,23 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				} else {
 					$this->setting['manufacturer_priority'] = abs($this->setting['manufacturer_priority']);
 				}
-				
-				$this->load->model('catalog/manufacturer');
 
-				$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
+				$filter_data = [
+					'start' => $this->setting['start'],
+					'limit' => $this->setting['limit']
+				];
+
+				$manufacturers = $this->model_extension_ocStore_feed_sitemap->getManufacturers($filter_data);
 
 				foreach ($manufacturers as $manufacturer) {
 					if (!$this->setting['manufacturer_image'] || $this->setting['manufacturer_image'] && $manufacturer['image']) {
 						$output .= '<url>';
 						$output .= '  <loc>' . $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . '&language=' . $this->setting['language']) . '</loc>';
 						$output .= '  <changefreq>weekly</changefreq>';
-						if (isset($manufacturer['date_modified'])) {
+						if (!empty($manufacturer['date_modified'])) {
 							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($manufacturer['date_modified'])) . '</lastmod>';
+						} else {
+							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP') . '</lastmod>';
 						}
 						$output .= '  <priority>' . $this->setting['manufacturer_priority'] . '</priority>';
 
@@ -230,7 +296,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				}
 			}
 
-			if ($this->setting['product_status'] && is_file(DIR_APPLICATION . 'model/catalog/product.php')) {
+			if ($this->setting['product_status']) {
 				$this->setting['product_priority'] = (float)round($this->setting['product_priority'], 1);
 
 				if ($this->setting['product_priority'] > 1) {
@@ -239,17 +305,22 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 					$this->setting['product_priority'] = abs($this->setting['product_priority']);
 				}
 
-				$this->load->model('catalog/product');
+				$filter_data = [
+					'start' => $this->setting['start'],
+					'limit' => $this->setting['limit']
+				];
 
-				$products = $this->model_catalog_product->getProducts();
+				$products = $this->model_extension_ocStore_feed_sitemap->getProducts($filter_data);
 
 				foreach ($products as $product) {
 					if (!$this->setting['product_image'] || $this->setting['product_image'] && $product['image']) {
 						$output .= '<url>';
 						$output .= '  <loc>' . $this->url->link('product/product', 'product_id=' . $product['product_id'] . '&language=' . $this->setting['language']) . '</loc>';
 						$output .= '  <changefreq>weekly</changefreq>';
-						if (isset($product['date_modified'])) {
+						if (!empty($product['date_modified'])) {
 							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($product['date_modified'])) . '</lastmod>';
+						} else {
+							$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP') . '</lastmod>';
 						}
 						$output .= '  <priority>' . $this->setting['product_priority'] . '</priority>';
 
@@ -276,81 +347,5 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				$this->response->setOutput($output);
 			}
 		}
-	}
-
-	protected function getCategories($parent_id, $current_path = '') {
-		$output = '';
-
-		$results = $this->model_catalog_category->getCategories($parent_id);
-
-		foreach ($results as $result) {
-			if (!$current_path) {
-				$new_path = $result['category_id'];
-			} else {
-				$new_path = $current_path . '_' . $result['category_id'];
-			}
-
-			if (!$this->setting['category_image'] || $this->setting['category_image'] && $result['image']) {
-				$output .= '<url>';
-				$output .= '  <loc>' . $this->url->link('product/category', 'path=' . $new_path . '&language=' . $this->setting['language']) . '</loc>';
-				$output .= '  <changefreq>weekly</changefreq>';
-				if (isset($result['date_modified'])) {
-					$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($result['date_modified'])) . '</lastmod>';
-				}
-				$output .= '  <priority>' . $this->setting['category_priority'] . '</priority>';
-
-				if ($this->setting['category_image']) {
-					$output .= '  <image:image>';
-					$output .= '  <image:loc>' . $this->model_tool_image->resize($result['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height')) . '</image:loc>';
-					$output .= '  <image:caption>' . $result['name'] . '</image:caption>';
-					$output .= '  <image:title>' . $result['name'] . '</image:title>';
-					$output .= '  </image:image>';
-				}
-
-				$output .= '</url>';
-			}
-
-			$output .= $this->getCategories($result['category_id'], $new_path);
-		}
-
-		return $output;
-	}
-
-	protected function getBlogCategories($parent_id, $current_path = '') {
-		$output = '';
-
-		$results = $this->model_extension_ocStore_blog_category->getCategories($parent_id);
-
-		foreach ($results as $result) {
-			if (!$current_path) {
-				$new_path = $result['blog_category_id'];
-			} else {
-				$new_path = $current_path . '_' . $result['blog_category_id'];
-			}
-
-			if (!$this->setting['blog_category_image'] || $this->setting['blog_category_image'] && $result['image']) {
-				$output .= '<url>';
-				$output .= '  <loc>' . $this->url->link('extension/ocStor/blog/category', 'blog_category_id=' . $new_path . '&language=' . $this->setting['language']) . '</loc>';
-				$output .= '  <changefreq>weekly</changefreq>';
-				if (isset($result['date_modified'])) {
-					$output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($result['date_modified'])) . '</lastmod>';
-				}
-				$output .= '  <priority>' . $this->setting['blog_category_priority'] . '</priority>';
-
-				if ($this->setting['blog_category_image']) {
-					$output .= '  <image:image>';
-					$output .= '  <image:loc>' . $this->model_tool_image->resize($result['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height')) . '</image:loc>';
-					$output .= '  <image:caption>' . $result['name'] . '</image:caption>';
-					$output .= '  <image:title>' . $result['name'] . '</image:title>';
-					$output .= '  </image:image>';
-				}
-
-				$output .= '</url>';
-			}
-
-			$output .= $this->getCategories($result['blog_category_id'], $new_path);
-		}
-
-		return $output;
 	}
 }

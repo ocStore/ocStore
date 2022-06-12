@@ -61,7 +61,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['status'])) {
 			$data['status'] = $this->request->post['status'];
-		} elseif (!empty($module_info['status'])) {
+		} elseif (isset($module_info['status'])) {
 			$data['status'] = $module_info['status'];
 		} else {
 			$data['status'] = true;
@@ -78,7 +78,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 		foreach ($data['results'] as $result) {
 			if (isset($this->request->post[$result['table'] . '_status'])) {
 				$data[$result['table'] . '_status'] = $this->request->post[$result['table'] . '_status'];
-			} elseif (!empty($module_info[$result['table'] . '_status'])) {
+			} elseif (isset($module_info[$result['table'] . '_status'])) {
 				$data[$result['table'] . '_status'] = $module_info[$result['table'] . '_status'];
 			} else {
 				$data[$result['table'] . '_status'] = $result['status'];
@@ -86,7 +86,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 
 			if (isset($this->request->post[$result['table'] . '_image'])) {
 				$data[$result['table'] . '_image'] = $this->request->post[$result['table'] . '_image'];
-			} elseif (!empty($module_info[$result['table'] . '_image'])) {
+			} elseif (isset($module_info[$result['table'] . '_image'])) {
 				$data[$result['table'] . '_image'] = $module_info[$result['table'] . '_image'];
 			} else {
 				$data[$result['table'] . '_image'] = $result['image'];
@@ -94,7 +94,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 
 			if (isset($this->request->post[$result['table'] . '_priority'])) {
 				$data[$result['table'] . '_priority'] = $this->request->post[$result['table'] . '_priority'];
-			} elseif (!empty($module_info[$result['table'] . '_priority'])) {
+			} elseif (isset($module_info[$result['table'] . '_priority'])) {
 				$data[$result['table'] . '_priority'] = $module_info[$result['table'] . '_priority'];
 			} else {
 				$data[$result['table'] . '_priority'] = $result['priority'];
@@ -121,7 +121,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['stores'])) {
 			$data['stores'] = $this->request->post['stores'];
-		} elseif (!empty($module_info['stores'])) {
+		} elseif (isset($module_info['stores'])) {
 			$data['stores'] = $module_info['stores'];
 		} else {
 			$data['stores'] = [0];
@@ -129,7 +129,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['store_id'])) {
 			$data['store_id'] = $this->request->post['store_id'];
-		} elseif (!empty($module_info['store_id'])) {
+		} elseif (isset($module_info['store_id'])) {
 			$data['store_id'] = $module_info['store_id'];
 		} else {
 			$data['store_id'] = 0;
@@ -141,7 +141,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['languages'])) {
 			$data['languages'] = $this->request->post['languages'];
-		} elseif (!empty($module_info['languages'])) {
+		} elseif (isset($module_info['languages'])) {
 			$data['languages'] = $module_info['languages'];
 		} else {
 			$data['languages'] = [2];
@@ -149,7 +149,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['language_id'])) {
 			$data['language_id'] = $this->request->post['language_id'];
-		} elseif (!empty($module_info['language_id'])) {
+		} elseif (isset($module_info['language_id'])) {
 			$data['language_id'] = $module_info['language_id'];
 		} else {
 			$data['language_id'] = 2;

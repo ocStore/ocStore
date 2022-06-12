@@ -165,7 +165,7 @@ class Installer extends \Opencart\System\Engine\Controller {
 			if (is_file($file)) {
 				$json['error'] = $this->language->get('error_file_exists');
 
-				unlink($this->request->files['file']['name']);
+				unlink($this->request->files['file']['tmp_name']);
 			}
 
 			if ($this->request->files['file']['error'] != UPLOAD_ERR_OK) {
@@ -197,7 +197,6 @@ class Installer extends \Opencart\System\Engine\Controller {
                             'extension_id'          => 0,
                             'extension_download_id' => 0,
                             'name'                  => isset($install_info['name']) ? $install_info['name'] : $this->language->get('text_unknown'),
-                            'package_name'          => basename($filename, '.ocmod.zip'),
                             'code'              	=> basename($filename, '.ocmod.zip'),
                             'version'               => isset($install_info['version']) ? $install_info['version'] : $this->language->get('text_unknown'),
                             'author'                => isset($install_info['author']) ? $install_info['author'] : $this->language->get('text_unknown'),
@@ -236,7 +235,6 @@ class Installer extends \Opencart\System\Engine\Controller {
                                     'extension_id'          => 0,
                                     'extension_download_id' => 0,
                                     'name'                  => isset($install_info['name']) ? $install_info['name'] : $this->language->get('text_unknown'),
-                                    'package_name'          => basename($filename, '.ocmod.zip'),
                                     'code'              	=> $code,
                                     'version'               => isset($install_info['version']) ? $install_info['version'] : $this->language->get('text_unknown'),
                                     'author'                => isset($install_info['author']) ? $install_info['author'] : $this->language->get('text_unknown'),
@@ -291,10 +289,10 @@ class Installer extends \Opencart\System\Engine\Controller {
 		$extension_install_info = $this->model_setting_extension->getInstall($extension_install_id);
 
 		if ($extension_install_info) {
-			$file = DIR_STORAGE . 'marketplace/' . $extension_install_info['package_name'] . '.ocmod.zip';
+			$file = DIR_STORAGE . 'marketplace/' . $extension_install_info['code'] . '.ocmod.zip';
 
 			if (!is_file($file)) {
-				$json['error'] = sprintf($this->language->get('error_file'), $extension_install_info['package_name'] . '.ocmod.zip');
+				$json['error'] = sprintf($this->language->get('error_file'), $extension_install_info['code'] . '.ocmod.zip');
 			}
 
 			if ($page == 1 && is_dir(DIR_EXTENSION . $extension_install_info['code'] . '/')) {
@@ -513,13 +511,15 @@ class Installer extends \Opencart\System\Engine\Controller {
 							while (count($directories) != 0) {
 								$next = array_shift($directories);
 
-								foreach (glob($next . '*') as $file) {
-									if (is_dir($file)) {
-										$directories[] = $file . '/';
-									}
+								if (is_dir($next)) {
+									foreach (glob(trim($next, '/') . '/{*,.[!.]*,..?*}', GLOB_BRACE) as $file) {
+										if (is_dir($file)) {
+											$directories[] = $file . '/';
+										}
 
-									if (is_file($file)) {
-										$autoload[substr(dirname($file), strlen(DIR_STORAGE . 'vendor/' . $directory . $classmap) + 1)] = substr(dirname($file), strlen(DIR_STORAGE . 'vendor/'));
+										if (is_file($file)) {
+											$autoload[substr(dirname($file), strlen(DIR_STORAGE . 'vendor/' . $directory . $classmap) + 1)] = substr(dirname($file), strlen(DIR_STORAGE . 'vendor/'));
+										}
 									}
 								}
 							}
@@ -646,7 +646,7 @@ class Installer extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$file = DIR_STORAGE . 'marketplace/' . $extension_install_info['package_name'] . '.ocmod.zip';
+			$file = DIR_STORAGE . 'marketplace/' . $extension_install_info['code'] . '.ocmod.zip';
 			
 			// Unzip the files
 			$zip = new \ZipArchive();

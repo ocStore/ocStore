@@ -2,28 +2,35 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerBlogReview extends Controller {
+namespace Opencart\Admin\Controller\Extension\ocStore\Blog;
+
+if (!defined('VERSION')) {
+	header('Refresh: 1; URL=/');
+	exit('ЗАПРЫШЧАЮ!');
+}
+
+class Review extends \Opencart\System\Engine\Controller {
 	private $error = array();
 
 	public function index() {
-		$this->load->language('blog/review');
+		$this->load->language('extension/ocStore/blog/review');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('blog/review');
+		$this->load->model('extension/ocStore/blog/review');
 
 		$this->getList();
 	}
 
 	public function add() {
-		$this->load->language('blog/review');
+		$this->load->language('extension/ocStore/blog/review');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('blog/review');
+		$this->load->model('extension/ocStore/blog/review');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_blog_review->addReview($this->request->post);
+			$this->model_extension_ocStore_blog_review->addReview($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -57,21 +64,21 @@ class ControllerBlogReview extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
 		}
 
 		$this->getForm();
 	}
 
 	public function edit() {
-		$this->load->language('blog/review');
+		$this->load->language('extension/ocStore/blog/review');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('blog/review');
+		$this->load->model('extension/ocStore/blog/review');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_blog_review->editReview($this->request->get['review_article_id'], $this->request->post);
+			$this->model_extension_ocStore_blog_review->editReview($this->request->get['review_article_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -105,22 +112,22 @@ class ControllerBlogReview extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
 		}
 
 		$this->getForm();
 	}
 
 	public function delete() {
-		$this->load->language('blog/review');
+		$this->load->language('extension/ocStore/blog/review');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('blog/review');
+		$this->load->model('extension/ocStore/blog/review');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $review_article_id) {
-				$this->model_blog_review->deleteReview($review_article_id);
+				$this->model_extension_ocStore_blog_review->deleteReview($review_article_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -155,7 +162,7 @@ class ControllerBlogReview extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
 		}
 
 		$this->getList();
@@ -243,13 +250,13 @@ class ControllerBlogReview extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true)
+			'href' => $this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true)
 		);
 
-		$data['add'] = $this->url->link('blog/review/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
-		$data['delete'] = $this->url->link('blog/review/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
-		$data['enabled'] = $this->url->link('blog/review/enable', 'user_token=' . $this->session->data['user_token'] . $url, true);
-		$data['disabled'] = $this->url->link('blog/review/disable', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['add'] = $this->url->link('extension/ocStore/blog/review/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['delete'] = $this->url->link('extension/ocStore/blog/review/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['enabled'] = $this->url->link('extension/ocStore/blog/review/enable', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['disabled'] = $this->url->link('extension/ocStore/blog/review/disable', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		$data['reviews'] = array();
 
@@ -264,9 +271,9 @@ class ControllerBlogReview extends Controller {
 			'limit'             => $this->config->get('config_limit_admin')
 		);
 
-		$review_total = $this->model_blog_review->getTotalReviews($filter_data);
+		$review_total = $this->model_extension_ocStore_blog_review->getTotalReviews($filter_data);
 
-		$results = $this->model_blog_review->getReviews($filter_data);
+		$results = $this->model_extension_ocStore_blog_review->getReviews($filter_data);
 
 		foreach ($results as $result) {
 			$data['reviews'][] = array(
@@ -276,7 +283,7 @@ class ControllerBlogReview extends Controller {
 				'rating'     => $result['rating'],
 				'status'     => ($result['status']) ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
-				'edit'       => $this->url->link('blog/review/edit', 'user_token=' . $this->session->data['user_token'] . '&review_article_id=' . $result['review_article_id'] . $url, true)
+				'edit'       => $this->url->link('extension/ocStore/blog/review/edit', 'user_token=' . $this->session->data['user_token'] . '&review_article_id=' . $result['review_article_id'] . $url, true)
 			);
 		}
 
@@ -330,11 +337,11 @@ class ControllerBlogReview extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['sort_article'] = $this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=pd.name' . $url, true);
-		$data['sort_author'] = $this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=r.author' . $url, true);
-		$data['sort_rating'] = $this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=r.rating' . $url, true);
-		$data['sort_status'] = $this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=r.status' . $url, true);
-		$data['sort_date_added'] = $this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=r.date_added' . $url, true);
+		$data['sort_article'] = $this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=pd.name' . $url, true);
+		$data['sort_author'] = $this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=r.author' . $url, true);
+		$data['sort_rating'] = $this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=r.rating' . $url, true);
+		$data['sort_status'] = $this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=r.status' . $url, true);
+		$data['sort_date_added'] = $this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . '&sort=r.date_added' . $url, true);
 
 		$url = '';
 
@@ -366,7 +373,7 @@ class ControllerBlogReview extends Controller {
 		$pagination->total = $review_total;
 		$pagination->page = $page;
 		$pagination->limit = $this->config->get('config_limit_admin');
-		$pagination->url = $this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . $url . '&page={page}', true);
+		$pagination->url = $this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . $url . '&page={page}', true);
 
 		$data['pagination'] = $pagination->render();
 
@@ -384,7 +391,7 @@ class ControllerBlogReview extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('blog/review_list', $data));
+		$this->response->setOutput($this->load->view('extension/ocStore/blog/review_list', $data));
 	}
 
 	protected function getForm() {
@@ -459,19 +466,19 @@ class ControllerBlogReview extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true)
+			'href' => $this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true)
 		);
 
 		if (!isset($this->request->get['review_article_id'])) {
-			$data['action'] = $this->url->link('blog/review/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
+			$data['action'] = $this->url->link('extension/ocStore/blog/review/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		} else {
-			$data['action'] = $this->url->link('blog/review/edit', 'user_token=' . $this->session->data['user_token'] . '&review_article_id=' . $this->request->get['review_article_id'] . $url, true);
+			$data['action'] = $this->url->link('extension/ocStore/blog/review/edit', 'user_token=' . $this->session->data['user_token'] . '&review_article_id=' . $this->request->get['review_article_id'] . $url, true);
 		}
 
-		$data['cancel'] = $this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['cancel'] = $this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['review_article_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$review_info = $this->model_blog_review->getReview($this->request->get['review_article_id']);
+			$review_info = $this->model_extension_ocStore_blog_review->getReview($this->request->get['review_article_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -538,11 +545,11 @@ class ControllerBlogReview extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('blog/review_form', $data));
+		$this->response->setOutput($this->load->view('extension/ocStore/blog/review_form', $data));
 	}
 
 	protected function validateForm() {
-		if (!$this->user->hasPermission('modify', 'blog/review')) {
+		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/review')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
@@ -566,18 +573,18 @@ class ControllerBlogReview extends Controller {
 	}
 	
 		public function enable() {
-        $this->load->language('blog/review');
+        $this->load->language('extension/ocStore/blog/review');
         $this->document->setTitle($this->language->get('heading_title'));
-        $this->load->model('blog/review');
+        $this->load->model('extension/ocStore/blog/review');
         if (isset($this->request->post['selected']) && $this->validateEnable()) {
             foreach ($this->request->post['selected'] as $review_article_id) {
                 $data = array();
-                $result = $this->model_blog_review->getReview($review_article_id);
+                $result = $this->model_extension_ocStore_blog_review->getReview($review_article_id);
                 foreach ($result as $key => $value) {
                     $data[$key] = $value;
                 }
                 $data['status'] = 1;
-                $this->model_blog_review->editReview($review_article_id, $data);
+                $this->model_extension_ocStore_blog_review->editReview($review_article_id, $data);
             }
             $this->session->data['success'] = $this->language->get('text_success');
             $url = '';
@@ -590,23 +597,23 @@ class ControllerBlogReview extends Controller {
             if (isset($this->request->get['order'])) {
                 $url .= '&order=' . $this->request->get['order'];
             }
-            $this->response->redirect($this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
+            $this->response->redirect($this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
         }
         $this->getList();
     }
     public function disable() {
-        $this->load->language('blog/review');
+        $this->load->language('extension/ocStore/blog/review');
         $this->document->setTitle($this->language->get('heading_title'));
-        $this->load->model('blog/review');
+        $this->load->model('extension/ocStore/blog/review');
         if (isset($this->request->post['selected']) && $this->validateDisable()) {
             foreach ($this->request->post['selected'] as $review_article_id) {
                 $data = array();
-                $result = $this->model_blog_review->getReview($review_article_id);
+                $result = $this->model_extension_ocStore_blog_review->getReview($review_article_id);
                 foreach ($result as $key => $value) {
                     $data[$key] = $value;
                 }
                 $data['status'] = 0;
-                $this->model_blog_review->editReview($review_article_id, $data);
+                $this->model_extension_ocStore_blog_review->editReview($review_article_id, $data);
             }
             $this->session->data['success'] = $this->language->get('text_success');
             $url = '';
@@ -619,13 +626,13 @@ class ControllerBlogReview extends Controller {
             if (isset($this->request->get['order'])) {
                 $url .= '&order=' . $this->request->get['order'];
             }
-            $this->response->redirect($this->url->link('blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
+            $this->response->redirect($this->url->link('extension/ocStore/blog/review', 'user_token=' . $this->session->data['user_token'] . $url, true));
         }
         $this->getList();
     }
 	
 	protected function validateEnable() {
-		if (!$this->user->hasPermission('modify', 'blog/review')) {
+		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/review')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
@@ -633,7 +640,7 @@ class ControllerBlogReview extends Controller {
 	}
 	
 	protected function validateDisable() {
-		if (!$this->user->hasPermission('modify', 'blog/review')) {
+		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/review')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
@@ -641,7 +648,7 @@ class ControllerBlogReview extends Controller {
 	}
 
 	protected function validateDelete() {
-		if (!$this->user->hasPermission('modify', 'blog/review')) {
+		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/review')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 

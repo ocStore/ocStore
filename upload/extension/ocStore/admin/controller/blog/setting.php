@@ -2,11 +2,18 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerBlogSetting extends Controller {
+namespace Opencart\Admin\Controller\Extension\ocStore\Blog;
+
+if (!defined('VERSION')) {
+	header('Refresh: 1; URL=/');
+	exit('ЗАПРЫШЧАЮ!');
+}
+
+class Setting extends \Opencart\System\Engine\Controller {
 	private $error = array();
 
 	public function index() {
-		$this->load->language('blog/setting');
+		$this->load->language('extension/ocStore/blog/setting');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -17,7 +24,7 @@ class ControllerBlogSetting extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('blog/setting', 'user_token=' . $this->session->data['user_token'], true));
+			$this->response->redirect($this->url->link('extension/ocStore/blog/setting', 'user_token=' . $this->session->data['user_token'], true));
 		}
 
 		$data['heading_title'] = $this->language->get('heading_title');
@@ -115,7 +122,7 @@ class ControllerBlogSetting extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('blog/setting', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('extension/ocStore/blog/setting', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
 		if (isset($this->session->data['success'])) {
@@ -126,7 +133,7 @@ class ControllerBlogSetting extends Controller {
 			$data['success'] = '';
 		}
 
-		$data['action'] = $this->url->link('blog/setting', 'user_token=' . $this->session->data['user_token'], true);
+		$data['action'] = $this->url->link('extension/ocStore/blog/setting', 'user_token=' . $this->session->data['user_token'], true);
 
 		$data['cancel'] = $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'], true);
 
@@ -256,7 +263,7 @@ class ControllerBlogSetting extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('blog/setting', $data));
+		$this->response->setOutput($this->load->view('extension/ocStore/blog/setting', $data));
 	}
 
 	protected function validate() {

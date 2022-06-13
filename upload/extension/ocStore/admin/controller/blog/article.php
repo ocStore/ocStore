@@ -2,28 +2,35 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerBlogArticle extends Controller {
+namespace Opencart\Admin\Controller\Extension\ocStore\Blog;
+
+if (!defined('VERSION')) {
+	header('Refresh: 1; URL=/');
+	exit('ЗАПРЫШЧАЮ!');
+}
+
+class Article extends \Opencart\System\Engine\Controller {
 	private $error = array();
 
 	public function index() {
-		$this->load->language('blog/article');
+		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('blog/article');
+		$this->load->model('extension/ocStore/blog/article');
 
 		$this->getList();
 	}
 
 	public function add() {
-		$this->load->language('blog/article');
+		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('blog/article');
+		$this->load->model('extension/ocStore/blog/article');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_blog_article->addArticle($this->request->post);
+			$this->model_extension_ocStore_blog_article->addArticle($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -33,10 +40,17 @@ class ControllerBlogArticle extends Controller {
 				$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
 			}
 
+			if (isset($this->request->get['filter_category'])) {
+				$url .= '&filter_category=' . $this->request->get['filter_category'];
+				if (isset($this->request->get['filter_sub_category'])) {
+					$url .= '&filter_sub_category';
+				}
+			}
+
 			if (isset($this->request->get['filter_status'])) {
 				$url .= '&filter_status=' . $this->request->get['filter_status'];
 			}
-			
+
 			if (isset($this->request->get['filter_noindex'])) {
 				$url .= '&filter_noindex=' . $this->request->get['filter_noindex'];
 			}
@@ -53,21 +67,21 @@ class ControllerBlogArticle extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url, true));
 		}
 
 		$this->getForm();
 	}
 
 	public function edit() {
-		$this->load->language('blog/article');
+		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('blog/article');
+		$this->load->model('extension/ocStore/blog/article');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_blog_article->editArticle($this->request->get['article_id'], $this->request->post);
+			$this->model_extension_ocStore_blog_article->editArticle($this->request->get['article_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -77,10 +91,17 @@ class ControllerBlogArticle extends Controller {
 				$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
 			}
 
+			if (isset($this->request->get['filter_category'])) {
+				$url .= '&filter_category=' . $this->request->get['filter_category'];
+				if (isset($this->request->get['filter_sub_category'])) {
+					$url .= '&filter_sub_category';
+				}
+			}
+
 			if (isset($this->request->get['filter_status'])) {
 				$url .= '&filter_status=' . $this->request->get['filter_status'];
 			}
-			
+
 			if (isset($this->request->get['filter_noindex'])) {
 				$url .= '&filter_noindex=' . $this->request->get['filter_noindex'];
 			}
@@ -97,22 +118,22 @@ class ControllerBlogArticle extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url, true));
 		}
 
 		$this->getForm();
 	}
 
 	public function delete() {
-		$this->load->language('blog/article');
+		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('blog/article');
+		$this->load->model('extension/ocStore/blog/article');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $article_id) {
-				$this->model_blog_article->deleteArticle($article_id);
+				$this->model_extension_ocStore_blog_article->deleteArticle($article_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -123,10 +144,17 @@ class ControllerBlogArticle extends Controller {
 				$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
 			}
 
+			if (isset($this->request->get['filter_category'])) {
+				$url .= '&filter_category=' . $this->request->get['filter_category'];
+				if (isset($this->request->get['filter_sub_category'])) {
+					$url .= '&filter_sub_category';
+				}
+			}
+
 			if (isset($this->request->get['filter_status'])) {
 				$url .= '&filter_status=' . $this->request->get['filter_status'];
 			}
-			
+
 			if (isset($this->request->get['filter_noindex'])) {
 				$url .= '&filter_noindex=' . $this->request->get['filter_noindex'];
 			}
@@ -143,22 +171,22 @@ class ControllerBlogArticle extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url, true));
 		}
 
 		$this->getList();
 	}
 
 	public function copy() {
-		$this->load->language('blog/article');
+		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('blog/article');
+		$this->load->model('extension/ocStore/blog/article');
 
 		if (isset($this->request->post['selected']) && $this->validateCopy()) {
 			foreach ($this->request->post['selected'] as $article_id) {
-				$this->model_blog_article->copyArticle($article_id);
+				$this->model_extension_ocStore_blog_article->copyArticle($article_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -169,10 +197,17 @@ class ControllerBlogArticle extends Controller {
 				$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
 			}
 
+			if (isset($this->request->get['filter_category'])) {
+				$url .= '&filter_category=' . $this->request->get['filter_category'];
+				if (isset($this->request->get['filter_sub_category'])) {
+					$url .= '&filter_sub_category';
+				}
+			}
+
 			if (isset($this->request->get['filter_status'])) {
 				$url .= '&filter_status=' . $this->request->get['filter_status'];
 			}
-			
+
 			if (isset($this->request->get['filter_noindex'])) {
 				$url .= '&filter_noindex=' . $this->request->get['filter_noindex'];
 			}
@@ -189,17 +224,163 @@ class ControllerBlogArticle extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url, true));
+		}
+
+		$this->getList();
+	}
+
+	public function enable() {
+		$this->load->language('extension/ocStore/blog/article');
+
+		$this->document->setTitle($this->language->get('heading_title'));
+
+		$this->load->model('extension/ocStore/blog/article');
+
+		if (isset($this->request->post['selected']) && $this->validateProStatus()) {
+			foreach ($this->request->post['selected'] as $article_id) {
+				$this->model_extension_ocStore_blog_article->editArticleStatus($article_id, 1);
+			}
+
+			$this->session->data['success'] = $this->language->get('text_success');
+
+			$url = '';
+
+			if (isset($this->request->get['page'])) {
+				$url .= '&page=' . $this->request->get['page'];
+			}
+
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			$this->response->redirect($this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url, true));
+		}
+
+		$this->getList();
+	}
+
+	public function disable() {
+		$this->load->language('extension/ocStore/blog/article');
+
+		$this->document->setTitle($this->language->get('heading_title'));
+
+		$this->load->model('extension/ocStore/blog/article');
+
+		if (isset($this->request->post['selected']) && $this->validateProStatus()) {
+			foreach ($this->request->post['selected'] as $article_id) {
+				$this->model_extension_ocStore_blog_article->editArticleStatus($article_id, 0);
+			}
+
+			$this->session->data['success'] = $this->language->get('text_success');
+
+			$url = '';
+
+			if (isset($this->request->get['page'])) {
+				$url .= '&page=' . $this->request->get['page'];
+			}
+
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			$this->response->redirect($this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url, true));
 		}
 
 		$this->getList();
 	}
 
 	protected function getList() {
+		$data['heading_title'] = $this->language->get('heading_title');
+
+		$data['text_list'] = $this->language->get('text_list');
+		$data['text_all'] = $this->language->get('text_all');
+		$data['text_none_category'] = $this->language->get('text_none_category');
+		$data['text_enabled'] = $this->language->get('text_enabled');
+		$data['text_disabled'] = $this->language->get('text_disabled');
+		$data['text_no_results'] = $this->language->get('text_no_results');
+		$data['text_confirm'] = $this->language->get('text_confirm');
+
+		$data['column_image'] = $this->language->get('column_image');
+		$data['column_name'] = $this->language->get('column_name');
+		$data['column_status'] = $this->language->get('column_status');
+		$data['column_noindex'] = $this->language->get('column_noindex');
+		$data['column_action'] = $this->language->get('column_action');
+
+		$data['entry_name'] = $this->language->get('entry_name');
+		$data['entry_category'] = $this->language->get('entry_category');
+		$data['entry_category_filter'] = $this->language->get('entry_category_filter');
+		$data['entry_sub_category'] = $this->language->get('entry_sub_category');
+		$data['entry_status'] = $this->language->get('entry_status');
+		$data['entry_noindex'] = $this->language->get('entry_noindex');
+
+		$data['button_copy'] = $this->language->get('button_copy');
+		$data['button_add'] = $this->language->get('button_add');
+		$data['button_edit'] = $this->language->get('button_edit');
+		$data['button_shop'] = $this->language->get('button_shop');
+		$data['button_delete'] = $this->language->get('button_delete');
+		$data['button_filter'] = $this->language->get('button_filter');
+		$data['button_clear'] = $this->language->get('button_clear');
+		$data['button_enable'] = $this->language->get('button_enable');
+		$data['button_disable'] = $this->language->get('button_disable');
+
+		$data['token'] = $this->session->data['token'];
+
 		if (isset($this->request->get['filter_name'])) {
 			$filter_name = $this->request->get['filter_name'];
 		} else {
 			$filter_name = null;
+		}
+
+		$filter_sub_category = null;
+
+		if (isset($this->request->get['filter_category'])) {
+			$filter_category = $this->request->get['filter_category'];
+
+			if (!empty($filter_category) && isset($this->request->get['filter_sub_category'])) {
+				$filter_sub_category = true;
+			} elseif (isset($this->request->get['filter_sub_category'])) {
+				unset($this->request->get['filter_sub_category']);
+			}
+		} else {
+			$filter_category = null;
+
+			if (isset($this->request->get['filter_sub_category'])) {
+				unset($this->request->get['filter_sub_category']);
+			}
+		}
+
+		$filter_category_name = null;
+
+		if (isset($filter_category)) {
+			if ($filter_category > 0) {
+				$this->load->model('extension/ocStore/blog/category');
+
+				$category = $this->model_extension_ocStore_blog_category->getCategory($filter_category);
+
+				if ($category) {
+					$filter_category_name = ($category['path']) ? $category['path'] . ' &gt; ' . $category['name'] : $category['name'];
+				} else {
+					$filter_category = null;
+					$filter_sub_category = null;
+
+					unset($this->request->get['filter_category']);
+
+					if (isset($this->request->get['filter_sub_category'])) {
+						unset($this->request->get['filter_sub_category']);
+					}
+				}
+			} else {
+				$filter_category_name = $this->language->get('text_none_category');
+			}
 		}
 
 		if (isset($this->request->get['filter_status'])) {
@@ -207,7 +388,7 @@ class ControllerBlogArticle extends Controller {
 		} else {
 			$filter_status = null;
 		}
-		
+
 		if (isset($this->request->get['filter_noindex'])) {
 			$filter_noindex = $this->request->get['filter_noindex'];
 		} else {
@@ -232,16 +413,29 @@ class ControllerBlogArticle extends Controller {
 			$page = 1;
 		}
 
+		if ($this->request->server['HTTPS']) {
+			$server = HTTPS_CATALOG;
+		} else {
+			$server = HTTP_CATALOG;
+		}
+
 		$url = '';
 
 		if (isset($this->request->get['filter_name'])) {
 			$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
 		}
 
+		if (isset($this->request->get['filter_category'])) {
+			$url .= '&filter_category=' . $this->request->get['filter_category'];
+			if (isset($this->request->get['filter_sub_category'])) {
+				$url .= '&filter_sub_category';
+			}
+		}
+
 		if (isset($this->request->get['filter_status'])) {
 			$url .= '&filter_status=' . $this->request->get['filter_status'];
 		}
-		
+
 		if (isset($this->request->get['filter_noindex'])) {
 			$url .= '&filter_noindex=' . $this->request->get['filter_noindex'];
 		}
@@ -262,38 +456,39 @@ class ControllerBlogArticle extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url, true)
+			'href' => $this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url, true)
 		);
 
-		$data['add'] = $this->url->link('blog/article/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
-		$data['copy'] = $this->url->link('blog/article/copy', 'user_token=' . $this->session->data['user_token'] . $url, true);
-		$data['delete'] = $this->url->link('blog/article/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
-		
-		$data['enabled'] = $this->url->link('blog/article/enable', 'user_token=' . $this->session->data['user_token'] . $url, true);
-        $data['disabled'] = $this->url->link('blog/article/disable', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['add'] = $this->url->link('extension/ocStore/blog/article/add', 'token=' . $this->session->data['token'] . $url, true);
+		$data['copy'] = $this->url->link('extension/ocStore/blog/article/copy', 'token=' . $this->session->data['token'] . $url, true);
+		$data['delete'] = $this->url->link('extension/ocStore/blog/article/delete', 'token=' . $this->session->data['token'] . $url, true);
+		$data['enabled'] = $this->url->link('extension/ocStore/blog/article/enable', 'token=' . $this->session->data['token'] . $url, true);
+		$data['disabled'] = $this->url->link('extension/ocStore/blog/article/disable', 'token=' . $this->session->data['token'] . $url, true);
 
 		$data['articles'] = array();
 
 		$filter_data = array(
-			'filter_name'	  => $filter_name,
-			'filter_status'   => $filter_status,
-			'filter_noindex'  => $filter_noindex,
-			'sort'            => $sort,
-			'order'           => $order,
-			'start'           => ($page - 1) * $this->config->get('config_limit_admin'),
-			'limit'           => $this->config->get('config_limit_admin')
+			'filter_name'         => $filter_name,
+			'filter_category'     => $filter_category,
+			'filter_sub_category' => $filter_sub_category,
+			'filter_status'       => $filter_status,
+			'filter_noindex'      => $filter_noindex,
+			'sort'                => $sort,
+			'order'               => $order,
+			'start'               => ($page - 1) * $this->config->get('config_limit_admin'),
+			'limit'               => $this->config->get('config_limit_admin')
 		);
 
 		$this->load->model('tool/image');
 
-		$article_total = $this->model_blog_article->getTotalArticles($filter_data);
+		$article_total = $this->model_extension_ocStore_blog_article->getTotalArticles($filter_data);
 
-		$results = $this->model_blog_article->getArticles($filter_data);
+		$results = $this->model_extension_ocStore_blog_article->getArticles($filter_data);
 
 		foreach ($results as $result) {
 			if (is_file(DIR_IMAGE . $result['image'])) {
@@ -306,14 +501,12 @@ class ControllerBlogArticle extends Controller {
 				'article_id' => $result['article_id'],
 				'image'      => $image,
 				'name'       => $result['name'],
-				'status'     => ($result['status']) ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
-				'noindex'    => ($result['noindex']) ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
-				'href_shop'  => HTTP_CATALOG . 'index.php?route=blog/article&article_id=' . ($result['article_id']),
-				'edit'       => $this->url->link('blog/article/edit', 'user_token=' . $this->session->data['user_token'] . '&article_id=' . $result['article_id'] . $url, true)
+				'status'     => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
+				'noindex'    => ($result['noindex'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
+				'href_shop'  => $server . 'index.php?route=extension/ocStore/blog/article&article_id=' . $result['article_id'],
+				'edit'       => $this->url->link('extension/ocStore/blog/article/edit', 'token=' . $this->session->data['token'] . '&article_id=' . $result['article_id'] . $url, true)
 			);
 		}
-
-		$data['user_token'] = $this->session->data['user_token'];
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -341,10 +534,17 @@ class ControllerBlogArticle extends Controller {
 			$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
 		}
 
+		if (isset($this->request->get['filter_category'])) {
+			$url .= '&filter_category=' . $this->request->get['filter_category'];
+			if (isset($this->request->get['filter_sub_category'])) {
+				$url .= '&filter_sub_category';
+			}
+		}
+
 		if (isset($this->request->get['filter_status'])) {
 			$url .= '&filter_status=' . $this->request->get['filter_status'];
 		}
-		
+
 		if (isset($this->request->get['filter_noindex'])) {
 			$url .= '&filter_noindex=' . $this->request->get['filter_noindex'];
 		}
@@ -359,10 +559,10 @@ class ControllerBlogArticle extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['sort_name'] = $this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . '&sort=pd.name' . $url, true);
-		$data['sort_status'] = $this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . '&sort=p.status' . $url, true);
-		$data['sort_noindex'] = $this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . '&sort=p.noindex' . $url, true);
-		$data['sort_order'] = $this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . '&sort=p.sort_order' . $url, true);
+		$data['sort_name'] = $this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . '&sort=pd.name' . $url, true);
+		$data['sort_status'] = $this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . '&sort=p.status' . $url, true);
+		$data['sort_noindex'] = $this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . '&sort=p.noindex' . $url, true);
+		$data['sort_order'] = $this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . '&sort=p.sort_order' . $url, true);
 
 		$url = '';
 
@@ -370,10 +570,17 @@ class ControllerBlogArticle extends Controller {
 			$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
 		}
 
+		if (isset($this->request->get['filter_category'])) {
+			$url .= '&filter_category=' . $this->request->get['filter_category'];
+			if (isset($this->request->get['filter_sub_category'])) {
+				$url .= '&filter_sub_category';
+			}
+		}
+
 		if (isset($this->request->get['filter_status'])) {
 			$url .= '&filter_status=' . $this->request->get['filter_status'];
 		}
-		
+
 		if (isset($this->request->get['filter_noindex'])) {
 			$url .= '&filter_noindex=' . $this->request->get['filter_noindex'];
 		}
@@ -390,13 +597,16 @@ class ControllerBlogArticle extends Controller {
 		$pagination->total = $article_total;
 		$pagination->page = $page;
 		$pagination->limit = $this->config->get('config_limit_admin');
-		$pagination->url = $this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url . '&page={page}', true);
+		$pagination->url = $this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url . '&page={page}', true);
 
 		$data['pagination'] = $pagination->render();
 
 		$data['results'] = sprintf($this->language->get('text_pagination'), ($article_total) ? (($page - 1) * $this->config->get('config_limit_admin')) + 1 : 0, ((($page - 1) * $this->config->get('config_limit_admin')) > ($article_total - $this->config->get('config_limit_admin'))) ? $article_total : ((($page - 1) * $this->config->get('config_limit_admin')) + $this->config->get('config_limit_admin')), $article_total, ceil($article_total / $this->config->get('config_limit_admin')));
 
 		$data['filter_name'] = $filter_name;
+		$data['filter_category_name'] = $filter_category_name;
+		$data['filter_category'] = $filter_category;
+		$data['filter_sub_category'] = $filter_sub_category;
 		$data['filter_status'] = $filter_status;
 		$data['filter_noindex'] = $filter_noindex;
 
@@ -407,10 +617,59 @@ class ControllerBlogArticle extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('blog/article_list', $data));
+		$this->response->setOutput($this->load->view('extension/ocStore/blog/article_list', $data));
 	}
 
 	protected function getForm() {
+		$data['heading_title'] = $this->language->get('heading_title');
+
+		$data['text_form'] = !isset($this->request->get['article_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
+		$data['text_enabled'] = $this->language->get('text_enabled');
+		$data['text_disabled'] = $this->language->get('text_disabled');
+		$data['text_none'] = $this->language->get('text_none');
+		$data['text_yes'] = $this->language->get('text_yes');
+		$data['text_no'] = $this->language->get('text_no');
+		$data['text_default'] = $this->language->get('text_default');
+		$data['text_select'] = $this->language->get('text_select');
+		$data['text_nogallery'] = $this->language->get('text_nogallery');
+
+		$data['entry_name'] = $this->language->get('entry_name');
+		$data['entry_description'] = $this->language->get('entry_description');
+		$data['entry_meta_title'] = $this->language->get('entry_meta_title');
+		$data['entry_meta_h1'] = $this->language->get('entry_meta_h1');
+		$data['entry_meta_description'] = $this->language->get('entry_meta_description');
+		$data['entry_meta_keyword'] = $this->language->get('entry_meta_keyword');
+		$data['entry_keyword'] = $this->language->get('entry_keyword');
+		$data['entry_image'] = $this->language->get('entry_image');
+		$data['entry_store'] = $this->language->get('entry_store');
+		$data['entry_download'] = $this->language->get('entry_download');
+		$data['entry_category'] = $this->language->get('entry_category');
+		$data['entry_main_category'] = $this->language->get('entry_main_category');
+		$data['entry_related'] = $this->language->get('entry_related');
+		$data['entry_related_product'] = $this->language->get('entry_related_product');
+		$data['entry_sort_order'] = $this->language->get('entry_sort_order');
+		$data['entry_status'] = $this->language->get('entry_status');
+		$data['entry_noindex'] = $this->language->get('entry_noindex');
+		$data['entry_tag'] = $this->language->get('entry_tag');
+		$data['entry_layout'] = $this->language->get('entry_layout');
+
+		$data['help_keyword'] = $this->language->get('help_keyword');
+		$data['help_category'] = $this->language->get('help_category');
+		$data['help_download'] = $this->language->get('help_download');
+		$data['help_related'] = $this->language->get('help_related');
+		$data['help_related_product'] = $this->language->get('help_related_product');
+		$data['help_tag'] = $this->language->get('help_tag');
+		$data['help_noindex'] = $this->language->get('help_noindex');
+
+		$data['button_save'] = $this->language->get('button_save');
+		$data['button_cancel'] = $this->language->get('button_cancel');
+		$data['button_image_add'] = $this->language->get('button_image_add');
+		$data['button_remove'] = $this->language->get('button_remove');
+
+		$data['tab_general'] = $this->language->get('tab_general');
+		$data['tab_data'] = $this->language->get('tab_data');
+		$data['tab_links'] = $this->language->get('tab_links');
+		$data['tab_design'] = $this->language->get('tab_design');
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -429,7 +688,7 @@ class ControllerBlogArticle extends Controller {
 		} else {
 			$data['error_meta_title'] = array();
 		}
-		
+
 		if (isset($this->error['meta_h1'])) {
 			$data['error_meta_h1'] = $this->error['meta_h1'];
 		} else {
@@ -448,10 +707,17 @@ class ControllerBlogArticle extends Controller {
 			$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
 		}
 
+		if (isset($this->request->get['filter_category'])) {
+			$url .= '&filter_category=' . $this->request->get['filter_category'];
+			if (isset($this->request->get['filter_sub_category'])) {
+				$url .= '&filter_sub_category';
+			}
+		}
+
 		if (isset($this->request->get['filter_status'])) {
 			$url .= '&filter_status=' . $this->request->get['filter_status'];
 		}
-		
+
 		if (isset($this->request->get['filter_noindex'])) {
 			$url .= '&filter_noindex=' . $this->request->get['filter_noindex'];
 		}
@@ -472,27 +738,27 @@ class ControllerBlogArticle extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url, true)
+			'href' => $this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url, true)
 		);
 
 		if (!isset($this->request->get['article_id'])) {
-			$data['action'] = $this->url->link('blog/article/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
+			$data['action'] = $this->url->link('extension/ocStore/blog/article/add', 'token=' . $this->session->data['token'] . $url, true);
 		} else {
-			$data['action'] = $this->url->link('blog/article/edit', 'user_token=' . $this->session->data['user_token'] . '&article_id=' . $this->request->get['article_id'] . $url, true);
+			$data['action'] = $this->url->link('extension/ocStore/blog/article/edit', 'token=' . $this->session->data['token'] . '&article_id=' . $this->request->get['article_id'] . $url, true);
 		}
 
-		$data['cancel'] = $this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['cancel'] = $this->url->link('extension/ocStore/blog/article', 'token=' . $this->session->data['token'] . $url, true);
 
 		if (isset($this->request->get['article_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$article_info = $this->model_blog_article->getArticle($this->request->get['article_id']);
+			$article_info = $this->model_extension_ocStore_blog_article->getArticle($this->request->get['article_id']);
 		}
 
-		$data['user_token'] = $this->session->data['user_token'];
+		$data['token'] = $this->session->data['token'];
 
 		$this->load->model('localisation/language');
 
@@ -501,11 +767,11 @@ class ControllerBlogArticle extends Controller {
 		if (isset($this->request->post['article_description'])) {
 			$data['article_description'] = $this->request->post['article_description'];
 		} elseif (isset($this->request->get['article_id'])) {
-			$data['article_description'] = $this->model_blog_article->getArticleDescriptions($this->request->get['article_id']);
+			$data['article_description'] = $this->model_extension_ocStore_blog_article->getArticleDescriptions($this->request->get['article_id']);
 		} else {
 			$data['article_description'] = array();
 		}
-		
+
 		$language_id = $this->config->get('config_language_id');
 		if (isset($data['article_description'][$language_id]['name'])) {
 			$data['heading_title'] = $data['article_description'][$language_id]['name'];
@@ -533,28 +799,22 @@ class ControllerBlogArticle extends Controller {
 
 		$this->load->model('setting/store');
 
-		$data['stores'] = array();
-		
-		$data['stores'][] = array(
-			'store_id' => 0,
-			'name'     => $this->language->get('text_default')
-		);
-		
-		$stores = $this->model_setting_store->getStores();
-
-		foreach ($stores as $store) {
-			$data['stores'][] = array(
-				'store_id' => $store['store_id'],
-				'name'     => $store['name']
-			);
-		}
+		$data['stores'] = $this->model_setting_store->getStores();
 
 		if (isset($this->request->post['article_store'])) {
 			$data['article_store'] = $this->request->post['article_store'];
 		} elseif (isset($this->request->get['article_id'])) {
-			$data['article_store'] = $this->model_blog_article->getArticleStores($this->request->get['article_id']);
+			$data['article_store'] = $this->model_extension_ocStore_blog_article->getArticleStores($this->request->get['article_id']);
 		} else {
 			$data['article_store'] = array(0);
+		}
+
+		if (isset($this->request->post['keyword'])) {
+			$data['keyword'] = $this->request->post['keyword'];
+		} elseif (!empty($article_info)) {
+			$data['keyword'] = $article_info['keyword'];
+		} else {
+			$data['keyword'] = '';
 		}
 
 		if (isset($this->request->post['sort_order'])) {
@@ -572,7 +832,7 @@ class ControllerBlogArticle extends Controller {
 		} else {
 			$data['status'] = true;
 		}
-		
+
 		if (isset($this->request->post['noindex'])) {
 			$data['noindex'] = $this->request->post['noindex'];
 		} elseif (!empty($article_info)) {
@@ -582,16 +842,14 @@ class ControllerBlogArticle extends Controller {
 		}
 
 		// Categories
-		$this->load->model('blog/category');
-		
-		$categories = $this->model_blog_category->getAllCategories();
-		
-		$data['categories'] = $this->model_blog_category->getCategories($categories);
-		
+		$this->load->model('extension/ocStore/blog/category');
+
+		$data['categories'] = $this->model_extension_ocStore_blog_category->getCategories();
+
 		if (isset($this->request->post['main_blog_category_id'])) {
 			$data['main_blog_category_id'] = $this->request->post['main_blog_category_id'];
 		} elseif (isset($article_info)) {
-			$data['main_blog_category_id'] = $this->model_blog_article->getArticleMainCategoryId($this->request->get['article_id']);
+			$data['main_blog_category_id'] = $this->model_extension_ocStore_blog_article->getArticleMainCategoryId($this->request->get['article_id']);
 		} else {
 			$data['main_blog_category_id'] = 0;
 		}
@@ -599,7 +857,7 @@ class ControllerBlogArticle extends Controller {
 		if (isset($this->request->post['article_blog_category'])) {
 			$categories = $this->request->post['article_blog_category'];
 		} elseif (isset($this->request->get['article_id'])) {
-			$categories = $this->model_blog_article->getArticleCategories($this->request->get['article_id']);
+			$categories = $this->model_extension_ocStore_blog_article->getArticleCategories($this->request->get['article_id']);
 		} else {
 			$categories = array();
 		}
@@ -607,7 +865,7 @@ class ControllerBlogArticle extends Controller {
 		$data['article_categories'] = array();
 
 		foreach ($categories as $blog_category_id) {
-			$category_info = $this->model_blog_category->getCategory($blog_category_id);
+			$category_info = $this->model_extension_ocStore_blog_category->getCategory($blog_category_id);
 
 			if ($category_info) {
 				$data['article_categories'][] = array(
@@ -621,7 +879,7 @@ class ControllerBlogArticle extends Controller {
 		if (isset($this->request->post['article_image'])) {
 			$article_images = $this->request->post['article_image'];
 		} elseif (isset($this->request->get['article_id'])) {
-			$article_images = $this->model_blog_article->getArticleImages($this->request->get['article_id']);
+			$article_images = $this->model_extension_ocStore_blog_article->getArticleImages($this->request->get['article_id']);
 		} else {
 			$article_images = array();
 		}
@@ -650,7 +908,7 @@ class ControllerBlogArticle extends Controller {
 		if (isset($this->request->post['article_download'])) {
 			$article_downloads = $this->request->post['article_download'];
 		} elseif (isset($this->request->get['article_id'])) {
-			$article_downloads = $this->model_blog_article->getArticleDownloads($this->request->get['article_id']);
+			$article_downloads = $this->model_extension_ocStore_blog_article->getArticleDownloads($this->request->get['article_id']);
 		} else {
 			$article_downloads = array();
 		}
@@ -671,7 +929,7 @@ class ControllerBlogArticle extends Controller {
 		if (isset($this->request->post['article_related'])) {
 			$articles = $this->request->post['article_related'];
 		} elseif (isset($this->request->get['article_id'])) {
-			$articles = $this->model_blog_article->getArticleRelated($this->request->get['article_id']);
+			$articles = $this->model_extension_ocStore_blog_article->getArticleRelated($this->request->get['article_id']);
 		} else {
 			$articles = array();
 		}
@@ -679,7 +937,7 @@ class ControllerBlogArticle extends Controller {
 		$data['article_relateds'] = array();
 
 		foreach ($articles as $article_id) {
-			$related_info = $this->model_blog_article->getArticle($article_id);
+			$related_info = $this->model_extension_ocStore_blog_article->getArticle($article_id);
 
 			if ($related_info) {
 				$data['article_relateds'][] = array(
@@ -688,41 +946,34 @@ class ControllerBlogArticle extends Controller {
 				);
 			}
 		}
-		
-		if (isset($this->request->post['product_related'])) {
-			$products = $this->request->post['product_related'];
+
+		if (isset($this->request->post['article_related_product'])) {
+			$products = $this->request->post['article_related_product'];
 		} elseif (isset($article_info)) {
-			$products = $this->model_blog_article->getProductRelated($this->request->get['article_id']);
+			$products = $this->model_extension_ocStore_blog_article->getProductRelated($this->request->get['article_id']);
 		} else {
 			$products = array();
 		}
 
-		$data['product_relateds'] = array();
+		$data['article_related_product'] = array();
+
 		$this->load->model('catalog/product');
 
 		foreach ($products as $product_id) {
 			$product_info = $this->model_catalog_product->getProduct($product_id);
 
 			if ($product_info) {
-				$data['product_relateds'][] = array(
+				$data['article_related_product'][] = array(
 					'product_id' => $product_info['product_id'],
 					'name'       => $product_info['name']
 				);
 			}
 		}
-		
-		if (isset($this->request->post['article_seo_url'])) {
-			$data['article_seo_url'] = $this->request->post['article_seo_url'];
-		} elseif (isset($this->request->get['article_id'])) {
-			$data['article_seo_url'] = $this->model_blog_article->getArticleSeoUrls($this->request->get['article_id']);
-		} else {
-			$data['article_seo_url'] = array();
-		}
 
 		if (isset($this->request->post['article_layout'])) {
 			$data['article_layout'] = $this->request->post['article_layout'];
 		} elseif (isset($this->request->get['article_id'])) {
-			$data['article_layout'] = $this->model_blog_article->getArticleLayouts($this->request->get['article_id']);
+			$data['article_layout'] = $this->model_extension_ocStore_blog_article->getArticleLayouts($this->request->get['article_id']);
 		} else {
 			$data['article_layout'] = array();
 		}
@@ -735,11 +986,11 @@ class ControllerBlogArticle extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('blog/article_form', $data));
+		$this->response->setOutput($this->load->view('extension/ocStore/blog/article_form', $data));
 	}
 
 	protected function validateForm() {
-		if (!$this->user->hasPermission('modify', 'blog/article')) {
+		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/article')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
@@ -751,33 +1002,23 @@ class ControllerBlogArticle extends Controller {
 			if ((utf8_strlen($value['meta_title']) < 0) || (utf8_strlen($value['meta_title']) > 255)) {
 				$this->error['meta_title'][$language_id] = $this->language->get('error_meta_title');
 			}
-			
+
 			if ((utf8_strlen($value['meta_h1']) < 0) || (utf8_strlen($value['meta_h1']) > 255)) {
 				$this->error['meta_h1'][$language_id] = $this->language->get('error_meta_h1');
 			}
 		}
-		
-		if ($this->request->post['article_seo_url']) {
-			$this->load->model('design/seo_url');
-			
-			foreach ($this->request->post['article_seo_url'] as $store_id => $language) {
-				foreach ($language as $language_id => $keyword) {
-					if (!empty($keyword)) {
-						if (count(array_keys($language, $keyword)) > 1) {
-							$this->error['keyword'][$store_id][$language_id] = $this->language->get('error_unique');
-						}						
-						
-						$seo_urls = $this->model_design_seo_url->getSeoUrlsByKeyword($keyword);
-						
-						foreach ($seo_urls as $seo_url) {
-							if (($seo_url['store_id'] == $store_id) && (!isset($this->request->get['article_id']) || (($seo_url['query'] != 'article_id=' . $this->request->get['article_id'])))) {
-								$this->error['keyword'][$store_id][$language_id] = $this->language->get('error_keyword');
-								
-								break;
-							}
-						}
-					}
-				}
+
+		if (utf8_strlen($this->request->post['keyword']) > 0) {
+			$this->load->model('catalog/url_alias');
+
+			$url_alias_info = $this->model_catalog_url_alias->getUrlAlias($this->request->post['keyword']);
+
+			if ($url_alias_info && isset($this->request->get['article_id']) && $url_alias_info['query'] != 'article_id=' . $this->request->get['article_id']) {
+				$this->error['keyword'] = sprintf($this->language->get('error_keyword')) . ' <a href="' . $this->url->link('tool/seomanager', 'token=' . $this->session->data['token'] . '&filter_query=' . $url_alias_info['query'], true) . '" target="_blank">' . $url_alias_info['query'] . '</a>';
+			}
+
+			if ($url_alias_info && !isset($this->request->get['article_id'])) {
+				$this->error['keyword'] = sprintf($this->language->get('error_keyword')) . ' <a href="' . $this->url->link('tool/seomanager', 'token=' . $this->session->data['token'] . '&filter_query=' . $url_alias_info['query'], true) . '" target="_blank">' . $url_alias_info['query'] . '</a>';
 			}
 		}
 
@@ -787,79 +1028,9 @@ class ControllerBlogArticle extends Controller {
 
 		return !$this->error;
 	}
-	
-	public function enable() {
-        $this->load->language('blog/article');
-
-        $this->document->setTitle($this->language->get('heading_title'));
-
-        $this->load->model('blog/article');
-
-        if (isset($this->request->post['selected'])) {
-
-            foreach ($this->request->post['selected'] as $article_id) {
-                $this->model_blog_article->editArticleStatus($article_id, 1);
-            }
-
-            $this->session->data['success'] = $this->language->get('text_success');
-
-            $url = '';
-
-            if (isset($this->request->get['page'])) {
-                $url .= '&page=' . $this->request->get['page'];
-            }
-
-            if (isset($this->request->get['sort'])) {
-                $url .= '&sort=' . $this->request->get['sort'];
-            }
-
-            if (isset($this->request->get['order'])) {
-                $url .= '&order=' . $this->request->get['order'];
-            }
-
-            $this->response->redirect($this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url, true));
-        }
-
-        $this->getList();
-    }
-
-    public function disable() {
-        $this->load->language('blog/article');
-
-        $this->document->setTitle($this->language->get('heading_title'));
-
-        $this->load->model('blog/article');
-
-        if (isset($this->request->post['selected'])) {
-
-            foreach ($this->request->post['selected'] as $article_id) {
-                $this->model_blog_article->editArticleStatus($article_id, 0);
-            }
-
-            $this->session->data['success'] = $this->language->get('text_success');
-
-            $url = '';
-
-            if (isset($this->request->get['page'])) {
-                $url .= '&page=' . $this->request->get['page'];
-            }
-
-            if (isset($this->request->get['sort'])) {
-                $url .= '&sort=' . $this->request->get['sort'];
-            }
-
-            if (isset($this->request->get['order'])) {
-                $url .= '&order=' . $this->request->get['order'];
-            }
-
-            $this->response->redirect($this->url->link('blog/article', 'user_token=' . $this->session->data['user_token'] . $url, true));
-        }
-
-        $this->getList();
-    }
 
 	protected function validateDelete() {
-		if (!$this->user->hasPermission('modify', 'blog/article')) {
+		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/article')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
@@ -867,7 +1038,15 @@ class ControllerBlogArticle extends Controller {
 	}
 
 	protected function validateCopy() {
-		if (!$this->user->hasPermission('modify', 'blog/article')) {
+		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/article')) {
+			$this->error['warning'] = $this->language->get('error_permission');
+		}
+
+		return !$this->error;
+	}
+
+	protected function validateProStatus() {
+		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/article')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
@@ -878,7 +1057,7 @@ class ControllerBlogArticle extends Controller {
 		$json = array();
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('blog/article');
+			$this->load->model('extension/ocStore/blog/article');
 
 			if (isset($this->request->get['filter_name'])) {
 				$filter_name = $this->request->get['filter_name'];
@@ -889,7 +1068,7 @@ class ControllerBlogArticle extends Controller {
 			if (isset($this->request->get['limit'])) {
 				$limit = $this->request->get['limit'];
 			} else {
-				$limit = $this->config->get('config_limit_autocomplete');
+				$limit = 5;
 			}
 
 			$filter_data = array(
@@ -898,10 +1077,9 @@ class ControllerBlogArticle extends Controller {
 				'limit'        => $limit
 			);
 
-			$results = $this->model_blog_article->getArticles($filter_data);
+			$results = $this->model_extension_ocStore_blog_article->getArticles($filter_data);
 
 			foreach ($results as $result) {
-
 				$json[] = array(
 					'article_id' => $result['article_id'],
 					'name'       => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'))

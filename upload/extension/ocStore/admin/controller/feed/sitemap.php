@@ -10,9 +10,9 @@ if (!defined('VERSION')) {
 }
 
 class Sitemap extends \Opencart\System\Engine\Controller {
-	private $error = array();
+	private array $error = [];
 
-	public function index() {
+	public function index(): void {
 		$this->load->language('extension/ocStore/feed/sitemap');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -25,7 +25,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				'feed_sitemap' => $this->request->post
 			]);
 
-			$this->session->data['success'] = $this->language->get('text_success');
+			//$this->session->data['success'] = $this->language->get('text_success');
 
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=feed', true));
 		}
@@ -36,22 +36,22 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			$data['error_warning'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
-		);
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_extension'),
 			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=feed', true)
-		);
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
 			'href' => $this->url->link('extension/ocStore/feed/sitemap', 'user_token=' . $this->session->data['user_token'], true)
-		);
+		];
 
 		$data['action'] = $this->url->link('extension/ocStore/feed/sitemap', 'user_token=' . $this->session->data['user_token'], true);
 
@@ -164,11 +164,41 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput($this->load->view('extension/ocStore/feed/sitemap', $data));
 	}
 
-	protected function validate() {
+	protected function validate(): bool {
 		if (!$this->user->hasPermission('modify', 'extension/ocStore/feed/sitemap')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
 		return !$this->error;
+	}
+
+	public function save(): void {
+		$this->load->language('extension/ocStore/feed/sitemap');
+
+		$json = [];
+
+		if ($this->request->server['REQUEST_METHOD'] != 'POST') {
+			$json['error']['warning'] = $this->language->get('error_permission');
+		}
+
+		if (!$this->validate()) {
+			foreach ($this->error as $key => $result) {
+				$json['error'][$key] = $result;
+			}
+		}
+
+		if (!$json) {
+			$this->load->model('setting/setting');
+
+			$this->model_setting_setting->editSetting('feed_sitemap', [
+				'feed_sitemap_status' => !empty($this->request->post['status']),
+				'feed_sitemap' => $this->request->post
+			]);
+
+			$json['success'] = $this->language->get('text_success');
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
 	}
 }

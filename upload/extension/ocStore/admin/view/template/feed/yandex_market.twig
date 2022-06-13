@@ -25,7 +25,7 @@
         <h3 class="card-title"><i class="fas fa-pencil"></i> {{ text_edit }}</h3>
       </div>
       <div class="card-body">
-        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-yandex-market" class="form-horizontal">
+        <form action="{{ action }}" not-action="{{ action }}|save" method="post" enctype="multipart/form-data" id="form-yandex-market" data-oc-toggle="not-ajax">
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label" for="input-status">{{ entry_status }}</label>
             <div class="col-sm-10">
@@ -237,12 +237,8 @@
                   <input type="number" name="feed_yandex_market_image_height" value="{{ feed_yandex_market_image_height }}" placeholder="{{ text_height }}" class="form-control{% if (error_image_height) %} is-invalid{% endif %}" />
                 </div>
               </div>
-              {% if (error_image_width) %} 
-              <div class="invalid-feedback d-block">{{ error_image_width }}</div>
-              {% endif %} 
-              {% if (error_image_height) %} 
-              <div class="invalid-feedback d-block">{{ error_image_height }}</div>
-              {% endif %} 
+              <div class="invalid-feedback{% if (error_image_width) %} d-block{% endif %}">{{ error_image_width }}</div>
+              <div class="invalid-feedback{% if (error_image_height) %} d-block{% endif %}">{{ error_image_height }}</div>
             </div>
           </div>
           <div class="row mb-3">

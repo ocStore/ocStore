@@ -10,9 +10,9 @@ if (!defined('VERSION')) {
 }
 
 class YandexMarket extends \Opencart\System\Engine\Controller {
-	private $error = array();
+	private array $error = [];
 
-	public function index() {
+	public function index(): void {
 		$this->load->language('extension/ocStore/feed/yandex_market');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -30,7 +30,7 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 
 			$this->model_setting_setting->editSetting('feed_yandex_market', $this->request->post);
 
-			$this->session->data['success'] = $this->language->get('text_success');
+			//$this->session->data['success'] = $this->language->get('text_success');
 
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=feed', true));
 		}
@@ -55,22 +55,22 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 			$data['error_image_height'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
-		);
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_extension'),
 			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=feed', true)
-		);
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
 			'href' => $this->url->link('extension/ocStore/feed/yandex_market', 'user_token=' . $this->session->data['user_token'], true)
-		);
+		];
 
 		$data['action'] = $this->url->link('extension/ocStore/feed/yandex_market', 'user_token=' . $this->session->data['user_token'], true);
 
@@ -114,7 +114,7 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 			$data['feed_yandex_market_type'] = $this->config->get('feed_yandex_market_type');
 		}
 
-		$data['code_man'] = array('not_unload', 'name', 'meta_h1', 'meta_title', 'meta_keyword', 'meta_description', 'model', 'sku', 'upc', 'ean', 'jan', 'isbn', 'mpn', 'location');
+		$data['code_man'] = ['not_unload', 'name', 'meta_h1', 'meta_title', 'meta_keyword', 'meta_description', 'model', 'sku', 'upc', 'ean', 'jan', 'isbn', 'mpn', 'location'];
 
 		if (isset($this->request->post['feed_yandex_market_name'])) {
 			$data['feed_yandex_market_name'] = $this->request->post['feed_yandex_market_name'];
@@ -213,7 +213,7 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 		} elseif ($this->config->has('feed_yandex_market_categories')) {
 			$data['feed_yandex_market_categories'] = explode(',', $this->config->get('feed_yandex_market_categories'));
 		} else {
-			$data['feed_yandex_market_categories'] = array();
+			$data['feed_yandex_market_categories'] = [];
 		}
 
 		$this->load->model('catalog/manufacturer');
@@ -225,14 +225,14 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 		} elseif ($this->config->has('feed_yandex_market_manufacturers')) {
 			$data['feed_yandex_market_manufacturers'] = explode(',', $this->config->get('feed_yandex_market_manufacturers'));
 		} else {
-			$data['feed_yandex_market_manufacturers'] = array();
+			$data['feed_yandex_market_manufacturers'] = [];
 		}
 
 		$this->load->model('localisation/currency');
 
 		$currencies = $this->model_localisation_currency->getCurrencies();
 
-		$allowed_currencies = array_flip(array('RUR', 'RUB', 'USD', 'BYN', 'BYR', 'KZT', 'EUR', 'UAH'));
+		$allowed_currencies = array_flip(['RUR', 'RUB', 'USD', 'BYN', 'BYR', 'KZT', 'EUR', 'UAH']);
 
 		$data['currencies'] = array_intersect_key($currencies, $allowed_currencies);
 
@@ -291,7 +291,7 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput($this->load->view('extension/ocStore/feed/yandex_market', $data));
 	}
 
-	private function validate() {
+	private function validate(): bool {
 		if (!$this->user->hasPermission('modify', 'extension/ocStore/feed/yandex_market')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
@@ -321,5 +321,40 @@ class YandexMarket extends \Opencart\System\Engine\Controller {
 		}
 
 		return !$this->error;
+	}
+
+	public function save(): void {
+		$this->load->language('extension/ocStore/feed/yandex_market');
+
+		$json = [];
+
+		if ($this->request->server['REQUEST_METHOD'] != 'POST') {
+			$json['error']['warning'] = $this->language->get('error_permission');
+		}
+
+		if (!$this->validate()) {
+			foreach ($this->error as $key => $result) {
+				$json['error'][$key] = $result;
+			}
+		}
+
+		if (!$json) {
+			$this->load->model('setting/setting');
+
+			if (isset($this->request->post['feed_yandex_market_categories'])) {
+				$this->request->post['feed_yandex_market_categories'] = implode(',', $this->request->post['feed_yandex_market_categories']);
+			}
+
+			if (isset($this->request->post['feed_yandex_market_manufacturers'])) {
+				$this->request->post['feed_yandex_market_manufacturers'] = implode(',', $this->request->post['feed_yandex_market_manufacturers']);
+			}
+
+			$this->model_setting_setting->editSetting('feed_yandex_market', $this->request->post);
+
+			$json['success'] = $this->language->get('text_success');
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
 	}
 }

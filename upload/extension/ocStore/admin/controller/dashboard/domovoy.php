@@ -8,10 +8,16 @@
  */
 
 namespace Opencart\Admin\Controller\Extension\ocStore\Dashboard;
-class Domovoy extends \Opencart\System\Engine\Controller {
-	private $error = array();
 
-	public function index() {
+if (!defined('VERSION')) {
+	header('Refresh: 1; URL=/');
+	exit('ЗАПРЫШЧАЮ!');
+}
+
+class Domovoy extends \Opencart\System\Engine\Controller {
+	private array $error = [];
+
+	public function index(): void {
 		$this->load->language('extension/ocStore/dashboard/domovoy');
 
 		$this->document->setTitle($this->language->get('heading_h1'));
@@ -21,7 +27,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('dashboard_domovoy', $this->request->post);
 
-			$this->session->data['success'] = $this->language->get('text_success');
+			//$this->session->data['success'] = $this->language->get('text_success');
 
 			$this->response->redirect($this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true));
 		}
@@ -32,28 +38,32 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 			$data['error_warning'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
-		);
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_extension'),
 			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=dashboard', true)
-		);
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
 			'href' => $this->url->link('extension/ocStore/dashboard/domovoy', 'user_token=' . $this->session->data['user_token'], true)
-		);
+		];
 
 		$data['action'] = $this->url->link('extension/ocStore/dashboard/domovoy', 'user_token=' . $this->session->data['user_token'], true);
 
 		$data['cancel'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'] . '&type=dashboard', true);
 
-		$folders = array('logs' => array('dir' => DIR_STORAGE . 'logs'), 'cache' => array('dir' => DIR_CACHE), 'imagescache' => array('dir' => DIR_IMAGE . 'cache'));
+		$folders = [
+			'logs'        => ['dir' => DIR_STORAGE . 'logs'],
+			'cache'       => ['dir' => DIR_CACHE],
+			'imagescache' => ['dir' => DIR_IMAGE . 'cache']
+		];
 
 		foreach ($folders as $key => $folder) {
 			$data['folders'][$key]['name'] = $this->language->get('text_dir_' . $key);
@@ -61,7 +71,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 
 			if (isset($this->request->post["dashboard_domovoy_cron"])) {
 				$cron = $this->request->post["dashboard_domovoy_cron"];
-			} elseif ($this->config->get("dashboard_domovoy_cron")) {
+			} elseif ($this->config->has("dashboard_domovoy_cron")) {
 				$cron = $this->config->get("dashboard_domovoy_cron");
 			} else {
 				$data['folders'][$key]['cron']['time'] = 30;
@@ -77,7 +87,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['dashboard_domovoy_danger_funtions'])) {
 			$data['dashboard_domovoy_danger_funtions'] = $this->request->post['dashboard_domovoy_danger_funtions'];
-		} elseif ($this->config->get('dashboard_domovoy_danger_funtions')) {
+		} elseif ($this->config->has('dashboard_domovoy_danger_funtions')) {
 			$data['dashboard_domovoy_danger_funtions'] = $this->config->get('dashboard_domovoy_danger_funtions');
 		} else {
 			$data['dashboard_domovoy_danger_funtions'] = "exec\r\npassthru\r\nini_get\r\nini_get_all\r\nparse_ini_file\r\nphp_uname\r\nsystem\r\nshell_exec\r\nshow_source\r\npcntl_exec\r\npcntl_exec\r\nexpect_popen\r\nproc_open\r\npopen";
@@ -85,7 +95,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['dashboard_domovoy_warning_funtions'])) {
 			$data['dashboard_domovoy_warning_funtions'] = $this->request->post['dashboard_domovoy_warning_funtions'];
-		} elseif ($this->config->get('dashboard_domovoy_warning_funtions')) {
+		} elseif ($this->config->has('dashboard_domovoy_warning_funtions')) {
 			$data['dashboard_domovoy_warning_funtions'] = $this->config->get('dashboard_domovoy_warning_funtions');
 		} else {
 			$data['dashboard_domovoy_warning_funtions'] = "diskfreespace\r\ndisk_total_space\r\ndisk_total_space\r\nfileperms\r\nfopen\r\nphpversion\r\nopendir\r\nposix_getpwuid\r\nposix_uname";
@@ -99,7 +109,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['dashboard_domovoy_disk_free_space'])) {
 			$data['dashboard_domovoy_disk_free_space'] = $this->request->post['dashboard_domovoy_disk_free_space'];
-		} elseif($this->config->get('dashboard_domovoy_disk_free_space')) {
+		} elseif($this->config->has('dashboard_domovoy_disk_free_space')) {
 			$data['dashboard_domovoy_disk_free_space'] = $this->config->get('dashboard_domovoy_disk_free_space');
 		} else {
 			$data['dashboard_domovoy_disk_free_space'] = 500;
@@ -111,7 +121,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 			$data['dashboard_domovoy_free_space_status'] = $this->config->get('dashboard_domovoy_free_space_status');
 		}
 
-		$data['columns'] = array();
+		$data['columns'] = [];
 
 		for ($i = 3; $i <= 12; $i++) {
 			$data['columns'][] = $i;
@@ -136,7 +146,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput($this->load->view('extension/ocStore/dashboard/domovoy_form', $data));
 	}
 
-	protected function validate() {
+	protected function validate(): bool {
 		if (!$this->user->hasPermission('modify', 'extension/ocStore/dashboard/domovoy')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
@@ -144,11 +154,36 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 		return !$this->error;
 	}
 
+	public function save(): void {
+		$this->load->language('extension/ocStore/dashboard/domovoy');
+
+		$json = [];
+
+		if ($this->request->server['REQUEST_METHOD'] != 'POST') {
+			$json['error']['warning'] = $this->language->get('error_permission');
+		}
+
+		if (!$this->validate()) {
+			foreach ($this->error as $key => $result) {
+				$json['error'][$key] = $result;
+			}
+		}
+
+		if (!$json) {
+			$this->load->model('setting/setting');
+
+			$this->model_setting_setting->editSetting('dashboard_domovoy', $this->request->post);
+
+			$json['success'] = $this->language->get('text_success');
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
+
 	public function dashboard() {
 		$this->load->language('common/developer');
 		$this->load->language('extension/ocStore/dashboard/domovoy');
-
-		$this->document->addStyle('view/stylesheet/fork-awesome.css');
 
 		$data['user_token'] = $this->session->data['user_token'];
 
@@ -166,18 +201,22 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 		} else {
 			$this->load->model('setting/setting');
 
-			$this->model_setting_setting->editSetting('developer', array('developer_theme' => 1), 0);
+			$this->model_setting_setting->editSetting('developer', ['developer_theme' => 1], 0);
 
 			$data['eval'] = false;
 		}
 
-		$data['activities'] = array();
+		$data['activities'] = [];
 
-		$folders = array('logs' => array('dir' => DIR_STORAGE . 'logs'), 'cache' => array('dir' => DIR_CACHE), 'imagescache' => array('dir' => DIR_IMAGE . 'cache'));
+		$folders = [
+			'logs'        => ['dir' => DIR_STORAGE . 'logs'],
+			'cache'       => ['dir' => DIR_CACHE],
+			'imagescache' => ['dir' => DIR_IMAGE . 'cache']
+		];
 
 		$data['setting'] = $this->url->link('extension/ocStore/dashboard/domovoy', 'user_token=' . $this->session->data['user_token'], true);
 
-		$data['folders'] = array();
+		$data['folders'] = [];
 
 		foreach ($folders as $key => $folder) {
 			$data['folders'][$key]['name'] = $this->language->get('text_dir_' . $key);
@@ -247,14 +286,14 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 		if (!empty($danger_funtions)) {
 			$data['danger_funtions'] = $this->checkFunc($danger_funtions);
 		} else {
-			$data['danger_funtions'] = array();
+			$data['danger_funtions'] = [];
 		}
 
 		$warning_funtions = explode("\r\n", $this->config->get('dashboard_domovoy_warning_funtions'));
 		if (!empty($warning_funtions)) {
 			$data['warning_funtions'] = $this->checkFunc($warning_funtions);
 		} else {
-			$data['warning_funtions'] = array();
+			$data['warning_funtions'] = [];
 		}
 
 		return $this->load->view('extension/ocStore/dashboard/domovoy_info', $data);
@@ -263,7 +302,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 	public function clear($dir = false)	{
 		$this->load->language('extension/ocStore/dashboard/domovoy');
 
-		$json = array();
+		$json = [];
 
 		if (!$this->user->hasPermission('modify', 'extension/ocStore/dashboard/domovoy')) {
 			$json['error'] = $this->language->get('error_permission');
@@ -275,7 +314,11 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 					$key = $this->request->get['dir'];
 				}
 
-				$folders = array('logs' => array('dir' => DIR_STORAGE . 'logs/*'), 'cache' => array('dir' => DIR_CACHE . 'cache.*'), 'imagescache' => array('dir' => DIR_IMAGE . 'cache/*'));
+				$folders = [
+					'logs'        => ['dir' => DIR_STORAGE . 'logs/*'],
+					'cache'       => ['dir' => DIR_CACHE . 'cache.*'],
+					'imagescache' => ['dir' => DIR_IMAGE . 'cache/*']
+				];
 
 				$files = glob($folders[$key]['dir']);
 				if (!empty($files)) {
@@ -301,8 +344,11 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 		$this->load->model('setting/setting');
 
 		if (isset($this->request->get['dir']) or $dir) {
-
-			$folders = array('logs' => array('dir' => DIR_STORAGE . 'logs'), 'cache' => array('dir' => DIR_CACHE), 'imagescache' => array('dir' => DIR_IMAGE . 'cache'));
+			$folders = [
+				'logs'        => ['dir' => DIR_STORAGE . 'logs'],
+				'cache'       => ['dir' => DIR_CACHE],
+				'imagescache' => ['dir' => DIR_IMAGE . 'cache']
+			];
 
 			if ($dir) {
 				$key = $dir;
@@ -310,9 +356,9 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 				$key = $this->request->get['dir'];
 			}
 
-			$folder = array();
+			$folder = [];
 
-			$json = array();
+			$json = [];
 
 			if (!$this->user->hasPermission('modify', 'extension/ocStore/dashboard/domovoy')) {
 				$json['error'] = $this->language->get('error_permission');
@@ -394,7 +440,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 		$metrics[4] = $this->language->get('text_metrics_tbit');
 		$metric = 0;
 
-		$ret = array();
+		$ret = [];
 
 		while (floor($size / 1024) > 0) {
 			++$metric;
@@ -407,7 +453,7 @@ class Domovoy extends \Opencart\System\Engine\Controller {
 	}
 
 	private function checkFunc($functions) {
-		$result = array();
+		$result = [];
 		foreach ($functions as $function) {
 			if (function_exists($function)) {
 				$result[] = $function;

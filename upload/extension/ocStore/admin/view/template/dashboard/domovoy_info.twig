@@ -19,7 +19,7 @@
                     id="disk_free_space">{{ text_disk_free_space }} {{ disk_free_space.size }}{{ disk_free_space.unit }}</span>
             </button>{% endif %}
         <div class="float-end">
-            <a title="{{ text_setting }}" href="{{ setting }}" class="btn-close float-end"><i class="fas fa-cog fa-2x "></i></a>
+            <a title="{{ text_setting }}" href="{{ setting }}" class="float-end"><i class="fas fa-cog fa-2x "></i></a>
         </div>
     </div>
     <div class="alert-body"></div>
@@ -29,7 +29,7 @@
                 <tr>
                     <td>
                         <button type="button" value="theme" data-bs-toggle="tooltip" title="{{ button_refresh }}"
-                                class="btn btn-warning"><i class="fas fa-refresh"></i></button>
+                                class="btn btn-warning"><i class="fas fa-sync"></i></button>
                         <div class="btn-group" data-bs-toggle="buttons">
                             {% if developer_theme %}
                                 <label class="btn btn-success active" {% if not eval %}disabled="disabled"{% endif %}>
@@ -60,7 +60,7 @@
                     </td>
                     <td>
                         <button type="button" value="sass" data-bs-toggle="tooltip" title="{{ button_refresh }}"
-                                class="btn btn-warning"><i class="fas fa-refresh"></i></button>
+                                class="btn btn-warning"><i class="fas fa-sync"></i></button>
                         <div class="btn-group" data-bs-toggle="buttons">{% if developer_sass %}
                                 <label class="btn btn-success active">
                                     <input type="radio" name="developer_sass" value="1" autocomplete="off" checked>
@@ -82,10 +82,10 @@
                     <td class="text-right">{{ entry_modification_cache }} <a id="odmod-refresh" data-bs-toggle="tooltip"
                                                                              title="{{ button_refresh }}"
                                                                              class="btn btn-warning"><i
-                                    class="fas fa-refresh"></i></a></td>
+                                    class="fas fa-sync"></i></a></td>
                     <td class="text-right">{{ entry_allcache }}
                         <button type="button" value="allcache" data-bs-toggle="tooltip" title="{{ button_refresh }}"
-                                class="btn btn-warning"><i class="fas fa-refresh"></i></button>
+                                class="btn btn-warning"><i class="fas fa-sync"></i></button>
                     </td>
                 </tr>
             </table>
@@ -101,7 +101,7 @@
                 <li class="list-group-item">
                     <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_clear }}"
                             class="btn btn-warning clearFolder" data-bs-original-title="{{ button_refresh }}"><i
-                                class="fas fa-refresh"></i></button>
+                                class="fas fa-sync"></i></button>
                     <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_calculate }}"
                             class="btn btn-success calcFolder" data-bs-original-title="{{ button_refresh }}"><i
                                 class="fas fa-cogs"></i></button>

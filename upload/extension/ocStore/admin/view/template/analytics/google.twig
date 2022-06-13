@@ -4,7 +4,8 @@
     <div class="container-fluid">
       <div class="float-end">
         <button type="submit" form="form-analytics" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fas fa-save"></i></button>
-        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fas fa-reply"></i></a></div>
+        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fas fa-reply"></i></a>
+      </div>
       <h1>{{ heading_title }}</h1>
       <ul class="breadcrumb">
         {% for breadcrumb in breadcrumbs %}
@@ -19,21 +20,21 @@
       <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button>
     </div>
     {% endif %}
-    <div class="card page-default">
+    <div class="card">
       <div class="card-header">
         <h3 class="card-title"><i class="fas fa-pencil"></i> {{ text_edit }}</h3>
       </div>
       <div class="card-body">
         <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-analytics" class="form-horizontal">
           <div class="alert alert-info"><i class="fas fa-info-circle"></i> {{ text_signup }}
-            <button type="button" class="btn-close float-end" data-dismiss="alert"></button>
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button>
           </div>
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label" for="input-code">{{ entry_code }}</label>
             <div class="col-sm-10">
-              <textarea name="analytics_google_code" rows="5" placeholder="{{ entry_code }}" id="input-code" class="form-control">{{ analytics_google_code }}</textarea>
+              <textarea name="analytics_google_code" rows="5" placeholder="{{ entry_code }}" id="input-code" class="form-control{% if error_code %} is-invalid{% endif %}">{{ analytics_google_code }}</textarea>
               {% if error_code %}
-              <div class="text-danger">{{ error_code }}</div>
+              <div id="error-code" class="invalid-feedback d-block">{{ error_code }}</div>
               {% endif %}
             </div>
           </div>
@@ -56,4 +57,4 @@
     </div>
   </div>
 </div>
-{{ footer }} 
+{{ footer }}

@@ -3,8 +3,8 @@
   <div class="page-header">
     <div class="container-fluid">
       <div class="float-end">
-        <button type="submit" form="form-yandex-market" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
-        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fa fa-reply"></i></a>
+        <button type="submit" form="form-yandex-market" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fas fa-save"></i></button>
+        <a href="{{ cancel }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fas fa-reply"></i></a>
       </div>
       <h1>{{ heading_title }}</h1>
       <ul class="breadcrumb">
@@ -16,13 +16,13 @@
   </div>
   <div class="container-fluid">
     {% if (error_warning) %} 
-    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+    <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> {{ error_warning }} 
       <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button>
     </div>
     {% endif %} 
     <div class="card page-default">
       <div class="card-header">
-        <h3 class="card-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+        <h3 class="card-title"><i class="fas fa-pencil"></i> {{ text_edit }}</h3>
       </div>
       <div class="card-body">
         <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-yandex-market" class="form-horizontal">
@@ -231,29 +231,17 @@
             <div class="col-sm-10">
               <div class="row">
                 <div class="col-sm-6">
-                  <input type="number" name="feed_yandex_market_image_width" value="{{ feed_yandex_market_image_width }}" placeholder="{{ text_width }}" class="form-control" />
+                  <input type="number" name="feed_yandex_market_image_width" value="{{ feed_yandex_market_image_width }}" placeholder="{{ text_width }}" class="form-control{% if (error_image_width) %} is-invalid{% endif %}" />
                 </div>
                 <div class="col-sm-6">
-                  <input type="number" name="feed_yandex_market_image_height" value="{{ feed_yandex_market_image_height }}" placeholder="{{ text_height }}" class="form-control" />
+                  <input type="number" name="feed_yandex_market_image_height" value="{{ feed_yandex_market_image_height }}" placeholder="{{ text_height }}" class="form-control{% if (error_image_height) %} is-invalid{% endif %}" />
                 </div>
               </div>
               {% if (error_image_width) %} 
-              <div class="text-danger">{{ error_image_width }}</div>
+              <div class="invalid-feedback d-block">{{ error_image_width }}</div>
               {% endif %} 
               {% if (error_image_height) %} 
-              <div class="text-danger">{{ error_image_height }}</div>
-              {% endif %} 
-              {% if (error_image_width_min) %} 
-              <div class="text-danger">{{ error_image_width_min }}</div>
-              {% endif %} 
-              {% if (error_image_height_min) %} 
-              <div class="text-danger">{{ error_image_height_min }}</div>
-              {% endif %} 
-              {% if (error_image_width_max) %} 
-              <div class="text-danger">{{ error_image_width_max }}</div>
-              {% endif %} 
-              {% if (error_image_height_max) %} 
-              <div class="text-danger">{{ error_image_height_max }}</div>
+              <div class="invalid-feedback d-block">{{ error_image_height }}</div>
               {% endif %} 
             </div>
           </div>

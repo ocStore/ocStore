@@ -13,6 +13,10 @@ class Google extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('setting/setting');
 
+		if (!isset($this->request->get['store_id'])) {
+			$this->request->get['store_id'] = 0;
+		}
+
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('analytics_google', $this->request->post, $this->request->get['store_id']);
 

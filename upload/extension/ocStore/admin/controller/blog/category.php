@@ -406,7 +406,21 @@ class Category extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('setting/store');
 
-		$data['stores'] = $this->model_setting_store->getStores();
+		$data['stores'] = [];
+
+		$data['stores'][] = [
+			'store_id' => 0,
+			'name'     => $this->language->get('text_default')
+		];
+
+		$stores = $this->model_setting_store->getStores();
+
+		foreach ($stores as $store) {
+			$data['stores'][] = [
+				'store_id' => $store['store_id'],
+				'name'     => $store['name']
+			];
+		}
 
 		if (isset($this->request->post['category_store'])) {
 			$data['category_store'] = $this->request->post['category_store'];
@@ -414,14 +428,6 @@ class Category extends \Opencart\System\Engine\Controller {
 			$data['category_store'] = $this->model_extension_ocStore_blog_category->getStores($this->request->get['blog_category_id']);
 		} else {
 			$data['category_store'] = [0];
-		}
-
-		if (isset($this->request->post['keyword'])) {
-			$data['keyword'] = $this->request->post['keyword'];
-		} elseif (isset($category_info['keyword'])) {
-			$data['keyword'] = $category_info['keyword'];
-		} else {
-			$data['keyword'] = '';
 		}
 
 		if (isset($this->request->post['image'])) {
@@ -434,10 +440,8 @@ class Category extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('tool/image');
 
-		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
-		} elseif (isset($category_info['image']) && is_file(DIR_IMAGE . $category_info['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($category_info['image'], 100, 100);
+		if (is_file(DIR_IMAGE . html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8'))) {
+			$data['thumb'] = $this->model_tool_image->resize(html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8'), 100, 100);
 		} else {
 			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
@@ -486,8 +490,8 @@ class Category extends \Opencart\System\Engine\Controller {
 
 		$data['category_seo_url'] = [];
 
-		if (isset($this->request->get['category_id'])) {
-			$results = $this->model_extension_ocStore_blog_category->getSeoUrls($this->request->get['category_id']);
+		if (isset($this->request->get['blog_category_id'])) {
+			$results = $this->model_extension_ocStore_blog_category->getSeoUrls($this->request->get['blog_category_id']);
 
 			foreach ($results as $store_id => $languages) {
 				foreach ($languages as $language_id => $keyword) {
@@ -546,11 +550,11 @@ class Category extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('catalog/category');
 
-		if (isset($this->request->post['blog_category_id']) && $this->request->post['parent_id']) {
+		if (isset($this->request->get['blog_category_id']) && isset($this->request->post['parent_id'])) {
 			$results = $this->model_extension_ocStore_blog_category->getPaths($this->request->post['parent_id']);
 
 			foreach ($results as $result) {
-				if ($result['path_id'] == $this->request->post['blog_category_id']) {
+				if ($result['path_id'] == $this->request->get['blog_category_id']) {
 					$this->error['parent'] = $this->language->get('error_parent');
 
 					break;
@@ -566,7 +570,7 @@ class Category extends \Opencart\System\Engine\Controller {
 					if ($keyword) {
 						$seo_url_info = $this->model_design_seo_url->getSeoUrlByKeyword($keyword, $store_id, $language_id);
 
-						if ($seo_url_info && (!isset($this->request->post['blog_category_id']) || $seo_url_info['key'] != 'path' || $seo_url_info['value'] != $this->model_extension_ocStore_blog_category->getPath($this->request->post['blog_category_id']))) {
+						if ($seo_url_info && (!isset($this->request->get['blog_category_id']) || $seo_url_info['key'] != 'blog_category_id' || $seo_url_info['value'] != $this->model_extension_ocStore_blog_category->getPath($this->request->get['blog_category_id']))) {
 							$this->error['keyword'][$store_id][$language_id] = $this->language->get('error_keyword');
 						}
 					} else {

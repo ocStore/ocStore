@@ -10,24 +10,24 @@
 
             $.extend(this, option);
 
-			// Transitionrun - start script
-			if ('ontransitionrun' in window) {
-				$this.one('transitionrun', function () {
-					$this[0].blur();
-					$this.unbind('transitionrun');
-					$this.unbind('focus');
-					this.request();
-				});
-			}
+            // Transitionrun - start script
+            if ('ontransitionrun' in window) {
+                $this.one('transitionrun', function () {
+                    $this[0].blur();
+                    $this.unbind('transitionrun');
+                    $this.unbind('focus');
+                    this.request();
+                });
+            }
 
             // Focus
-			$this.on('focus', function () {
-				$this[0].blur();
-				$this.unbind('focus');
-				if (!('ontransitionrun' in window)) {
-					this.request();
-				}
-			});
+            $this.on('focus', function () {
+                $this[0].blur();
+                $this.unbind('focus');
+                if (!('ontransitionrun' in window)) {
+                    this.request();
+                }
+            });
 
             // Keydown
             $this.on('input', function (e) {

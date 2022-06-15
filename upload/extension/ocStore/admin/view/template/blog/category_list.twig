@@ -7,7 +7,7 @@
         <button type="submit" form="form-category" formaction="{{ repair }}" data-bs-toggle="tooltip" title="{{ button_rebuild }}" class="btn btn-light"><i class="fas fa-sync"></i></button>
         <button type="submit" form="form-category" formaction="{{ enabled }}" data-bs-toggle="tooltip" title="{{ button_enable }}" class="btn btn-light"><i class="fas fa-play"></i></button>
         <button type="submit" form="form-category" formaction="{{ disabled }}" data-bs-toggle="tooltip" title="{{ button_disable }}" class="btn btn-light"><i class="fas fa-pause"></i></button>
-        <button type="submit" form="form-category" onclick="confirm('{{ text_confirm }}') ? $('#form-category').submit() : false;" formaction="{{ delete }}" data-bs-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+        <button type="button" form="form-category" onclick="confirm('{{ text_confirm }}') ? $('#form-category').submit() : false;" formaction="{{ delete }}" data-bs-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
       </div>
       <h1>{{ heading_title }}</h1>
       <ul class="breadcrumb">

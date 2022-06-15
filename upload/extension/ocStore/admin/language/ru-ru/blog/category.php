@@ -22,8 +22,8 @@ $_['column_action']          = 'Действия';
 // Entry
 $_['entry_name']             = 'Категория';
 $_['entry_description']      = 'Описание';
-$_['entry_meta_title'] 	     = 'Мета-тег Title';
 $_['entry_meta_h1'] 	     = 'HTML-тег H1';
+$_['entry_meta_title'] 	     = 'Мета-тег Title';
 $_['entry_meta_keyword'] 	 = 'Мета-тег Keywords';
 $_['entry_meta_description'] = 'Мета-тег Description';
 $_['entry_keyword']          = 'SEO URL';
@@ -46,7 +46,7 @@ $_['help_noindex']           = 'Индексация поисковыми сис
 // Error
 $_['error_warning']          = 'Внимательно проверьте форму на ошибки!';
 $_['error_permission']       = 'У вас недостаточно прав для внесения изменений!';
-$_['error_name']             = 'Название должно содержать от 2 до 32 символов!';
+$_['error_name']             = 'Название должно содержать от 2 до 255 символов!';
 $_['error_meta_title']       = 'Мета-тег Title должен содержать от 0 до 255 символов!';
 $_['error_meta_h1']	         = 'HTML-тег H1 должен содержать от 0 до 255 символов!';
 $_['error_keyword']          = 'Выбранный SEO URL уже используется!';

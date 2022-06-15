@@ -22,8 +22,8 @@ $_['column_action']          = 'Action';
 // Entry
 $_['entry_name']             = 'Category Name';
 $_['entry_description']      = 'Description';
-$_['entry_meta_title'] 	     = 'Meta Tag Title';
 $_['entry_meta_h1'] 	     = 'HTML Tag H1';
+$_['entry_meta_title'] 	     = 'Meta Tag Title';
 $_['entry_meta_keyword'] 	 = 'Meta Tag Keywords';
 $_['entry_meta_description'] = 'Meta Tag Description';
 $_['entry_keyword']          = 'SEO Keyword';
@@ -46,7 +46,7 @@ $_['help_noindex']           = 'indexing in search engines Google, Yandex, Bing 
 // Error
 $_['error_warning']          = 'Warning: Please check the form carefully for errors!';
 $_['error_permission']       = 'Warning: You do not have permission to modify categories!';
-$_['error_name']             = 'Category Name must be between 2 and 32 characters!';
+$_['error_name']             = 'Category Name must be between 2 and 255 characters!';
 $_['error_meta_title']       = 'Meta Title must be greater than 0 and less than 255 characters!';
 $_['error_meta_h1']          = 'HTML Tag H1 must be greater than 0 and less than 255 characters!';
 $_['error_keyword']          = 'SEO keyword already in use!';

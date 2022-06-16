@@ -33,7 +33,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 		'store_id'               => 0,
 		'language'               => 'uk-ua',
 		'language_id'            => 2,
-		'cache_status'           => false,
+		'cache'                  => false,
 		'start'                  => 0,
 		'limit'                  => 10000,
 	];
@@ -41,8 +41,16 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 
 	public function index() {
 		if ($this->config->get('feed_sitemap_status')) {
+			// Защитный ключ
+			$secret_key = $this->config->get('feed_sitemap_secret_key');
 			$this->setting = $this->setting_default;
 			$setting = $this->config->get('feed_sitemap');
+
+			if ($secret_key) {
+				if (!isset($this->request->get['secret_key']) || isset($this->request->get['secret_key']) && $this->request->get['secret_key'] != $secret_key) {
+					exit();
+				}
+			}
 
 			if ($setting && is_array($setting)) {
 				foreach ($setting as $key => $result) {
@@ -50,7 +58,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				}
 			}
 
-			$this->request->get['cache_status'] = $this->setting['cache_status'];
+			$this->setting['cache'] = $setting['cache'];
 
 			foreach ($this->setting as $key => $result) {
 				if (isset($this->request->get[$key])) {
@@ -72,7 +80,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			$this->config->set('config_language', $this->setting['language']);
 			$this->config->set('config_language_id', $this->setting['language_id']);
 
-			if ($this->setting['cache_status']) {
+			if ($this->setting['cache']) {
 				$cache_name = 'ocStore.sitemap.' . md5(http_build_query($this->setting));
 				$cache = new \Opencart\System\Library\Cache\File(36000);
 				$output = $cache->get($cache_name);
@@ -340,7 +348,7 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			$output .= '</urlset>';
 
 			if ($output) {
-				if ($this->setting['cache_status']) {
+				if ($this->setting['cache']) {
 					$cache->set($cache_name, $output);
 				}
 				$this->response->addHeader('Content-Type: application/xml');

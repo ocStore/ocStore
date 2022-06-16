@@ -12,15 +12,17 @@ $_['text_edit']                  = 'Редактирование';
 
 // Entry
 $_['entry_status']               = 'Статус';
-$_['entry_blog_category']        = 'blog category';
-$_['entry_blog_article']         = 'blog article';
-$_['entry_category']             = 'category';
-$_['entry_information']          = 'information';
-$_['entry_manufacturer']         = 'manufacturer';
-$_['entry_product']              = 'product';
-$_['entry_store']                = 'store';
-$_['entry_language']             = 'language';
-$_['entry_image']                = 'image';
+$_['entry_blog_category']        = 'Категория блога';
+$_['entry_blog_article']         = 'Статья блога';
+$_['entry_category']             = 'Категория товара';
+$_['entry_information']          = 'Информационная страница';
+$_['entry_manufacturer']         = 'Производитель';
+$_['entry_product']              = 'Товар';
+$_['entry_store']                = 'Магазин';
+$_['entry_language']             = 'Язык';
+$_['entry_image']                = 'Изображение';
+$_['entry_cache']                = 'Кэш';
+$_['entry_secret_key']           = 'Секретный ключ';
 $_['entry_priority']             = 'Приоритет';
 $_['entry_data_feed']            = 'Адрес Карты';
 

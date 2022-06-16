@@ -12,16 +12,18 @@ $_['text_edit']                  = 'Edit Google Sitemap';
 
 // Entry
 $_['entry_status']               = 'Status';
-$_['entry_blog_category']        = 'blog category';
-$_['entry_blog_article']         = 'blog article';
-$_['entry_category']             = 'category';
-$_['entry_information']          = 'information';
-$_['entry_manufacturer']         = 'manufacturer';
-$_['entry_product']              = 'product';
-$_['entry_store']                = 'store';
-$_['entry_language']             = 'language';
-$_['entry_image']                = 'image';
+$_['entry_blog_category']        = 'Blog Category';
+$_['entry_blog_article']         = 'Blog Article';
+$_['entry_category']             = 'Category';
+$_['entry_information']          = 'Information';
+$_['entry_manufacturer']         = 'Manufacturer';
+$_['entry_product']              = 'Product';
+$_['entry_store']                = 'Store';
+$_['entry_language']             = 'Language';
+$_['entry_image']                = 'Image';
 $_['entry_priority']             = 'Priority';
+$_['entry_cache']                = 'Cache';
+$_['entry_secret_key']           = 'Secret Key';
 $_['entry_data_feed']            = 'Data Feed Url';
 
 // Error

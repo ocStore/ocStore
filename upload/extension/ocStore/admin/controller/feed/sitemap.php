@@ -155,6 +155,22 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 			$data['language_id'] = 2;
 		}
 
+		if (isset($this->request->post['cache'])) {
+			$data['cache'] = $this->request->post['cache'];
+		} elseif (isset($module_info['cache'])) {
+			$data['cache'] = $module_info['cache'];
+		} else {
+			$data['cache'] = true;
+		}
+
+		if (isset($this->request->post['secret_key'])) {
+			$data['secret_key'] = $this->request->post['secret_key'];
+		} elseif (isset($module_info['secret_key'])) {
+			$data['secret_key'] = $module_info['secret_key'];
+		} else {
+			$data['secret_key'] = '';
+		}
+
 		$data['data_feed'] = HTTP_CATALOG . 'index.php?route=extension/ocStore/feed/sitemap';
 
 		$data['header'] = $this->load->controller('common/header');

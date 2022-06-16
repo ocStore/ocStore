@@ -10,7 +10,7 @@ if (!defined('VERSION')) {
 }
 
 class Review extends \Opencart\System\Engine\Controller {
-	private $error = [];
+	private array $error = [];
 
 	public function index(): void {
 		$this->load->language('extension/ocStore/blog/review');
@@ -22,7 +22,7 @@ class Review extends \Opencart\System\Engine\Controller {
 		$this->getList();
 	}
 
-	public function add() {
+	public function add(): void {
 		$this->load->language('extension/ocStore/blog/review');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -70,7 +70,7 @@ class Review extends \Opencart\System\Engine\Controller {
 		$this->getForm();
 	}
 
-	public function edit() {
+	public function edit(): void {
 		$this->load->language('extension/ocStore/blog/review');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -118,14 +118,14 @@ class Review extends \Opencart\System\Engine\Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete(): void {
 		$this->load->language('extension/ocStore/blog/review');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('extension/ocStore/blog/review');
 
-		if (isset($this->request->post['selected']) && $this->validateDelete()) {
+		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $review_article_id) {
 				$this->model_extension_ocStore_blog_review->deleteReview($review_article_id);
 			}
@@ -168,14 +168,14 @@ class Review extends \Opencart\System\Engine\Controller {
 		$this->getList();
 	}
 
-	public function enable() {
+	public function enable(): void {
 		$this->load->language('extension/ocStore/blog/review');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('extension/ocStore/blog/review');
 
-		if (isset($this->request->post['selected']) && $this->validateProStatus()) {
+		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $review_article_id) {
 				$data = [];
 
@@ -228,14 +228,14 @@ class Review extends \Opencart\System\Engine\Controller {
 		$this->getList();
 	}
 
-	public function disable() {
+	public function disable(): void {
 		$this->load->language('extension/ocStore/blog/review');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('extension/ocStore/blog/review');
 
-		if (isset($this->request->post['selected']) && $this->validateProStatus()) {
+		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $review_article_id) {
 				$data = [];
 
@@ -288,7 +288,7 @@ class Review extends \Opencart\System\Engine\Controller {
 		$this->getList();
 	}
 
-	protected function getList() {
+	protected function getList(): void {
 		$this->config->set('configblog_limit_admin', 10);
 
 		if (isset($this->request->get['filter_article'])) {
@@ -500,7 +500,7 @@ class Review extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput($this->load->view('extension/ocStore/blog/review_list.tpl', $data));
 	}
 
-	protected function getForm() {
+	protected function getForm(): void {
 		$data['text_form'] = !isset($this->request->get['review_article_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
 
 		if (isset($this->error['warning'])) {
@@ -651,23 +651,23 @@ class Review extends \Opencart\System\Engine\Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/ocStore/blog/review_form.tpl', $data));
+		$this->response->setOutput($this->load->view('extension/ocStore/blog/review_form', $data));
 	}
 
-	protected function validateForm() {
+	protected function validateForm(): bool {
 		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/review')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		if (!$this->request->post['article_id']) {
+		if (empty($this->request->post['article_id'])) {
 			$this->error['article'] = $this->language->get('error_article');
 		}
 
-		if ((utf8_strlen($this->request->post['author']) < 3) || (utf8_strlen($this->request->post['author']) > 64)) {
+		if (!isset($this->request->post['author']) || (utf8_strlen($this->request->post['author']) < 3) || (utf8_strlen($this->request->post['author']) > 64)) {
 			$this->error['author'] = $this->language->get('error_author');
 		}
 
-		if (utf8_strlen($this->request->post['text']) < 1) {
+		if (!isset($this->request->post['text']) || utf8_strlen($this->request->post['text']) < 1) {
 			$this->error['text'] = $this->language->get('error_text');
 		}
 
@@ -678,15 +678,7 @@ class Review extends \Opencart\System\Engine\Controller {
 		return !$this->error;
 	}
 
-	protected function validateDelete() {
-		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/review')) {
-			$this->error['warning'] = $this->language->get('error_permission');
-		}
-
-		return !$this->error;
-	}
-
-	protected function validateProStatus() {
+	protected function validate(): bool {
 		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/review')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}

@@ -10,9 +10,9 @@ if (!defined('VERSION')) {
 }
 
 class Article extends \Opencart\System\Engine\Controller {
-	private $error = [];
+	private array $error = [];
 
-	public function index() {
+	public function index(): void {
 		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -22,14 +22,14 @@ class Article extends \Opencart\System\Engine\Controller {
 		$this->getList();
 	}
 
-	public function add() {
+	public function add(): void {
 		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('extension/ocStore/blog/article');
 
-		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_extension_ocStore_blog_article->addArticle($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -73,14 +73,14 @@ class Article extends \Opencart\System\Engine\Controller {
 		$this->getForm();
 	}
 
-	public function edit() {
+	public function edit(): void {
 		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('extension/ocStore/blog/article');
 
-		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_extension_ocStore_blog_article->editArticle($this->request->get['article_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -124,14 +124,14 @@ class Article extends \Opencart\System\Engine\Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete(): void {
 		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('extension/ocStore/blog/article');
 
-		if (isset($this->request->post['selected']) && $this->validateDelete()) {
+		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $article_id) {
 				$this->model_extension_ocStore_blog_article->deleteArticle($article_id);
 			}
@@ -177,14 +177,14 @@ class Article extends \Opencart\System\Engine\Controller {
 		$this->getList();
 	}
 
-	public function copy() {
+	public function copy(): void {
 		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('extension/ocStore/blog/article');
 
-		if (isset($this->request->post['selected']) && $this->validateCopy()) {
+		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $article_id) {
 				$this->model_extension_ocStore_blog_article->copyArticle($article_id);
 			}
@@ -230,14 +230,14 @@ class Article extends \Opencart\System\Engine\Controller {
 		$this->getList();
 	}
 
-	public function enable() {
+	public function enable(): void {
 		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('extension/ocStore/blog/article');
 
-		if (isset($this->request->post['selected']) && $this->validateProStatus()) {
+		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $article_id) {
 				$this->model_extension_ocStore_blog_article->editArticleStatus($article_id, 1);
 			}
@@ -264,14 +264,14 @@ class Article extends \Opencart\System\Engine\Controller {
 		$this->getList();
 	}
 
-	public function disable() {
+	public function disable(): void {
 		$this->load->language('extension/ocStore/blog/article');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('extension/ocStore/blog/article');
 
-		if (isset($this->request->post['selected']) && $this->validateProStatus()) {
+		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $article_id) {
 				$this->model_extension_ocStore_blog_article->editArticleStatus($article_id, 0);
 			}
@@ -298,7 +298,7 @@ class Article extends \Opencart\System\Engine\Controller {
 		$this->getList();
 	}
 
-	protected function getList() {
+	protected function getList(): void {
 		$this->config->set('configblog_limit_admin', 10);
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -588,7 +588,7 @@ class Article extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput($this->load->view('extension/ocStore/blog/article_list', $data));
 	}
 
-	protected function getForm() {
+	protected function getForm(): void {
 		$data['text_form'] = !isset($this->request->get['article_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
 
 		if (isset($this->error['warning'])) {
@@ -751,7 +751,7 @@ class Article extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['status'])) {
 			$data['status'] = $this->request->post['status'];
-		} elseif (isset($article_info)) {
+		} elseif (isset($article_info['status'])) {
 			$data['status'] = $article_info['status'];
 		} else {
 			$data['status'] = true;
@@ -759,7 +759,7 @@ class Article extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['noindex'])) {
 			$data['noindex'] = $this->request->post['noindex'];
-		} elseif (isset($article_info)) {
+		} elseif (isset($article_info['noindex'])) {
 			$data['noindex'] = $article_info['noindex'];
 		} else {
 			$data['noindex'] = 1;
@@ -772,7 +772,7 @@ class Article extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['main_blog_category_id'])) {
 			$data['main_blog_category_id'] = $this->request->post['main_blog_category_id'];
-		} elseif (isset($article_info)) {
+		} elseif (isset($this->request->get['article_id'])) {
 			$data['main_blog_category_id'] = $this->model_extension_ocStore_blog_article->getMainCategoryId($this->request->get['article_id']);
 		} else {
 			$data['main_blog_category_id'] = 0;
@@ -873,7 +873,7 @@ class Article extends \Opencart\System\Engine\Controller {
 
 		if (isset($this->request->post['article_related_product'])) {
 			$products = $this->request->post['article_related_product'];
-		} elseif (isset($article_info)) {
+		} elseif (isset($this->request->get['article_id'])) {
 			$products = $this->model_extension_ocStore_blog_article->getProductRelated($this->request->get['article_id']);
 		} else {
 			$products = [];
@@ -894,6 +894,16 @@ class Article extends \Opencart\System\Engine\Controller {
 			}
 		}
 
+		if (isset($this->request->get['article_id'])) {
+			$data['product_seo_url'] = $this->model_catalog_product->getSeoUrls($this->request->get['article_id']);
+		} else {
+			$data['product_seo_url'] = [];
+		}
+
+		$this->load->model('design/layout');
+
+		$data['layouts'] = $this->model_design_layout->getLayouts();
+
 		if (isset($this->request->post['article_layout'])) {
 			$data['article_layout'] = $this->request->post['article_layout'];
 		} elseif (isset($this->request->get['article_id'])) {
@@ -902,10 +912,6 @@ class Article extends \Opencart\System\Engine\Controller {
 			$data['article_layout'] = [];
 		}
 
-		$this->load->model('design/layout');
-
-		$data['layouts'] = $this->model_design_layout->getLayouts();
-
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
@@ -913,34 +919,36 @@ class Article extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput($this->load->view('extension/ocStore/blog/article_form', $data));
 	}
 
-	protected function validateForm() {
+	protected function validate(): bool {
 		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/article')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		foreach ($this->request->post['article_description'] as $language_id => $value) {
-			if ((utf8_strlen($value['name']) < 3) || (utf8_strlen($value['name']) > 255)) {
-				$this->error['name'][$language_id] = $this->language->get('error_name');
-			}
+		if (isset($this->request->post['article_description']) && is_array($this->request->post['article_description'])) {
+			foreach ($this->request->post['article_description'] as $language_id => $value) {
+				if (!isset($value['name']) || (utf8_strlen($value['name']) < 2) || (utf8_strlen($value['name']) > 255)) {
+					$this->error['name'][$language_id] = $this->language->get('error_name');
+				}
 
-			if ((utf8_strlen($value['meta_title']) < 0) || (utf8_strlen($value['meta_title']) > 255)) {
-				$this->error['meta_title'][$language_id] = $this->language->get('error_meta_title');
-			}
+				if (!empty($value['meta_h1']) || utf8_strlen($value['meta_h1']) > 255) {
+					$this->error['meta_h1'][$language_id] = $this->language->get('error_meta_h1');
+				}
 
-			if ((utf8_strlen($value['meta_h1']) < 0) || (utf8_strlen($value['meta_h1']) > 255)) {
-				$this->error['meta_h1'][$language_id] = $this->language->get('error_meta_h1');
+				if (!empty($value['meta_title']) || (utf8_strlen($value['meta_title']) > 255)) {
+					$this->error['meta_title'][$language_id] = $this->language->get('error_meta_title');
+				}
 			}
 		}
 
-		if (!empty($this->request->post['category_seo_url'])) {
+		if (!empty($this->request->post['article_seo_url'])) {
 			$this->load->model('design/seo_url');
 
-			foreach ($this->request->post['category_seo_url'] as $store_id => $language) {
+			foreach ($this->request->post['article_seo_url'] as $store_id => $language) {
 				foreach ($language as $language_id => $keyword) {
 					if ($keyword) {
 						$seo_url_info = $this->model_design_seo_url->getSeoUrlByKeyword($keyword, $store_id, $language_id);
 
-						if ($seo_url_info && (!isset($this->request->get['blog_category_id']) || $seo_url_info['key'] != 'article_id' || $seo_url_info['value'] != $this->model_extension_ocStore_blog_category->getPath($this->request->get['blog_category_id']))) {
+						if ($seo_url_info && (!isset($this->request->get['article_id']) || $seo_url_info['key'] != 'article_id' || $seo_url_info['value'] != (int)$this->request->get['article_id'])) {
 							$this->error['keyword'][$store_id][$language_id] = $this->language->get('error_keyword');
 						}
 					} else {
@@ -957,31 +965,7 @@ class Article extends \Opencart\System\Engine\Controller {
 		return !$this->error;
 	}
 
-	protected function validateDelete() {
-		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/article')) {
-			$this->error['warning'] = $this->language->get('error_permission');
-		}
-
-		return !$this->error;
-	}
-
-	protected function validateCopy() {
-		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/article')) {
-			$this->error['warning'] = $this->language->get('error_permission');
-		}
-
-		return !$this->error;
-	}
-
-	protected function validateProStatus() {
-		if (!$this->user->hasPermission('modify', 'extension/ocStore/blog/article')) {
-			$this->error['warning'] = $this->language->get('error_permission');
-		}
-
-		return !$this->error;
-	}
-
-	public function autocomplete() {
+	public function autocomplete(): void {
 		$json = [];
 
 		if (isset($this->request->get['filter_name'])) {
@@ -996,7 +980,7 @@ class Article extends \Opencart\System\Engine\Controller {
 			if (isset($this->request->get['limit'])) {
 				$limit = $this->request->get['limit'];
 			} else {
-				$limit = 5;
+				$limit = $this->config->get('configblog_limit_admin');
 			}
 
 			$filter_data = [

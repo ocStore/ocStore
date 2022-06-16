@@ -58,13 +58,13 @@ class Sitemap extends \Opencart\System\Engine\Controller {
 				}
 			}
 
-			$this->setting['cache'] = $setting['cache'];
-
 			foreach ($this->setting as $key => $result) {
 				if (isset($this->request->get[$key])) {
 					$this->setting[$key] = $this->request->get[$key];
 				}
 			}
+
+			$this->setting['cache'] = $setting['cache'];
 
 			$language_info = $this->db->query("SELECT language_id, code FROM `" . DB_PREFIX . "language` WHERE `language_id` = '" . (int)$this->setting['language_id'] . "'" . (!empty($this->request->get['language']) ? " OR `code` = '" . $this->db->escape($this->setting['language']) . "'" : false))->row;
 

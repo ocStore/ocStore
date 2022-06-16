@@ -392,6 +392,18 @@ class Article extends \Opencart\System\Engine\Model {
 		return $article_store_data;
 	}
 
+	public function getSeoUrls(int $article_id): array {
+		$product_seo_url_data = [];
+
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "seo_url` WHERE `key` = 'article_id' AND `value` = '" . (int)$article_id . "'");
+
+		foreach ($query->rows as $result) {
+			$product_seo_url_data[$result['store_id']][$result['language_id']] = $result['keyword'];
+		}
+
+		return $product_seo_url_data;
+	}
+
 	public function getLayouts(int $article_id): array {
 		$article_layout_data = [];
 

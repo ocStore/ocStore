@@ -1,4 +1,7 @@
 <?php
+// *	@source		See SOURCE.txt for source and other copyright.
+// *	@license	GNU General Public License version 3; see LICENSE.txt
+
 // Heading
 $_['heading_title']    = 'Fixer';
 
@@ -6,7 +9,7 @@ $_['heading_title']    = 'Fixer';
 $_['text_extension']   = 'Extensions';
 $_['text_success']     = 'Success: You have modified fixer currency rates!';
 $_['text_edit']        = 'Edit Fixer';
-$_['text_signup']      = 'Fixer.io is a currency conversion service <a href="https://fixer.io/" target="_blank" class="alert-link">signup here</a>.';
+$_['text_signup']      = 'Fixer.io is a currency conversion service <a href="https://fixer.io/" class="alert-link" rel="noreferrer noopener" target="_blank">signup here</a>.';
 $_['text_support']     = 'This extension Requires at EUR currency to be available currency option.';
 
 // Entry

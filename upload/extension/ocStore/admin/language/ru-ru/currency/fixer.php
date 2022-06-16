@@ -1,12 +1,15 @@
 <?php
+// *	@source		See SOURCE.txt for source and other copyright.
+// *	@license	GNU General Public License version 3; see LICENSE.txt
+
 // Heading
 $_['heading_title']    = 'Fixer';
 
 // Text
-$_['text_extension']   = 'Extensions';
-$_['text_success']     = 'Success: You have modified fixer currency rates!';
-$_['text_edit']        = 'Edit Fixer';
-$_['text_signup']      = 'Fixer.io - сервис конвертации валют <a href="https://fixer.io/" target="_blank" class="alert-link">зарегистрироваться</a>.';
+$_['text_extension']   = 'Расширения';
+$_['text_success']     = 'Успех: вы изменили параметры fixer!';
+$_['text_edit']        = 'Редактировать Fixer';
+$_['text_signup']      = 'Fixer.io - сервис конвертации валют <a href="https://fixer.io/" class="alert-link" rel="noreferrer noopener" target="_blank">зарегистрироваться</a>.';
 $_['text_support']     = 'Для этого модуля требуется валюта EUR';
 
 // Entry

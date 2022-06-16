@@ -17,6 +17,7 @@ $_['text_keyword']           = 'Не используйте пробелы, вм
 // Column
 $_['column_name']            = 'Категории';
 $_['column_sort_order']      = 'Порядок сортировки';
+$_['column_status']          = 'Статус';
 $_['column_noindex']         = 'Индексация';
 $_['column_action']          = 'Действия';
 

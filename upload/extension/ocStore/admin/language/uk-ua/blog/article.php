@@ -3,58 +3,60 @@
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
 // Heading
-$_['heading_title']          = 'Статьи блога';
+$_['heading_title']          = 'Статті блога';
 
 // Text
-$_['text_success']           = 'Настройки успешно изменены!';
-$_['text_list']              = 'Список cтатей';
-$_['text_add']               = 'Добавить';
-$_['text_edit']              = 'Редактирование статьи';
-$_['text_default']           = 'По умолчанию';
+$_['text_success']           = 'Налаштування успішно змінено!';
+$_['text_list']              = 'Список статей';
+$_['text_add']               = 'Додати';
+$_['text_edit']              = 'Редагування статті';
+$_['text_default']           = 'За замовчуванням';
+$_['text_none_category']     = ' --- Без Категорії --- ';
 $_['text_keyword']           = 'Не використовуйте пробіли, замість цього замініть пробіли на "-" і переконайтеся, що SEO URL-адреса унікальна у всьому магазині.';
 
 // Column
-$_['column_name']            = 'Название статьи';
-$_['column_image']           = 'Изображения';
+$_['column_name']            = 'Назва статті';
+$_['column_image']           = 'Зображення';
 $_['column_status']          = 'Статус';
-$_['column_noindex']         = 'Индексация';
-$_['column_action']          = 'Действия';
+$_['column_noindex']         = 'Індексація';
+$_['column_action']          = 'Дії';
 
 // Entry
-$_['entry_name']             = 'Название статьи';
-$_['entry_description']      = 'Текст статьи';
-$_['entry_meta_title'] 	     = 'Мета-тег Title';
+$_['entry_name']             = 'Назва статті';
+$_['entry_description']      = 'Текст статті';
+$_['entry_meta_title']       = 'Мета-тег Title';
 $_['entry_meta_h1']          = 'HTML-тег H1';
 $_['entry_meta_keyword']     = 'Мета-тег Keywords';
 $_['entry_meta_description'] = 'Мета-тег Description';
 $_['entry_keyword']          = 'SEO URL';
-$_['entry_store']            = 'Магазины';
-$_['entry_image']            = 'Изображение статьи';
+$_['entry_store']            = 'Крами';
+$_['entry_image']            = 'Зображення статті';
 $_['entry_status']           = 'Статус';
-$_['entry_noindex']          = 'Индексация';
-$_['entry_sort_order']       = 'Порядок сортировки';
-$_['entry_category']         = 'Показывать в категориях';
-$_['entry_main_category']    = 'Главная категория';
-$_['entry_download']         = 'Загрузки';
-$_['entry_related']          = 'Рекомендуемые статьи';
-$_['entry_related_product']  = 'Рекомендуемые товары';
-$_['entry_tag']              = 'Теги статьи';
-$_['entry_layout']           = 'Выбрать макет';
+$_['entry_noindex']          = 'Індексація';
+$_['entry_sort_order']       = 'Порядок сортування';
+$_['entry_category']         = 'Показувати у категоріях';
+$_['entry_category_filter']  = 'Категорії';
+$_['entry_sub_category']     = 'включаючи підкатегорії';
+$_['entry_main_category']    = 'Головна категорія';
+$_['entry_download']         = 'Завантаження';
+$_['entry_related']          = 'Рекомендовані статті';
+$_['entry_related_product']  = 'Рекомендовані товари';
+$_['entry_tag']              = 'Теги статті';
+$_['entry_layout']           = 'Вибрати макет';
 
 // Help
-$_['help_keyword']           = 'Должен быть уникальным во всей системе, без пробелов и спецсимволов';
-$_['help_category']          = '(Автозаполнение)';
-$_['help_download']          = '(Автозаполнение)';
-$_['help_related']           = '(Автозаполнение)';
-$_['help_related_product']   = '(Автозаполнение)';
-$_['help_tag']               = 'Теги разделяются запятой';
-$_['help_noindex']           = 'Индексация поисковыми системами Google, Yandex, Bing и др.';
+$_['help_category']          = '(Автозаповнення)';
+$_['help_download']          = '(Автозаповнення)';
+$_['help_related']           = '(Автозаповнення)';
+$_['help_related_product']   = '(Автозаповнення)';
+$_['help_tag']               = 'Теги розділяються комою';
+$_['help_noindex']           = 'Індексація пошуковими системами Google, Yandex, Bing та ін.';
 
 // Error
-$_['error_warning']          = 'Внимательно проверьте форму на ошибки!';
-$_['error_permission']       = 'У вас недостаточно прав для внесения изменений!';
-$_['error_name']             = 'Название должно содержать от 3 до 255 символов!';
-$_['error_meta_title']       = 'Мета-тег Title должен содержать от 0 до 255 символов!';
-$_['error_meta_h1']          = 'HTML-тег H1 должен содержать от 0 до 255 символов!';
-$_['error_seo']              = 'Требуется ключевое слово SEO URL!';
-$_['error_keyword']          = 'Выбранный SEO URL уже используется!';
+$_['error_warning']          = 'Уважно перевірте форму на помилки!';
+$_['error_permission']       = 'У вас недостатньо прав для внесення змін!';
+$_['error_name']             = 'Назва повинна містити від 3 до 255 символів!';
+$_['error_meta_title']       = 'Мета-тег Title повинен містити від 0 до 255 символів!';
+$_['error_meta_h1']          = 'HTML-тег H1 повинен містити від 0 до 255 символів!';
+$_['error_seo']              = 'Потрібне ключове слово SEO URL!';
+$_['error_keyword']          = 'Вибраний SEO URL вже використовується!';

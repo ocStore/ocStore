@@ -3,37 +3,36 @@
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
 // Heading
-$_['heading_title']     = 'Отзывы блога';
+$_['heading_title']     = 'Відгуки блогу';
 
 // Text
-$_['text_success']      = 'Настройки успешно изменены!';
-$_['text_list']         = 'Отзывы';
-$_['text_add']          = 'Добавить';
-$_['text_edit']         = 'Редактирование';
+$_['text_success']      = 'Налаштування успішно змінено!';
+$_['text_list']         = 'Відгуки';
+$_['text_add']          = 'Додати';
+$_['text_edit']         = 'Редагування';
 
 // Column
-$_['column_article']    = 'К статье';
-$_['column_author']     = 'Автор отзыва';
+$_['column_article']    = 'До статті';
+$_['column_author']     = 'Автор відгуку';
 $_['column_rating']     = 'Рейтинг';
 $_['column_status']     = 'Статус';
-$_['column_date_added'] = 'Дата добавления';
-$_['column_action']     = 'Действия';
+$_['column_date_added'] = 'Дата додавання';
+$_['column_action']     = 'Дії';
 
 // Entry
-$_['entry_article']     = 'К статье';
-$_['entry_author']      = 'Автор отзыва';
+$_['entry_article']     = 'До статті';
+$_['entry_author']      = 'Автор відгуку';
 $_['entry_rating']      = 'Рейтинг';
 $_['entry_status']      = 'Статус';
-$_['entry_text']        = 'Текст отзыва';
-$_['entry_date_added']  = 'Дата добавления';
+$_['entry_text']        = 'Текст відгуку';
+$_['entry_date_added']  = 'Дата додавання';
 
 // Help
-$_['help_article']      = '(Автозаполнение)';
+$_['help_article']      = '(Автозаповнення)';
 
 // Error
-$_['error_permission']  = 'У вас недостаточно прав для внесения изменений!';
-$_['error_article']     = 'Необходимо выбрать статью!';
-$_['error_author']      = 'Имя автора должно содержать от 3 до 64 символов!';
-$_['error_text']        = 'Отзыв должен содержать хотя бы 1 символ!';
-$_['error_rating']      = 'Необходимо оценить статью!';
-
+$_['error_permission']  = 'У вас недостатньо прав для внесення змін!';
+$_['error_article']     = 'Необхідно вибрати статтю!';
+$_['error_author']      = 'Ім\'я автора має містити від 3 до 64 символів!';
+$_['error_text']        = 'Відгук повинен містити хоча б 1 символ!';
+$_['error_rating']      = 'Необхідно оцінити статтю!';

@@ -11,7 +11,8 @@ $_['text_list']              = 'Article List';
 $_['text_add']               = 'Add Article';
 $_['text_edit']              = 'Edit Article';
 $_['text_default']           = 'Default';
-$_['text_keyword']           = 'Do not use spaces, instead replace spaces with - and make sure the SEO URL is globally unique.';
+$_['text_none_category']     = ' --- None Category --- ';
+$_['text_keyword']           = 'Do not use spaces, instead replace spaces with "-" and make sure the SEO URL is globally unique.';
 
 // Column
 $_['column_name']            = 'Article Name';
@@ -34,6 +35,8 @@ $_['entry_status']           = 'Status';
 $_['entry_noindex']          = 'Index';
 $_['entry_sort_order']       = 'Sort Order';
 $_['entry_category']         = 'Categories';
+$_['entry_category_filter']  = 'Categories';
+$_['entry_sub_category']     = 'include subcategories';
 $_['entry_main_category']    = 'Main Category';
 $_['entry_download']         = 'Downloads';
 $_['entry_related']          = 'Related Article';
@@ -42,7 +45,6 @@ $_['entry_tag']              = 'Product Tags';
 $_['entry_layout']           = 'Layout Override';
 
 // Help
-$_['help_keyword']           = 'Do not use spaces, instead replace spaces with - and make sure the keyword is globally unique.';
 $_['help_category']          = '(Autocomplete)';
 $_['help_download']          = '(Autocomplete)';
 $_['help_related']           = '(Autocomplete)';

@@ -283,7 +283,7 @@ class ControllerExtensionDashboardDomovoy extends Controller
                     $key = $this->request->get['dir'];
                 }
 
-                $folders = array('logs' => array('dir' => DIR_STORAGE . 'logs/*'), 'cache' => array('dir' => DIR_CACHE . 'cache.*'), 'imagescache' => array('dir' => DIR_IMAGE . 'cache/*'));
+                $folders = array('logs' => array('dir' => DIR_STORAGE . 'logs/*'), 'cache' => array('dir' => DIR_CACHE . '*.*'), 'imagescache' => array('dir' => DIR_IMAGE . 'cache/*'));
 
                 $files = glob($folders[$key]['dir']);
                 if (!empty($files)) {

@@ -4,87 +4,100 @@
 ///  https://ocstore.com        ///
 ///////////////////////////////////
 
+# ВСТАНОВЛЕННЯ
 
-ПРИМІТКА: ЦЕ ЛИШЕ ДЛЯ НОВОГО ВСТАНОВЛЕННЯ!
-ЯКЩО ОНОВЛЕННЯ В ІСНУЮЧИЙ МАГАЗИН, НЕ ЗАБУДЬТЕ ПРОЧИТАТИ UPGRADE.TXT
+* Це лише для __нового встановлення__
+* Ці інструкції призначені для ручного встановлення за допомогою FTP, cPanel або іншої панелі управління веб-хостингом.
 
+Якщо ви __оновлюєте існуючий магазин__, обов'язково прочитайте [інструкції з оновлення](UPGRADE.md) натомість
 
--------
-Встановлення
--------
-These instructions are for a manual installation using FTP, cPanel or other web hosting Control Panel.
+## Встановлення на Linux
 
-- Встановлення на Linux -
+1. Завантажте всі файли та папки на ваш сервер з папки "Upload", розмістіть їх у кореневій директорії веб-сайту. Коренева директорія відрізняється на різних серверах: у cPanel це має бути public_html/, а в Plesk - httpdocs/.
+2. Переконайтеся, що веб-користувач має дозволи на читання, запис та виконання всіх директорій під кореневою директорією.
+3. Перейменуйте config-dist.php на config.php і admin/config-dist.php на admin/config.php
+4. Для Linux/Unix переконайтеся, що наступні папки та файли доступні для запису.
 
-1. Завантажте всі ваші файли та папки на ваш сервер з папки «Upload». Можна розархівувати в будь-яке місце на Ваш вибір.
-    Наприклад: У cPanel має бути в папці public_html/ і Plesk має бути в httpdocs/.
+       chmod 0777 config.php
+       chmod 0777 admin/config.php
 
+5. Переконайтеся, що у вас встановлена база даних MySQL з призначеним користувачем
+    * НЕ використовуйте ваше `root` ім'я користувача та пароль
+6. Відвідайте головну сторінку магазину, наприклад http://www.example.com або http://www.example.com/store/
+7. Ви повинні потрапити на сторінку інсталятора. Дотримуйтесь інструкцій на екрані.
+8. Після успішного встановлення видаліть директорію /install/ через ftp.
+9. Якщо ви завантажили скомпільовану версію з папкою "vendor" - вона має бути завантажена вище кореневої директорії (у тій же папці, де знаходиться public_html або httpdocs)
+
+## Встановлення на Windows
+
+1. Завантажте всі файли та папки на ваш сервер з папки "Upload". Це може бути будь-де на ваш вибір, наприклад /wwwroot/store або /wwwroot
 2. Перейменуйте config-dist.php на config.php і admin/config-dist.php на admin/config.php
+3. Для Windows переконайтеся, що дозволи наступних папок та файлів дозволяють читання та запис.
 
-3. Для Linux/Unix переконайтеся, що папки та файли доступні для запису.
+       config.php
+       admin/config.php
 
-		chmod 0755 or 0777 system/storage/cache/
-		chmod 0755 or 0777 system/storage/download/
-		chmod 0755 or 0777 system/storage/logs/
-		chmod 0755 or 0777 system/storage/modification/
-		chmod 0755 or 0777 system/storage/session/
-		chmod 0755 or 0777 system/storage/upload/
-		chmod 0755 or 0777 system/storage/vendor/
-		chmod 0755 or 0777 image/
-		chmod 0755 or 0777 image/cache/
-		chmod 0755 or 0777 image/catalog/
-		chmod 0755 or 0777 config.php
-		chmod 0755 or 0777 admin/config.php
+4. Переконайтеся, що у вас встановлена база даних MySQL з призначеним користувачем
+    * НЕ використовуйте ваше `root` ім'я користувача та пароль
+5. Ви повинні потрапити на сторінку інсталятора. Дотримуйтесь інструкцій на екрані.
+6. Після успішного встановлення видаліть директорію /install/.
 
-		Якщо при правах 0755 не працює, спробуйте 0777.
+## Локальне встановлення
 
-4. Упевніться, що у вас встановлено базу даних MySQL і ви маєте доступ до неї. НІ ЗА ЯКИХ ОБСТАВ НЕ ВИКОРИСТОВУЙТЕ ROOT ЛОГІН ТА ПАРОЛЬ.
+Існує багато веб-серверів "все в одному", і більшість з них повинні працювати з OpenCart/ocStore одразу після встановлення.
 
-5. Завітайте на домашню сторінку свого магазину.
-Наприклад: http://www.example.com або http://www.examle.com/store/
+Деякі приклади...
 
-6. Дотримуйтесь інструкцій на екрані.
+* http://www.apachefriends.org/en/xampp.html
+* http://www.ampps.com/
+* http://www.usbwebserver.net
+* http://www.wampserver.com/en/
 
-7. Видаліть папку для встановлення.
+## Примітки
 
-8. Якщо ви завантажили скомпільовану версію з папкою Vendor, то вона повинна бути завантажена вище кореневої директорії (у тій же папці, де public_html або httpdocs)
+### Проблеми з Godaddy
 
-Встановлення на Windows -
+Якщо ваш хостинг на godaddy, можливо, вам доведеться перейменувати php.ini на user.ini
 
-1. Завантажте всі файли та папки на свій сервер із папки «Upload». Їх можна розпакувати у будь-яке місце на ваш вибір. Наприклад /wwwroot/store або /wwwroot
+Схоже, що godaddy почав змінювати стандартні назви файлів у галузі.
 
-2. Перейменуйте config-dist.php на config.php і admin/config-dist.php на admin/config.php
+### Детальні дозволи для файлів (для Linux/Unix)
 
-3. Для Windows переконайтеся, що папки та файли доступні для запису.
+   	chmod 0755 або 0777 system/storage/cache/
+   	chmod 0755 або 0777 system/storage/download/
+   	chmod 0755 або 0777 system/storage/logs/
+   	chmod 0755 або 0777 system/storage/modification/
+   	chmod 0755 або 0777 system/storage/session/
+   	chmod 0755 або 0777 system/storage/upload/
+   	chmod 0755 або 0777 system/storage/vendor/
+   	chmod 0755 або 0777 image/
+   	chmod 0755 або 0777 image/cache/
+   	chmod 0755 або 0777 image/catalog/
+   	chmod 0755 або 0777 config.php
+   	chmod 0755 або 0777 admin/config.php
 
-		system/storage/cache/
-		system/storage/download/
-		system/storage/logs/
-		system/storage/modification/
-		system/storage/session/
-		system/storage/upload/
-		system/storage/vendor/
-		image/
-		image/cache/
-		image/catalog/
-		config.php
-		admin/config.php
-
-4. Переконайтеся, що у Вас встановлена база даних MySQL і Ви маєте доступ до неї. НІ В ЯКОМУ РАЗІ НЕ ВИКОРИСТОВУЙТЕ ROOT ЛОГІН І ПАРОЛЬ.
-
-5. Завітайте на домашню сторінку Вашого магазину.
-    Наприклад: http://www.example.com або http://www.examle.com/store/
-
-6. Виконуйте вказівки на екрані.
-
-7. Видаліть інсталяційну директорію.
+   	Якщо при правах 0755 не працює, спробуйте 0777.
 
 ----------------------------
-COMPOSER OR NOT TO COMPOSER
-----------------------------
-From version 2.2 composer has been added to aid developers who want to use composer libraries. 2 versions of OpenCart
-will become available, one compiled and one non-compiled (composer.json only - no files in vendor folder).
 
-We STRONGLY advise leaving the vendor folder outside of the webroot - so files cannot be accessed directly.
+## Підготовка до роботи
+Коли ваш сайт готовий до роботи, відкрийте файл system/config/default.php
 
-Composer installing is extremely simple - https://getcomposer.org
+**Знайдіть:**
+
+`$_['error_display'] = true;`
+
+**Замініть на:**
+
+`$_['error_display'] = false;`
+
+## COMPOSER АБО НЕ COMPOSER
+
+Починаючи з __версії 2.2 додано composer__ для допомоги розробникам, які хочуть використовувати бібліотеки composer. Стануть доступними 2 версії OpenCart/ocStore:
+одна скомпільована та одна нескомпільована (тільки composer.json - немає файлів у папці vendor).
+
+Ми НАСТІЙНО __радимо залишати папку vendor поза кореневою директорією__ - щоб файли не були доступні напряму.
+
+### Як встановити Composer
+
+Встановлення надзвичайно просте, дотримуйтесь інструкцій [ТУТ](https://getcomposer.org/download/)

@@ -13,6 +13,8 @@ Disallow: /download
 Disallow: /system
 Disallow: /search
 Disallow: */storage/
+Disallow: /*?page=$
+Disallow: /*&page=$
 Disallow: /*?sort=
 Disallow: /*&sort=
 Disallow: /*?order=
@@ -43,5 +45,5 @@ Allow: *.ttf
 Allow: *.woff
 Allow: *.woff2
 
-# При включенном SeoPro, раскомментировать строку Sitemap и подставить Ваш адрес сайта
+# При увімкненому SeoPro, розкоментувати рядок Sitemap і підставити Вашу адресу сайту
 # Sitemap: https://site.com/sitemap.xml

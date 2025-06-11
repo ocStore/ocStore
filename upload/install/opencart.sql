@@ -14,20 +14,20 @@ SET sql_mode = '';
 
 DROP TABLE IF EXISTS `oc_address`;
 CREATE TABLE `oc_address` (
-`address_id` int(11) NOT NULL AUTO_INCREMENT,
-`customer_id` int(11) NOT NULL,
-`firstname` varchar(32) NOT NULL,
-`lastname` varchar(32) NOT NULL,
-`company` varchar(40) NOT NULL,
-`address_1` varchar(128) NOT NULL,
-`address_2` varchar(128) NOT NULL,
-`city` varchar(128) NOT NULL,
-`postcode` varchar(10) NOT NULL,
-`country_id` int(11) NOT NULL DEFAULT '0',
-`zone_id` int(11) NOT NULL DEFAULT '0',
-`custom_field` text NOT NULL,
-PRIMARY KEY (`address_id`),
-KEY `customer_id` (`customer_id`)
+  `address_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `firstname` varchar(32) NOT NULL,
+  `lastname` varchar(32) NOT NULL,
+  `company` varchar(40) NOT NULL,
+  `address_1` varchar(128) NOT NULL,
+  `address_2` varchar(128) NOT NULL,
+  `city` varchar(128) NOT NULL,
+  `postcode` varchar(10) NOT NULL,
+  `country_id` int(11) NOT NULL DEFAULT '0',
+  `zone_id` int(11) NOT NULL DEFAULT '0',
+  `custom_field` text NOT NULL,
+  PRIMARY KEY (`address_id`),
+  KEY `customer_id` (`customer_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -38,17 +38,17 @@ KEY `customer_id` (`customer_id`)
 
 DROP TABLE IF EXISTS `oc_googleshopping_target`;
 CREATE TABLE `oc_googleshopping_target` (
-`advertise_google_target_id` int(11) UNSIGNED NOT NULL,
-`store_id` int(11) NOT NULL DEFAULT '0',
-`campaign_name` varchar(255) NOT NULL DEFAULT '',
-`country` varchar(2) NOT NULL DEFAULT '',
-`budget` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`feeds` text NOT NULL,
-`status` enum('paused','active') NOT NULL DEFAULT 'paused',
-`date_added` DATE,
-`roas` INT(11) NOT NULL DEFAULT '0',
-PRIMARY KEY (`advertise_google_target_id`),
-KEY `store_id` (`store_id`)
+  `advertise_google_target_id` int(11) UNSIGNED NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  `campaign_name` varchar(255) NOT NULL DEFAULT '',
+  `country` varchar(2) NOT NULL DEFAULT '',
+  `budget` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `feeds` text NOT NULL,
+  `status` enum('paused','active') NOT NULL DEFAULT 'paused',
+  `date_added` DATE,
+  `roas` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`advertise_google_target_id`),
+  KEY `store_id` (`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
@@ -59,13 +59,13 @@ KEY `store_id` (`store_id`)
 
 DROP TABLE IF EXISTS `oc_api`;
 CREATE TABLE `oc_api` (
-`api_id` int(11) NOT NULL AUTO_INCREMENT,
-`username` varchar(64) NOT NULL,
-`key` text NOT NULL,
-`status` tinyint(1) NOT NULL,
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`api_id`)
+  `api_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) NOT NULL,
+  `key` text NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`api_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -76,10 +76,10 @@ PRIMARY KEY (`api_id`)
 
 DROP TABLE IF EXISTS `oc_api_ip`;
 CREATE TABLE `oc_api_ip` (
-`api_ip_id` int(11) NOT NULL AUTO_INCREMENT,
-`api_id` int(11) NOT NULL,
-`ip` varchar(40) NOT NULL,
-PRIMARY KEY (`api_ip_id`)
+  `api_ip_id` int(11) NOT NULL AUTO_INCREMENT,
+  `api_id` int(11) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  PRIMARY KEY (`api_ip_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -90,13 +90,13 @@ PRIMARY KEY (`api_ip_id`)
 
 DROP TABLE IF EXISTS `oc_api_session`;
 CREATE TABLE `oc_api_session` (
-`api_session_id` int(11) NOT NULL AUTO_INCREMENT,
-`api_id` int(11) NOT NULL,
-`session_id` varchar(32) NOT NULL,
-`ip` varchar(40) NOT NULL,
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`api_session_id`)
+  `api_session_id` int(11) NOT NULL AUTO_INCREMENT,
+  `api_id` int(11) NOT NULL,
+  `session_id` varchar(32) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`api_session_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -107,10 +107,10 @@ PRIMARY KEY (`api_session_id`)
 
 DROP TABLE IF EXISTS `oc_attribute`;
 CREATE TABLE `oc_attribute` (
-`attribute_id` int(11) NOT NULL AUTO_INCREMENT,
-`attribute_group_id` int(11) NOT NULL,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`attribute_id`)
+  `attribute_id` int(11) NOT NULL AUTO_INCREMENT,
+  `attribute_group_id` int(11) NOT NULL,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`attribute_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -138,10 +138,10 @@ INSERT INTO `oc_attribute` (`attribute_id`, `attribute_group_id`, `sort_order`) 
 
 DROP TABLE IF EXISTS `oc_attribute_description`;
 CREATE TABLE `oc_attribute_description` (
-`attribute_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(64) NOT NULL,
-PRIMARY KEY (`attribute_id`,`language_id`)
+  `attribute_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`attribute_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -180,9 +180,9 @@ INSERT INTO `oc_attribute_description` (`attribute_id`, `language_id`, `name`) V
 
 DROP TABLE IF EXISTS `oc_attribute_group`;
 CREATE TABLE `oc_attribute_group` (
-`attribute_group_id` int(11) NOT NULL AUTO_INCREMENT,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`attribute_group_id`)
+  `attribute_group_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`attribute_group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -203,10 +203,10 @@ INSERT INTO `oc_attribute_group` (`attribute_group_id`, `sort_order`) VALUES
 
 DROP TABLE IF EXISTS `oc_attribute_group_description`;
 CREATE TABLE `oc_attribute_group_description` (
-`attribute_group_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(64) NOT NULL,
-PRIMARY KEY (`attribute_group_id`,`language_id`)
+  `attribute_group_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`attribute_group_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -231,10 +231,10 @@ INSERT INTO `oc_attribute_group_description` (`attribute_group_id`, `language_id
 
 DROP TABLE IF EXISTS `oc_banner`;
 CREATE TABLE `oc_banner` (
-`banner_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(64) NOT NULL,
-`status` tinyint(1) NOT NULL,
-PRIMARY KEY (`banner_id`)
+  `banner_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  PRIMARY KEY (`banner_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -254,14 +254,14 @@ INSERT INTO `oc_banner` (`banner_id`, `name`, `status`) VALUES
 
 DROP TABLE IF EXISTS `oc_banner_image`;
 CREATE TABLE `oc_banner_image` (
-`banner_image_id` int(11) NOT NULL AUTO_INCREMENT,
-`banner_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`title` varchar(64) NOT NULL,
-`link` varchar(255) NOT NULL,
-`image` varchar(255) NOT NULL,
-`sort_order` int(3) NOT NULL DEFAULT '0',
-PRIMARY KEY (`banner_image_id`)
+  `banner_image_id` int(11) NOT NULL AUTO_INCREMENT,
+  `banner_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `title` varchar(64) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `sort_order` int(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`banner_image_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -306,17 +306,17 @@ INSERT INTO `oc_banner_image` (`banner_image_id`, `banner_id`, `language_id`, `t
 
 DROP TABLE IF EXISTS `oc_cart`;
 CREATE TABLE `oc_cart` (
-`cart_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-`api_id` int(11) NOT NULL,
-`customer_id` int(11) NOT NULL,
-`session_id` varchar(32) NOT NULL,
-`product_id` int(11) NOT NULL,
-`recurring_id` int(11) NOT NULL,
-`option` text NOT NULL,
-`quantity` int(5) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`cart_id`),
-KEY `cart_id` (`api_id`,`customer_id`,`session_id`,`product_id`,`recurring_id`)
+  `cart_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `api_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `session_id` varchar(32) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `recurring_id` int(11) NOT NULL,
+  `option` text NOT NULL,
+  `quantity` int(5) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`cart_id`),
+  KEY `cart_id` (`api_id`,`customer_id`,`session_id`,`product_id`,`recurring_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -327,18 +327,18 @@ KEY `cart_id` (`api_id`,`customer_id`,`session_id`,`product_id`,`recurring_id`)
 
 DROP TABLE IF EXISTS `oc_category`;
 CREATE TABLE `oc_category` (
-`category_id` int(11) NOT NULL AUTO_INCREMENT,
-`image` varchar(255) DEFAULT NULL,
-`parent_id` int(11) NOT NULL DEFAULT '0',
-`top` tinyint(1) NOT NULL,
-`column` int(3) NOT NULL,
-`sort_order` int(3) NOT NULL DEFAULT '0',
-`status` tinyint(1) NOT NULL,
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-`noindex` tinyint(1) NOT NULL DEFAULT '1',
-PRIMARY KEY (`category_id`),
-KEY `parent_id` (`parent_id`)
+  `category_id` int(11) NOT NULL AUTO_INCREMENT,
+  `image` varchar(255) DEFAULT NULL,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `top` tinyint(1) NOT NULL,
+  `column` int(3) NOT NULL,
+  `sort_order` int(3) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  `noindex` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`category_id`),
+  KEY `parent_id` (`parent_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -385,7 +385,7 @@ INSERT INTO `oc_category` (`category_id`, `image`, `parent_id`, `top`, `column`,
 (57, '', 0, 1, 1, 3, 1, '2011-04-26 08:53:16', '2011-05-30 12:15:05', 1),
 (58, '', 52, 0, 0, 0, 1, '2011-05-08 13:44:16', '2011-05-08 13:44:16', 1);
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_category_description`
@@ -393,16 +393,16 @@ INSERT INTO `oc_category` (`category_id`, `image`, `parent_id`, `top`, `column`,
 
 DROP TABLE IF EXISTS `oc_category_description`;
 CREATE TABLE `oc_category_description` (
-`category_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(255) NOT NULL,
-`description` text NOT NULL,
-`meta_title` varchar(255) NOT NULL,
-`meta_description` varchar(255) NOT NULL,
-`meta_keyword` varchar(255) NOT NULL,
-`meta_h1` varchar(255) NOT NULL,
-PRIMARY KEY (`category_id`,`language_id`),
-KEY `name` (`name`)
+  `category_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `meta_title` varchar(255) NOT NULL,
+  `meta_description` varchar(255) NOT NULL,
+  `meta_keyword` varchar(255) NOT NULL,
+  `meta_h1` varchar(255) NOT NULL,
+  PRIMARY KEY (`category_id`,`language_id`),
+  KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -487,7 +487,7 @@ INSERT INTO `oc_category_description` (`category_id`, `language_id`, `name`, `de
 (41, 2, 'test 8', '', '', '', '', ''),
 (42, 2, 'test 9', '', '', '', '', '');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_category_filter`
@@ -495,9 +495,9 @@ INSERT INTO `oc_category_description` (`category_id`, `language_id`, `name`, `de
 
 DROP TABLE IF EXISTS `oc_category_filter`;
 CREATE TABLE `oc_category_filter` (
-`category_id` int(11) NOT NULL,
-`filter_id` int(11) NOT NULL,
-PRIMARY KEY (`category_id`,`filter_id`)
+  `category_id` int(11) NOT NULL,
+  `filter_id` int(11) NOT NULL,
+  PRIMARY KEY (`category_id`,`filter_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -508,10 +508,10 @@ PRIMARY KEY (`category_id`,`filter_id`)
 
 DROP TABLE IF EXISTS `oc_category_path`;
 CREATE TABLE `oc_category_path` (
-`category_id` int(11) NOT NULL,
-`path_id` int(11) NOT NULL,
-`level` int(11) NOT NULL,
-PRIMARY KEY (`category_id`,`path_id`)
+  `category_id` int(11) NOT NULL,
+  `path_id` int(11) NOT NULL,
+  `level` int(11) NOT NULL,
+  PRIMARY KEY (`category_id`,`path_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -599,11 +599,11 @@ INSERT INTO `oc_category_path` (`category_id`, `path_id`, `level`) VALUES
 
 DROP TABLE IF EXISTS `oc_googleshopping_category`;
 CREATE TABLE `oc_googleshopping_category` (
-`google_product_category` varchar(10) NOT NULL,
-`store_id` int(11) NOT NULL DEFAULT '0',
-`category_id` int(11) NOT NULL,
-PRIMARY KEY (`google_product_category`,`store_id`),
-KEY `category_id_store_id` (`category_id`,`store_id`)
+  `google_product_category` varchar(10) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  `category_id` int(11) NOT NULL,
+  PRIMARY KEY (`google_product_category`,`store_id`),
+  KEY `category_id_store_id` (`category_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
@@ -614,10 +614,10 @@ KEY `category_id_store_id` (`category_id`,`store_id`)
 
 DROP TABLE IF EXISTS `oc_category_to_layout`;
 CREATE TABLE `oc_category_to_layout` (
-`category_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL,
-`layout_id` int(11) NOT NULL,
-PRIMARY KEY (`category_id`,`store_id`)
+  `category_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL,
+  `layout_id` int(11) NOT NULL,
+  PRIMARY KEY (`category_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -628,9 +628,9 @@ PRIMARY KEY (`category_id`,`store_id`)
 
 DROP TABLE IF EXISTS `oc_category_to_store`;
 CREATE TABLE `oc_category_to_store` (
-`category_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL,
-PRIMARY KEY (`category_id`,`store_id`)
+  `category_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL,
+  PRIMARY KEY (`category_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -685,14 +685,14 @@ INSERT INTO `oc_category_to_store` (`category_id`, `store_id`) VALUES
 
 DROP TABLE IF EXISTS `oc_country`;
 CREATE TABLE `oc_country` (
-`country_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(128) NOT NULL,
-`iso_code_2` varchar(2) NOT NULL,
-`iso_code_3` varchar(3) NOT NULL,
-`address_format` text NOT NULL,
-`postcode_required` tinyint(1) NOT NULL,
-`status` tinyint(1) NOT NULL DEFAULT '1',
-PRIMARY KEY (`country_id`)
+  `country_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL,
+  `iso_code_2` varchar(2) NOT NULL,
+  `iso_code_3` varchar(3) NOT NULL,
+  `address_format` text NOT NULL,
+  `postcode_required` tinyint(1) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`country_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -710,16 +710,16 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 (8, 'Antarctica', 'AQ', 'ATA', '', 0, 1),
 (9, 'Antigua and Barbuda', 'AG', 'ATG', '', 0, 1),
 (10, 'Argentina', 'AR', 'ARG', '', 0, 1),
-(11, 'Армения', 'AM', 'ARM', '', 0, 1),
+(11, 'Armenia', 'AM', 'ARM', '', 0, 1),
 (12, 'Aruba', 'AW', 'ABW', '', 0, 1),
 (13, 'Australia', 'AU', 'AUS', '', 0, 1),
 (14, 'Austria', 'AT', 'AUT', '', 0, 1),
-(15, 'Азербайджан', 'AZ', 'AZE', '', 0, 1),
+(15, 'Azerbaijan', 'AZ', 'AZE', '', 0, 1),
 (16, 'Bahamas', 'BS', 'BHS', '', 0, 1),
 (17, 'Bahrain', 'BH', 'BHR', '', 0, 1),
 (18, 'Bangladesh', 'BD', 'BGD', '', 0, 1),
 (19, 'Barbados', 'BB', 'BRB', '', 0, 1),
-(20, 'Беларусь', 'BY', 'BLR', '', 0, 1),
+(20, 'Belarus', 'BY', 'BLR', '', 0, 1),
 (21, 'Belgium', 'BE', 'BEL', '{firstname} {lastname}\r\n{company}\r\n{address_1}\r\n{address_2}\r\n{postcode} {city}\r\n{country}', 0, 1),
 (22, 'Belize', 'BZ', 'BLZ', '', 0, 1),
 (23, 'Benin', 'BJ', 'BEN', '', 0, 1),
@@ -778,7 +778,7 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 (77, 'French Southern Territories', 'TF', 'ATF', '', 0, 1),
 (78, 'Gabon', 'GA', 'GAB', '', 0, 1),
 (79, 'Gambia', 'GM', 'GMB', '', 0, 1),
-(80, 'Грузия', 'GE', 'GEO', '', 0, 1),
+(80, 'Georgia', 'GE', 'GEO', '', 0, 1),
 (81, 'Germany', 'DE', 'DEU', '{company}\r\n{firstname} {lastname}\r\n{address_1}\r\n{address_2}\r\n{postcode} {city}\r\n{country}', 1, 1),
 (82, 'Ghana', 'GH', 'GHA', '', 0, 1),
 (83, 'Gibraltar', 'GI', 'GIB', '', 0, 1),
@@ -807,13 +807,13 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 (106, 'Jamaica', 'JM', 'JAM', '', 0, 1),
 (107, 'Japan', 'JP', 'JPN', '', 0, 1),
 (108, 'Jordan', 'JO', 'JOR', '', 0, 1),
-(109, 'Казахстан', 'KZ', 'KAZ', '', 0, 1),
+(109, 'Kazakhstan', 'KZ', 'KAZ', '', 0, 1),
 (110, 'Kenya', 'KE', 'KEN', '', 0, 1),
 (111, 'Kiribati', 'KI', 'KIR', '', 0, 1),
 (112, 'North Korea', 'KP', 'PRK', '', 0, 1),
 (113, 'South Korea', 'KR', 'KOR', '', 0, 1),
 (114, 'Kuwait', 'KW', 'KWT', '', 0, 1),
-(115, 'Кыргызстан', 'KG', 'KGZ', '', 0, 1),
+(115, 'Kyrgyzstan', 'KG', 'KGZ', '', 0, 1),
 (116, 'Lao People''s Democratic Republic', 'LA', 'LAO', '', 0, 1),
 (117, 'Latvia', 'LV', 'LVA', '', 0, 1),
 (118, 'Lebanon', 'LB', 'LBN', '', 0, 1),
@@ -838,7 +838,7 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 (137, 'Mayotte', 'YT', 'MYT', '', 0, 1),
 (138, 'Mexico', 'MX', 'MEX', '', 0, 1),
 (139, 'Micronesia, Federated States of', 'FM', 'FSM', '', 0, 1),
-(140, 'Молдова', 'MD', 'MDA', '', 0, 1),
+(140, 'Moldova, Republic of', 'MD', 'MDA', '', 0, 1),
 (141, 'Monaco', 'MC', 'MCO', '', 0, 1),
 (142, 'Mongolia', 'MN', 'MNG', '', 0, 1),
 (143, 'Montserrat', 'MS', 'MSR', '', 0, 1),
@@ -924,7 +924,7 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 (223, 'United States', 'US', 'USA', '{firstname} {lastname}\r\n{company}\r\n{address_1}\r\n{address_2}\r\n{city}, {zone} {postcode}\r\n{country}', 0, 1),
 (224, 'United States Minor Outlying Islands', 'UM', 'UMI', '', 0, 1),
 (225, 'Uruguay', 'UY', 'URY', '', 0, 1),
-(226, 'Узбекистан', 'UZ', 'UZB', '', 0, 1),
+(226, 'Uzbekistan', 'UZ', 'UZB', '', 0, 1),
 (227, 'Vanuatu', 'VU', 'VUT', '', 0, 1),
 (228, 'Vatican City State (Holy See)', 'VA', 'VAT', '', 0, 1),
 (229, 'Venezuela', 'VE', 'VEN', '', 0, 1),
@@ -954,7 +954,7 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 (256, 'Guernsey', 'GG', 'GGY', '', 0, 1),
 (257, 'Jersey', 'JE', 'JEY', '', 0, 1);
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_coupon`
@@ -962,21 +962,21 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 
 DROP TABLE IF EXISTS `oc_coupon`;
 CREATE TABLE `oc_coupon` (
-`coupon_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(128) NOT NULL,
-`code` varchar(20) NOT NULL,
-`type` char(1) NOT NULL,
-`discount` decimal(15,4) NOT NULL,
-`logged` tinyint(1) NOT NULL,
-`shipping` tinyint(1) NOT NULL,
-`total` decimal(15,4) NOT NULL,
-`date_start` date NOT NULL DEFAULT '0000-00-00',
-`date_end` date NOT NULL DEFAULT '0000-00-00',
-`uses_total` int(11) NOT NULL,
-`uses_customer` varchar(11) NOT NULL,
-`status` tinyint(1) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`coupon_id`)
+  `coupon_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL,
+  `code` varchar(20) NOT NULL,
+  `type` char(1) NOT NULL,
+  `discount` decimal(15,4) NOT NULL,
+  `logged` tinyint(1) NOT NULL,
+  `shipping` tinyint(1) NOT NULL,
+  `total` decimal(15,4) NOT NULL,
+  `date_start` date NOT NULL DEFAULT '0000-00-00',
+  `date_end` date NOT NULL DEFAULT '0000-00-00',
+  `uses_total` int(11) NOT NULL,
+  `uses_customer` varchar(11) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`coupon_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -996,9 +996,9 @@ INSERT INTO `oc_coupon` (`coupon_id`, `name`, `code`, `type`, `discount`, `logge
 
 DROP TABLE IF EXISTS `oc_coupon_category`;
 CREATE TABLE `oc_coupon_category` (
-`coupon_id` int(11) NOT NULL,
-`category_id` int(11) NOT NULL,
-PRIMARY KEY (`coupon_id`,`category_id`)
+  `coupon_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  PRIMARY KEY (`coupon_id`,`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1009,13 +1009,13 @@ PRIMARY KEY (`coupon_id`,`category_id`)
 
 DROP TABLE IF EXISTS `oc_coupon_history`;
 CREATE TABLE `oc_coupon_history` (
-`coupon_history_id` int(11) NOT NULL AUTO_INCREMENT,
-`coupon_id` int(11) NOT NULL,
-`order_id` int(11) NOT NULL,
-`customer_id` int(11) NOT NULL,
-`amount` decimal(15,4) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`coupon_history_id`)
+  `coupon_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `coupon_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `amount` decimal(15,4) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`coupon_history_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1026,10 +1026,10 @@ PRIMARY KEY (`coupon_history_id`)
 
 DROP TABLE IF EXISTS `oc_coupon_product`;
 CREATE TABLE `oc_coupon_product` (
-`coupon_product_id` int(11) NOT NULL AUTO_INCREMENT,
-`coupon_id` int(11) NOT NULL,
-`product_id` int(11) NOT NULL,
-PRIMARY KEY (`coupon_product_id`)
+  `coupon_product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `coupon_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  PRIMARY KEY (`coupon_product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1040,16 +1040,16 @@ PRIMARY KEY (`coupon_product_id`)
 
 DROP TABLE IF EXISTS `oc_currency`;
 CREATE TABLE `oc_currency` (
-`currency_id` int(11) NOT NULL AUTO_INCREMENT,
-`title` varchar(32) NOT NULL,
-`code` varchar(3) NOT NULL,
-`symbol_left` varchar(12) NOT NULL,
-`symbol_right` varchar(12) NOT NULL,
-`decimal_place` char(1) NOT NULL,
-`value` double(15,8) NOT NULL,
-`status` tinyint(1) NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`currency_id`)
+  `currency_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(32) NOT NULL,
+  `code` varchar(3) NOT NULL,
+  `symbol_left` varchar(12) NOT NULL,
+  `symbol_right` varchar(12) NOT NULL,
+  `decimal_place` char(1) NOT NULL,
+  `value` double(15,8) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`currency_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1069,29 +1069,29 @@ INSERT INTO `oc_currency` (`currency_id`, `title`, `code`, `symbol_left`, `symbo
 
 DROP TABLE IF EXISTS `oc_customer`;
 CREATE TABLE `oc_customer` (
-`customer_id` int(11) NOT NULL AUTO_INCREMENT,
-`customer_group_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL DEFAULT '0',
-`language_id` int(11) NOT NULL,
-`firstname` varchar(32) NOT NULL,
-`lastname` varchar(32) NOT NULL,
-`email` varchar(96) NOT NULL,
-`telephone` varchar(32) NOT NULL,
-`fax` varchar(32) NOT NULL,
-`password` varchar(40) NOT NULL,
-`salt` varchar(9) NOT NULL,
-`cart` text,
-`wishlist` text,
-`newsletter` tinyint(1) NOT NULL DEFAULT '0',
-`address_id` int(11) NOT NULL DEFAULT '0',
-`custom_field` text NOT NULL,
-`ip` varchar(40) NOT NULL,
-`status` tinyint(1) NOT NULL,
-`safe` tinyint(1) NOT NULL,
-`token` text NOT NULL,
-`code` varchar(40) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_id`)
+  `customer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_group_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  `language_id` int(11) NOT NULL,
+  `firstname` varchar(32) NOT NULL,
+  `lastname` varchar(32) NOT NULL,
+  `email` varchar(96) NOT NULL,
+  `telephone` varchar(32) NOT NULL,
+  `fax` varchar(32) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `salt` varchar(9) NOT NULL,
+  `cart` text,
+  `wishlist` text,
+  `newsletter` tinyint(1) NOT NULL DEFAULT '0',
+  `address_id` int(11) NOT NULL DEFAULT '0',
+  `custom_field` text NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `safe` tinyint(1) NOT NULL,
+  `token` text NOT NULL,
+  `code` varchar(40) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1102,13 +1102,13 @@ PRIMARY KEY (`customer_id`)
 
 DROP TABLE IF EXISTS `oc_customer_activity`;
 CREATE TABLE `oc_customer_activity` (
-`customer_activity_id` int(11) NOT NULL AUTO_INCREMENT,
-`customer_id` int(11) NOT NULL,
-`key` varchar(64) NOT NULL,
-`data` text NOT NULL,
-`ip` varchar(40) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_activity_id`)
+  `customer_activity_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `key` varchar(64) NOT NULL,
+  `data` text NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_activity_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1119,24 +1119,24 @@ PRIMARY KEY (`customer_activity_id`)
 
 DROP TABLE IF EXISTS `oc_customer_affiliate`;
 CREATE TABLE `oc_customer_affiliate` (
-`customer_id` int(11) NOT NULL,
-`company` varchar(40) NOT NULL,
-`website` varchar(255) NOT NULL,
-`tracking` varchar(64) NOT NULL,
-`commission` decimal(4,2) NOT NULL DEFAULT '0.00',
-`tax` varchar(64) NOT NULL,
-`payment` varchar(6) NOT NULL,
-`cheque` varchar(100) NOT NULL,
-`paypal` varchar(64) NOT NULL,
-`bank_name` varchar(64) NOT NULL,
-`bank_branch_number` varchar(64) NOT NULL,
-`bank_swift_code` varchar(64) NOT NULL,
-`bank_account_name` varchar(64) NOT NULL,
-`bank_account_number` varchar(64) NOT NULL,
-`custom_field` text NOT NULL,
-`status` tinyint(1) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_id`)
+  `customer_id` int(11) NOT NULL,
+  `company` varchar(40) NOT NULL,
+  `website` varchar(255) NOT NULL,
+  `tracking` varchar(64) NOT NULL,
+  `commission` decimal(4,2) NOT NULL DEFAULT '0.00',
+  `tax` varchar(64) NOT NULL,
+  `payment` varchar(6) NOT NULL,
+  `cheque` varchar(100) NOT NULL,
+  `paypal` varchar(64) NOT NULL,
+  `bank_name` varchar(64) NOT NULL,
+  `bank_branch_number` varchar(64) NOT NULL,
+  `bank_swift_code` varchar(64) NOT NULL,
+  `bank_account_name` varchar(64) NOT NULL,
+  `bank_account_number` varchar(64) NOT NULL,
+  `custom_field` text NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1147,11 +1147,11 @@ PRIMARY KEY (`customer_id`)
 
 DROP TABLE IF EXISTS `oc_customer_approval`;
 CREATE TABLE `oc_customer_approval` (
-`customer_approval_id` int(11) NOT NULL AUTO_INCREMENT,
-`customer_id` int(11) NOT NULL,
-`type` varchar(9) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_approval_id`)
+  `customer_approval_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `type` varchar(9) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_approval_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1162,10 +1162,10 @@ PRIMARY KEY (`customer_approval_id`)
 
 DROP TABLE IF EXISTS `oc_customer_group`;
 CREATE TABLE `oc_customer_group` (
-`customer_group_id` int(11) NOT NULL AUTO_INCREMENT,
-`approval` int(1) NOT NULL,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`customer_group_id`)
+  `customer_group_id` int(11) NOT NULL AUTO_INCREMENT,
+  `approval` int(1) NOT NULL,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`customer_group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1183,11 +1183,11 @@ INSERT INTO `oc_customer_group` (`customer_group_id`, `approval`, `sort_order`) 
 
 DROP TABLE IF EXISTS `oc_customer_group_description`;
 CREATE TABLE `oc_customer_group_description` (
-`customer_group_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(32) NOT NULL,
-`description` text NOT NULL,
-PRIMARY KEY (`customer_group_id`,`language_id`)
+  `customer_group_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`customer_group_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1206,11 +1206,11 @@ INSERT INTO `oc_customer_group_description` (`customer_group_id`, `language_id`,
 
 DROP TABLE IF EXISTS `oc_customer_history`;
 CREATE TABLE `oc_customer_history` (
-`customer_history_id` int(11) NOT NULL AUTO_INCREMENT,
-`customer_id` int(11) NOT NULL,
-`comment` text NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_history_id`)
+  `customer_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `comment` text NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_history_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1221,15 +1221,15 @@ PRIMARY KEY (`customer_history_id`)
 
 DROP TABLE IF EXISTS `oc_customer_login`;
 CREATE TABLE `oc_customer_login` (
-`customer_login_id` int(11) NOT NULL AUTO_INCREMENT,
-`email` varchar(96) NOT NULL,
-`ip` varchar(40) NOT NULL,
-`total` int(4) NOT NULL,
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`customer_login_id`),
-KEY `email` (`email`),
-KEY `ip` (`ip`)
+  `customer_login_id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(96) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `total` int(4) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`customer_login_id`),
+  KEY `email` (`email`),
+  KEY `ip` (`ip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1240,12 +1240,12 @@ KEY `ip` (`ip`)
 
 DROP TABLE IF EXISTS `oc_customer_ip`;
 CREATE TABLE `oc_customer_ip` (
-`customer_ip_id` int(11) NOT NULL AUTO_INCREMENT,
-`customer_id` int(11) NOT NULL,
-`ip` varchar(40) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_ip_id`),
-KEY `ip` (`ip`)
+  `customer_ip_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_ip_id`),
+  KEY `ip` (`ip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1256,12 +1256,12 @@ KEY `ip` (`ip`)
 
 DROP TABLE IF EXISTS `oc_customer_online`;
 CREATE TABLE `oc_customer_online` (
-`ip` varchar(40) NOT NULL,
-`customer_id` int(11) NOT NULL,
-`url` text NOT NULL,
-`referer` text NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`ip`)
+  `ip` varchar(40) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `url` text NOT NULL,
+  `referer` text NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`ip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1272,13 +1272,13 @@ PRIMARY KEY (`ip`)
 
 DROP TABLE IF EXISTS `oc_customer_reward`;
 CREATE TABLE `oc_customer_reward` (
-`customer_reward_id` int(11) NOT NULL AUTO_INCREMENT,
-`customer_id` int(11) NOT NULL DEFAULT '0',
-`order_id` int(11) NOT NULL DEFAULT '0',
-`description` text NOT NULL,
-`points` int(8) NOT NULL DEFAULT '0',
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_reward_id`)
+  `customer_reward_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL DEFAULT '0',
+  `order_id` int(11) NOT NULL DEFAULT '0',
+  `description` text NOT NULL,
+  `points` int(8) NOT NULL DEFAULT '0',
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_reward_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1289,13 +1289,13 @@ PRIMARY KEY (`customer_reward_id`)
 
 DROP TABLE IF EXISTS `oc_customer_transaction`;
 CREATE TABLE `oc_customer_transaction` (
-`customer_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
-`customer_id` int(11) NOT NULL,
-`order_id` int(11) NOT NULL,
-`description` text NOT NULL,
-`amount` decimal(15,4) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_transaction_id`)
+  `customer_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `amount` decimal(15,4) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_transaction_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1306,18 +1306,18 @@ PRIMARY KEY (`customer_transaction_id`)
 
 DROP TABLE IF EXISTS `oc_customer_search`;
 CREATE TABLE `oc_customer_search` (
-`customer_search_id` int(11) NOT NULL AUTO_INCREMENT,
-`store_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`customer_id` int(11) NOT NULL,
-`keyword` varchar(255) NOT NULL,
-`category_id` int(11),
-`sub_category` tinyint(1) NOT NULL,
-`description` tinyint(1) NOT NULL,
-`products` int(11) NOT NULL,
-`ip` varchar(40) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_search_id`)
+  `customer_search_id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `keyword` varchar(255) NOT NULL,
+  `category_id` int(11),
+  `sub_category` tinyint(1) NOT NULL,
+  `description` tinyint(1) NOT NULL,
+  `products` int(11) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_search_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1328,10 +1328,10 @@ PRIMARY KEY (`customer_search_id`)
 
 DROP TABLE IF EXISTS `oc_customer_wishlist`;
 CREATE TABLE `oc_customer_wishlist` (
-`customer_id` int(11) NOT NULL,
-`product_id` int(11) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`customer_id`,`product_id`)
+  `customer_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_id`,`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1342,14 +1342,14 @@ PRIMARY KEY (`customer_id`,`product_id`)
 
 DROP TABLE IF EXISTS `oc_custom_field`;
 CREATE TABLE `oc_custom_field` (
-`custom_field_id` int(11) NOT NULL AUTO_INCREMENT,
-`type` varchar(32) NOT NULL,
-`value` text NOT NULL,
-`validation` varchar(255) NOT NULL,
-`location` varchar(10) NOT NULL,
-`status` tinyint(1) NOT NULL,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`custom_field_id`)
+  `custom_field_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(32) NOT NULL,
+  `value` text NOT NULL,
+  `validation` varchar(255) NOT NULL,
+  `location` varchar(10) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`custom_field_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1360,10 +1360,10 @@ PRIMARY KEY (`custom_field_id`)
 
 DROP TABLE IF EXISTS `oc_custom_field_customer_group`;
 CREATE TABLE `oc_custom_field_customer_group` (
-`custom_field_id` int(11) NOT NULL,
-`customer_group_id` int(11) NOT NULL,
-`required` tinyint(1) NOT NULL,
-PRIMARY KEY (`custom_field_id`,`customer_group_id`)
+  `custom_field_id` int(11) NOT NULL,
+  `customer_group_id` int(11) NOT NULL,
+  `required` tinyint(1) NOT NULL,
+  PRIMARY KEY (`custom_field_id`,`customer_group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1374,10 +1374,10 @@ PRIMARY KEY (`custom_field_id`,`customer_group_id`)
 
 DROP TABLE IF EXISTS `oc_custom_field_description`;
 CREATE TABLE `oc_custom_field_description` (
-`custom_field_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(128) NOT NULL,
-PRIMARY KEY (`custom_field_id`,`language_id`)
+  `custom_field_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  PRIMARY KEY (`custom_field_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1388,10 +1388,10 @@ PRIMARY KEY (`custom_field_id`,`language_id`)
 
 DROP TABLE IF EXISTS `oc_custom_field_value`;
 CREATE TABLE `oc_custom_field_value` (
-`custom_field_value_id` int(11) NOT NULL AUTO_INCREMENT,
-`custom_field_id` int(11) NOT NULL,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`custom_field_value_id`)
+  `custom_field_value_id` int(11) NOT NULL AUTO_INCREMENT,
+  `custom_field_id` int(11) NOT NULL,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`custom_field_value_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1402,11 +1402,11 @@ PRIMARY KEY (`custom_field_value_id`)
 
 DROP TABLE IF EXISTS `oc_custom_field_value_description`;
 CREATE TABLE `oc_custom_field_value_description` (
-`custom_field_value_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`custom_field_id` int(11) NOT NULL,
-`name` varchar(128) NOT NULL,
-PRIMARY KEY (`custom_field_value_id`,`language_id`)
+  `custom_field_value_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `custom_field_id` int(11) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  PRIMARY KEY (`custom_field_value_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1417,11 +1417,11 @@ PRIMARY KEY (`custom_field_value_id`,`language_id`)
 
 DROP TABLE IF EXISTS `oc_download`;
 CREATE TABLE `oc_download` (
-`download_id` int(11) NOT NULL AUTO_INCREMENT,
-`filename` varchar(160) NOT NULL,
-`mask` varchar(128) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`download_id`)
+  `download_id` int(11) NOT NULL AUTO_INCREMENT,
+  `filename` varchar(160) NOT NULL,
+  `mask` varchar(128) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`download_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1432,10 +1432,10 @@ PRIMARY KEY (`download_id`)
 
 DROP TABLE IF EXISTS `oc_download_description`;
 CREATE TABLE `oc_download_description` (
-`download_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(64) NOT NULL,
-PRIMARY KEY (`download_id`,`language_id`)
+  `download_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`download_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1446,13 +1446,13 @@ PRIMARY KEY (`download_id`,`language_id`)
 
 DROP TABLE IF EXISTS `oc_event`;
 CREATE TABLE `oc_event` (
-`event_id` int(11) NOT NULL AUTO_INCREMENT,
-`code` varchar(64) NOT NULL,
-`trigger` text NOT NULL,
-`action` text NOT NULL,
-`status` tinyint(1) NOT NULL,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`event_id`)
+  `event_id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(64) NOT NULL,
+  `trigger` text NOT NULL,
+  `action` text NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `sort_order` int(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`event_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1558,10 +1558,10 @@ INSERT INTO `oc_event` (`event_id`, `code`, `trigger`, `action`, `status`, `sort
 
 DROP TABLE IF EXISTS `oc_extension`;
 CREATE TABLE `oc_extension` (
-`extension_id` int(11) NOT NULL AUTO_INCREMENT,
-`type` varchar(32) NOT NULL,
-`code` varchar(32) NOT NULL,
-PRIMARY KEY (`extension_id`)
+  `extension_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(32) NOT NULL,
+  `code` varchar(32) NOT NULL,
+  PRIMARY KEY (`extension_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1627,11 +1627,11 @@ INSERT INTO `oc_extension` (`extension_id`, `type`, `code`) VALUES
 
 DROP TABLE IF EXISTS `oc_extension_install`;
 CREATE TABLE `oc_extension_install` (
-`extension_install_id` int(11) NOT NULL AUTO_INCREMENT,
-`extension_download_id` int(11) NOT NULL,
-`filename` varchar(255) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`extension_install_id`)
+  `extension_install_id` int(11) NOT NULL AUTO_INCREMENT,
+  `extension_download_id` int(11) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`extension_install_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1642,11 +1642,11 @@ PRIMARY KEY (`extension_install_id`)
 
 DROP TABLE IF EXISTS `oc_extension_path`;
 CREATE TABLE `oc_extension_path` (
-`extension_path_id` int(11) NOT NULL AUTO_INCREMENT,
-`extension_install_id` int(11) NOT NULL,
-`path` varchar(255) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`extension_path_id`)
+  `extension_path_id` int(11) NOT NULL AUTO_INCREMENT,
+  `extension_install_id` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`extension_path_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1657,10 +1657,10 @@ PRIMARY KEY (`extension_path_id`)
 
 DROP TABLE IF EXISTS `oc_filter`;
 CREATE TABLE `oc_filter` (
-`filter_id` int(11) NOT NULL AUTO_INCREMENT,
-`filter_group_id` int(11) NOT NULL,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`filter_id`)
+  `filter_id` int(11) NOT NULL AUTO_INCREMENT,
+  `filter_group_id` int(11) NOT NULL,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`filter_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1671,11 +1671,11 @@ PRIMARY KEY (`filter_id`)
 
 DROP TABLE IF EXISTS `oc_filter_description`;
 CREATE TABLE `oc_filter_description` (
-`filter_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`filter_group_id` int(11) NOT NULL,
-`name` varchar(64) NOT NULL,
-PRIMARY KEY (`filter_id`,`language_id`)
+  `filter_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `filter_group_id` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`filter_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1686,9 +1686,9 @@ PRIMARY KEY (`filter_id`,`language_id`)
 
 DROP TABLE IF EXISTS `oc_filter_group`;
 CREATE TABLE `oc_filter_group` (
-`filter_group_id` int(11) NOT NULL AUTO_INCREMENT,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`filter_group_id`)
+  `filter_group_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`filter_group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1699,10 +1699,10 @@ PRIMARY KEY (`filter_group_id`)
 
 DROP TABLE IF EXISTS `oc_filter_group_description`;
 CREATE TABLE `oc_filter_group_description` (
-`filter_group_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(64) NOT NULL,
-PRIMARY KEY (`filter_group_id`,`language_id`)
+  `filter_group_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`filter_group_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1713,12 +1713,12 @@ PRIMARY KEY (`filter_group_id`,`language_id`)
 
 DROP TABLE IF EXISTS `oc_geo_zone`;
 CREATE TABLE `oc_geo_zone` (
-`geo_zone_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(32) NOT NULL,
-`description` varchar(255) NOT NULL,
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`geo_zone_id`)
+  `geo_zone_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`geo_zone_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1737,25 +1737,25 @@ INSERT INTO `oc_geo_zone` (`geo_zone_id`, `name`, `description`, `date_modified`
 
 DROP TABLE IF EXISTS `oc_information`;
 CREATE TABLE `oc_information` (
-`information_id` int(11) NOT NULL AUTO_INCREMENT,
-`bottom` int(1) NOT NULL DEFAULT '0',
-`sort_order` int(3) NOT NULL DEFAULT '0',
-`status` tinyint(1) NOT NULL DEFAULT '1',
-`noindex` tinyint(1) NOT NULL DEFAULT '1',
-PRIMARY KEY (`information_id`)
+  `information_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bottom` int(1) NOT NULL DEFAULT '0',
+  `sort_order` int(3) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `noindex` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`information_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_information`
 --
 
-INSERT INTO `oc_information` (`information_id`, `bottom`, `sort_order`, `status`, `noindex`) VALUES
-(3, 1, 3, 1, 1),
-(4, 1, 1, 1, 0),
-(5, 1, 4, 1, 1),
-(6, 1, 2, 1, 1);
+INSERT INTO `oc_information` (`information_id`, `bottom`, `sort_order`, `status`) VALUES
+(3, 1, 3, 1),
+(4, 1, 1, 1),
+(5, 1, 4, 1),
+(6, 1, 2, 1);
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_information_description`
@@ -1763,15 +1763,15 @@ INSERT INTO `oc_information` (`information_id`, `bottom`, `sort_order`, `status`
 
 DROP TABLE IF EXISTS `oc_information_description`;
 CREATE TABLE `oc_information_description` (
-`information_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`title` varchar(64) NOT NULL,
-`description` mediumtext NOT NULL,
-`meta_title` varchar(255) NOT NULL,
-`meta_description` varchar(255) NOT NULL,
-`meta_keyword` varchar(255) NOT NULL,
-`meta_h1` varchar(255) NOT NULL,
-PRIMARY KEY (`information_id`,`language_id`)
+  `information_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `title` varchar(64) NOT NULL,
+  `description` mediumtext NOT NULL,
+  `meta_title` varchar(255) NOT NULL,
+  `meta_description` varchar(255) NOT NULL,
+  `meta_keyword` varchar(255) NOT NULL,
+  `meta_h1` varchar(255) NOT NULL,
+  PRIMARY KEY (`information_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1788,7 +1788,7 @@ INSERT INTO `oc_information_description` (`information_id`, `language_id`, `titl
 (5, 2, 'Terms &amp; Conditions', '&lt;p&gt;Terms &amp;amp; Conditions&lt;br&gt;&lt;/p&gt;', '', '', '', ''),
 (3, 2, 'Privacy Policy', '&lt;p&gt;Privacy Policy&lt;br&gt;&lt;/p&gt;', '', '', '', '');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_information_to_layout`
@@ -1796,10 +1796,10 @@ INSERT INTO `oc_information_description` (`information_id`, `language_id`, `titl
 
 DROP TABLE IF EXISTS `oc_information_to_layout`;
 CREATE TABLE `oc_information_to_layout` (
-`information_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL,
-`layout_id` int(11) NOT NULL,
-PRIMARY KEY (`information_id`,`store_id`)
+  `information_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL,
+  `layout_id` int(11) NOT NULL,
+  PRIMARY KEY (`information_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -1810,9 +1810,9 @@ PRIMARY KEY (`information_id`,`store_id`)
 
 DROP TABLE IF EXISTS `oc_information_to_store`;
 CREATE TABLE `oc_information_to_store` (
-`information_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL,
-PRIMARY KEY (`information_id`,`store_id`)
+  `information_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL,
+  PRIMARY KEY (`information_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1833,16 +1833,16 @@ INSERT INTO `oc_information_to_store` (`information_id`, `store_id`) VALUES
 
 DROP TABLE IF EXISTS `oc_language`;
 CREATE TABLE `oc_language` (
-`language_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(32) NOT NULL,
-`code` varchar(5) NOT NULL,
-`locale` varchar(255) NOT NULL,
-`image` varchar(64) NOT NULL,
-`directory` varchar(32) NOT NULL,
-`sort_order` int(3) NOT NULL DEFAULT '0',
-`status` tinyint(1) NOT NULL,
-PRIMARY KEY (`language_id`),
-KEY `name` (`name`)
+  `language_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `code` varchar(5) NOT NULL,
+  `locale` varchar(255) NOT NULL,
+  `image` varchar(64) NOT NULL,
+  `directory` varchar(32) NOT NULL,
+  `sort_order` int(3) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL,
+  PRIMARY KEY (`language_id`),
+  KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1861,9 +1861,9 @@ INSERT INTO `oc_language` (`language_id`, `name`, `code`, `locale`, `image`, `di
 
 DROP TABLE IF EXISTS `oc_layout`;
 CREATE TABLE `oc_layout` (
-`layout_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(64) NOT NULL,
-PRIMARY KEY (`layout_id`)
+  `layout_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`layout_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1889,7 +1889,7 @@ INSERT INTO `oc_layout` (`layout_id`, `name`) VALUES
 (16, 'Статті Блогу'),
 (17, 'Сторінка виробника');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_layout_module`
@@ -1897,12 +1897,12 @@ INSERT INTO `oc_layout` (`layout_id`, `name`) VALUES
 
 DROP TABLE IF EXISTS `oc_layout_module`;
 CREATE TABLE `oc_layout_module` (
-`layout_module_id` int(11) NOT NULL AUTO_INCREMENT,
-`layout_id` int(11) NOT NULL,
-`code` varchar(64) NOT NULL,
-`position` varchar(14) NOT NULL,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`layout_module_id`)
+  `layout_module_id` int(11) NOT NULL AUTO_INCREMENT,
+  `layout_id` int(11) NOT NULL,
+  `code` varchar(64) NOT NULL,
+  `position` varchar(14) NOT NULL,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`layout_module_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1942,11 +1942,11 @@ INSERT INTO `oc_layout_module` (`layout_module_id`, `layout_id`, `code`, `positi
 
 DROP TABLE IF EXISTS `oc_layout_route`;
 CREATE TABLE `oc_layout_route` (
-`layout_route_id` int(11) NOT NULL AUTO_INCREMENT,
-`layout_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL,
-`route` varchar(64) NOT NULL,
-PRIMARY KEY (`layout_route_id`)
+  `layout_route_id` int(11) NOT NULL AUTO_INCREMENT,
+  `layout_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL,
+  `route` varchar(64) NOT NULL,
+  PRIMARY KEY (`layout_route_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1972,7 +1972,7 @@ INSERT INTO `oc_layout_route` (`layout_route_id`, `layout_id`, `store_id`, `rout
 (56, 16, 0, 'blog/article'),
 (63, 17, 0, 'product/manufacturer/info');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_length_class`
@@ -1980,9 +1980,9 @@ INSERT INTO `oc_layout_route` (`layout_route_id`, `layout_id`, `store_id`, `rout
 
 DROP TABLE IF EXISTS `oc_length_class`;
 CREATE TABLE `oc_length_class` (
-`length_class_id` int(11) NOT NULL AUTO_INCREMENT,
-`value` decimal(15,8) NOT NULL,
-PRIMARY KEY (`length_class_id`)
+  `length_class_id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` decimal(15,8) NOT NULL,
+  PRIMARY KEY (`length_class_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2002,11 +2002,11 @@ INSERT INTO `oc_length_class` (`length_class_id`, `value`) VALUES
 
 DROP TABLE IF EXISTS `oc_length_class_description`;
 CREATE TABLE `oc_length_class_description` (
-`length_class_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`title` varchar(32) NOT NULL,
-`unit` varchar(4) NOT NULL,
-PRIMARY KEY (`length_class_id`,`language_id`)
+  `length_class_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `title` varchar(32) NOT NULL,
+  `unit` varchar(4) NOT NULL,
+  PRIMARY KEY (`length_class_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2021,7 +2021,7 @@ INSERT INTO `oc_length_class_description` (`length_class_id`, `language_id`, `ti
 (3, 1, 'Дюйм', 'in'),
 (3, 2, 'Inch', 'in');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_location`
@@ -2029,17 +2029,17 @@ INSERT INTO `oc_length_class_description` (`length_class_id`, `language_id`, `ti
 
 DROP TABLE IF EXISTS `oc_location`;
 CREATE TABLE `oc_location` (
-`location_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(32) NOT NULL,
-`address` text NOT NULL,
-`telephone` varchar(32) NOT NULL,
-`fax` varchar(32) NOT NULL,
-`geocode` varchar(32) NOT NULL,
-`image` varchar(255) DEFAULT NULL,
-`open` text NOT NULL,
-`comment` text NOT NULL,
-PRIMARY KEY (`location_id`),
-KEY `name` (`name`)
+  `location_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `address` text NOT NULL,
+  `telephone` varchar(32) NOT NULL,
+  `fax` varchar(32) NOT NULL,
+  `geocode` varchar(32) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `open` text NOT NULL,
+  `comment` text NOT NULL,
+  PRIMARY KEY (`location_id`),
+  KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2050,12 +2050,12 @@ KEY `name` (`name`)
 
 DROP TABLE IF EXISTS `oc_manufacturer`;
 CREATE TABLE `oc_manufacturer` (
-`manufacturer_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(64) NOT NULL,
-`image` varchar(255) DEFAULT NULL,
-`sort_order` int(3) NOT NULL,
+  `manufacturer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `sort_order` int(3) NOT NULL,
 `noindex` tinyint(1) NOT NULL DEFAULT '1',
-PRIMARY KEY (`manufacturer_id`)
+  PRIMARY KEY (`manufacturer_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2114,9 +2114,9 @@ INSERT INTO `oc_manufacturer_description` (`manufacturer_id`, `language_id`, `de
 
 DROP TABLE IF EXISTS `oc_manufacturer_to_store`;
 CREATE TABLE `oc_manufacturer_to_store` (
-`manufacturer_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL,
-PRIMARY KEY (`manufacturer_id`,`store_id`)
+  `manufacturer_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL,
+  PRIMARY KEY (`manufacturer_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2153,13 +2153,13 @@ PRIMARY KEY (`manufacturer_id`,`store_id`)
 
 DROP TABLE IF EXISTS `oc_marketing`;
 CREATE TABLE `oc_marketing` (
-`marketing_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(32) NOT NULL,
-`description` text NOT NULL,
-`code` varchar(64) NOT NULL,
-`clicks` int(5) NOT NULL DEFAULT '0',
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`marketing_id`)
+  `marketing_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `description` text NOT NULL,
+  `code` varchar(64) NOT NULL,
+  `clicks` int(5) NOT NULL DEFAULT '0',
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`marketing_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -------------------------------------------------------------
@@ -2170,17 +2170,17 @@ PRIMARY KEY (`marketing_id`)
 
 DROP TABLE IF EXISTS `oc_modification`;
 CREATE TABLE `oc_modification` (
-`modification_id` int(11) NOT NULL AUTO_INCREMENT,
-`extension_install_id` int(11) NOT NULL,
-`name` varchar(64) NOT NULL,
-`code` varchar(64) NOT NULL,
-`author` varchar(64) NOT NULL,
-`version` varchar(32) NOT NULL,
-`link` varchar(255) NOT NULL,
-`xml` mediumtext NOT NULL,
-`status` tinyint(1) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`modification_id`)
+  `modification_id` int(11) NOT NULL AUTO_INCREMENT,
+  `extension_install_id` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `code` varchar(64) NOT NULL,
+  `author` varchar(64) NOT NULL,
+  `version` varchar(32) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `xml` mediumtext NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`modification_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2204,11 +2204,11 @@ PRIMARY KEY (`backup_id`)
 
 DROP TABLE IF EXISTS `oc_module`;
 CREATE TABLE `oc_module` (
-`module_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(64) NOT NULL,
-`code` varchar(32) NOT NULL,
-`setting` text NOT NULL,
-PRIMARY KEY (`module_id`)
+  `module_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `code` varchar(32) NOT NULL,
+  `setting` text NOT NULL,
+  PRIMARY KEY (`module_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2236,10 +2236,10 @@ INSERT INTO `oc_module` (`module_id`, `name`, `code`, `setting`) VALUES
 
 DROP TABLE IF EXISTS `oc_option`;
 CREATE TABLE `oc_option` (
-`option_id` int(11) NOT NULL AUTO_INCREMENT,
-`type` varchar(32) NOT NULL,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`option_id`)
+  `option_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(32) NOT NULL,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`option_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2267,10 +2267,10 @@ INSERT INTO `oc_option` (`option_id`, `type`, `sort_order`) VALUES
 
 DROP TABLE IF EXISTS `oc_option_description`;
 CREATE TABLE `oc_option_description` (
-`option_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(128) NOT NULL,
-PRIMARY KEY (`option_id`,`language_id`)
+  `option_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  PRIMARY KEY (`option_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2309,11 +2309,11 @@ INSERT INTO `oc_option_description` (`option_id`, `language_id`, `name`) VALUES
 
 DROP TABLE IF EXISTS `oc_option_value`;
 CREATE TABLE `oc_option_value` (
-`option_value_id` int(11) NOT NULL AUTO_INCREMENT,
-`option_id` int(11) NOT NULL,
-`image` varchar(255) NOT NULL,
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`option_value_id`)
+  `option_value_id` int(11) NOT NULL AUTO_INCREMENT,
+  `option_id` int(11) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`option_value_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2344,11 +2344,11 @@ INSERT INTO `oc_option_value` (`option_value_id`, `option_id`, `image`, `sort_or
 
 DROP TABLE IF EXISTS `oc_option_value_description`;
 CREATE TABLE `oc_option_value_description` (
-`option_value_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`option_id` int(11) NOT NULL,
-`name` varchar(128) NOT NULL,
-PRIMARY KEY (`option_value_id`,`language_id`)
+  `option_value_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `option_id` int(11) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  PRIMARY KEY (`option_value_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2379,68 +2379,68 @@ INSERT INTO `oc_option_value_description` (`option_value_id`, `language_id`, `op
 
 DROP TABLE IF EXISTS `oc_order`;
 CREATE TABLE `oc_order` (
-`order_id` int(11) NOT NULL AUTO_INCREMENT,
-`invoice_no` int(11) NOT NULL DEFAULT '0',
-`invoice_prefix` varchar(26) NOT NULL,
-`store_id` int(11) NOT NULL DEFAULT '0',
-`store_name` varchar(64) NOT NULL,
-`store_url` varchar(255) NOT NULL,
-`customer_id` int(11) NOT NULL DEFAULT '0',
-`customer_group_id` int(11) NOT NULL DEFAULT '0',
-`firstname` varchar(32) NOT NULL,
-`lastname` varchar(32) NOT NULL,
-`email` varchar(96) NOT NULL,
-`telephone` varchar(32) NOT NULL,
-`fax` varchar(32) NOT NULL,
-`custom_field` text NOT NULL,
-`payment_firstname` varchar(32) NOT NULL,
-`payment_lastname` varchar(32) NOT NULL,
-`payment_company` varchar(60) NOT NULL,
-`payment_address_1` varchar(128) NOT NULL,
-`payment_address_2` varchar(128) NOT NULL,
-`payment_city` varchar(128) NOT NULL,
-`payment_postcode` varchar(10) NOT NULL,
-`payment_country` varchar(128) NOT NULL,
-`payment_country_id` int(11) NOT NULL,
-`payment_zone` varchar(128) NOT NULL,
-`payment_zone_id` int(11) NOT NULL,
-`payment_address_format` text NOT NULL,
-`payment_custom_field` text NOT NULL,
-`payment_method` varchar(128) NOT NULL,
-`payment_code` varchar(128) NOT NULL,
-`shipping_firstname` varchar(32) NOT NULL,
-`shipping_lastname` varchar(32) NOT NULL,
-`shipping_company` varchar(40) NOT NULL,
-`shipping_address_1` varchar(128) NOT NULL,
-`shipping_address_2` varchar(128) NOT NULL,
-`shipping_city` varchar(128) NOT NULL,
-`shipping_postcode` varchar(10) NOT NULL,
-`shipping_country` varchar(128) NOT NULL,
-`shipping_country_id` int(11) NOT NULL,
-`shipping_zone` varchar(128) NOT NULL,
-`shipping_zone_id` int(11) NOT NULL,
-`shipping_address_format` text NOT NULL,
-`shipping_custom_field` text NOT NULL,
-`shipping_method` varchar(128) NOT NULL,
-`shipping_code` varchar(128) NOT NULL,
-`comment` text NOT NULL,
-`total` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`order_status_id` int(11) NOT NULL DEFAULT '0',
-`affiliate_id` int(11) NOT NULL,
-`commission` decimal(15,4) NOT NULL,
-`marketing_id` int(11) NOT NULL,
-`tracking` varchar(64) NOT NULL,
-`language_id` int(11) NOT NULL,
-`currency_id` int(11) NOT NULL,
-`currency_code` varchar(3) NOT NULL,
-`currency_value` decimal(15,8) NOT NULL DEFAULT '1.00000000',
-`ip` varchar(40) NOT NULL,
-`forwarded_ip` varchar(40) NOT NULL,
-`user_agent` varchar(255) NOT NULL,
-`accept_language` varchar(255) NOT NULL,
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`order_id`)
+  `order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_no` int(11) NOT NULL DEFAULT '0',
+  `invoice_prefix` varchar(26) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  `store_name` varchar(64) NOT NULL,
+  `store_url` varchar(255) NOT NULL,
+  `customer_id` int(11) NOT NULL DEFAULT '0',
+  `customer_group_id` int(11) NOT NULL DEFAULT '0',
+  `firstname` varchar(32) NOT NULL,
+  `lastname` varchar(32) NOT NULL,
+  `email` varchar(96) NOT NULL,
+  `telephone` varchar(32) NOT NULL,
+  `fax` varchar(32) NOT NULL,
+  `custom_field` text NOT NULL,
+  `payment_firstname` varchar(32) NOT NULL,
+  `payment_lastname` varchar(32) NOT NULL,
+  `payment_company` varchar(60) NOT NULL,
+  `payment_address_1` varchar(128) NOT NULL,
+  `payment_address_2` varchar(128) NOT NULL,
+  `payment_city` varchar(128) NOT NULL,
+  `payment_postcode` varchar(10) NOT NULL,
+  `payment_country` varchar(128) NOT NULL,
+  `payment_country_id` int(11) NOT NULL,
+  `payment_zone` varchar(128) NOT NULL,
+  `payment_zone_id` int(11) NOT NULL,
+  `payment_address_format` text NOT NULL,
+  `payment_custom_field` text NOT NULL,
+  `payment_method` varchar(128) NOT NULL,
+  `payment_code` varchar(128) NOT NULL,
+  `shipping_firstname` varchar(32) NOT NULL,
+  `shipping_lastname` varchar(32) NOT NULL,
+  `shipping_company` varchar(40) NOT NULL,
+  `shipping_address_1` varchar(128) NOT NULL,
+  `shipping_address_2` varchar(128) NOT NULL,
+  `shipping_city` varchar(128) NOT NULL,
+  `shipping_postcode` varchar(10) NOT NULL,
+  `shipping_country` varchar(128) NOT NULL,
+  `shipping_country_id` int(11) NOT NULL,
+  `shipping_zone` varchar(128) NOT NULL,
+  `shipping_zone_id` int(11) NOT NULL,
+  `shipping_address_format` text NOT NULL,
+  `shipping_custom_field` text NOT NULL,
+  `shipping_method` varchar(128) NOT NULL,
+  `shipping_code` varchar(128) NOT NULL,
+  `comment` text NOT NULL,
+  `total` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `order_status_id` int(11) NOT NULL DEFAULT '0',
+  `affiliate_id` int(11) NOT NULL,
+  `commission` decimal(15,4) NOT NULL,
+  `marketing_id` int(11) NOT NULL,
+  `tracking` varchar(64) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `currency_id` int(11) NOT NULL,
+  `currency_code` varchar(3) NOT NULL,
+  `currency_value` decimal(15,8) NOT NULL DEFAULT '1.00000000',
+  `ip` varchar(40) NOT NULL,
+  `forwarded_ip` varchar(40) NOT NULL,
+  `user_agent` varchar(255) NOT NULL,
+  `accept_language` varchar(255) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2451,13 +2451,13 @@ PRIMARY KEY (`order_id`)
 
 DROP TABLE IF EXISTS `oc_order_history`;
 CREATE TABLE `oc_order_history` (
-`order_history_id` int(11) NOT NULL AUTO_INCREMENT,
-`order_id` int(11) NOT NULL,
-`order_status_id` int(11) NOT NULL,
-`notify` tinyint(1) NOT NULL DEFAULT '0',
-`comment` text NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`order_history_id`)
+  `order_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `order_status_id` int(11) NOT NULL,
+  `notify` tinyint(1) NOT NULL DEFAULT '0',
+  `comment` text NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`order_history_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2468,15 +2468,15 @@ PRIMARY KEY (`order_history_id`)
 
 DROP TABLE IF EXISTS `oc_order_option`;
 CREATE TABLE `oc_order_option` (
-`order_option_id` int(11) NOT NULL AUTO_INCREMENT,
-`order_id` int(11) NOT NULL,
-`order_product_id` int(11) NOT NULL,
-`product_option_id` int(11) NOT NULL,
-`product_option_value_id` int(11) NOT NULL DEFAULT '0',
-`name` varchar(255) NOT NULL,
-`value` text NOT NULL,
-`type` varchar(32) NOT NULL,
-PRIMARY KEY (`order_option_id`)
+  `order_option_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `order_product_id` int(11) NOT NULL,
+  `product_option_id` int(11) NOT NULL,
+  `product_option_value_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL,
+  `value` text NOT NULL,
+  `type` varchar(32) NOT NULL,
+  PRIMARY KEY (`order_option_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2487,18 +2487,18 @@ PRIMARY KEY (`order_option_id`)
 
 DROP TABLE IF EXISTS `oc_order_product`;
 CREATE TABLE `oc_order_product` (
-`order_product_id` int(11) NOT NULL AUTO_INCREMENT,
-`order_id` int(11) NOT NULL,
-`product_id` int(11) NOT NULL,
-`name` varchar(255) NOT NULL,
-`model` varchar(64) NOT NULL,
-`quantity` int(4) NOT NULL,
-`price` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`total` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`tax` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`reward` int(8) NOT NULL,
-PRIMARY KEY (`order_product_id`),
-KEY `order_id` (`order_id`)
+  `order_product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `model` varchar(64) NOT NULL,
+  `quantity` int(4) NOT NULL,
+  `price` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `total` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `tax` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `reward` int(8) NOT NULL,
+  PRIMARY KEY (`order_product_id`),
+  KEY `order_id` (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2509,27 +2509,27 @@ KEY `order_id` (`order_id`)
 
 DROP TABLE IF EXISTS `oc_order_recurring`;
 CREATE TABLE `oc_order_recurring` (
-`order_recurring_id` int(11) NOT NULL AUTO_INCREMENT,
-`order_id` int(11) NOT NULL,
-`reference` varchar(255) NOT NULL,
-`product_id` int(11) NOT NULL,
-`product_name` varchar(255) NOT NULL,
-`product_quantity` int(11) NOT NULL,
-`recurring_id` int(11) NOT NULL,
-`recurring_name` varchar(255) NOT NULL,
-`recurring_description` varchar(255) NOT NULL,
-`recurring_frequency` varchar(25) NOT NULL,
-`recurring_cycle` smallint(6) NOT NULL,
-`recurring_duration` smallint(6) NOT NULL,
-`recurring_price` decimal(10,4) NOT NULL,
-`trial` tinyint(1) NOT NULL,
-`trial_frequency` varchar(25) NOT NULL,
-`trial_cycle` smallint(6) NOT NULL,
-`trial_duration` smallint(6) NOT NULL,
-`trial_price` decimal(10,4) NOT NULL,
-`status` tinyint(4) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`order_recurring_id`)
+  `order_recurring_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `reference` varchar(255) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_quantity` int(11) NOT NULL,
+  `recurring_id` int(11) NOT NULL,
+  `recurring_name` varchar(255) NOT NULL,
+  `recurring_description` varchar(255) NOT NULL,
+  `recurring_frequency` varchar(25) NOT NULL,
+  `recurring_cycle` smallint(6) NOT NULL,
+  `recurring_duration` smallint(6) NOT NULL,
+  `recurring_price` decimal(10,4) NOT NULL,
+  `trial` tinyint(1) NOT NULL,
+  `trial_frequency` varchar(25) NOT NULL,
+  `trial_cycle` smallint(6) NOT NULL,
+  `trial_duration` smallint(6) NOT NULL,
+  `trial_price` decimal(10,4) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`order_recurring_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2540,13 +2540,13 @@ PRIMARY KEY (`order_recurring_id`)
 
 DROP TABLE IF EXISTS `oc_order_recurring_transaction`;
 CREATE TABLE `oc_order_recurring_transaction` (
-`order_recurring_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
-`order_recurring_id` int(11) NOT NULL,
-`reference` varchar(255) NOT NULL,
-`type` varchar(255) NOT NULL,
-`amount` decimal(10,4) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`order_recurring_transaction_id`)
+  `order_recurring_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_recurring_id` int(11) NOT NULL,
+  `reference` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `amount` decimal(10,4) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`order_recurring_transaction_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2557,15 +2557,15 @@ PRIMARY KEY (`order_recurring_transaction_id`)
 
 DROP TABLE IF EXISTS `oc_order_shipment`;
 CREATE TABLE `oc_order_shipment` (
-`order_shipment_id` int(11) NOT NULL AUTO_INCREMENT,
-`order_id` int(11) NOT NULL,
-`date_added` datetime NOT NULL,
-`shipping_courier_id` varchar(255) NOT NULL DEFAULT '',
-`tracking_number` varchar(255) NOT NULL DEFAULT '',
-PRIMARY KEY (`order_shipment_id`)
+  `order_shipment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `shipping_courier_id` varchar(255) NOT NULL DEFAULT '',
+  `tracking_number` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`order_shipment_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_shipping_courier`
@@ -2573,10 +2573,10 @@ PRIMARY KEY (`order_shipment_id`)
 
 DROP TABLE IF EXISTS `oc_shipping_courier`;
 CREATE TABLE `oc_shipping_courier` (
-`shipping_courier_id` int(11) NOT NULL,
-`shipping_courier_code` varchar(255) NOT NULL DEFAULT '',
-`shipping_courier_name` varchar(255) NOT NULL DEFAULT '',
-PRIMARY KEY (`shipping_courier_id`)
+  `shipping_courier_id` int(11) NOT NULL,
+  `shipping_courier_code` varchar(255) NOT NULL DEFAULT '',
+  `shipping_courier_name` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`shipping_courier_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -2584,12 +2584,12 @@ PRIMARY KEY (`shipping_courier_id`)
 --
 
 INSERT INTO `oc_shipping_courier` (`shipping_courier_id`, `shipping_courier_code`, `shipping_courier_name`) VALUES
-(1, 'dhl', 'DHL'),
-(2, 'fedex', 'Fedex'),
-(3, 'ups', 'UPS'),
-(4, 'royal-mail', 'Royal Mail'),
-(5, 'usps', 'United States Postal Service'),
-(6, 'auspost', 'Australia Post');
+  (1, 'dhl', 'DHL'),
+  (2, 'fedex', 'Fedex'),
+  (3, 'ups', 'UPS'),
+  (4, 'royal-mail', 'Royal Mail'),
+  (5, 'usps', 'United States Postal Service'),
+  (6, 'auspost', 'Australia Post');
 
 -----------------------------------------------------------
 
@@ -2599,10 +2599,10 @@ INSERT INTO `oc_shipping_courier` (`shipping_courier_id`, `shipping_courier_code
 
 DROP TABLE IF EXISTS `oc_order_status`;
 CREATE TABLE `oc_order_status` (
-`order_status_id` int(11) NOT NULL AUTO_INCREMENT,
-`language_id` int(11) NOT NULL,
-`name` varchar(32) NOT NULL,
-PRIMARY KEY (`order_status_id`,`language_id`)
+  `order_status_id` int(11) NOT NULL AUTO_INCREMENT,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  PRIMARY KEY (`order_status_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2639,7 +2639,7 @@ INSERT INTO `oc_order_status` (`order_status_id`, `language_id`, `name`) VALUES
 (16, 2, 'Voided'),
 (15, 2, 'Processed');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_order_total`
@@ -2647,14 +2647,14 @@ INSERT INTO `oc_order_status` (`order_status_id`, `language_id`, `name`) VALUES
 
 DROP TABLE IF EXISTS `oc_order_total`;
 CREATE TABLE `oc_order_total` (
-`order_total_id` int(10) NOT NULL AUTO_INCREMENT,
-`order_id` int(11) NOT NULL,
-`code` varchar(32) NOT NULL,
-`title` varchar(255) NOT NULL,
-`value` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`sort_order` int(3) NOT NULL,
-PRIMARY KEY (`order_total_id`),
-KEY `order_id` (`order_id`)
+  `order_total_id` int(10) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `code` varchar(32) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `value` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `sort_order` int(3) NOT NULL,
+  PRIMARY KEY (`order_total_id`),
+  KEY `order_id` (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2665,19 +2665,19 @@ KEY `order_id` (`order_id`)
 
 DROP TABLE IF EXISTS `oc_order_voucher`;
 CREATE TABLE `oc_order_voucher` (
-`order_voucher_id` int(11) NOT NULL AUTO_INCREMENT,
-`order_id` int(11) NOT NULL,
-`voucher_id` int(11) NOT NULL,
-`description` varchar(255) NOT NULL,
-`code` varchar(10) NOT NULL,
-`from_name` varchar(64) NOT NULL,
-`from_email` varchar(96) NOT NULL,
-`to_name` varchar(64) NOT NULL,
-`to_email` varchar(96) NOT NULL,
-`voucher_theme_id` int(11) NOT NULL,
-`message` text NOT NULL,
-`amount` decimal(15,4) NOT NULL,
-PRIMARY KEY (`order_voucher_id`)
+  `order_voucher_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `voucher_id` int(11) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `code` varchar(10) NOT NULL,
+  `from_name` varchar(64) NOT NULL,
+  `from_email` varchar(96) NOT NULL,
+  `to_name` varchar(64) NOT NULL,
+  `to_email` varchar(96) NOT NULL,
+  `voucher_theme_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `amount` decimal(15,4) NOT NULL,
+  PRIMARY KEY (`order_voucher_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2688,39 +2688,39 @@ PRIMARY KEY (`order_voucher_id`)
 
 DROP TABLE IF EXISTS `oc_product`;
 CREATE TABLE `oc_product` (
-`product_id` int(11) NOT NULL AUTO_INCREMENT,
-`model` varchar(64) NOT NULL,
-`sku` varchar(64) NOT NULL,
-`upc` varchar(12) NOT NULL,
-`ean` varchar(14) NOT NULL,
-`jan` varchar(13) NOT NULL,
-`isbn` varchar(17) NOT NULL,
-`mpn` varchar(64) NOT NULL,
-`location` varchar(128) NOT NULL,
-`quantity` int(4) NOT NULL DEFAULT '0',
-`stock_status_id` int(11) NOT NULL,
-`image` varchar(255) DEFAULT NULL,
-`manufacturer_id` int(11) NOT NULL,
-`shipping` tinyint(1) NOT NULL DEFAULT '1',
-`price` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`points` int(8) NOT NULL DEFAULT '0',
-`tax_class_id` int(11) NOT NULL,
-`date_available` date NOT NULL DEFAULT '0000-00-00',
-`weight` decimal(15,8) NOT NULL DEFAULT '0.00000000',
-`weight_class_id` int(11) NOT NULL DEFAULT '0',
-`length` decimal(15,8) NOT NULL DEFAULT '0.00000000',
-`width` decimal(15,8) NOT NULL DEFAULT '0.00000000',
-`height` decimal(15,8) NOT NULL DEFAULT '0.00000000',
-`length_class_id` int(11) NOT NULL DEFAULT '0',
-`subtract` tinyint(1) NOT NULL DEFAULT '1',
-`minimum` int(11) NOT NULL DEFAULT '1',
-`sort_order` int(11) NOT NULL DEFAULT '0',
-`status` tinyint(1) NOT NULL DEFAULT '0',
-`viewed` int(5) NOT NULL DEFAULT '0',
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-`noindex` tinyint(1) NOT NULL DEFAULT '1',
-PRIMARY KEY (`product_id`)
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `model` varchar(64) NOT NULL,
+  `sku` varchar(64) NOT NULL,
+  `upc` varchar(12) NOT NULL,
+  `ean` varchar(14) NOT NULL,
+  `jan` varchar(13) NOT NULL,
+  `isbn` varchar(17) NOT NULL,
+  `mpn` varchar(64) NOT NULL,
+  `location` varchar(128) NOT NULL,
+  `quantity` int(4) NOT NULL DEFAULT '0',
+  `stock_status_id` int(11) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `manufacturer_id` int(11) NOT NULL,
+  `shipping` tinyint(1) NOT NULL DEFAULT '1',
+  `price` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `points` int(8) NOT NULL DEFAULT '0',
+  `tax_class_id` int(11) NOT NULL,
+  `date_available` date NOT NULL DEFAULT '0000-00-00',
+  `weight` decimal(15,8) NOT NULL DEFAULT '0.00000000',
+  `weight_class_id` int(11) NOT NULL DEFAULT '0',
+  `length` decimal(15,8) NOT NULL DEFAULT '0.00000000',
+  `width` decimal(15,8) NOT NULL DEFAULT '0.00000000',
+  `height` decimal(15,8) NOT NULL DEFAULT '0.00000000',
+  `length_class_id` int(11) NOT NULL DEFAULT '0',
+  `subtract` tinyint(1) NOT NULL DEFAULT '1',
+  `minimum` int(11) NOT NULL DEFAULT '1',
+  `sort_order` int(11) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `viewed` int(5) NOT NULL DEFAULT '0',
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  `noindex` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2748,7 +2748,7 @@ INSERT INTO `oc_product` (`product_id`, `model`, `sku`, `upc`, `ean`, `jan`, `is
 (48, 'product 20', 'test 1', '', '', '', '', '', 'test 2', 995, 5, 'catalog/demo/ipod_classic_1.jpg', 8, 1, 100.0000, 0, 9, '2009-02-08', 1.00000000, 1, 0.00000000, 0.00000000, 0.00000000, 2, 1, 1, 0, 1, 0, '2009-02-08 17:21:51', '2011-09-30 01:07:06', 1),
 (49, 'SAM1', '', '', '', '', '', '', '', 0, 8, 'catalog/demo/samsung_tab_1.jpg', 0, 1, 199.9900, 0, 9, '2011-04-25', 0.00000000, 1, 0.00000000, 0.00000000, 0.00000000, 1, 1, 1, 1, 1, 0, '2011-04-26 08:57:34', '2011-09-30 01:06:23', 1);
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_googleshopping_product`
@@ -2756,30 +2756,30 @@ INSERT INTO `oc_product` (`product_id`, `model`, `sku`, `upc`, `ean`, `jan`, `is
 
 DROP TABLE IF EXISTS `oc_googleshopping_product`;
 CREATE TABLE `oc_googleshopping_product` (
-`product_advertise_google_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-`product_id` int(11) DEFAULT NULL,
-`store_id` int(11) NOT NULL DEFAULT '0',
-`has_issues` tinyint(1) DEFAULT NULL,
-`destination_status` enum('pending','approved','disapproved') NOT NULL DEFAULT 'pending',
-`impressions` int(11) NOT NULL DEFAULT '0',
-`clicks` int(11) NOT NULL DEFAULT '0',
-`conversions` int(11) NOT NULL DEFAULT '0',
-`cost` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`conversion_value` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`google_product_category` varchar(10) DEFAULT NULL,
-`condition` enum('new','refurbished','used') DEFAULT NULL,
-`adult` tinyint(1) DEFAULT NULL,
-`multipack` int(11) DEFAULT NULL,
-`is_bundle` tinyint(1) DEFAULT NULL,
-`age_group` enum('newborn','infant','toddler','kids','adult') DEFAULT NULL,
-`color` int(11) DEFAULT NULL,
-`gender` enum('male','female','unisex') DEFAULT NULL,
-`size_type` enum('regular','petite','plus','big and tall','maternity') DEFAULT NULL,
-`size_system` enum('AU','BR','CN','DE','EU','FR','IT','JP','MEX','UK','US') DEFAULT NULL,
-`size` int(11) DEFAULT NULL,
-`is_modified` tinyint(1) NOT NULL DEFAULT '0',
-PRIMARY KEY (`product_advertise_google_id`),
-UNIQUE KEY `product_id_store_id` (`product_id`,`store_id`)
+  `product_advertise_google_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL,
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  `has_issues` tinyint(1) DEFAULT NULL,
+  `destination_status` enum('pending','approved','disapproved') NOT NULL DEFAULT 'pending',
+  `impressions` int(11) NOT NULL DEFAULT '0',
+  `clicks` int(11) NOT NULL DEFAULT '0',
+  `conversions` int(11) NOT NULL DEFAULT '0',
+  `cost` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `conversion_value` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `google_product_category` varchar(10) DEFAULT NULL,
+  `condition` enum('new','refurbished','used') DEFAULT NULL,
+  `adult` tinyint(1) DEFAULT NULL,
+  `multipack` int(11) DEFAULT NULL,
+  `is_bundle` tinyint(1) DEFAULT NULL,
+  `age_group` enum('newborn','infant','toddler','kids','adult') DEFAULT NULL,
+  `color` int(11) DEFAULT NULL,
+  `gender` enum('male','female','unisex') DEFAULT NULL,
+  `size_type` enum('regular','petite','plus','big and tall','maternity') DEFAULT NULL,
+  `size_system` enum('AU','BR','CN','DE','EU','FR','IT','JP','MEX','UK','US') DEFAULT NULL,
+  `size` int(11) DEFAULT NULL,
+  `is_modified` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`product_advertise_google_id`),
+  UNIQUE KEY `product_id_store_id` (`product_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
@@ -2790,14 +2790,14 @@ UNIQUE KEY `product_id_store_id` (`product_id`,`store_id`)
 
 DROP TABLE IF EXISTS `oc_googleshopping_product_status`;
 CREATE TABLE `oc_googleshopping_product_status` (
-`product_id` int(11) NOT NULL DEFAULT '0',
-`store_id` int(11) NOT NULL DEFAULT '0',
-`product_variation_id` varchar(64) NOT NULL DEFAULT '',
-`destination_statuses` text NOT NULL,
-`data_quality_issues` text NOT NULL,
-`item_level_issues` text NOT NULL,
-`google_expiration_date` int(11) NOT NULL DEFAULT '0',
-PRIMARY KEY (`product_id`,`store_id`,`product_variation_id`)
+  `product_id` int(11) NOT NULL DEFAULT '0',
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  `product_variation_id` varchar(64) NOT NULL DEFAULT '',
+  `destination_statuses` text NOT NULL,
+  `data_quality_issues` text NOT NULL,
+  `item_level_issues` text NOT NULL,
+  `google_expiration_date` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`product_id`,`store_id`,`product_variation_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
@@ -2808,10 +2808,10 @@ PRIMARY KEY (`product_id`,`store_id`,`product_variation_id`)
 
 DROP TABLE IF EXISTS `oc_googleshopping_product_target`;
 CREATE TABLE `oc_googleshopping_product_target` (
-`product_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL DEFAULT '0',
-`advertise_google_target_id` int(11) UNSIGNED NOT NULL,
-PRIMARY KEY (`product_id`,`advertise_google_target_id`)
+  `product_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  `advertise_google_target_id` int(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (`product_id`,`advertise_google_target_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -----------------------------------------------------------
@@ -2822,11 +2822,11 @@ PRIMARY KEY (`product_id`,`advertise_google_target_id`)
 
 DROP TABLE IF EXISTS `oc_product_attribute`;
 CREATE TABLE `oc_product_attribute` (
-`product_id` int(11) NOT NULL,
-`attribute_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`text` text NOT NULL,
-PRIMARY KEY (`product_id`,`attribute_id`,`language_id`)
+  `product_id` int(11) NOT NULL,
+  `attribute_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY (`product_id`,`attribute_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2848,17 +2848,17 @@ INSERT INTO `oc_product_attribute` (`product_id`, `attribute_id`, `language_id`,
 
 DROP TABLE IF EXISTS `oc_product_description`;
 CREATE TABLE `oc_product_description` (
-`product_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(255) NOT NULL,
-`description` text NOT NULL,
-`tag` text NOT NULL,
-`meta_title` varchar(255) NOT NULL,
-`meta_description` varchar(255) NOT NULL,
-`meta_keyword` varchar(255) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `tag` text NOT NULL,
+  `meta_title` varchar(255) NOT NULL,
+  `meta_description` varchar(255) NOT NULL,
+  `meta_keyword` varchar(255) NOT NULL,
 `meta_h1` varchar(255) NOT NULL,
-PRIMARY KEY (`product_id`,`language_id`),
-KEY `name` (`name`)
+  PRIMARY KEY (`product_id`,`language_id`),
+  KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2906,7 +2906,7 @@ INSERT INTO `oc_product_description` (`product_id`, `language_id`, `name`, `desc
 (35, 2, 'Product 8', '&lt;p&gt;Product 8&lt;br&gt;&lt;/p&gt;', '', '', '', '', ''),
 (46, 2, 'Sony VAIO', '&lt;p&gt;Unprecedented power. The next generation of processing technology has \r\narrived. Built into the newest VAIO notebooks lies Intel''s latest, most \r\npowerful innovation yet: Intel® Centrino® 2 processor technology. \r\nBoasting incredible speed, expanded wireless connectivity, enhanced \r\nmultimedia support and greater energy efficiency, all the \r\nhigh-performance essentials are seamlessly combined into a single chip.&lt;br&gt;&lt;/p&gt;', '', '', '', '', '');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_discount`
@@ -2914,16 +2914,16 @@ INSERT INTO `oc_product_description` (`product_id`, `language_id`, `name`, `desc
 
 DROP TABLE IF EXISTS `oc_product_discount`;
 CREATE TABLE `oc_product_discount` (
-`product_discount_id` int(11) NOT NULL AUTO_INCREMENT,
-`product_id` int(11) NOT NULL,
-`customer_group_id` int(11) NOT NULL,
-`quantity` int(4) NOT NULL DEFAULT '0',
-`priority` int(5) NOT NULL DEFAULT '1',
-`price` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`date_start` date NOT NULL DEFAULT '0000-00-00',
-`date_end` date NOT NULL DEFAULT '0000-00-00',
-PRIMARY KEY (`product_discount_id`),
-KEY `product_id` (`product_id`)
+  `product_discount_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `customer_group_id` int(11) NOT NULL,
+  `quantity` int(4) NOT NULL DEFAULT '0',
+  `priority` int(5) NOT NULL DEFAULT '1',
+  `price` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `date_start` date NOT NULL DEFAULT '0000-00-00',
+  `date_end` date NOT NULL DEFAULT '0000-00-00',
+  PRIMARY KEY (`product_discount_id`),
+  KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2943,9 +2943,9 @@ INSERT INTO `oc_product_discount` (`product_discount_id`, `product_id`, `custome
 
 DROP TABLE IF EXISTS `oc_product_filter`;
 CREATE TABLE `oc_product_filter` (
-`product_id` int(11) NOT NULL,
-`filter_id` int(11) NOT NULL,
-PRIMARY KEY (`product_id`,`filter_id`)
+  `product_id` int(11) NOT NULL,
+  `filter_id` int(11) NOT NULL,
+  PRIMARY KEY (`product_id`,`filter_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -2956,12 +2956,12 @@ PRIMARY KEY (`product_id`,`filter_id`)
 
 DROP TABLE IF EXISTS `oc_product_image`;
 CREATE TABLE `oc_product_image` (
-`product_image_id` int(11) NOT NULL AUTO_INCREMENT,
-`product_id` int(11) NOT NULL,
-`image` varchar(255) DEFAULT NULL,
-`sort_order` int(3) NOT NULL DEFAULT '0',
-PRIMARY KEY (`product_image_id`),
-KEY `product_id` (`product_id`)
+  `product_image_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `sort_order` int(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`product_image_id`),
+  KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3039,12 +3039,12 @@ INSERT INTO `oc_product_image` (`product_image_id`, `product_id`, `image`, `sort
 
 DROP TABLE IF EXISTS `oc_product_option`;
 CREATE TABLE `oc_product_option` (
-`product_option_id` int(11) NOT NULL AUTO_INCREMENT,
-`product_id` int(11) NOT NULL,
-`option_id` int(11) NOT NULL,
-`value` text NOT NULL,
-`required` tinyint(1) NOT NULL,
-PRIMARY KEY (`product_option_id`)
+  `product_option_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `option_id` int(11) NOT NULL,
+  `value` text NOT NULL,
+  `required` tinyint(1) NOT NULL,
+  PRIMARY KEY (`product_option_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3073,20 +3073,20 @@ INSERT INTO `oc_product_option` (`product_option_id`, `product_id`, `option_id`,
 
 DROP TABLE IF EXISTS `oc_product_option_value`;
 CREATE TABLE `oc_product_option_value` (
-`product_option_value_id` int(11) NOT NULL AUTO_INCREMENT,
-`product_option_id` int(11) NOT NULL,
-`product_id` int(11) NOT NULL,
-`option_id` int(11) NOT NULL,
-`option_value_id` int(11) NOT NULL,
-`quantity` int(3) NOT NULL,
-`subtract` tinyint(1) NOT NULL,
-`price` decimal(15,4) NOT NULL,
-`price_prefix` varchar(1) NOT NULL,
-`points` int(8) NOT NULL,
-`points_prefix` varchar(1) NOT NULL,
-`weight` decimal(15,8) NOT NULL,
-`weight_prefix` varchar(1) NOT NULL,
-PRIMARY KEY (`product_option_value_id`)
+  `product_option_value_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_option_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `option_id` int(11) NOT NULL,
+  `option_value_id` int(11) NOT NULL,
+  `quantity` int(3) NOT NULL,
+  `subtract` tinyint(1) NOT NULL,
+  `price` decimal(15,4) NOT NULL,
+  `price_prefix` varchar(1) NOT NULL,
+  `points` int(8) NOT NULL,
+  `points_prefix` varchar(1) NOT NULL,
+  `weight` decimal(15,8) NOT NULL,
+  `weight_prefix` varchar(1) NOT NULL,
+  PRIMARY KEY (`product_option_value_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3119,10 +3119,10 @@ INSERT INTO `oc_product_option_value` (`product_option_value_id`, `product_optio
 
 DROP TABLE IF EXISTS `oc_product_recurring`;
 CREATE TABLE `oc_product_recurring` (
-`product_id` int(11) NOT NULL,
-`recurring_id` int(11) NOT NULL,
-`customer_group_id` int(11) NOT NULL,
-PRIMARY KEY (`product_id`,`recurring_id`,`customer_group_id`)
+  `product_id` int(11) NOT NULL,
+  `recurring_id` int(11) NOT NULL,
+  `customer_group_id` int(11) NOT NULL,
+  PRIMARY KEY (`product_id`,`recurring_id`,`customer_group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3133,9 +3133,9 @@ PRIMARY KEY (`product_id`,`recurring_id`,`customer_group_id`)
 
 DROP TABLE IF EXISTS `oc_product_related`;
 CREATE TABLE `oc_product_related` (
-`product_id` int(11) NOT NULL,
-`related_id` int(11) NOT NULL,
-PRIMARY KEY (`product_id`,`related_id`)
+  `product_id` int(11) NOT NULL,
+  `related_id` int(11) NOT NULL,
+  PRIMARY KEY (`product_id`,`related_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3156,11 +3156,11 @@ INSERT INTO `oc_product_related` (`product_id`, `related_id`) VALUES
 
 DROP TABLE IF EXISTS `oc_product_reward`;
 CREATE TABLE `oc_product_reward` (
-`product_reward_id` int(11) NOT NULL AUTO_INCREMENT,
-`product_id` int(11) NOT NULL DEFAULT '0',
-`customer_group_id` int(11) NOT NULL DEFAULT '0',
-`points` int(8) NOT NULL DEFAULT '0',
-PRIMARY KEY (`product_reward_id`)
+  `product_reward_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL DEFAULT '0',
+  `customer_group_id` int(11) NOT NULL DEFAULT '0',
+  `points` int(8) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`product_reward_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3196,15 +3196,15 @@ INSERT INTO `oc_product_reward` (`product_reward_id`, `product_id`, `customer_gr
 
 DROP TABLE IF EXISTS `oc_product_special`;
 CREATE TABLE `oc_product_special` (
-`product_special_id` int(11) NOT NULL AUTO_INCREMENT,
-`product_id` int(11) NOT NULL,
-`customer_group_id` int(11) NOT NULL,
-`priority` int(5) NOT NULL DEFAULT '1',
-`price` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`date_start` date NOT NULL DEFAULT '0000-00-00',
-`date_end` date NOT NULL DEFAULT '0000-00-00',
-PRIMARY KEY (`product_special_id`),
-KEY `product_id` (`product_id`)
+  `product_special_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `customer_group_id` int(11) NOT NULL,
+  `priority` int(5) NOT NULL DEFAULT '1',
+  `price` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `date_start` date NOT NULL DEFAULT '0000-00-00',
+  `date_end` date NOT NULL DEFAULT '0000-00-00',
+  PRIMARY KEY (`product_special_id`),
+  KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3224,11 +3224,11 @@ INSERT INTO `oc_product_special` (`product_special_id`, `product_id`, `customer_
 
 DROP TABLE IF EXISTS `oc_product_to_category`;
 CREATE TABLE `oc_product_to_category` (
-`product_id` int(11) NOT NULL,
-`category_id` int(11) NOT NULL,
-`main_category` tinyint(1) NOT NULL DEFAULT '0',
-PRIMARY KEY (`product_id`,`category_id`),
-KEY `category_id` (`category_id`)
+  `product_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `main_category` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`product_id`,`category_id`),
+  KEY `category_id` (`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3272,7 +3272,7 @@ INSERT INTO `oc_product_to_category` (`product_id`, `category_id`, `main_categor
 (44, 46, 1),
 (45, 46, 1);
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_to_download`
@@ -3280,9 +3280,9 @@ INSERT INTO `oc_product_to_category` (`product_id`, `category_id`, `main_categor
 
 DROP TABLE IF EXISTS `oc_product_to_download`;
 CREATE TABLE `oc_product_to_download` (
-`product_id` int(11) NOT NULL,
-`download_id` int(11) NOT NULL,
-PRIMARY KEY (`product_id`,`download_id`)
+  `product_id` int(11) NOT NULL,
+  `download_id` int(11) NOT NULL,
+  PRIMARY KEY (`product_id`,`download_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3293,10 +3293,10 @@ PRIMARY KEY (`product_id`,`download_id`)
 
 DROP TABLE IF EXISTS `oc_product_to_layout`;
 CREATE TABLE `oc_product_to_layout` (
-`product_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL,
-`layout_id` int(11) NOT NULL,
-PRIMARY KEY (`product_id`,`store_id`)
+  `product_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL,
+  `layout_id` int(11) NOT NULL,
+  PRIMARY KEY (`product_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3307,9 +3307,9 @@ PRIMARY KEY (`product_id`,`store_id`)
 
 DROP TABLE IF EXISTS `oc_product_to_store`;
 CREATE TABLE `oc_product_to_store` (
-`product_id` int(11) NOT NULL,
-`store_id` int(11) NOT NULL DEFAULT '0',
-PRIMARY KEY (`product_id`,`store_id`)
+  `product_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`product_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3345,19 +3345,19 @@ INSERT INTO `oc_product_to_store` (`product_id`, `store_id`) VALUES
 
 DROP TABLE IF EXISTS `oc_recurring`;
 CREATE TABLE `oc_recurring` (
-`recurring_id` int(11) NOT NULL AUTO_INCREMENT,
-`price` decimal(10,4) NOT NULL,
-`frequency` enum('day','week','semi_month','month','year') NOT NULL,
-`duration` int(10) unsigned NOT NULL,
-`cycle` int(10) unsigned NOT NULL,
-`trial_status` tinyint(4) NOT NULL,
-`trial_price` decimal(10,4) NOT NULL,
-`trial_frequency` enum('day','week','semi_month','month','year') NOT NULL,
-`trial_duration` int(10) unsigned NOT NULL,
-`trial_cycle` int(10) unsigned NOT NULL,
-`status` tinyint(4) NOT NULL,
-`sort_order` int(11) NOT NULL,
-PRIMARY KEY (`recurring_id`)
+  `recurring_id` int(11) NOT NULL AUTO_INCREMENT,
+  `price` decimal(10,4) NOT NULL,
+  `frequency` enum('day','week','semi_month','month','year') NOT NULL,
+  `duration` int(10) unsigned NOT NULL,
+  `cycle` int(10) unsigned NOT NULL,
+  `trial_status` tinyint(4) NOT NULL,
+  `trial_price` decimal(10,4) NOT NULL,
+  `trial_frequency` enum('day','week','semi_month','month','year') NOT NULL,
+  `trial_duration` int(10) unsigned NOT NULL,
+  `trial_cycle` int(10) unsigned NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `sort_order` int(11) NOT NULL,
+  PRIMARY KEY (`recurring_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3368,10 +3368,10 @@ PRIMARY KEY (`recurring_id`)
 
 DROP TABLE IF EXISTS `oc_recurring_description`;
 CREATE TABLE `oc_recurring_description` (
-`recurring_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(255) NOT NULL,
-PRIMARY KEY (`recurring_id`,`language_id`)
+  `recurring_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`recurring_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3382,26 +3382,26 @@ PRIMARY KEY (`recurring_id`,`language_id`)
 
 DROP TABLE IF EXISTS `oc_return`;
 CREATE TABLE `oc_return` (
-`return_id` int(11) NOT NULL AUTO_INCREMENT,
-`order_id` int(11) NOT NULL,
-`product_id` int(11) NOT NULL,
-`customer_id` int(11) NOT NULL,
-`firstname` varchar(32) NOT NULL,
-`lastname` varchar(32) NOT NULL,
-`email` varchar(96) NOT NULL,
-`telephone` varchar(32) NOT NULL,
-`product` varchar(255) NOT NULL,
-`model` varchar(64) NOT NULL,
-`quantity` int(4) NOT NULL,
-`opened` tinyint(1) NOT NULL,
-`return_reason_id` int(11) NOT NULL,
-`return_action_id` int(11) NOT NULL,
-`return_status_id` int(11) NOT NULL,
-`comment` text,
-`date_ordered` date NOT NULL DEFAULT '0000-00-00',
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`return_id`)
+  `return_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `firstname` varchar(32) NOT NULL,
+  `lastname` varchar(32) NOT NULL,
+  `email` varchar(96) NOT NULL,
+  `telephone` varchar(32) NOT NULL,
+  `product` varchar(255) NOT NULL,
+  `model` varchar(64) NOT NULL,
+  `quantity` int(4) NOT NULL,
+  `opened` tinyint(1) NOT NULL,
+  `return_reason_id` int(11) NOT NULL,
+  `return_action_id` int(11) NOT NULL,
+  `return_status_id` int(11) NOT NULL,
+  `comment` text,
+  `date_ordered` date NOT NULL DEFAULT '0000-00-00',
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`return_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3412,10 +3412,10 @@ PRIMARY KEY (`return_id`)
 
 DROP TABLE IF EXISTS `oc_return_action`;
 CREATE TABLE `oc_return_action` (
-`return_action_id` int(11) NOT NULL AUTO_INCREMENT,
-`language_id` int(11) NOT NULL DEFAULT '0',
-`name` varchar(64) NOT NULL,
-PRIMARY KEY (`return_action_id`,`language_id`)
+  `return_action_id` int(11) NOT NULL AUTO_INCREMENT,
+  `language_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`return_action_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3430,7 +3430,7 @@ INSERT INTO `oc_return_action` (`return_action_id`, `language_id`, `name`) VALUE
 (3, 2, 'Replacement Sent'),
 (2, 2, 'Credit Issued');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_return_history`
@@ -3438,13 +3438,13 @@ INSERT INTO `oc_return_action` (`return_action_id`, `language_id`, `name`) VALUE
 
 DROP TABLE IF EXISTS `oc_return_history`;
 CREATE TABLE `oc_return_history` (
-`return_history_id` int(11) NOT NULL AUTO_INCREMENT,
-`return_id` int(11) NOT NULL,
-`return_status_id` int(11) NOT NULL,
-`notify` tinyint(1) NOT NULL,
-`comment` text NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`return_history_id`)
+  `return_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `return_id` int(11) NOT NULL,
+  `return_status_id` int(11) NOT NULL,
+  `notify` tinyint(1) NOT NULL,
+  `comment` text NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`return_history_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3455,10 +3455,10 @@ PRIMARY KEY (`return_history_id`)
 
 DROP TABLE IF EXISTS `oc_return_reason`;
 CREATE TABLE `oc_return_reason` (
-`return_reason_id` int(11) NOT NULL AUTO_INCREMENT,
-`language_id` int(11) NOT NULL DEFAULT '0',
-`name` varchar(128) NOT NULL,
-PRIMARY KEY (`return_reason_id`,`language_id`)
+  `return_reason_id` int(11) NOT NULL AUTO_INCREMENT,
+  `language_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(128) NOT NULL,
+  PRIMARY KEY (`return_reason_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3477,7 +3477,7 @@ INSERT INTO `oc_return_reason` (`return_reason_id`, `language_id`, `name`) VALUE
 (5, 1, 'Інше (інша причина), будь ласка, вкажіть/докладіть подробиці'),
 (5, 2, 'Other, please supply details');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_return_status`
@@ -3485,10 +3485,10 @@ INSERT INTO `oc_return_reason` (`return_reason_id`, `language_id`, `name`) VALUE
 
 DROP TABLE IF EXISTS `oc_return_status`;
 CREATE TABLE `oc_return_status` (
-`return_status_id` int(11) NOT NULL AUTO_INCREMENT,
-`language_id` int(11) NOT NULL DEFAULT '0',
-`name` varchar(32) NOT NULL,
-PRIMARY KEY (`return_status_id`,`language_id`)
+  `return_status_id` int(11) NOT NULL AUTO_INCREMENT,
+  `language_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(32) NOT NULL,
+  PRIMARY KEY (`return_status_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3503,7 +3503,7 @@ INSERT INTO `oc_return_status` (`return_status_id`, `language_id`, `name`) VALUE
 (2, 2, 'Awaiting Products'),
 (3, 2, 'Complete');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_review`
@@ -3511,17 +3511,17 @@ INSERT INTO `oc_return_status` (`return_status_id`, `language_id`, `name`) VALUE
 
 DROP TABLE IF EXISTS `oc_review`;
 CREATE TABLE `oc_review` (
-`review_id` int(11) NOT NULL AUTO_INCREMENT,
-`product_id` int(11) NOT NULL,
-`customer_id` int(11) NOT NULL,
-`author` varchar(64) NOT NULL,
-`text` text NOT NULL,
-`rating` int(1) NOT NULL,
-`status` tinyint(1) NOT NULL DEFAULT '0',
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`review_id`),
-KEY `product_id` (`product_id`)
+  `review_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `author` varchar(64) NOT NULL,
+  `text` text NOT NULL,
+  `rating` int(1) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`review_id`),
+  KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3532,10 +3532,10 @@ KEY `product_id` (`product_id`)
 
 DROP TABLE IF EXISTS `oc_statistics`;
 CREATE TABLE `oc_statistics` (
-`statistics_id` int(11) NOT NULL AUTO_INCREMENT,
-`code` varchar(64) NOT NULL,
-`value` decimal(15,4) NOT NULL,
-PRIMARY KEY (`statistics_id`)
+  `statistics_id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(64) NOT NULL,
+  `value` decimal(15,4) NOT NULL,
+  PRIMARY KEY (`statistics_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
@@ -3560,10 +3560,10 @@ INSERT INTO `oc_statistics` (`statistics_id`, `code`, `value`) VALUES
 
 DROP TABLE IF EXISTS `oc_session`;
 CREATE TABLE `oc_session` (
-`session_id` varchar(32) NOT NULL,
-`data` text NOT NULL,
-`expire` datetime NOT NULL,
-PRIMARY KEY (`session_id`)
+  `session_id` varchar(32) NOT NULL,
+  `data` text NOT NULL,
+  `expire` datetime NOT NULL,
+  PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3574,13 +3574,13 @@ PRIMARY KEY (`session_id`)
 
 DROP TABLE IF EXISTS `oc_setting`;
 CREATE TABLE `oc_setting` (
-`setting_id` int(11) NOT NULL AUTO_INCREMENT,
-`store_id` int(11) NOT NULL DEFAULT '0',
-`code` varchar(128) NOT NULL,
-`key` varchar(128) NOT NULL,
-`value` text NOT NULL,
-`serialized` tinyint(1) NOT NULL,
-PRIMARY KEY (`setting_id`)
+  `setting_id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL DEFAULT '0',
+  `code` varchar(128) NOT NULL,
+  `key` varchar(128) NOT NULL,
+  `value` text NOT NULL,
+  `serialized` tinyint(1) NOT NULL,
+  PRIMARY KEY (`setting_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3660,8 +3660,8 @@ INSERT INTO `oc_setting` (`store_id`, `code`, `key`, `value`, `serialized`) VALU
 (0, 'config', 'config_name', 'Ваш магазин', 0),
 (0, 'config', 'config_seo_url', '0', 0),
 (0, 'config', 'config_file_max_size', '300000', 0),
-(0, 'config', 'config_file_ext_allowed', 'zip\r\ntxt\r\npng\r\njpe\r\njpeg\r\njpg\r\ngif\r\nbmp\r\nico\r\ntiff\r\ntif\r\nsvg\r\nsvgz\r\nzip\r\nrar\r\nmsi\r\ncab\r\nmp3\r\nqt\r\nmov\r\npdf\r\npsd\r\nai\r\neps\r\nps\r\ndoc', 0),
-(0, 'config', 'config_file_mime_allowed', 'text/plain\r\nimage/png\r\nimage/jpeg\r\nimage/gif\r\nimage/bmp\r\nimage/tiff\r\nimage/svg+xml\r\napplication/zip\r\n&quot;application/zip&quot;\r\napplication/x-zip\r\n&quot;application/x-zip&quot;\r\napplication/x-zip-compressed\r\n&quot;application/x-zip-compressed&quot;\r\napplication/rar\r\n&quot;application/rar&quot;\r\napplication/x-rar\r\n&quot;application/x-rar&quot;\r\napplication/x-rar-compressed\r\n&quot;application/x-rar-compressed&quot;\r\napplication/octet-stream\r\n&quot;application/octet-stream&quot;\r\naudio/mpeg\r\nvideo/quicktime\r\napplication/pdf', 0),
+(0, 'config', 'config_file_ext_allowed', 'zip\r\ntxt\r\npng\r\njpe\r\njpeg\r\njpg\r\ngif\r\nbmp\r\nico\r\ntiff\r\ntif\r\nsvg\r\nsvgz\r\nwebp\r\nzip\r\nrar\r\nmsi\r\ncab\r\nmp3\r\nqt\r\nmov\r\npdf\r\npsd\r\nai\r\neps\r\nps\r\ndoc', 0),
+(0, 'config', 'config_file_mime_allowed', 'text/plain\r\nimage/png\r\nimage/jpeg\r\nimage/gif\r\nimage/bmp\r\nimage/tiff\r\nimage/svg+xml\r\nimage/webp\r\napplication/zip\r\n&quot;application/zip&quot;\r\napplication/x-zip\r\n&quot;application/x-zip&quot;\r\napplication/x-zip-compressed\r\n&quot;application/x-zip-compressed&quot;\r\napplication/rar\r\n&quot;application/rar&quot;\r\napplication/x-rar\r\n&quot;application/x-rar&quot;\r\napplication/x-rar-compressed\r\n&quot;application/x-rar-compressed&quot;\r\napplication/octet-stream\r\n&quot;application/octet-stream&quot;\r\naudio/mpeg\r\nvideo/quicktime\r\napplication/pdf', 0),
 (0, 'config', 'config_maintenance', '0', 0),
 (0, 'config', 'config_password', '1', 0),
 (0, 'config', 'config_encryption', '', 0),
@@ -3839,10 +3839,10 @@ INSERT INTO `oc_setting` (`store_id`, `code`, `key`, `value`, `serialized`) VALU
 
 DROP TABLE IF EXISTS `oc_stock_status`;
 CREATE TABLE `oc_stock_status` (
-`stock_status_id` int(11) NOT NULL AUTO_INCREMENT,
-`language_id` int(11) NOT NULL,
-`name` varchar(32) NOT NULL,
-PRIMARY KEY (`stock_status_id`,`language_id`)
+  `stock_status_id` int(11) NOT NULL AUTO_INCREMENT,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  PRIMARY KEY (`stock_status_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3859,7 +3859,7 @@ INSERT INTO `oc_stock_status` (`stock_status_id`, `language_id`, `name`) VALUES
 (5, 2, 'Out Of Stock'),
 (6, 2, '2-3 Days');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_store`
@@ -3867,11 +3867,11 @@ INSERT INTO `oc_stock_status` (`stock_status_id`, `language_id`, `name`) VALUES
 
 DROP TABLE IF EXISTS `oc_store`;
 CREATE TABLE `oc_store` (
-`store_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(64) NOT NULL,
-`url` varchar(255) NOT NULL,
-`ssl` varchar(255) NOT NULL,
-PRIMARY KEY (`store_id`)
+  `store_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `ssl` varchar(255) NOT NULL,
+  PRIMARY KEY (`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3882,12 +3882,12 @@ PRIMARY KEY (`store_id`)
 
 DROP TABLE IF EXISTS `oc_tax_class`;
 CREATE TABLE `oc_tax_class` (
-`tax_class_id` int(11) NOT NULL AUTO_INCREMENT,
-`title` varchar(32) NOT NULL,
-`description` varchar(255) NOT NULL,
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`tax_class_id`)
+  `tax_class_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(32) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`tax_class_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3906,14 +3906,14 @@ INSERT INTO `oc_tax_class` (`tax_class_id`, `title`, `description`, `date_added`
 
 DROP TABLE IF EXISTS `oc_tax_rate`;
 CREATE TABLE `oc_tax_rate` (
-`tax_rate_id` int(11) NOT NULL AUTO_INCREMENT,
-`geo_zone_id` int(11) NOT NULL DEFAULT '0',
-`name` varchar(32) NOT NULL,
-`rate` decimal(15,4) NOT NULL DEFAULT '0.0000',
-`type` char(1) NOT NULL,
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`tax_rate_id`)
+  `tax_rate_id` int(11) NOT NULL AUTO_INCREMENT,
+  `geo_zone_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(32) NOT NULL,
+  `rate` decimal(15,4) NOT NULL DEFAULT '0.0000',
+  `type` char(1) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`tax_rate_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3932,9 +3932,9 @@ INSERT INTO `oc_tax_rate` (`tax_rate_id`, `geo_zone_id`, `name`, `rate`, `type`,
 
 DROP TABLE IF EXISTS `oc_tax_rate_to_customer_group`;
 CREATE TABLE `oc_tax_rate_to_customer_group` (
-`tax_rate_id` int(11) NOT NULL,
-`customer_group_id` int(11) NOT NULL,
-PRIMARY KEY (`tax_rate_id`,`customer_group_id`)
+  `tax_rate_id` int(11) NOT NULL,
+  `customer_group_id` int(11) NOT NULL,
+  PRIMARY KEY (`tax_rate_id`,`customer_group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3953,12 +3953,12 @@ INSERT INTO `oc_tax_rate_to_customer_group` (`tax_rate_id`, `customer_group_id`)
 
 DROP TABLE IF EXISTS `oc_tax_rule`;
 CREATE TABLE `oc_tax_rule` (
-`tax_rule_id` int(11) NOT NULL AUTO_INCREMENT,
-`tax_class_id` int(11) NOT NULL,
-`tax_rate_id` int(11) NOT NULL,
-`based` varchar(10) NOT NULL,
-`priority` int(5) NOT NULL DEFAULT '1',
-PRIMARY KEY (`tax_rule_id`)
+  `tax_rule_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tax_class_id` int(11) NOT NULL,
+  `tax_rate_id` int(11) NOT NULL,
+  `based` varchar(10) NOT NULL,
+  `priority` int(5) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`tax_rule_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -3979,13 +3979,13 @@ INSERT INTO `oc_tax_rule` (`tax_rule_id`, `tax_class_id`, `tax_rate_id`, `based`
 
 DROP TABLE IF EXISTS `oc_theme`;
 CREATE TABLE `oc_theme` (
-`theme_id` int(11) NOT NULL AUTO_INCREMENT,
-`store_id` int(11) NOT NULL,
-`theme` varchar(64) NOT NULL,
-`route` varchar(64) NOT NULL,
-`code` mediumtext NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`theme_id`)
+  `theme_id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `theme` varchar(64) NOT NULL,
+  `route` varchar(64) NOT NULL,
+  `code` mediumtext NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`theme_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -3996,14 +3996,14 @@ PRIMARY KEY (`theme_id`)
 
 DROP TABLE IF EXISTS `oc_translation`;
 CREATE TABLE `oc_translation` (
-`translation_id` int(11) NOT NULL AUTO_INCREMENT,
-`store_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`route` varchar(64) NOT NULL,
-`key` varchar(64) NOT NULL,
-`value` text NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`translation_id`)
+  `translation_id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `route` varchar(64) NOT NULL,
+  `key` varchar(64) NOT NULL,
+  `value` text NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`translation_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -4014,12 +4014,12 @@ PRIMARY KEY (`translation_id`)
 
 DROP TABLE IF EXISTS `oc_upload`;
 CREATE TABLE `oc_upload` (
-`upload_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(255) NOT NULL,
-`filename` varchar(255) NOT NULL,
-`code` varchar(255) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`upload_id`)
+  `upload_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`upload_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -4030,14 +4030,14 @@ PRIMARY KEY (`upload_id`)
 
 DROP TABLE IF EXISTS `oc_seo_url`;
 CREATE TABLE `oc_seo_url` (
-`seo_url_id` int(11) NOT NULL AUTO_INCREMENT,
-`store_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`query` varchar(255) NOT NULL,
-`keyword` varchar(255) NOT NULL,
-PRIMARY KEY (`seo_url_id`),
-KEY `query` (`query`),
-KEY `keyword` (`keyword`)
+  `seo_url_id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,  
+  `query` varchar(255) NOT NULL,
+  `keyword` varchar(255) NOT NULL,
+  PRIMARY KEY (`seo_url_id`),
+  KEY `query` (`query`),
+  KEY `keyword` (`keyword`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -4256,7 +4256,7 @@ INSERT INTO `oc_seo_url` (`seo_url_id`, `store_id`, `language_id`, `query`, `key
 (1020, 0, 2, 'account/wishlist', 'en-wishlist'),
 (1021, 0, 2, 'account/return/add', 'en-add-return');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_user`
@@ -4264,20 +4264,20 @@ INSERT INTO `oc_seo_url` (`seo_url_id`, `store_id`, `language_id`, `query`, `key
 
 DROP TABLE IF EXISTS `oc_user`;
 CREATE TABLE `oc_user` (
-`user_id` int(11) NOT NULL AUTO_INCREMENT,
-`user_group_id` int(11) NOT NULL,
-`username` varchar(20) NOT NULL,
-`password` varchar(40) NOT NULL,
-`salt` varchar(9) NOT NULL,
-`firstname` varchar(32) NOT NULL,
-`lastname` varchar(32) NOT NULL,
-`email` varchar(96) NOT NULL,
-`image` varchar(255) NOT NULL,
-`code` varchar(40) NOT NULL,
-`ip` varchar(40) NOT NULL,
-`status` tinyint(1) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`user_id`)
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_group_id` int(11) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `salt` varchar(9) NOT NULL,
+  `firstname` varchar(32) NOT NULL,
+  `lastname` varchar(32) NOT NULL,
+  `email` varchar(96) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `code` varchar(40) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -4288,10 +4288,10 @@ PRIMARY KEY (`user_id`)
 
 DROP TABLE IF EXISTS `oc_user_group`;
 CREATE TABLE `oc_user_group` (
-`user_group_id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(64) NOT NULL,
-`permission` text NOT NULL,
-PRIMARY KEY (`user_group_id`)
+  `user_group_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `permission` text NOT NULL,
+  PRIMARY KEY (`user_group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -4310,19 +4310,19 @@ INSERT INTO `oc_user_group` (`user_group_id`, `name`, `permission`) VALUES
 
 DROP TABLE IF EXISTS `oc_voucher`;
 CREATE TABLE `oc_voucher` (
-`voucher_id` int(11) NOT NULL AUTO_INCREMENT,
-`order_id` int(11) NOT NULL,
-`code` varchar(10) NOT NULL,
-`from_name` varchar(64) NOT NULL,
-`from_email` varchar(96) NOT NULL,
-`to_name` varchar(64) NOT NULL,
-`to_email` varchar(96) NOT NULL,
-`voucher_theme_id` int(11) NOT NULL,
-`message` text NOT NULL,
-`amount` decimal(15,4) NOT NULL,
-`status` tinyint(1) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`voucher_id`)
+  `voucher_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `code` varchar(10) NOT NULL,
+  `from_name` varchar(64) NOT NULL,
+  `from_email` varchar(96) NOT NULL,
+  `to_name` varchar(64) NOT NULL,
+  `to_email` varchar(96) NOT NULL,
+  `voucher_theme_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `amount` decimal(15,4) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`voucher_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -4333,12 +4333,12 @@ PRIMARY KEY (`voucher_id`)
 
 DROP TABLE IF EXISTS `oc_voucher_history`;
 CREATE TABLE `oc_voucher_history` (
-`voucher_history_id` int(11) NOT NULL AUTO_INCREMENT,
-`voucher_id` int(11) NOT NULL,
-`order_id` int(11) NOT NULL,
-`amount` decimal(15,4) NOT NULL,
-`date_added` datetime NOT NULL,
-PRIMARY KEY (`voucher_history_id`)
+  `voucher_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `voucher_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `amount` decimal(15,4) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`voucher_history_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------
@@ -4349,9 +4349,9 @@ PRIMARY KEY (`voucher_history_id`)
 
 DROP TABLE IF EXISTS `oc_voucher_theme`;
 CREATE TABLE `oc_voucher_theme` (
-`voucher_theme_id` int(11) NOT NULL AUTO_INCREMENT,
-`image` varchar(255) NOT NULL,
-PRIMARY KEY (`voucher_theme_id`)
+  `voucher_theme_id` int(11) NOT NULL AUTO_INCREMENT,
+  `image` varchar(255) NOT NULL,
+  PRIMARY KEY (`voucher_theme_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -4371,10 +4371,10 @@ INSERT INTO `oc_voucher_theme` (`voucher_theme_id`, `image`) VALUES
 
 DROP TABLE IF EXISTS `oc_voucher_theme_description`;
 CREATE TABLE `oc_voucher_theme_description` (
-`voucher_theme_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`name` varchar(32) NOT NULL,
-PRIMARY KEY (`voucher_theme_id`,`language_id`)
+  `voucher_theme_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  PRIMARY KEY (`voucher_theme_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -4397,9 +4397,9 @@ INSERT INTO `oc_voucher_theme_description` (`voucher_theme_id`, `language_id`, `
 
 DROP TABLE IF EXISTS `oc_weight_class`;
 CREATE TABLE `oc_weight_class` (
-`weight_class_id` int(11) NOT NULL AUTO_INCREMENT,
-`value` decimal(15,8) NOT NULL DEFAULT '0.00000000',
-PRIMARY KEY (`weight_class_id`)
+  `weight_class_id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` decimal(15,8) NOT NULL DEFAULT '0.00000000',
+  PRIMARY KEY (`weight_class_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -4420,11 +4420,11 @@ INSERT INTO `oc_weight_class` (`weight_class_id`, `value`) VALUES
 
 DROP TABLE IF EXISTS `oc_weight_class_description`;
 CREATE TABLE `oc_weight_class_description` (
-`weight_class_id` int(11) NOT NULL,
-`language_id` int(11) NOT NULL,
-`title` varchar(32) NOT NULL,
-`unit` varchar(4) NOT NULL,
-PRIMARY KEY (`weight_class_id`,`language_id`)
+  `weight_class_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `title` varchar(32) NOT NULL,
+  `unit` varchar(4) NOT NULL,
+  PRIMARY KEY (`weight_class_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -4441,7 +4441,7 @@ INSERT INTO `oc_weight_class_description` (`weight_class_id`, `language_id`, `ti
 (6, 1, 'Унції', 'oz'),
 (6, 2, 'Ounce', 'oz');
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_zone`
@@ -4449,12 +4449,12 @@ INSERT INTO `oc_weight_class_description` (`weight_class_id`, `language_id`, `ti
 
 DROP TABLE IF EXISTS `oc_zone`;
 CREATE TABLE `oc_zone` (
-`zone_id` int(11) NOT NULL AUTO_INCREMENT,
-`country_id` int(11) NOT NULL,
-`name` varchar(128) NOT NULL,
-`code` varchar(32) NOT NULL,
-`status` tinyint(1) NOT NULL DEFAULT '1',
-PRIMARY KEY (`zone_id`)
+  `zone_id` int(11) NOT NULL AUTO_INCREMENT,
+  `country_id` int(11) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `code` varchar(32) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`zone_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -4641,17 +4641,17 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (177, 10, 'Santiago del Estero', 'SD', 1),
 (178, 10, 'Tierra del Fuego', 'TF', 1),
 (179, 10, 'Tucuman', 'TU', 1),
-(180, 11, 'Арагацотн', 'AGT', 1),
-(181, 11, 'Арарат', 'ARR', 1),
-(182, 11, 'Армавир', 'ARM', 1),
-(183, 11, 'Гегаркуник', 'GEG', 1),
-(184, 11, 'Котайк', 'KOT', 1),
-(185, 11, 'Лори', 'LOR', 1),
-(186, 11, 'Ширак', 'SHI', 1),
-(187, 11, 'Сюник', 'SYU', 1),
-(188, 11, 'Тавуш', 'TAV', 1),
-(189, 11, 'Вайоц Дзор', 'VAY', 1),
-(190, 11, 'Ереван', 'YER', 1),
+(180, 11, 'Aragatsotn', 'AGT', 1),
+(181, 11, 'Ararat', 'ARR', 1),
+(182, 11, 'Armavir', 'ARM', 1),
+(183, 11, 'Geghark''unik''', 'GEG', 1),
+(184, 11, 'Kotayk''', 'KOT', 1),
+(185, 11, 'Lorri', 'LOR', 1),
+(186, 11, 'Shirak', 'SHI', 1),
+(187, 11, 'Syunik''', 'SYU', 1),
+(188, 11, 'Tavush', 'TAV', 1),
+(189, 11, 'Vayots'' Dzor', 'VAY', 1),
+(190, 11, 'Yerevan', 'YER', 1),
 (191, 13, 'Australian Capital Territory', 'ACT', 1),
 (192, 13, 'New South Wales', 'NSW', 1),
 (193, 13, 'Northern Territory', 'NT', 1),
@@ -4662,8 +4662,8 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (198, 13, 'Western Australia', 'WA', 1),
 (199, 14, 'Burgenland', 'BUR', 1),
 (200, 14, 'Kärnten', 'KAR', 1),
-(201, 14, 'Nieder&ouml;sterreich', 'NOS', 1),
-(202, 14, 'Ober&ouml;sterreich', 'OOS', 1),
+(201, 14, 'Niederösterreich', 'NOS', 1),
+(202, 14, 'Oberösterreich', 'OOS', 1),
 (203, 14, 'Salzburg', 'SAL', 1),
 (204, 14, 'Steiermark', 'STE', 1),
 (205, 14, 'Tirol', 'TIR', 1),
@@ -4798,13 +4798,13 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (334, 19, 'Saint Peter', 'PET', 1),
 (335, 19, 'Saint Philip', 'PHI', 1),
 (336, 19, 'Saint Thomas', 'THO', 1),
-(337, 20, 'Брест', 'BR', 1),
-(338, 20, 'Гомель', 'HO', 1),
-(339, 20, 'Минск', 'HM', 1),
-(340, 20, 'Гродно', 'HR', 1),
-(341, 20, 'Могилев', 'MA', 1),
-(342, 20, 'Минская область', 'MI', 1),
-(343, 20, 'Витебск', 'VI', 1),
+(337, 20, 'Brestskaya (Brest)', 'BR', 1),
+(338, 20, 'Homyel''skaya (Homyel'')', 'HO', 1),
+(339, 20, 'Horad Minsk', 'HM', 1),
+(340, 20, 'Hrodzyenskaya (Hrodna)', 'HR', 1),
+(341, 20, 'Mahilyowskaya (Mahilyow)', 'MA', 1),
+(342, 20, 'Minskaya', 'MI', 1),
+(343, 20, 'Vitsyebskaya (Vitsyebsk)', 'VI', 1),
 (344, 21, 'Antwerpen', 'VAN', 1),
 (345, 21, 'Brabant Wallon', 'WBR', 1),
 (346, 21, 'Hainaut', 'WHT', 1),
@@ -5692,7 +5692,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1251, 80, 'Samegrelo-Zemo Svaneti', 'SZ', 1),
 (1252, 80, 'Samtskhe-Javakheti', 'SJ', 1),
 (1253, 80, 'Shida Kartli', 'SK', 1),
-(1254, 81, 'Baden-W&uuml;rttemberg', 'BAW', 1),
+(1254, 81, 'Baden-Württemberg', 'BAW', 1),
 (1255, 81, 'Bayern', 'BAY', 1),
 (1256, 81, 'Berlin', 'BER', 1),
 (1257, 81, 'Brandenburg', 'BRG', 1),
@@ -5707,7 +5707,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1266, 81, 'Sachsen', 'SAS', 1),
 (1267, 81, 'Sachsen-Anhalt', 'SAC', 1),
 (1268, 81, 'Schleswig-Holstein', 'SCN', 1),
-(1269, 81, 'Th&uuml;ringen', 'THE', 1),
+(1269, 81, 'Thüringen', 'THE', 1),
 (1270, 82, 'Ashanti Region', 'AS', 1),
 (1271, 82, 'Brong-Ahafo Region', 'BA', 1),
 (1272, 82, 'Central Region', 'CE', 1),
@@ -5910,9 +5910,9 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1508, 100, 'Bali', 'BA', 1),
 (1509, 100, 'Banten', 'BT', 1),
 (1510, 100, 'Bengkulu', 'BE', 1),
-(1511, 100, 'BoDeTaBek', 'BD', 1),
+(1511, 100, 'Kalimantan Utara', 'BD', 1),
 (1512, 100, 'Gorontalo', 'GO', 1),
-(1513, 100, 'Jakarta Raya', 'JK', 1),
+(1513, 100, 'Jakarta', 'JK', 1),
 (1514, 100, 'Jambi', 'JA', 1),
 (1515, 100, 'Jawa Barat', 'JB', 1),
 (1516, 100, 'Jawa Tengah', 'JT', 1),
@@ -6115,23 +6115,23 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1713, 108, 'Jarash', 'JA', 1),
 (1714, 108, 'Ma''an', 'MA', 1),
 (1715, 108, 'Madaba', 'MD', 1),
-(1716, 109, 'Алматинская область', 'AL', 1),
-(1717, 109, 'Алматы - город республ-го значения', 'AC', 1),
-(1718, 109, 'Акмолинская область', 'AM', 1),
-(1719, 109, 'Актюбинская область', 'AQ', 1),
-(1720, 109, 'Астана - город республ-го значения', 'AS', 1),
-(1721, 109, 'Атырауская область', 'AT', 1),
-(1722, 109, 'Западно-Казахстанская область', 'BA', 1),
-(1723, 109, 'Байконур - город республ-го значения', 'BY', 1),
-(1724, 109, 'Мангистауская область', 'MA', 1),
-(1725, 109, 'Южно-Казахстанская область', 'ON', 1),
-(1726, 109, 'Павлодарская область', 'PA', 1),
-(1727, 109, 'Карагандинская область', 'QA', 1),
-(1728, 109, 'Костанайская область', 'QO', 1),
-(1729, 109, 'Кызылординская область', 'QY', 1),
-(1730, 109, 'Восточно-Казахстанская область', 'SH', 1),
-(1731, 109, 'Северо-Казахстанская область', 'SO', 1),
-(1732, 109, 'Жамбылская область', 'ZH', 1),
+(1716, 109, 'Almaty', 'AL', 1),
+(1717, 109, 'Almaty City', 'AC', 1),
+(1718, 109, 'Aqmola', 'AM', 1),
+(1719, 109, 'Aqtobe', 'AQ', 1),
+(1720, 109, 'Astana City', 'AS', 1),
+(1721, 109, 'Atyrau', 'AT', 1),
+(1722, 109, 'Batys Qazaqstan', 'BA', 1),
+(1723, 109, 'Bayqongyr City', 'BY', 1),
+(1724, 109, 'Mangghystau', 'MA', 1),
+(1725, 109, 'Ongtustik Qazaqstan', 'ON', 1),
+(1726, 109, 'Pavlodar', 'PA', 1),
+(1727, 109, 'Qaraghandy', 'QA', 1),
+(1728, 109, 'Qostanay', 'QO', 1),
+(1729, 109, 'Qyzylorda', 'QY', 1),
+(1730, 109, 'Shyghys Qazaqstan', 'SH', 1),
+(1731, 109, 'Soltustik Qazaqstan', 'SO', 1),
+(1732, 109, 'Zhambyl', 'ZH', 1),
 (1733, 110, 'Central', 'CE', 1),
 (1734, 110, 'Coast', 'CO', 1),
 (1735, 110, 'Eastern', 'EA', 1),
@@ -6702,12 +6702,12 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (2332, 150, 'Gelderland', 'GE', 1),
 (2333, 150, 'Groningen', 'GR', 1),
 (2334, 150, 'Limburg', 'LI', 1),
-(2335, 150, 'Noord Brabant', 'NB', 1),
-(2336, 150, 'Noord Holland', 'NH', 1),
+(2335, 150, 'Noord-Brabant', 'NB', 1),
+(2336, 150, 'Noord-Holland', 'NH', 1),
 (2337, 150, 'Overijssel', 'OV', 1),
 (2338, 150, 'Utrecht', 'UT', 1),
 (2339, 150, 'Zeeland', 'ZE', 1),
-(2340, 150, 'Zuid Holland', 'ZH', 1),
+(2340, 150, 'Zuid-Holland', 'ZH', 1),
 (2341, 152, 'Iles Loyaute', 'L', 1),
 (2342, 152, 'Nord', 'N', 1),
 (2343, 152, 'Sud', 'S', 1),
@@ -7872,9 +7872,9 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3506, 221, 'Abu Zaby', 'AZ', 1),
 (3507, 221, '''Ajman', 'AJ', 1),
 (3508, 221, 'Al Fujayrah', 'FU', 1),
-(3509, 221, 'Ash Shariqah', 'SH', 1),
+(3509, 221, 'Ash Shāriqah', 'SH', 1),
 (3510, 221, 'Dubai', 'DU', 1),
-(3511, 221, 'R''as al Khaymah', 'RK', 1),
+(3511, 221, 'Ra’s al Khaymah', 'RK', 1),
 (3512, 221, 'Umm al Qaywayn', 'UQ', 1),
 (3513, 222, 'Aberdeen', 'ABN', 1),
 (3514, 222, 'Aberdeenshire', 'ABNS', 1),
@@ -8575,7 +8575,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (4237, 105, 'Fermo', 'FM', 1),
 (4238, 105, 'Monza Brianza', 'MB', 1);
 
--- --------------------------------------------------------
+-----------------------------------------------------------
 
 --
 -- Table structure for table `oc_zone_to_geo_zone`
@@ -8583,13 +8583,13 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 
 DROP TABLE IF EXISTS `oc_zone_to_geo_zone`;
 CREATE TABLE `oc_zone_to_geo_zone` (
-`zone_to_geo_zone_id` int(11) NOT NULL AUTO_INCREMENT,
-`country_id` int(11) NOT NULL,
-`zone_id` int(11) NOT NULL DEFAULT '0',
-`geo_zone_id` int(11) NOT NULL,
-`date_added` datetime NOT NULL,
-`date_modified` datetime NOT NULL,
-PRIMARY KEY (`zone_to_geo_zone_id`)
+  `zone_to_geo_zone_id` int(11) NOT NULL AUTO_INCREMENT,
+  `country_id` int(11) NOT NULL,
+  `zone_id` int(11) NOT NULL DEFAULT '0',
+  `geo_zone_id` int(11) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`zone_to_geo_zone_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --

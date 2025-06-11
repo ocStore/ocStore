@@ -193,14 +193,14 @@ class ControllerMarketingContact extends Controller {
 					$start = ($page - 1) * 10;
 					$end = $start + 10;
 
-					if($page == 1 && $email_total < 10) {
+					if ($page == 1 && $email_total < 10) {
 						$json['success'] = sprintf($this->language->get('text_sent'), $email_total, $email_total);
-					} else if($page == 1 && $email_total > 10) {
+					} elseif ($page == 1 && $email_total > 10) {
 						$json['success'] = sprintf($this->language->get('text_sent'), 10, $email_total);
-					} else if($page > 1 && $email_total < ($page * 10)) {
+					} elseif ($page > 1 && $email_total < ($page * 10)) {
 						$json['success'] = sprintf($this->language->get('text_sent'), $email_total, $email_total);
 					} else {
-						$json['success'] = sprintf($this->language->get('text_sent'), ($start * $page), $email_total);
+						$json['success'] = sprintf($this->language->get('text_sent'), $end, $email_total);
 					}
 
 					if ($end < $email_total) {

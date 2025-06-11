@@ -737,8 +737,25 @@ class ControllerCustomerCustomer extends Controller {
 			$data['telephone'] = '';
 		}
 
+		if (isset($this->request->post['custom_field'])) {
+			$data['account_custom_field'] = $this->request->post['custom_field'];
+		} elseif (!empty($customer_info)) {
+			$data['account_custom_field'] = json_decode($customer_info['custom_field'], true);
+		} else {
+			$data['account_custom_field'] = array();
+		}
+
+		if (isset($this->request->post['address'])) {
+			$data['addresses'] = $this->request->post['address'];
+		} elseif (isset($this->request->get['customer_id'])) {
+			$data['addresses'] = $this->model_customer_customer->getAddresses($this->request->get['customer_id']);
+		} else {
+			$data['addresses'] = array();
+		}
+
 		// Custom Fields
 		$this->load->model('customer/custom_field');
+		$this->load->model('tool/upload');
 
 		$data['custom_fields'] = array();
 
@@ -759,14 +776,40 @@ class ControllerCustomerCustomer extends Controller {
 				'location'           => $custom_field['location'],
 				'sort_order'         => $custom_field['sort_order']
 			);
-		}
 
-		if (isset($this->request->post['custom_field'])) {
-			$data['account_custom_field'] = $this->request->post['custom_field'];
-		} elseif (!empty($customer_info)) {
-			$data['account_custom_field'] = json_decode($customer_info['custom_field'], true);
-		} else {
-			$data['account_custom_field'] = array();
+			if($custom_field['type'] == 'file') {
+				if(isset($data['account_custom_field'][$custom_field['custom_field_id']])) {
+					$code = $data['account_custom_field'][$custom_field['custom_field_id']];
+
+					$upload_result = $this->model_tool_upload->getUploadByCode($code);
+
+					$data['account_custom_field'][$custom_field['custom_field_id']] = array();
+					if($upload_result) {
+						$data['account_custom_field'][$custom_field['custom_field_id']]['name'] = $upload_result['name'];
+						$data['account_custom_field'][$custom_field['custom_field_id']]['code'] = $upload_result['code'];
+					} else {
+						$data['account_custom_field'][$custom_field['custom_field_id']]['name'] = "";
+						$data['account_custom_field'][$custom_field['custom_field_id']]['code'] = $code;
+					}
+				}
+
+				foreach($data['addresses'] as $address_id => $address) {
+					if(isset($address['custom_field'][$custom_field['custom_field_id']])) {
+						$code = $address['custom_field'][$custom_field['custom_field_id']];
+
+						$upload_result = $this->model_tool_upload->getUploadByCode($code);
+						
+						$data['addresses'][$address_id]['custom_field'][$custom_field['custom_field_id']] = array();
+						if($upload_result) {
+							$data['addresses'][$address_id]['custom_field'][$custom_field['custom_field_id']]['name'] = $upload_result['name'];
+							$data['addresses'][$address_id]['custom_field'][$custom_field['custom_field_id']]['code'] = $upload_result['code'];
+						} else {
+							$data['addresses'][$address_id]['custom_field'][$custom_field['custom_field_id']]['name'] = "";
+							$data['addresses'][$address_id]['custom_field'][$custom_field['custom_field_id']]['code'] = $code;
+						}
+					}
+				}
+			}
 		}
 
 		if (isset($this->request->post['newsletter'])) {
@@ -808,14 +851,6 @@ class ControllerCustomerCustomer extends Controller {
 		$this->load->model('localisation/country');
 
 		$data['countries'] = $this->model_localisation_country->getCountries();
-
-		if (isset($this->request->post['address'])) {
-			$data['addresses'] = $this->request->post['address'];
-		} elseif (isset($this->request->get['customer_id'])) {
-			$data['addresses'] = $this->model_customer_customer->getAddresses($this->request->get['customer_id']);
-		} else {
-			$data['addresses'] = array();
-		}
 
 		if (isset($this->request->post['address_id'])) {
 			$data['address_id'] = $this->request->post['address_id'];
@@ -859,7 +894,7 @@ class ControllerCustomerCustomer extends Controller {
 		} elseif (!empty($affiliate_info)) {
 			$data['tracking'] = $affiliate_info['tracking'];
 		} else {
-			$data['tracking'] = '';
+			$data['tracking'] = token(10);
 		}
 
 		if (isset($this->request->post['commission'])) {
@@ -1080,7 +1115,7 @@ class ControllerCustomerCustomer extends Controller {
 				$this->error['tracking'] = $this->language->get('error_tracking');
 			}
 
-			$affiliate_info = $this->model_customer_customer->getAffliateByTracking($this->request->post['tracking']);
+			$affiliate_info = $this->model_customer_customer->getAffiliateByTracking($this->request->post['tracking']);
 
 			if (!isset($this->request->get['customer_id'])) {
 				if ($affiliate_info) {
@@ -1093,9 +1128,9 @@ class ControllerCustomerCustomer extends Controller {
 			}
 
 			foreach ($custom_fields as $custom_field) {
-				if (($custom_field['location'] == 'affiliate') && $custom_field['required'] && empty($this->request->post['custom_field'][$custom_field['custom_field_id']])) {
+				if (($custom_field['location'] == 'affiliate') && $custom_field['required'] && empty($this->request->post['custom_field']['affiliate'][$custom_field['custom_field_id']])) {
 					$this->error['custom_field'][$custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
-				} elseif (($custom_field['location'] == 'affiliate') && ($custom_field['type'] == 'text') && !empty($custom_field['validation']) && !filter_var($this->request->post['custom_field'][$custom_field['custom_field_id']], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => $custom_field['validation'])))) {
+				} elseif (($custom_field['location'] == 'affiliate') && ($custom_field['type'] == 'text') && !empty($custom_field['validation']) && !filter_var($this->request->post['custom_field']['affiliate'][$custom_field['custom_field_id']], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => $custom_field['validation'])))) {
 					$this->error['custom_field'][$custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
 				}
 			}

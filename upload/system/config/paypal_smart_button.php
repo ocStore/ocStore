@@ -1,4 +1,4 @@
-<?php 
+<?php
 $_['paypal_smart_button_setting'] = array(
 	'page' => array(
 		'product' => array(

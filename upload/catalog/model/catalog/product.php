@@ -47,7 +47,7 @@ class ModelCatalogProduct extends Model {
 				'height'           => $query->row['height'],
 				'length_class_id'  => $query->row['length_class_id'],
 				'subtract'         => $query->row['subtract'],
-				'rating'           => round($query->row['rating']),
+				'rating'           => round(($query->row['rating']===null) ? 0 : $query->row['rating']),
 				'reviews'          => $query->row['reviews'] ? $query->row['reviews'] : 0,
 				'minimum'          => $query->row['minimum'],
 				'sort_order'       => $query->row['sort_order'],
@@ -265,6 +265,7 @@ class ModelCatalogProduct extends Model {
 		$product_data = $this->cache->get('product.latest.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $this->config->get('config_customer_group_id') . '.' . (int)$limit);
 
 		if (!$product_data) {
+			$product_data = array();
 			$query = $this->db->query("SELECT p.product_id FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY p.date_added DESC LIMIT " . (int)$limit);
 
 			foreach ($query->rows as $result) {
@@ -281,6 +282,7 @@ class ModelCatalogProduct extends Model {
 		$product_data = $this->cache->get('product.popular.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $this->config->get('config_customer_group_id') . '.' . (int)$limit);
 	
 		if (!$product_data) {
+			$product_data = array();
 			$query = $this->db->query("SELECT p.product_id FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY p.viewed DESC, p.date_added DESC LIMIT " . (int)$limit);
 	
 			foreach ($query->rows as $result) {
@@ -540,5 +542,17 @@ class ModelCatalogProduct extends Model {
 		} else {
 			return 0;
 		}
+	}
+
+	public function checkProductCategory($product_id, $category_ids) {
+		
+		$implode = array();
+
+		foreach ($category_ids as $category_id) {
+			$implode[] = (int)$category_id;
+		}
+		
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_to_category WHERE product_id = '" . (int)$product_id . "' AND category_id IN(" . implode(',', $implode) . ")");
+  	    return $query->row;
 	}
 }

@@ -12,13 +12,29 @@
 namespace Twig\Node\Expression\Binary;
 
 use Twig\Compiler;
+use Twig\Node\Expression\ReturnBoolInterface;
 
-class NotEqualBinary extends AbstractBinary
+class NotEqualBinary extends AbstractBinary implements ReturnBoolInterface
 {
-    public function operator(Compiler $compiler)
+    public function compile(Compiler $compiler): void
+    {
+        if (\PHP_VERSION_ID >= 80000) {
+            parent::compile($compiler);
+
+            return;
+        }
+
+        $compiler
+            ->raw('(0 !== CoreExtension::compare(')
+            ->subcompile($this->getNode('left'))
+            ->raw(', ')
+            ->subcompile($this->getNode('right'))
+            ->raw('))')
+        ;
+    }
+
+    public function operator(Compiler $compiler): Compiler
     {
         return $compiler->raw('!=');
     }
 }
-
-class_alias('Twig\Node\Expression\Binary\NotEqualBinary', 'Twig_Node_Expression_Binary_NotEqual');

@@ -24,14 +24,10 @@
             <label class="col-sm-2 control-label" for="input-store">{{ entry_store }}</label>
             <div class="col-sm-10">
               <select name="store_id" id="input-store" class="form-control">
-                <option value="0">{{ text_default }}</option>
-                
+                <option value="0">{{ text_default }}</option>               
                 {% for store in stores %}
-                
                 <option value="{{ store.store_id }}">{{ store.name }}</option>
-                
                 {% endfor %}
-              
               </select>
             </div>
           </div>
@@ -53,13 +49,9 @@
             <label class="col-sm-2 control-label" for="input-customer-group">{{ entry_customer_group }}</label>
             <div class="col-sm-10">
               <select name="customer_group_id" id="input-customer-group" class="form-control">
-                
                 {% for customer_group in customer_groups %}
-                
                 <option value="{{ customer_group.customer_group_id }}">{{ customer_group.name }}</option>
-                
                 {% endfor %}
-              
               </select>
             </div>
           </div>
@@ -105,8 +97,8 @@
   <script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script> 
   <script type="text/javascript" src="view/javascript/codemirror/lib/xml.js"></script> 
   <script type="text/javascript" src="view/javascript/codemirror/lib/formatting.js"></script> 
-  <script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
-  <link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/summernote/summernote.min.js"></script>
+  <link href="view/javascript/summernote/summernote.min.css" rel="stylesheet" />
   <script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script> 
   <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script> 
   <script type="text/javascript"><!--

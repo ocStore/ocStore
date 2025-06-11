@@ -12,9 +12,14 @@
 namespace Twig\Node\Expression;
 
 use Twig\Compiler;
+use Twig\Node\Expression\Unary\SpreadUnary;
+use Twig\Node\Expression\Unary\StringCastUnary;
+use Twig\Node\Expression\Variable\ContextVariable;
 
-class ArrayExpression extends AbstractExpression
+class ArrayExpression extends AbstractExpression implements SupportDefinedTestInterface, ReturnArrayInterface
 {
+    use SupportDefinedTestTrait;
+
     private $index;
 
     public function __construct(array $elements, int $lineno)
@@ -29,10 +34,9 @@ class ArrayExpression extends AbstractExpression
         }
     }
 
-    public function getKeyValuePairs()
+    public function getKeyValuePairs(): array
     {
         $pairs = [];
-
         foreach (array_chunk($this->nodes, 2) as $pair) {
             $pairs[] = [
                 'key' => $pair[0],
@@ -43,7 +47,7 @@ class ArrayExpression extends AbstractExpression
         return $pairs;
     }
 
-    public function hasElement(AbstractExpression $key)
+    public function hasElement(AbstractExpression $key): bool
     {
         foreach ($this->getKeyValuePairs() as $pair) {
             // we compare the string representation of the keys
@@ -56,7 +60,7 @@ class ArrayExpression extends AbstractExpression
         return false;
     }
 
-    public function addElement(AbstractExpression $value, AbstractExpression $key = null)
+    public function addElement(AbstractExpression $value, ?AbstractExpression $key = null): void
     {
         if (null === $key) {
             $key = new ConstantExpression(++$this->index, $value->getTemplateLine());
@@ -65,24 +69,44 @@ class ArrayExpression extends AbstractExpression
         array_push($this->nodes, $key, $value);
     }
 
-    public function compile(Compiler $compiler)
+    public function compile(Compiler $compiler): void
     {
+        if ($this->definedTest) {
+            $compiler->repr(true);
+
+            return;
+        }
+
         $compiler->raw('[');
-        $first = true;
-        foreach ($this->getKeyValuePairs() as $pair) {
-            if (!$first) {
+        $isSequence = true;
+        foreach ($this->getKeyValuePairs() as $i => $pair) {
+            if (0 !== $i) {
                 $compiler->raw(', ');
             }
-            $first = false;
 
-            $compiler
-                ->subcompile($pair['key'])
-                ->raw(' => ')
-                ->subcompile($pair['value'])
-            ;
+            $key = null;
+            if ($pair['key'] instanceof ContextVariable) {
+                $pair['key'] = new StringCastUnary($pair['key'], $pair['key']->getTemplateLine());
+            } elseif ($pair['key'] instanceof TempNameExpression) {
+                $key = $pair['key']->getAttribute('name');
+                $pair['key'] = new ConstantExpression($key, $pair['key']->getTemplateLine());
+            } elseif ($pair['key'] instanceof ConstantExpression) {
+                $key = $pair['key']->getAttribute('value');
+            }
+
+            if ($key !== $i) {
+                $isSequence = false;
+            }
+
+            if (!$isSequence && !$pair['value'] instanceof SpreadUnary) {
+                $compiler
+                    ->subcompile($pair['key'])
+                    ->raw(' => ')
+                ;
+            }
+
+            $compiler->subcompile($pair['value']);
         }
         $compiler->raw(']');
     }
 }
-
-class_alias('Twig\Node\Expression\ArrayExpression', 'Twig_Node_Expression_Array');

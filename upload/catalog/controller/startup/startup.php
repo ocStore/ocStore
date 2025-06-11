@@ -1,5 +1,17 @@
 <?php
 class ControllerStartupStartup extends Controller {
+
+	public function __isset($key) {
+		// To make sure that calls to isset also support dynamic properties from the registry
+		// See https://www.php.net/manual/en/language.oop5.overloading.php#object.isset
+		if ($this->registry) {
+			if ($this->registry->get($key)!==null) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function index() {
 		// Store
 		if ($this->request->server['HTTPS']) {
@@ -104,7 +116,7 @@ class ControllerStartupStartup extends Controller {
 		}
 				
 		if (!isset($this->request->cookie['language']) || $this->request->cookie['language'] != $code) {
-			setcookie('language', $code, time() + 60 * 60 * 24 * 30, '/', $this->request->server['HTTP_HOST']);
+			setcookie('language', $code, time() + 60 * 60 * 24 * 30, '/');
 		}
 				
 		// Overwrite the default language object
@@ -164,7 +176,7 @@ class ControllerStartupStartup extends Controller {
 		}
 		
 		if (!isset($this->request->cookie['currency']) || $this->request->cookie['currency'] != $code) {
-			setcookie('currency', $code, time() + 60 * 60 * 24 * 30, '/', $this->request->server['HTTP_HOST']);
+			setcookie('currency', $code, time() + 60 * 60 * 24 * 30, '/');
 		}		
 		
 		$this->registry->set('currency', new Cart\Currency($this->registry));
@@ -197,6 +209,6 @@ class ControllerStartupStartup extends Controller {
 		$this->registry->set('cart', new Cart\Cart($this->registry));
 		
 		// Encryption
-		$this->registry->set('encryption', new Encryption($this->config->get('config_encryption')));
+		$this->registry->set('encryption', new Encryption());
 	}
 }

@@ -62,7 +62,7 @@ class ControllerProductSearch extends Controller {
 			$page = 1;
 		}
 
-		if (isset($this->request->get['limit'])) {
+		if (isset($this->request->get['limit']) && (int)$this->request->get['limit'] > 0) {
 			$limit = (int)$this->request->get['limit'];
 		} else {
 			$limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
@@ -92,7 +92,7 @@ class ControllerProductSearch extends Controller {
 		}
 
 		if (isset($this->request->get['tag'])) {
-			$url .= '&tag=' . urlencode(html_entity_decode($this->request->get['tag'], ENT_QUOTES, 'UTF-8'));
+			$url .= '&tag=' . urlencode(html_entity_decode(trim($this->request->get['tag']), ENT_QUOTES, 'UTF-8'));
 		}
 
 		if (isset($this->request->get['description'])) {

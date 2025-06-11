@@ -473,7 +473,7 @@ class ControllerMarketplaceModification extends Controller {
 				$recovery = array();
 
 				// Set the a recovery of the modification code in case we need to use it if an abort attribute is used.
-				if (isset($modification)) {
+				if ($modification) {
 					$recovery = $modification;
 				}
 
@@ -544,6 +544,11 @@ class ControllerMarketplaceModification extends Controller {
 
 										// Log
 										$log[] = PHP_EOL . 'FILE: ' . $key;
+
+									} else {
+										// Log
+										$log[] = PHP_EOL . 'FILE: (sub modification) ' . $key;
+									
 									}
 
 									foreach ($operations as $operation) {

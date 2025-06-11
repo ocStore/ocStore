@@ -96,7 +96,7 @@ class ModelExtensionReportSale extends Model {
 			);
 		}
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `" . DB_PREFIX . "order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= '" . $this->db->escape(date('Y') . '-' . date('m') . '-1') . "' GROUP BY DATE(date_added)");
+		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `" . DB_PREFIX . "order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= DATE('" . $this->db->escape(date('Y') . '-' . date('m') . '-1') . "') GROUP BY DATE(date_added)");
 
 		foreach ($query->rows as $result) {
 			$order_data[date('j', strtotime($result['date_added']))] = array(
@@ -146,11 +146,11 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= DATE('" . $this->db->escape($data['filter_date_start']) . "')";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= DATE('" . $this->db->escape($data['filter_date_end']) . "')";
 		}
 
 		if (!empty($data['filter_group'])) {
@@ -160,7 +160,7 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		switch($group) {
-			case 'day';
+			case 'day':
 				$sql .= " GROUP BY YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added)";
 				break;
 			default:
@@ -202,7 +202,7 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		switch($group) {
-			case 'day';
+			case 'day':
 				$sql = "SELECT COUNT(DISTINCT YEAR(date_added), MONTH(date_added), DAY(date_added)) AS total FROM `" . DB_PREFIX . "order`";
 				break;
 			default:
@@ -224,11 +224,11 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(date_added) >= DATE('" . $this->db->escape($data['filter_date_start']) . "')";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(date_added) <= DATE('" . $this->db->escape($data['filter_date_end']) . "')";
 		}
 
 		$query = $this->db->query($sql);
@@ -246,11 +246,11 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= DATE('" . $this->db->escape($data['filter_date_start']) . "')";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= DATE('" . $this->db->escape($data['filter_date_end']) . "')";
 		}
 
 		if (!empty($data['filter_group'])) {
@@ -260,7 +260,7 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		switch($group) {
-			case 'day';
+			case 'day':
 				$sql .= " GROUP BY YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added), ot.title";
 				break;
 			default:
@@ -300,7 +300,7 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		switch($group) {
-			case 'day';
+			case 'day':
 				$sql = "SELECT COUNT(DISTINCT YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added), ot.title) AS total FROM `" . DB_PREFIX . "order` o";
 				break;
 			default:
@@ -324,11 +324,11 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= DATE('" . $this->db->escape($data['filter_date_start']) . "')";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= DATE('" . $this->db->escape($data['filter_date_end']) . "')";
 		}
 
 		$query = $this->db->query($sql);
@@ -346,11 +346,11 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= DATE('" . $this->db->escape($data['filter_date_start']) . "')";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= DATE('" . $this->db->escape($data['filter_date_end']) . "')";
 		}
 
 		if (!empty($data['filter_group'])) {
@@ -360,7 +360,7 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		switch($group) {
-			case 'day';
+			case 'day':
 				$sql .= " GROUP BY YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added), ot.title";
 				break;
 			default:
@@ -400,7 +400,7 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		switch($group) {
-			case 'day';
+			case 'day':
 				$sql = "SELECT COUNT(DISTINCT YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added), ot.title) AS total FROM `" . DB_PREFIX . "order` o";
 				break;
 			default:
@@ -424,11 +424,11 @@ class ModelExtensionReportSale extends Model {
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= DATE('" . $this->db->escape($data['filter_date_start']) . "')";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= DATE('" . $this->db->escape($data['filter_date_end']) . "')";
 		}
 
 		$query = $this->db->query($sql);

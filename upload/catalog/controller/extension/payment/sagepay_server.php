@@ -43,17 +43,17 @@ class ControllerExtensionPaymentSagepayServer extends Controller {
 		$payment_data = array();
 
 		if ($this->config->get('payment_sagepay_server_test') == 'live') {
-			$url = 'https://live.sagepay.com/gateway/service/vspserver-register.vsp';
+//			$url = 'https://live.sagepay.com/gateway/service/vspserver-register.vsp';
+			$url = 'https://live.opayo.eu.elavon.com/gateway/service/vspdirect-register.vsp';
 
-			$payment_data['VPSProtocol'] = '3.00';
+//			$payment_data['VPSProtocol'] = '3.00';
+			$payment_data['VPSProtocol'] = '4.00';
 		} elseif ($this->config->get('payment_sagepay_server_test') == 'test') {
-			$url = 'https://test.sagepay.com/gateway/service/vspserver-register.vsp';
+//			$url = 'https://test.sagepay.com/gateway/service/vspserver-register.vsp';
+			$url = 'https://sandbox.opayo.eu.elavon.com/gateway/service/vspdirect-register.vsp';
 
-			$payment_data['VPSProtocol'] = '3.00';
-		} elseif ($this->config->get('payment_sagepay_server_test') == 'sim') {
-			$url = 'https://test.sagepay.com/Simulator/VSPServerGateway.asp?Service=VendorRegisterTx';
-
-			$payment_data['VPSProtocol'] = '2.23';
+//			$payment_data['VPSProtocol'] = '3.00';
+			$payment_data['VPSProtocol'] = '4.00';
 		}
 
 		$this->load->model('checkout/order');
@@ -67,7 +67,7 @@ class ControllerExtensionPaymentSagepayServer extends Controller {
 
 		$payment_data['ReferrerID'] = 'E511AF91-E4A0-42DE-80B0-09C981A3FB61';
 		$payment_data['Vendor'] = $this->config->get('payment_sagepay_server_vendor');
-		$payment_data['VendorTxCode'] = $this->session->data['order_id'] . 'T' . strftime("%Y%m%d%H%M%S") . mt_rand(1, 999);
+		$payment_data['VendorTxCode'] = $this->session->data['order_id'] . 'T' . date("YmdHis") . mt_rand(1, 999);
 		$payment_data['Amount'] = $this->currency->format($order_info['total'], $order_info['currency_code'], false, false);
 		$payment_data['Currency'] = $this->session->data['currency'];
 		$payment_data['Description'] = substr($this->config->get('config_name'), 0, 100);
@@ -469,11 +469,14 @@ class ControllerExtensionPaymentSagepayServer extends Controller {
 
 		if (!empty($card['token'])) {
 			if ($this->config->get('payment_sagepay_server_test') == 'live') {
-				$url = 'https://live.sagepay.com/gateway/service/removetoken.vsp';
+//				$url = 'https://live.sagepay.com/gateway/service/removetoken.vsp';
+				$url = 'https://live.opayo.eu.elavon.com/gateway/service/removetoken.vsp';
 			} else {
-				$url = 'https://test.sagepay.com/gateway/service/removetoken.vsp';
+//				$url = 'https://test.sagepay.com/gateway/service/removetoken.vsp';
+				$url = 'https://sandbox.opayo.eu.elavon.com/gateway/service/removetoken.vsp';
 			}
-			$payment_data['VPSProtocol'] = '3.00';
+//			$payment_data['VPSProtocol'] = '3.00';
+			$payment_data['VPSProtocol'] = '4.00';
 			$payment_data['Vendor'] = $this->config->get('payment_sagepay_server_vendor');
 			$payment_data['TxType'] = 'REMOVETOKEN';
 			$payment_data['Token'] = $card['token'];

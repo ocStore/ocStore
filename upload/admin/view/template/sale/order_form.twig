@@ -184,7 +184,8 @@
                 <label class="col-sm-2 control-label">{{ custom_field.name }}</label>
                 <div class="col-sm-10">
                   <button type="button" id="button-custom-field{{ custom_field.custom_field_id }}" class="btn btn-default"><i class="fa fa-upload"></i> {{ button_upload }}</button>
-                  <input type="hidden" name="custom_field[{{ custom_field.custom_field_id }}]" value="{{ account_custom_field[custom_field.custom_field_id] ? account_custom_field[custom_field.custom_field_id] }}" id="input-custom-field{{ custom_field.custom_field_id }}" />
+                  <input type="hidden" name="custom_field[{{ custom_field.custom_field_id }}]" value="{{ account_custom_field[custom_field.custom_field_id]['code'] ? account_custom_field[custom_field.custom_field_id]['code'] }}" id="input-custom-field{{ custom_field.custom_field_id }}" />
+				  <span>{{ account_custom_field[custom_field.custom_field_id]['name'] }}</span>
                 </div>
               </div>
               {% endif %}
@@ -297,8 +298,8 @@
                     <tr>
                       <td class="text-center" colspan="6">{{ text_no_results }}</td>
                     </tr>
-                  </tbody>
                   {% endif %}
+		  </tbody>
                 </table>
               </div>
               <ul class="nav nav-tabs nav-justified">
@@ -553,7 +554,8 @@
                 <label class="col-sm-2 control-label">{{ custom_field.name }}</label>
                 <div class="col-sm-10">
                   <button type="button" id="button-payment-custom-field{{ custom_field.custom_field_id }}" data-loading-text="{{ text_loading }}" class="btn btn-default"><i class="fa fa-upload"></i> {{ button_upload }}</button>
-                  <input type="hidden" name="custom_field[{{ custom_field.custom_field_id }}]" value="{{ payment_custom_field[custom_field.custom_field_id] ? payment_custom_field[custom_field.custom_field_id] }}" id="input-payment-custom-field{{ custom_field.custom_field_id }}" />
+                  <input type="hidden" name="custom_field[{{ custom_field.custom_field_id }}]" value="{{ payment_custom_field[custom_field.custom_field_id]['code'] ? payment_custom_field[custom_field.custom_field_id]['code'] }}" id="input-payment-custom-field{{ custom_field.custom_field_id }}" />
+				  <span>{{ payment_custom_field[custom_field.custom_field_id]['name'] }}</span>
                 </div>
               </div>
               {% endif %}
@@ -764,7 +766,8 @@
                 <label class="col-sm-2 control-label">{{ custom_field.name }}</label>
                 <div class="col-sm-10">
                   <button type="button" id="button-shipping-custom-field{{ custom_field.custom_field_id }}" data-loading-text="{{ text_loading }}" class="btn btn-default"><i class="fa fa-upload"></i> {{ button_upload }}</button>
-                  <input type="hidden" name="custom_field[{{ custom_field.custom_field_id }}]" value="{{ shipping_custom_field[custom_field.custom_field_id] ? shipping_custom_field[custom_field.custom_field_id] }}" id="input-custom-field{{ custom_field.custom_field_id }}" />
+                  <input type="hidden" name="custom_field[{{ custom_field.custom_field_id }}]" value="{{ shipping_custom_field[custom_field.custom_field_id]['code'] ? shipping_custom_field[custom_field.custom_field_id]['code'] }}" id="input-custom-field{{ custom_field.custom_field_id }}" />
+				  <span>{{ shipping_custom_field[custom_field.custom_field_id]['name'] }}</span>
                 </div>
               </div>
               {% endif %}
@@ -1037,7 +1040,7 @@ $('input[name=\'customer\']').autocomplete({
 			$('#tab-customer input[name^=\'custom_field[' + i + ']\'][type=\'hidden\']').val(item.custom_field[i]);
 			$('#tab-customer input[name^=\'custom_field[' + i + ']\'][type=\'radio\'][value=\'' + item.custom_field[i] + '\']').prop('checked', true);
 
-			if (item.custom_field[i] instanceof Array) {
+			if (item.custom_field[i]) {
 				for (j = 0; j < item.custom_field[i].length; j++) {
 					$('#tab-customer input[name^=\'custom_field[' + i + ']\'][type=\'checkbox\'][value=\'' + item.custom_field[i][j] + '\']').prop('checked', true);
 				}
@@ -1559,6 +1562,10 @@ $('#button-cart').on('click', function() {
 	$('a[href=\'#tab-payment\']').tab('show');
 });
 
+function htmlDecode(value) {
+  return $("<textarea/>").html(value).text();
+}
+
 // Payment Address
 $('select[name=\'payment_address\']').on('change', function() {
 	$.ajax({
@@ -1576,12 +1583,12 @@ $('select[name=\'payment_address\']').on('change', function() {
 			$('#tab-payment select option').not('#tab-payment select[name=\'payment_address\']').removeAttr('selected');
 			$('#tab-payment input[type=\'checkbox\'], #tab-payment input[type=\'radio\']').removeAttr('checked');
 
-			$('#tab-payment input[name=\'firstname\']').val(json['firstname']);
-			$('#tab-payment input[name=\'lastname\']').val(json['lastname']);
-			$('#tab-payment input[name=\'company\']').val(json['company']);
-			$('#tab-payment input[name=\'address_1\']').val(json['address_1']);
-			$('#tab-payment input[name=\'address_2\']').val(json['address_2']);
-			$('#tab-payment input[name=\'city\']').val(json['city']);
+			$('#tab-payment input[name=\'firstname\']').val(htmlDecode(json['firstname']));
+			$('#tab-payment input[name=\'lastname\']').val(htmlDecode(json['lastname']));
+			$('#tab-payment input[name=\'company\']').val(htmlDecode(json['company']));
+			$('#tab-payment input[name=\'address_1\']').val(htmlDecode(json['address_1']));
+			$('#tab-payment input[name=\'address_2\']').val(htmlDecode(json['address_2']));
+			$('#tab-payment input[name=\'city\']').val(htmlDecode(json['city']));
 			$('#tab-payment input[name=\'postcode\']').val(json['postcode']);
 			$('#tab-payment select[name=\'country_id\']').val(json['country_id']);
 
@@ -1760,12 +1767,12 @@ $('select[name=\'shipping_address\']').on('change', function() {
 			$('#tab-shipping select option').not('#tab-shipping select[name=\'shipping_address\']').removeAttr('selected');
 			$('#tab-shipping input[type=\'checkbox\'], #tab-shipping input[type=\'radio\']').removeAttr('checked');
 
-			$('#tab-shipping input[name=\'firstname\']').val(json['firstname']);
-			$('#tab-shipping input[name=\'lastname\']').val(json['lastname']);
-			$('#tab-shipping input[name=\'company\']').val(json['company']);
-			$('#tab-shipping input[name=\'address_1\']').val(json['address_1']);
-			$('#tab-shipping input[name=\'address_2\']').val(json['address_2']);
-			$('#tab-shipping input[name=\'city\']').val(json['city']);
+			$('#tab-shipping input[name=\'firstname\']').val(htmlDecode(json['firstname']));
+			$('#tab-shipping input[name=\'lastname\']').val(htmlDecode(json['lastname']));
+			$('#tab-shipping input[name=\'company\']').val(htmlDecode(json['company']));
+			$('#tab-shipping input[name=\'address_1\']').val(htmlDecode(json['address_1']));
+			$('#tab-shipping input[name=\'address_2\']').val(htmlDecode(json['address_2']));
+			$('#tab-shipping input[name=\'city\']').val(htmlDecode(json['city']));
 			$('#tab-shipping input[name=\'postcode\']').val(json['postcode']);
 			$('#tab-shipping select[name=\'country_id\']').val(json['country_id']);
 

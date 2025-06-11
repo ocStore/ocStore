@@ -45,7 +45,6 @@
             <div class="form-group">
               <label class="control-label" for="input-status">{{ entry_status }}</label>
               <select name="filter_status" id="input-status" class="form-control">
-                
                 {% for recurring_status in recurring_statuses %}
                   {% if filter_status == recurring_status.value %}
                 <option value="{{ recurring_status.value }}" selected="selected">{{ recurring_status.text }}</option>
@@ -200,13 +199,5 @@ $('input[name=\'filter_customer\']').autocomplete({
 		$('input[name=\'filter_customer\']').val(item['label']);
 	}
 });
-//--></script>
-<script type="text/javascript"><!--
-  $('#filter-recurring').on('keydown', function(e) {
-    if (e.keyCode == 13) {
-      $('#button-filter').trigger('click')
-    }
-  });
-//--></script>
-</div>
-{{ footer }} 
+//--></script></div>
+{{ footer }}

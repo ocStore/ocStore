@@ -56,6 +56,9 @@ class ControllerExtensionExtensionModule extends Controller {
 			// Call uninstall method if it exsits
 			$this->load->controller('extension/module/' . $this->request->get['extension'] . '/uninstall');
 
+			$this->load->model('user/user_group');
+			$this->model_user_user_group->removePermissions('extension/module/' . $this->request->get['extension']);
+
 			$this->session->data['success'] = $this->language->get('text_success');
 		}
 
@@ -206,6 +209,10 @@ class ControllerExtensionExtensionModule extends Controller {
 	protected function validate() {
 		if (!$this->user->hasPermission('modify', 'extension/extension/module')) {
 			$this->error['warning'] = $this->language->get('error_permission');
+		}
+
+		if(!isset($this->error['warning']) && isset($this->request->get['extension']) && ((utf8_strlen($this->request->get['extension']) < 3) || (utf8_strlen($this->request->get['extension']) > 32))) {
+			$this->error['warning'] = $this->language->get('error_code_name');
 		}
 
 		return !$this->error;

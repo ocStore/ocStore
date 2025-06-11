@@ -20,7 +20,7 @@ class ControllerStartupPermission extends Controller {
 				'extension/dashboard',
 				'extension/analytics',
 				'extension/captcha',
-                'extension/currency',
+				'extension/currency',
 				'extension/extension',
 				'extension/feed',
 				'extension/fraud',

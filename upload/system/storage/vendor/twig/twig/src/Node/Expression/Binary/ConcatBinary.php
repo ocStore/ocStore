@@ -13,13 +13,12 @@
 namespace Twig\Node\Expression\Binary;
 
 use Twig\Compiler;
+use Twig\Node\Expression\ReturnStringInterface;
 
-class ConcatBinary extends AbstractBinary
+class ConcatBinary extends AbstractBinary implements ReturnStringInterface
 {
-    public function operator(Compiler $compiler)
+    public function operator(Compiler $compiler): Compiler
     {
         return $compiler->raw('.');
     }
 }
-
-class_alias('Twig\Node\Expression\Binary\ConcatBinary', 'Twig_Node_Expression_Binary_Concat');

@@ -58,7 +58,7 @@ class ControllerProductCategory extends Controller {
 			$page = 1;
 		}
 
-		if (isset($this->request->get['limit'])) {
+		if (isset($this->request->get['limit']) && (int)$this->request->get['limit'] > 0) {
 			$limit = (int)$this->request->get['limit'];
             if (!in_array('limit', $disallow_params, true) && $this->config->get('config_noindex_status')) {
                 $this->document->setRobots('noindex,follow');

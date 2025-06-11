@@ -40,11 +40,13 @@ class ControllerAccountDownload extends Controller {
 			$page = 1;
 		}
 
+		$limit = 10;
+
 		$data['downloads'] = array();
 
 		$download_total = $this->model_account_download->getTotalDownloads();
 
-		$results = $this->model_account_download->getDownloads(($page - 1) * $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit'), $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit'));
+		$results = $this->model_account_download->getDownloads(($page - 1) * $limit, $limit);
 
 		foreach ($results as $result) {
 			if (file_exists(DIR_DOWNLOAD . $result['filename'])) {
@@ -82,13 +84,13 @@ class ControllerAccountDownload extends Controller {
 		$pagination = new Pagination();
 		$pagination->total = $download_total;
 		$pagination->page = $page;
-		$pagination->limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
+		$pagination->limit = $limit;
 		$pagination->url = $this->url->link('account/download', 'page={page}', true);
 
 		$data['pagination'] = $pagination->render();
 
-		$data['results'] = sprintf($this->language->get('text_pagination'), ($download_total) ? (($page - 1) * 10) + 1 : 0, ((($page - 1) * 10) > ($download_total - 10)) ? $download_total : ((($page - 1) * 10) + 10), $download_total, ceil($download_total / 10));
-		
+		$data['results'] = sprintf($this->language->get('text_pagination'), ($download_total) ? (($page - 1) * $limit) + 1 : 0, ((($page - 1) * $limit) > ($download_total - $limit)) ? $download_total : ((($page - 1) * $limit) + $limit), $download_total, ceil($download_total / $limit));
+
 		$data['continue'] = $this->url->link('account/account', '', true);
 
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -111,7 +113,7 @@ class ControllerAccountDownload extends Controller {
 		$this->load->model('account/download');
 
 		if (isset($this->request->get['download_id'])) {
-			$download_id = $this->request->get['download_id'];
+			$download_id = (int)$this->request->get['download_id'];
 		} else {
 			$download_id = 0;
 		}

@@ -3,5 +3,5 @@
 
 ocStore був створений відповідно до GNU GPLv3 і включає або є похідним робіт ліцензуються відповідно до GNU General Public License або інших ліцензій на безкоштовне програмне забезпечення або Open Source. В ocStore використані такі джерела:
 
-- OpenCart							(C) 2006-2015 Daniel Kerr, OpenCart Ltd.
-- Arastta							(С) 2015 Arastta Association.
+- OpenCart							(C) 2006 - 2025 Daniel Kerr, OpenCart Ltd.
+- Arastta							(С) 2015 - 2025 Arastta Association.

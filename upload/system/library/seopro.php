@@ -549,7 +549,12 @@ class SeoPro {
 
         if (isset($this->request->get['_route_'])) {
             $parts = $parts = explode('/', $this->request->get['_route_']);
-            $keyword = end($parts);
+            //$keyword = end($parts);
+            foreach ($parts as $_part) {
+                if($_part && trim($_part)){
+                    $keyword = $_part;
+                }
+            }
         } 	else {
             $keyword = '';
         }

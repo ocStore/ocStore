@@ -28,9 +28,9 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-width">{{ entry_width }}</label>
             <div class="col-sm-10">
-              <select name="dashboard_domovoy_width" id="input-width" class="form-control">
+              <select name="dashboard_domovyk_width" id="input-width" class="form-control">
                 {% for column in columns %}
-                {% if column == dashboard_domovoy_width %}
+                {% if column == dashboard_domovyk_width %}
                 <option value="{{ column }}" selected="selected">{{ column }}</option>
                 {% else %}
                 <option value="{{ column }}">{{ column }}</option>
@@ -42,8 +42,8 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
             <div class="col-sm-10">
-              <select name="dashboard_domovoy_status" id="input-status" class="form-control">
-                {% if dashboard_domovoy_status %}
+              <select name="dashboard_domovyk_status" id="input-status" class="form-control">
+                {% if dashboard_domovyk_status %}
                 <option value="1" selected="selected">{{ text_enabled }}</option>
                 <option value="0">{{ text_disabled }}</option>
                 {% else %}
@@ -56,7 +56,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
             <div class="col-sm-10">
-              <input type="text" name="dashboard_domovoy_sort_order" value="{{ dashboard_domovoy_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+              <input type="text" name="dashboard_domovyk_sort_order" value="{{ dashboard_domovyk_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
             </div>
           </div>
           {% for folder in folders %}
@@ -68,17 +68,17 @@
               <div class="row">
                 <div class="col-sm-10">
                   <label class="radio-inline"> {% if folder.cron.status %}
-                      <input type="radio" name="dashboard_domovoy_cron[{{folder.key}}][status]" value="1" checked="checked" />
+                      <input type="radio" name="dashboard_domovyk_cron[{{folder.key}}][status]" value="1" checked="checked" />
                       {{ text_yes }}
                     {% else %}
-                      <input type="radio" name="dashboard_domovoy_cron[{{folder.key}}][status]" value="1" />
+                      <input type="radio" name="dashboard_domovyk_cron[{{folder.key}}][status]" value="1" />
                       {{ text_yes }}
                     {% endif %} </label>
                   <label class="radio-inline"> {% if not folder.cron.status %}
-                      <input type="radio" name="dashboard_domovoy_cron[{{folder.key}}][status]" value="0" checked="checked" />
+                      <input type="radio" name="dashboard_domovyk_cron[{{folder.key}}][status]" value="0" checked="checked" />
                       {{ text_no }}
                     {% else %}
-                      <input type="radio" name="dashboard_domovoy_cron[{{folder.key}}][status]" value="0" />
+                      <input type="radio" name="dashboard_domovyk_cron[{{folder.key}}][status]" value="0" />
                       {{ text_no }}
                     {% endif %}</label>
                 </div>
@@ -90,7 +90,7 @@
               <div class="col-sm-10">
                 <div class="row">
                   <div class="col-sm-12">
-                    <input type="text" name="dashboard_domovoy_cron[{{folder.key}}][size]" value="{{ folder.cron.size }}" placeholder="{{ entry_size }}" class="form-control" />
+                    <input type="text" name="dashboard_domovyk_cron[{{folder.key}}][size]" value="{{ folder.cron.size }}" placeholder="{{ entry_size }}" class="form-control" />
                   </div>
                 </div>
               </div>
@@ -100,7 +100,7 @@
               <div class="col-sm-10">
                 <div class="row">
                   <div class="col-sm-3">
-                    <input type="text" name="dashboard_domovoy_cron[{{folder.key}}][time]" value="{{ folder.cron.time }}" placeholder="{{ entry_time }}" class="form-control" />
+                    <input type="text" name="dashboard_domovyk_cron[{{folder.key}}][time]" value="{{ folder.cron.time }}" placeholder="{{ entry_time }}" class="form-control" />
                   </div>
                 </div>
               </div>
@@ -114,7 +114,7 @@
               <div class="col-sm-10">
                 <div class="row">
                   <div class="col-sm-12">
-                    <input type="text" name="dashboard_domovoy_disk_free_space" value="{{ dashboard_domovoy_disk_free_space }}" placeholder="{{ entry_size }}" class="form-control" />
+                    <input type="text" name="dashboard_domovyk_disk_free_space" value="{{ dashboard_domovyk_disk_free_space }}" placeholder="{{ entry_size }}" class="form-control" />
                   </div>
                 </div>
               </div>
@@ -124,18 +124,18 @@
               <div class="col-sm-10">
                 <div class="row">
                   <div class="col-sm-10">
-                    <label class="radio-inline"> {% if dashboard_domovoy_free_space_status %}
-                        <input type="radio" name="dashboard_domovoy_free_space_status" value="1" checked="checked" />
+                    <label class="radio-inline"> {% if dashboard_domovyk_free_space_status %}
+                        <input type="radio" name="dashboard_domovyk_free_space_status" value="1" checked="checked" />
                         {{ text_yes }}
                       {% else %}
-                        <input type="radio" name="dashboard_domovoy_free_space_status" value="1" />
+                        <input type="radio" name="dashboard_domovyk_free_space_status" value="1" />
                         {{ text_yes }}
                       {% endif %} </label>
-                    <label class="radio-inline"> {% if not dashboard_domovoy_free_space_status %}
-                        <input type="radio" name="dashboard_domovoy_free_space_status" value="0" checked="checked" />
+                    <label class="radio-inline"> {% if not dashboard_domovyk_free_space_status %}
+                        <input type="radio" name="dashboard_domovyk_free_space_status" value="0" checked="checked" />
                         {{ text_no }}
                       {% else %}
-                        <input type="radio" name="dashboard_domovoy_free_space_status" value="0" />
+                        <input type="radio" name="dashboard_domovyk_free_space_status" value="0" />
                         {{ text_no }}
                       {% endif %}</label>
                   </div>
@@ -148,13 +148,13 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-valide-params">{{ entry_danger_funtions }}</label>
             <div class="col-sm-10">
-              <textarea name="dashboard_domovoy_danger_funtions" rows=10" placeholder="{{ entry_danger_funtions }}" id="input-valide-params" class="form-control">{{ dashboard_domovoy_danger_funtions }}</textarea>
+              <textarea name="dashboard_domovyk_danger_funtions" rows=10" placeholder="{{ entry_danger_funtions }}" id="input-valide-params" class="form-control">{{ dashboard_domovyk_danger_funtions }}</textarea>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-valide-params">{{ entry_warning_funtions }}</label>
             <div class="col-sm-10">
-              <textarea name="dashboard_domovoy_warning_funtions" rows=10" placeholder="{{ entry_warning_funtions }}" id="input-valide-params" class="form-control">{{ dashboard_domovoy_warning_funtions }}</textarea>
+              <textarea name="dashboard_domovyk_warning_funtions" rows=10" placeholder="{{ entry_warning_funtions }}" id="input-valide-params" class="form-control">{{ dashboard_domovyk_warning_funtions }}</textarea>
             </div>
           </div>
           </fieldset>

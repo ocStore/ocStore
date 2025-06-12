@@ -24,7 +24,7 @@ class ControllerEventTheme extends Controller {
 
 		$theme_info = $this->model_design_theme->getTheme($route, $directory);
 
-        if ($theme_info && !is_file(DIR_MODIFICATION . 'catalog/view/theme/' .$directory.'/template/'. $route . '.twig')) {
+		if ($theme_info) {
 			$code = html_entity_decode($theme_info['code'], ENT_QUOTES, 'UTF-8');
 		}
 	}

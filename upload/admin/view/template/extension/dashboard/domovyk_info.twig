@@ -1,4 +1,4 @@
-<div id="domovoy" class="panel panel-default">
+<div id="domovyk" class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title"><i class="fa fa-calendar"></i> {{ heading_title }}</h3>
         <button type="button" id="button-phpinfo" title="{{ text_phpinfo }}" class="btn btn-info">phpinfo</button>
@@ -137,22 +137,22 @@
     </ul>
 </div>
 <style>
-    #domovoy .btn-group label {
+    #domovyk .btn-group label {
         background: #a9a9a9
     }
 
-    #domovoy .btn-group label.btn-success.active {
+    #domovyk .btn-group label.btn-success.active {
         background-color: #4cb64c;
     }
 
-    #domovoy .btn-group label.btn-danger.active {
+    #domovyk .btn-group label.btn-danger.active {
         background-color: #d0321e;
     }
 </style>
 <script type="text/javascript"><!--
     $('#button-phpinfo').on('click', function () {
         $.ajax({
-            url: 'index.php?route=extension/dashboard/domovoy/phpinfo&user_token={{ user_token }}',
+            url: 'index.php?route=extension/dashboard/domovyk/phpinfo&user_token={{ user_token }}',
             dataType: 'html',
             beforeSend: function () {
                 $('#modal-phpinfo').button('loading');
@@ -200,7 +200,7 @@
     function calcFolder(element) {
 
         $.ajax({
-            url: 'index.php?route=extension/dashboard/domovoy/calc&dir=' + $(element).attr('value') + '&user_token={{ user_token }}',
+            url: 'index.php?route=extension/dashboard/domovyk/calc&dir=' + $(element).attr('value') + '&user_token={{ user_token }}',
             dataType: 'json',
             beforeSend: function () {
                 $(element).button('loading');
@@ -227,11 +227,11 @@
 
     }
 
-    $('#domovoy button.clearFolder').on('click', function () {
+    $('#domovyk button.clearFolder').on('click', function () {
         var element = this;
 
         $.ajax({
-            url: 'index.php?route=extension/dashboard/domovoy/clear&dir=' + $(element).attr('value') + '&user_token={{ user_token }}',
+            url: 'index.php?route=extension/dashboard/domovyk/clear&dir=' + $(element).attr('value') + '&user_token={{ user_token }}',
             dataType: 'json',
             beforeSend: function () {
                 $(element).button('loading');
@@ -259,14 +259,14 @@
         });
     });
 
-    $('#domovoy button.calcFolder').on('click', function () {
+    $('#domovyk button.calcFolder').on('click', function () {
         var element = this;
 
         calcFolder(element);
     });
     //--></script>
 <script type="text/javascript"><!--
-    $('#domovoy input[name=\'developer_theme\'], input[name=\'developer_sass\']').on('change', function () {
+    $('#domovyk input[name=\'developer_theme\'], input[name=\'developer_sass\']').on('change', function () {
         $.ajax({
             url: 'index.php?route=common/developer/edit&user_token={{ user_token }}',
             type: 'post',
@@ -282,11 +282,11 @@
                 $('.alert-dismissible').remove();
 
                 if (json['error']) {
-                    $('#domovoy .alert-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#domovyk .alert-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                 }
 
                 if (json['success']) {
-                    $('#domovoy .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#domovyk .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -295,7 +295,7 @@
         });
     });
 
-    $('#domovoy table button').on('click', function () {
+    $('#domovyk table button').on('click', function () {
         var element = this;
 
         $.ajax({
@@ -311,11 +311,11 @@
                 $('.alert-dismissible').remove();
 
                 if (json['error']) {
-                    $('#domovoy .alert-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#domovyk .alert-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                 }
 
                 if (json['success']) {
-                    $('#domovoy .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#domovyk .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -333,7 +333,7 @@
             complete: function () {
                 $(element).button('reset');
                 $('.alert-dismissible').remove();
-                $('#domovoy .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ text_ocmod_cache_success }} <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                $('#domovyk .alert-body').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ text_ocmod_cache_success }} <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
             }
         });
     });

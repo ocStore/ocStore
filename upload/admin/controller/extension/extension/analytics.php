@@ -125,7 +125,7 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 			}
 		}
 
-		$data['promotion'] = $this->load->controller('marketplace/promotion');
+		$data['promotion'] = $this->load->controller('extension/extension/promotion');
 
 		$this->response->setOutput($this->load->view('extension/extension/analytics', $data));
 	}

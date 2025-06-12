@@ -109,7 +109,7 @@ class ControllerExtensionExtensionMenu extends Controller {
 
 		array_multisort($sort_order, SORT_ASC, $data['extensions']);
 
-		$data['promotion'] = $this->load->controller('marketplace/promotion');
+		$data['promotion'] = $this->load->controller('extension/extension/promotion');
 
 		$this->response->setOutput($this->load->view('extension/extension/menu', $data));
 	}

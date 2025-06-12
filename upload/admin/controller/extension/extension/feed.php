@@ -101,23 +101,10 @@ class ControllerExtensionExtensionFeed extends Controller {
 				);
 			}
 		}
-		
-		$sort_order = array();
-		foreach ($data['extensions'] as $key => $value) {
-			if($value['installed']){
-				$add = '0';
-			}else{
-				$add = '1';
-			}
-				$sort_order[$key] = $add.$value['name'];
-		}
-		array_multisort($sort_order, SORT_ASC, $data['extensions']);
 
+		$data['promotion'] = $this->load->controller('extension/extension/promotion');
 
-        $data['promotion'] = $this->load->controller('marketplace/promotion');
-
-
-        $this->response->setOutput($this->load->view('extension/extension/feed', $data));
+		$this->response->setOutput($this->load->view('extension/extension/feed', $data));
 	}
 
 	protected function validate() {

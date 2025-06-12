@@ -108,6 +108,8 @@ class ControllerMarketplaceOpencartforum extends Controller {
 		$url .= '&time=' . $time;
         $url .= '&language=' . $this->language->get('code');
 
+
+
 		if (isset($this->request->get['filter_search'])) {
 			$url .= '&filter_search=' . urlencode($this->request->get['filter_search']);
 		}
@@ -155,7 +157,7 @@ class ControllerMarketplaceOpencartforum extends Controller {
 
 		$response_info = json_decode($response, true);
 
-		$extension_total = strip_tags($response_info['extension_total']);
+        $extension_total = strip_tags($response_info['extension_total'] ?? '0');
 
 		// Categories
         $curl = curl_init(OPENCARTFORUM_SERVER . 'marketplace/api/categories?' . $url);
@@ -217,7 +219,7 @@ class ControllerMarketplaceOpencartforum extends Controller {
 
         $response_info = $this->strip($response_info, $config);
 
-        $promotions = $this->strip($response_info['promotions'], $config);
+        $promotions = isset($response_info['promotions']) ? $this->strip($response_info['promotions'], $config) : [];
 
         if ($promotions && $page == 1) {
             foreach ($promotions as $result) {
@@ -236,7 +238,7 @@ class ControllerMarketplaceOpencartforum extends Controller {
 
 		$data['extensions'] = array();
 
-        $extensions = $this->strip($response_info['extensions'], $config);
+        $extensions = $this->strip($response_info['extensions'] ?? [], $config);
 
 		if ($extensions) {
 			foreach ($extensions as $result) {
@@ -282,7 +284,7 @@ class ControllerMarketplaceOpencartforum extends Controller {
 			$url .= '&sort=' . $this->request->get['sort'];
 		}
 
-        $categories = $this->strip($categories_info['categories'], $config);
+        $categories = $this->strip($categories_info['categories'] ?? [], $config);
 
 		$data['categories'] = array();
 
@@ -592,12 +594,24 @@ class ControllerMarketplaceOpencartforum extends Controller {
 	}
 
     private function strip($string, $config) {
+        if (empty($string)) {
+            return is_array($string) ? [] : '';
+        }
+
         $purifier = new HTMLPurifier($config);
-	    if (is_array($string))  {
-	        foreach ($string as $k => $v) {
-	        $string[$k] = $this->strip($v, $config); } return $string;
-	    }
-	    return $purifier->purify($string);
-	}
+
+        if (is_array($string)) {
+            foreach ($string as $k => $v) {
+                $string[$k] = $this->strip($v, $config);
+            }
+            return $string;
+        }
+
+        if (is_string($string)) {
+            return $purifier->purify($string);
+        }
+
+        return $string;
+    }
 
 }

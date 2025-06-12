@@ -76,25 +76,24 @@ class ControllerExtensionCurrencyNbu extends Controller {
 		return !$this->error;
 	}
 
-	public function currency($default = '') {
-		if ($this->config->get('currency_nbu_status')) {
-			$curl = curl_init();
+    public function currency($default = '') {
+        if ($this->config->get('currency_nbu_status')) {
+            $curl = curl_init();
 
-			curl_setopt($curl, CURLOPT_URL, 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange');
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curl, CURLOPT_HEADER, false);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
-			curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+            curl_setopt($curl, CURLOPT_URL, 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange');
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_HEADER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 
-			$response = curl_exec($curl);
+            $response = curl_exec($curl);
 
-			curl_close($curl);
+            curl_close($curl);
 
-
-			if ($response) {
-				$dom = new \DOMDocument('1.0', 'UTF-8');
-				$dom->loadXml($response);
+            if ($response) {
+                $dom = new \DOMDocument('1.0', 'UTF-8');
+                $dom->loadXml($response);
 
                 $currencies = array();
 
@@ -103,7 +102,6 @@ class ControllerExtensionCurrencyNbu extends Controller {
                 $root = $dom->documentElement;
                 $items = $root->getElementsByTagName('currency');
 
-
                 foreach ($items as $item)
                 {
                     $code = $item->getElementsByTagName('cc')->item(0)->nodeValue;
@@ -111,27 +109,35 @@ class ControllerExtensionCurrencyNbu extends Controller {
                     $currencies[$code] = floatval(str_replace(',', '.', $curs));
                 }
 
+                if ($currencies) {
+                    $this->load->model('localisation/currency');
 
-				if ($currencies) {
-					$this->load->model('localisation/currency');
+                    $results = $this->model_localisation_currency->getCurrencies();
 
-					$results = $this->model_localisation_currency->getCurrencies();
+                    if (empty($default)) {
+                        $default = 'UAH';
+                    }
 
-					foreach ($results as $result) {
-						if (isset($currencies[$result['code']])) {
-							$from = $currencies['UAH'];
+                    if (!isset($currencies[$default])) {
+                        $currencies[$default] = 1.0000;
+                    }
 
-							$to = $currencies[$result['code']];
+                    foreach ($results as $result) {
+                        if (isset($currencies[$result['code']])) {
+                            $from = $currencies['UAH'];
+                            $to = $currencies[$result['code']];
 
-							$this->model_localisation_currency->editValueByCode($result['code'], ($currencies[$default] * ($from / $to)));
-						}
-					}
-				}
+                            $base_rate = isset($currencies[$default]) ? $currencies[$default] : 1.0000;
 
-				$this->model_localisation_currency->editValueByCode($default, '1.00000');
+                            $this->model_localisation_currency->editValueByCode($result['code'], ($base_rate * ($from / $to)));
+                        }
+                    }
+                }
 
-				$this->cache->delete('currency');
-			}
-		}
-	}
+                $this->model_localisation_currency->editValueByCode($default, '1.00000');
+
+                $this->cache->delete('currency');
+            }
+        }
+    }
 }

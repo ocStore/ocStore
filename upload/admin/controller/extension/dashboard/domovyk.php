@@ -1,19 +1,19 @@
 <?php
 /**
- * @package        Domovoy
+ * @package        Domovyk
  * @author        Dinox
  * @copyright    Copyright (c) 2009 - 2021, Dinox. (https://opencartforum.com/)
  * @license        GPL3
  * @link        https://opencartforum.com/
  */
 
-class ControllerExtensionDashboardDomovoy extends Controller
+class ControllerExtensionDashboardDomovyk extends Controller
 {
     private $error = array();
 
     public function index()
     {
-        $this->load->language('extension/dashboard/domovoy');
+        $this->load->language('extension/dashboard/domovyk');
 
         $this->document->setTitle($this->language->get('heading_h1'));
 
@@ -21,7 +21,7 @@ class ControllerExtensionDashboardDomovoy extends Controller
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 
-            $this->model_setting_setting->editSetting('dashboard_domovoy', $this->request->post);
+            $this->model_setting_setting->editSetting('dashboard_domovyk', $this->request->post);
 
             $this->session->data['success'] = $this->language->get('text_success');
 
@@ -48,10 +48,10 @@ class ControllerExtensionDashboardDomovoy extends Controller
 
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('heading_title'),
-            'href' => $this->url->link('extension/dashboard/domovoy', 'user_token=' . $this->session->data['user_token'], true)
+            'href' => $this->url->link('extension/dashboard/domovyk', 'user_token=' . $this->session->data['user_token'], true)
         );
 
-        $data['action'] = $this->url->link('extension/dashboard/domovoy', 'user_token=' . $this->session->data['user_token'], true);
+        $data['action'] = $this->url->link('extension/dashboard/domovyk', 'user_token=' . $this->session->data['user_token'], true);
 
         $data['cancel'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'] . '&type=dashboard', true);
 
@@ -62,10 +62,10 @@ class ControllerExtensionDashboardDomovoy extends Controller
             $data['folders'][$key]['name'] = $this->language->get('text_dir_' . $key);
             $data['folders'][$key]['key'] = $key;
 
-            if (isset($this->request->post["dashboard_domovoy_cron"])) {
-                $cron = $this->request->post["dashboard_domovoy_cron"];
-            } elseif ($this->config->get("dashboard_domovoy_cron")) {
-                $cron = $this->config->get("dashboard_domovoy_cron");
+            if (isset($this->request->post["dashboard_domovyk_cron"])) {
+                $cron = $this->request->post["dashboard_domovyk_cron"];
+            } elseif ($this->config->get("dashboard_domovyk_cron")) {
+                $cron = $this->config->get("dashboard_domovyk_cron");
             } else {
                 $data['folders'][$key]['cron']['time'] = 30;
                 $data['folders'][$key]['cron']['size'] = 100;
@@ -78,40 +78,40 @@ class ControllerExtensionDashboardDomovoy extends Controller
             }
         }
 
-        if (isset($this->request->post['dashboard_domovoy_danger_funtions'])) {
-            $data['dashboard_domovoy_danger_funtions'] = $this->request->post['dashboard_domovoy_danger_funtions'];
-        } elseif ($this->config->get('dashboard_domovoy_danger_funtions')) {
-            $data['dashboard_domovoy_danger_funtions'] = $this->config->get('dashboard_domovoy_danger_funtions');
+        if (isset($this->request->post['dashboard_domovyk_danger_funtions'])) {
+            $data['dashboard_domovyk_danger_funtions'] = $this->request->post['dashboard_domovyk_danger_funtions'];
+        } elseif ($this->config->get('dashboard_domovyk_danger_funtions')) {
+            $data['dashboard_domovyk_danger_funtions'] = $this->config->get('dashboard_domovyk_danger_funtions');
         } else {
-            $data['dashboard_domovoy_danger_funtions'] = "exec\r\npassthru\r\nini_get\r\nini_get_all\r\nparse_ini_file\r\nphp_uname\r\nsystem\r\nshell_exec\r\nshow_source\r\npcntl_exec\r\npcntl_exec\r\nexpect_popen\r\nproc_open\r\npopen";
+            $data['dashboard_domovyk_danger_funtions'] = "exec\r\npassthru\r\nini_get\r\nini_get_all\r\nparse_ini_file\r\nphp_uname\r\nsystem\r\nshell_exec\r\nshow_source\r\npcntl_exec\r\npcntl_exec\r\nexpect_popen\r\nproc_open\r\npopen";
         }
 
-        if (isset($this->request->post['dashboard_domovoy_warning_funtions'])) {
-            $data['dashboard_domovoy_warning_funtions'] = $this->request->post['dashboard_domovoy_warning_funtions'];
-        } elseif ($this->config->get('dashboard_domovoy_warning_funtions')) {
-            $data['dashboard_domovoy_warning_funtions'] = $this->config->get('dashboard_domovoy_warning_funtions');
+        if (isset($this->request->post['dashboard_domovyk_warning_funtions'])) {
+            $data['dashboard_domovyk_warning_funtions'] = $this->request->post['dashboard_domovyk_warning_funtions'];
+        } elseif ($this->config->get('dashboard_domovyk_warning_funtions')) {
+            $data['dashboard_domovyk_warning_funtions'] = $this->config->get('dashboard_domovyk_warning_funtions');
         } else {
-            $data['dashboard_domovoy_warning_funtions'] = "diskfreespace\r\ndisk_total_space\r\ndisk_total_space\r\nfileperms\r\nfopen\r\nphpversion\r\nopendir\r\nposix_getpwuid\r\nposix_uname";
+            $data['dashboard_domovyk_warning_funtions'] = "diskfreespace\r\ndisk_total_space\r\ndisk_total_space\r\nfileperms\r\nfopen\r\nphpversion\r\nopendir\r\nposix_getpwuid\r\nposix_uname";
         }
 
-        if (isset($this->request->post['dashboard_domovoy_width'])) {
-            $data['dashboard_domovoy_width'] = $this->request->post['dashboard_domovoy_width'];
+        if (isset($this->request->post['dashboard_domovyk_width'])) {
+            $data['dashboard_domovyk_width'] = $this->request->post['dashboard_domovyk_width'];
         } else {
-            $data['dashboard_domovoy_width'] = $this->config->get('dashboard_domovoy_width');
+            $data['dashboard_domovyk_width'] = $this->config->get('dashboard_domovyk_width');
         }
 
-        if (isset($this->request->post['dashboard_domovoy_disk_free_space'])) {
-            $data['dashboard_domovoy_disk_free_space'] = $this->request->post['dashboard_domovoy_disk_free_space'];
-        } elseif($this->config->get('dashboard_domovoy_disk_free_space')) {
-            $data['dashboard_domovoy_disk_free_space'] = $this->config->get('dashboard_domovoy_disk_free_space');
+        if (isset($this->request->post['dashboard_domovyk_disk_free_space'])) {
+            $data['dashboard_domovyk_disk_free_space'] = $this->request->post['dashboard_domovyk_disk_free_space'];
+        } elseif($this->config->get('dashboard_domovyk_disk_free_space')) {
+            $data['dashboard_domovyk_disk_free_space'] = $this->config->get('dashboard_domovyk_disk_free_space');
         } else {
-            $data['dashboard_domovoy_disk_free_space'] = 500;
+            $data['dashboard_domovyk_disk_free_space'] = 500;
         }
 
-        if (isset($this->request->post['dashboard_domovoy_free_space_status'])) {
-            $data['dashboard_domovoy_free_space_status'] = $this->request->post['dashboard_domovoy_free_space_status'];
+        if (isset($this->request->post['dashboard_domovyk_free_space_status'])) {
+            $data['dashboard_domovyk_free_space_status'] = $this->request->post['dashboard_domovyk_free_space_status'];
         } else {
-            $data['dashboard_domovoy_free_space_status'] = $this->config->get('dashboard_domovoy_free_space_status');
+            $data['dashboard_domovyk_free_space_status'] = $this->config->get('dashboard_domovyk_free_space_status');
         }
 
 
@@ -121,29 +121,29 @@ class ControllerExtensionDashboardDomovoy extends Controller
             $data['columns'][] = $i;
         }
 
-        if (isset($this->request->post['dashboard_domovoy_status'])) {
-            $data['dashboard_domovoy_status'] = $this->request->post['dashboard_domovoy_status'];
+        if (isset($this->request->post['dashboard_domovyk_status'])) {
+            $data['dashboard_domovyk_status'] = $this->request->post['dashboard_domovyk_status'];
         } else {
-            $data['dashboard_domovoy_status'] = $this->config->get('dashboard_domovoy_status');
+            $data['dashboard_domovyk_status'] = $this->config->get('dashboard_domovyk_status');
         }
 
 
-        if (isset($this->request->post['dashboard_domovoy_sort_order'])) {
-            $data['dashboard_domovoy_sort_order'] = $this->request->post['dashboard_domovoy_sort_order'];
+        if (isset($this->request->post['dashboard_domovyk_sort_order'])) {
+            $data['dashboard_domovyk_sort_order'] = $this->request->post['dashboard_domovyk_sort_order'];
         } else {
-            $data['dashboard_domovoy_sort_order'] = $this->config->get('dashboard_domovoy_sort_order');
+            $data['dashboard_domovyk_sort_order'] = $this->config->get('dashboard_domovyk_sort_order');
         }
 
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
 
-        $this->response->setOutput($this->load->view('extension/dashboard/domovoy_form', $data));
+        $this->response->setOutput($this->load->view('extension/dashboard/domovyk_form', $data));
     }
 
     protected function validate()
     {
-        if (!$this->user->hasPermission('modify', 'extension/dashboard/domovoy')) {
+        if (!$this->user->hasPermission('modify', 'extension/dashboard/domovyk')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }
 
@@ -153,7 +153,7 @@ class ControllerExtensionDashboardDomovoy extends Controller
     public function dashboard()
     {
         $this->load->language('common/developer');
-        $this->load->language('extension/dashboard/domovoy');
+        $this->load->language('extension/dashboard/domovyk');
 
         $this->document->addStyle('view/stylesheet/fork-awesome.css');
 
@@ -182,7 +182,7 @@ class ControllerExtensionDashboardDomovoy extends Controller
 
         $folders = array('logs' => array('dir' => DIR_STORAGE . 'logs'), 'cache' => array('dir' => DIR_CACHE), 'imagescache' => array('dir' => DIR_IMAGE . 'cache'));
 
-        $data['setting'] = $this->url->link('extension/dashboard/domovoy', 'user_token=' . $this->session->data['user_token'], true);
+        $data['setting'] = $this->url->link('extension/dashboard/domovyk', 'user_token=' . $this->session->data['user_token'], true);
 
         $data['folders'] = array();
 
@@ -190,8 +190,8 @@ class ControllerExtensionDashboardDomovoy extends Controller
             $data['folders'][$key]['name'] = $this->language->get('text_dir_' . $key);
             $data['folders'][$key]['key'] = $key;
 
-            if ($this->config->get("dashboard_domovoy_cron")) {
-                $cron = $this->config->get("dashboard_domovoy_cron");
+            if ($this->config->get("dashboard_domovyk_cron")) {
+                $cron = $this->config->get("dashboard_domovyk_cron");
                 $folder_size = $cron[$key]['size'] * pow(1024, 2);
             } else {
                 $folder_size = 0;
@@ -201,7 +201,7 @@ class ControllerExtensionDashboardDomovoy extends Controller
 
             $cron_time = $cron[$key]['time'] * 60;
 
-            $cache = $this->config->get('domovoy_folders_' . $key);
+            $cache = $this->config->get('domovyk_folders_' . $key);
 
             $time = $this->date_diff(date('Y-m-d H:i'), (isset($cache['date']) ? $cache['date'] : ''));
             if ($cron[$key]['status'] && $time > $cron_time) {
@@ -240,40 +240,40 @@ class ControllerExtensionDashboardDomovoy extends Controller
             $data['ioncube_version'] = ioncube_loader_version();
         }
 
-        if (function_exists('disk_free_space') && $this->config->get('dashboard_domovoy_free_space_status')) {
+        if (function_exists('disk_free_space') && $this->config->get('dashboard_domovyk_free_space_status')) {
             $disk_space = disk_free_space("/");
             $data['disk_free_space'] = $this->format_size($disk_space);
-                $space_limit = $this->config->get("dashboard_domovoy_disk_free_space");
+                $space_limit = $this->config->get("dashboard_domovyk_disk_free_space");
                 $folder_size = $space_limit * pow(1024, 2);
             if ($disk_space < $folder_size) {
                 $data['disk_free_space_warning'] = sprintf($this->language->get('text_warning_free_space'), $space_limit);
             }
         }
 
-        $danger_funtions = explode("\r\n", $this->config->get('dashboard_domovoy_danger_funtions'));
+        $danger_funtions = explode("\r\n", $this->config->get('dashboard_domovyk_danger_funtions'));
         if (!empty($danger_funtions)) {
             $data['danger_funtions'] = $this->checkFunc($danger_funtions);
         } else {
             $data['danger_funtions'] = array();
         }
 
-        $warning_funtions = explode("\r\n", $this->config->get('dashboard_domovoy_warning_funtions'));
+        $warning_funtions = explode("\r\n", $this->config->get('dashboard_domovyk_warning_funtions'));
         if (!empty($warning_funtions)) {
             $data['warning_funtions'] = $this->checkFunc($warning_funtions);
         } else {
             $data['warning_funtions'] = array();
         }
 
-        return $this->load->view('extension/dashboard/domovoy_info', $data);
+        return $this->load->view('extension/dashboard/domovyk_info', $data);
     }
 
     public function clear($dir = false)
     {
-        $this->load->language('extension/dashboard/domovoy');
+        $this->load->language('extension/dashboard/domovyk');
 
         $json = array();
 
-        if (!$this->user->hasPermission('modify', 'extension/dashboard/domovoy')) {
+        if (!$this->user->hasPermission('modify', 'extension/dashboard/domovyk')) {
             $json['error'] = $this->language->get('error_permission');
         } else {
             if (isset($this->request->get['dir']) or $dir) {
@@ -305,7 +305,7 @@ class ControllerExtensionDashboardDomovoy extends Controller
 
     public function calc($dir = false)
     {
-        $this->load->language('extension/dashboard/domovoy');
+        $this->load->language('extension/dashboard/domovyk');
         $this->load->model('setting/setting');
 
         if (isset($this->request->get['dir']) or $dir) {
@@ -323,7 +323,7 @@ class ControllerExtensionDashboardDomovoy extends Controller
 
             $json = array();
 
-            if (!$this->user->hasPermission('modify', 'extension/dashboard/domovoy')) {
+            if (!$this->user->hasPermission('modify', 'extension/dashboard/domovyk')) {
                 $json['error'] = $this->language->get('error_permission');
             } else {
                 $folder['size'] = $this->getFilesSize($folders[$key]['dir']);
@@ -331,17 +331,17 @@ class ControllerExtensionDashboardDomovoy extends Controller
                 $folder['files'] = count(scandir($folders[$key]['dir'])) - 2;
                 $folder['date'] = date("Y-m-d H:i:s");
 
-                $value = $this->model_setting_setting->getSettingValue('domovoy_folders_' . $key);
+                $value = $this->model_setting_setting->getSettingValue('domovyk_folders_' . $key);
                 if ($value) {
-                    $this->model_setting_setting->editSettingValue('domovoy', 'domovoy_folders_' . $key, $folder);
+                    $this->model_setting_setting->editSettingValue('domovyk', 'domovyk_folders_' . $key, $folder);
                 } else {
-                    $settings = $this->model_setting_setting->getSetting('domovoy');
-                    $settings['domovoy_folders_' . $key] = $folder;
-                    $this->model_setting_setting->editSetting('domovoy', $settings);
+                    $settings = $this->model_setting_setting->getSetting('domovyk');
+                    $settings['domovyk_folders_' . $key] = $folder;
+                    $this->model_setting_setting->editSetting('domovyk', $settings);
                 }
 
-                if ($this->config->get("dashboard_domovoy_cron")) {
-                    $cron = $this->config->get("dashboard_domovoy_cron");
+                if ($this->config->get("dashboard_domovyk_cron")) {
+                    $cron = $this->config->get("dashboard_domovyk_cron");
                     $folder_size = $cron[$key]['size'] * pow(1024, 2);
                 } else {
                     $folder_size = 0;
@@ -396,7 +396,7 @@ class ControllerExtensionDashboardDomovoy extends Controller
 
     private function format_size($size)
     {
-        $this->load->language('extension/dashboard/domovoy');
+        $this->load->language('extension/dashboard/domovyk');
         $metrics[0] = $this->language->get('text_metrics_bit');
         $metrics[1] = $this->language->get('text_metrics_kbit');
         $metrics[2] = $this->language->get('text_metrics_mbit');

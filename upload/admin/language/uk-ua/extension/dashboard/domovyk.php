@@ -1,14 +1,14 @@
 <?php
 /**
- * @package		Domovoy
+ * @package		Domovyk
  * @author		Dinox
  * @copyright	Copyright (c) 2009 - 2021, Dinox. (https://opencartforum.com/)
  * @license		GPL3
  * @link		https://opencartforum.com/
  */
 // Heading
-$_['heading_h1']                = 'Домовой 1.0.1';
-$_['heading_title']             = '<strong>Домовой 1.0.1</strong>';
+$_['heading_h1']                = 'Домовик 1.0.2';
+$_['heading_title']             = '<strong>Домовик 1.0.2</strong>';
 
 // Text
 $_['text_extension']            = 'Доповнення';
@@ -45,7 +45,7 @@ $_['text_twig_off_warning']     = 'Кеш TWIG шаблонів відключе
 $_['text_clear']                = 'Очистити вміст папки';
 $_['text_calculate']            = 'Підрахувати розмір папки';
 $_['text_copy']                 = 'Натисніть щоб скопіювати версію';
-$_['text_copyright']            = 'Домовой 1.0.1 - Dinox[opencartforum.com]';
+$_['text_copyright']            = 'Домовик 1.0.2 - Dinox[opencartforum.com]';
 $_['text_phpinfo']              = 'Натисніть, щоб переглянути докладну інформацію про PHP та інші параметри';
 $_['text_check_function']       = 'Перевірка функцій';
 $_['text_ocmod_cache_success']  = 'Очищення кеша OCMOD успішно завершено';

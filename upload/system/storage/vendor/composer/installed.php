@@ -3,11 +3,11 @@
         'name' => 'opencart/opencart',
         'pretty_version' => '3.0.x-dev',
         'version' => '3.0.9999999.9999999-dev',
-        'reference' => 'dad46f0085b4da1b24d84821df9b77cda8b5f522',
+        'reference' => '13073a88d15b5de168ab06a304c341252634a941',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../../../',
         'aliases' => array(),
-        'dev' => true,
+        'dev' => false,
     ),
     'versions' => array(
         'braintree/braintree_php' => array(
@@ -76,7 +76,7 @@
         'opencart/opencart' => array(
             'pretty_version' => '3.0.x-dev',
             'version' => '3.0.9999999.9999999-dev',
-            'reference' => 'dad46f0085b4da1b24d84821df9b77cda8b5f522',
+            'reference' => '13073a88d15b5de168ab06a304c341252634a941',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../../../',
             'aliases' => array(),
@@ -197,9 +197,9 @@
             'dev_requirement' => false,
         ),
         'zoujingli/wechat-developer' => array(
-            'pretty_version' => 'v1.2.74',
-            'version' => '1.2.74.0',
-            'reference' => '59ca0950728713120ac447c764cbb2938ab9ccc6',
+            'pretty_version' => 'v1.2.75',
+            'version' => '1.2.75.0',
+            'reference' => '15622a40090e3e656eff517ffb4ca57227b0fa7f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../zoujingli/wechat-developer',
             'aliases' => array(),

@@ -19,6 +19,7 @@ class SeoPro {
     private $url;
     private $session;
     private $db;
+    private $cache;
     private $cat_tree = [];
     private $keywords = [];
     private $queries = [];
@@ -53,13 +54,13 @@ class SeoPro {
     public function prepareRoute($parts) {
 
         if (!empty($parts) && is_array($parts)) {
-
             foreach($parts as $id => $part) {
+                $query = null;
 
                 if($this->config->get('config_seopro_lowercase'))
                     $parts[$id] = utf8_strtolower($part);
 
-                if($parts[$id]) {
+                if($parts[$id] or $parts[$id] == "") {
 
                     $query = $this->getQueryByKeyword($parts[$id]);
 
@@ -224,9 +225,6 @@ class SeoPro {
                 break;
 
             case 'blog/article/review':
-                return [$url, $data, $postfix];
-                break;
-            case 'product/product/review':
                 return [$url, $data, $postfix];
                 break;
             case 'product/product/review':

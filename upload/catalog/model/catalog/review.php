@@ -36,7 +36,8 @@ class ModelCatalogReview extends Model {
 			$mail->send();
 
 			// Send to additional alert emails
-			$emails = explode(',', $this->config->get('config_mail_alert_email'));
+			$alert_emails = $this->config->get('config_alert_email');
+			$emails = !is_null($alert_emails) ? explode(',', $alert_emails) : [];
 
 			foreach ($emails as $email) {
 				if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) {

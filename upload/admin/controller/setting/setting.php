@@ -1003,21 +1003,13 @@ class ControllerSettingSetting extends Controller {
 			$data['config_seopro_lowercase'] = $this->config->get('config_seopro_lowercase');
 		}
 
-		if (isset($this->request->post['config_valide_param_flag'])) {
-			$data['config_valide_param_flag'] = $this->request->post['config_valide_param_flag'];
-		} elseif ($this->config->has('config_valide_param_flag')) {
-			$data['config_valide_param_flag'] = $this->config->get('config_valide_param_flag');
-		}
-
-
 		if (isset($this->request->post['config_valide_params'])) {
 			$data['config_valide_params'] = $this->request->post['config_valide_params'];
 		} elseif ($this->config->get('config_valide_params')) {
 			$data['config_valide_params'] = $this->config->get('config_valide_params');
 		} else {
-			$data['config_valide_params'] = "block\r\nfrommarket\r\ngclid\r\nfbclid\r\nkeyword\r\nlist_type\r\nopenstat\r\nopenstat_service\r\nopenstat_campaign\r\nopenstat_ad\r\nopenstat_source\r\nposition\r\nsource\r\ntracking\r\ntype\r\nyclid\r\nymclid\r\nuri\r\nurltype\r\nutm_source\r\nutm_medium\r\nutm_campaign\r\nutm_term\r\nutm_content";
+			$data['config_valide_params'] = "block\r\nfrommarket\r\ngclid\r\nfbclid\r\nttclid\r\ngad_source\r\nsrsltid\r\nmsclkid\r\nkeyword\r\nlist_type\r\nopenstat\r\nopenstat_service\r\nopenstat_campaign\r\nopenstat_ad\r\nopenstat_source\r\nposition\r\nsource\r\ntracking\r\ntype\r\nyclid\r\nymclid\r\nuri\r\nurltype\r\nutm_source\r\nutm_medium\r\nutm_campaign\r\nutm_term\r\nutm_content\r\nutm_referrer";
 		}
-
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

@@ -4,7 +4,7 @@
 
 # З будь-якими питаннями підтримки звертайтесь: http://www.opencart.com
 
-Options +FollowSymlinks
+Options +SymlinksIfOwnerMatch
 
 # Запобігання перегляду вмісту директорії
 Options -Indexes

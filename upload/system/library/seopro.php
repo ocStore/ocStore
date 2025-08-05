@@ -43,12 +43,11 @@ class SeoPro {
         $this->detectPostfix();
         $this->detectLanguage();
         $this->initHelpers();
-        if ($this->config->get('config_valide_param_flag')) {
-            $params = explode ("\r\n", $this->config->get('config_valide_params'));
-            if(!empty($params)) {
-                $this->valide_get_param = $params;
-            }
+        $params = explode ("\r\n", $this->config->get('config_valide_params'));
+        if(!empty($params)) {
+            $this->valide_get_param = $params;
         }
+        
     }
 
     public function prepareRoute($parts) {

@@ -63,7 +63,7 @@ class SeoPro {
 
                     $query = $this->getQueryByKeyword($parts[$id]);
 
-                    $url = explode('=', $query);
+                    $url = explode('=', (string)$query);
 
                     if(!empty($url[0])) {
 

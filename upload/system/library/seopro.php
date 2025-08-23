@@ -392,6 +392,14 @@ class SeoPro {
 
             if ((!$this->keywords || empty($this->keywords) || !$this->queries || empty($this->queries))) {
 
+                // Initialising arrays if they are false or null for PHP 8.1+ 
+                if (!is_array($this->keywords)) {
+                    $this->keywords = [];
+                }
+                if (!is_array($this->queries)) {
+                    $this->queries = [];
+                }
+
                 $sql_keyword = 'keyword';
                 if ($this->config->get('config_seopro_lowercase'))
                     $sql_keyword = 'LCASE(keyword) as '. $sql_keyword;

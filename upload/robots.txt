@@ -1,4 +1,5 @@
 User-agent: *
+Content-signal: search=yes, ai-train=no
 Disallow: /*route=account/
 Disallow: /*route=affiliate/
 Disallow: /*route=checkout/
@@ -13,8 +14,8 @@ Disallow: /download
 Disallow: /system
 Disallow: /search
 Disallow: */storage/
-Disallow: /*?page=$
-Disallow: /*&page=$
+Disallow: /*?page=
+Disallow: /*&page=
 Disallow: /*?sort=
 Disallow: /*&sort=
 Disallow: /*?order=
@@ -47,3 +48,70 @@ Allow: *.woff2
 
 # При увімкненому SeoPro, розкоментувати рядок Sitemap і підставити Вашу адресу сайту
 # Sitemap: https://site.com/sitemap.xml
+
+#Block russian terrorist bot
+
+#User-agent: Yandex
+#Disallow: /
+
+#User-agent: Mail.Ru/Slurp
+#Disallow: /
+
+
+#Block Popular Ai Bot. just uncomment the bots you need
+
+#User-agent: GPTBot
+#Disallow: /
+
+#User-agent: ChatGPT-User
+#Disallow: /
+
+#User-agent: OAI-SearchBot
+#Disallow: /
+
+#User-agent: CCBot
+#Disallow: /
+
+#User-agent: Google-Extended
+#Disallow: /
+
+#User-agent: Omgilibot
+#Disallow: /
+
+#User-agent: ClaudeBot
+#Disallow: /
+
+#User-agent: Claude-Web
+#Disallow: /
+
+#User-agent: Grok
+#Disallow: /
+
+#Alternative reducing the load from bots. just uncomment the bots you need
+
+#User-agent: GPTBot
+#Crawl-delay: 2
+
+#User-agent: ChatGPT-User
+#Crawl-delay: 2
+
+#User-agent: OAI-SearchBot
+#Crawl-delay: 2
+
+#User-agent: CCBot
+#Crawl-delay: 2
+
+#User-agent: Google-Extended
+#Crawl-delay: 2
+
+#User-agent: Omgilibot
+#Crawl-delay: 2
+
+#User-agent: ClaudeBot
+#Crawl-delay: 2
+
+#User-agent: Claude-Web
+#Crawl-delay: 2
+
+#User-agent: Grok
+#Crawl-delay: 2

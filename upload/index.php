@@ -1,6 +1,6 @@
 <?php
 // Version
-define('VERSION', '3.0.4.1b');
+define('VERSION', '3.0.4.1');
 define('VERSION_CORE', 'ocStore');
 define('VERSION_BUILD', '0001');
 define('VERSION_LANGPACK', 'UK-EN');

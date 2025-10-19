@@ -29,16 +29,15 @@
       {% if articles %}
       <div class="row">
         <div class="col-sm-3">
-          <div class="btn-group">
+          <div class="btn-group btn-group-sm">
             <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_list }}"><i class="fa fa-th-list"></i></button>
             <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_grid }}"><i class="fa fa-th"></i></button>
           </div>
         </div>
-        <div class="col-sm-1 col-sm-offset-2 text-right">
-          <label class="control-label" for="input-sort">{{ text_sort }}</label>
-        </div>
-        <div class="col-sm-3 text-right">
-         <select id="input-sort" class="form-control" onchange="location = this.value;">
+        <div class="col-md-4 col-xs-6 col-sm-offset-2">
+          <div class="form-group input-group input-group-sm">
+            <label class="input-group-addon" for="input-sort">{{ text_sort }}</label>
+            <select id="input-sort" class="form-control" onchange="location = this.value;">
               {% for sorts in sorts %}
               {% if sorts.value == '%s-%s'|format(sort, order) %}
               <option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
@@ -47,12 +46,12 @@
               {% endif %}
               {% endfor %}
             </select>
+          </div>
         </div>
-        <div class="col-sm-1 text-right">
-          <label class="control-label" for="input-limit">{{ text_limit }}</label>
-        </div>
-        <div class="col-sm-2 text-right">
-          <select id="input-limit" class="form-control" onchange="location = this.value;">
+        <div class="col-md-3 col-xs-6">
+          <div class="form-group input-group input-group-sm">
+            <label class="input-group-addon" for="input-limit">{{ text_limit }}</label>
+            <select id="input-limit" class="form-control" onchange="location = this.value;">
               {% for limits in limits %}
               {% if limits.value == limit %}
               <option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
@@ -61,9 +60,9 @@
               {% endif %}
               {% endfor %}
             </select>
+          </div>
         </div>
       </div>
-      <br />
       <div class="row">  
         {% for article in articles %} 
         <div class="product-layout product-list col-xs-12">

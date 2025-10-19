@@ -43,12 +43,11 @@ class SeoPro {
         $this->detectPostfix();
         $this->detectLanguage();
         $this->initHelpers();
-        if ($this->config->get('config_valide_param_flag')) {
-            $params = explode ("\r\n", $this->config->get('config_valide_params'));
-            if(!empty($params)) {
-                $this->valide_get_param = $params;
-            }
+        $params = explode ("\r\n", $this->config->get('config_valide_params'));
+        if(!empty($params)) {
+            $this->valide_get_param = $params;
         }
+        
     }
 
     public function prepareRoute($parts) {
@@ -64,7 +63,7 @@ class SeoPro {
 
                     $query = $this->getQueryByKeyword($parts[$id]);
 
-                    $url = explode('=', $query);
+                    $url = explode('=', (string)$query);
 
                     if(!empty($url[0])) {
 
@@ -393,6 +392,14 @@ class SeoPro {
 
             if ((!$this->keywords || empty($this->keywords) || !$this->queries || empty($this->queries))) {
 
+                // Initialising arrays if they are false or null for PHP 8.1+ 
+                if (!is_array($this->keywords)) {
+                    $this->keywords = [];
+                }
+                if (!is_array($this->queries)) {
+                    $this->queries = [];
+                }
+
                 $sql_keyword = 'keyword';
                 if ($this->config->get('config_seopro_lowercase'))
                     $sql_keyword = 'LCASE(keyword) as '. $sql_keyword;
@@ -547,7 +554,12 @@ class SeoPro {
 
         if (isset($this->request->get['_route_'])) {
             $parts = $parts = explode('/', $this->request->get['_route_']);
-            $keyword = end($parts);
+            //$keyword = end($parts);
+            foreach ($parts as $_part) {
+                if($_part && trim($_part)){
+                    $keyword = $_part;
+                }
+            }
         } 	else {
             $keyword = '';
         }

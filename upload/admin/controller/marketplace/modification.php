@@ -1102,7 +1102,7 @@ class ControllerMarketplaceModification extends Controller {
 		$file = DIR_LOGS . 'ocmod.log';
 
 		if (file_exists($file)) {
-			$data['log'] = htmlentities(file_get_contents($file, FILE_USE_INCLUDE_PATH, null));
+			$data['log'] = htmlentities(file_get_contents($file, FILE_USE_INCLUDE_PATH, null), ENT_QUOTES, "UTF-8");
 		} else {
 			$data['log'] = '';
 		}
@@ -1206,15 +1206,15 @@ class ControllerMarketplaceModification extends Controller {
         $modification = $this->model_setting_modification->getModification($this->request->get['modification_id']);
 
         if (isset($this->request->post['name'])) {
-            $data['name'] = htmlentities(ltrim($this->request->post['name']));
+            $data['name'] = htmlentities(ltrim($this->request->post['name']), ENT_QUOTES, "UTF-8");
         } elseif (isset($modification)) {
-            $data['name'] = htmlentities(ltrim($modification['name']));
+            $data['name'] = htmlentities(ltrim($modification['name']), ENT_QUOTES, "UTF-8");
         }
 
         if (isset($this->request->post['xml'])) {
-            $data['xml'] = htmlentities(ltrim($this->request->post['xml'], "﻿"));
+            $data['xml'] = htmlentities(ltrim($this->request->post['xml'], "﻿"), ENT_QUOTES, "UTF-8");
         } elseif (isset($modification)) {
-            $data['xml'] = htmlentities(ltrim($modification['xml'], "﻿"));
+            $data['xml'] = htmlentities(ltrim($modification['xml'], "﻿"), ENT_QUOTES, "UTF-8");
         }
 
         $data['header'] = $this->load->controller('common/header');

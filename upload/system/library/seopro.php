@@ -703,7 +703,7 @@ class SeoPro {
         if(!$this->config->get('config_seo_pro'))
             return;
 
-        if ($this->config->get('config_seo_url_cache')){
+        if ($this->config->get('config_seo_url_cache') &&  !$this->cache->get('seopro.keywords')){
             $this->cache->set('seopro.keywords', $this->keywords);
             $this->cache->set('seopro.queries', $this->queries);
             $this->cache->set('seopro.cat_tree', $this->cat_tree);

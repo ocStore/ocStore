@@ -179,9 +179,9 @@ class SeoPro {
                     $blog_path = '';
                     $article_id = $data['article_id'];
 
-                    if (isset($data['blog_category_id'])) {
+                    
                         $blog_path = $this->getBlogPathByArticle($article_id);
-                    }
+                    
 
                     //start add valide get-param
                     if ($this->valide_get_param) {
@@ -649,12 +649,14 @@ class SeoPro {
         static $blog_path = [];
         $cache = 'seopro.blog_category.seopath';
 
-        if (!is_array($blog_path)) {
-            if ($this->config->get('config_seo_url_cache'))
+
+            if ($this->config->get('config_seo_url_cache')) {
                 $blog_path = $this->cache->get($cache);
-            if (!is_array($blog_path))
+            }
+            if (!is_array($blog_path)) {
                 $blog_path = [];
-        }
+            }
+
 
         if (!isset($blog_path[$blog_category_id])) {
             $max_level = 10;

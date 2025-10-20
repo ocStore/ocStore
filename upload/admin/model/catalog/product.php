@@ -431,6 +431,7 @@ class ModelCatalogProduct extends Model {
 			preg_match('/(.*)(WHERE pd\.language_id.*)/', $sql, $sql_crutch_matches);
 		if (isset($sql_crutch_matches[2])) {
 		$sql = $sql_crutch_matches[1] . " LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p.product_id = p2c.product_id)" . $sql_crutch_matches[2];
+		$sql = str_replace('SELECT *','SELECT p.*',$sql);
 		} else {
 			$data['filter_category'] = null;
 			}

@@ -342,9 +342,12 @@ class ModelBlogArticle extends Model {
 		
 		$article_data = $this->cache->get('article.total.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache);
 		
-		$article_data = [];
+		
 		
 		if (!$article_data) {
+			
+			$article_data = [];
+			
 			$sql = "SELECT COUNT(DISTINCT p.article_id) AS total FROM " . DB_PREFIX . "article p LEFT JOIN " . DB_PREFIX . "article_description pd ON (p.article_id = pd.article_id) LEFT JOIN " . DB_PREFIX . "article_to_store p2s ON (p.article_id = p2s.article_id)";
 	
 			if (!empty($data['filter_blog_category_id'])) {

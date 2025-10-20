@@ -10,7 +10,10 @@ final class DB {
 
 		$this->maxlifetime = ini_get('session.gc_maxlifetime') !== null ? (int)ini_get('session.gc_maxlifetime') : 1440;
 
-		$this->gc();
+		if (date("N") == 7 && date("G") == 3)
+		{ // Clear Sessions only: Sunday, 3 AM
+			$this->db->query("DELETE FROM `" . DB_PREFIX . "session` WHERE expire < DATE_SUB(NOW(), INTERVAL 7 DAY);");
+		}
 	}
 
 	public function read($session_id) {

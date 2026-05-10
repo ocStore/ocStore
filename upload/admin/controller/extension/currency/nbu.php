@@ -100,43 +100,50 @@ class ControllerExtensionCurrencyNbu extends Controller {
                 $currencies['UAH'] = 1.0000;
 
                 $root = $dom->documentElement;
-                $items = $root->getElementsByTagName('currency');
 
-                foreach ($items as $item)
-                {
-                    $code = $item->getElementsByTagName('cc')->item(0)->nodeValue;
-                    $curs = $item->getElementsByTagName('rate')->item(0)->nodeValue;
-                    $currencies[$code] = floatval(str_replace(',', '.', $curs));
-                }
+				if ($root) {
+					$items = $root->getElementsByTagName('currency');
 
-                if ($currencies) {
-                    $this->load->model('localisation/currency');
+					foreach ($items as $item) {
+                        $code_node = $item->getElementsByTagName('cc')->item(0);
+                        $rate_node = $item->getElementsByTagName('rate')->item(0);
 
-                    $results = $this->model_localisation_currency->getCurrencies();
-
-                    if (empty($default)) {
-                        $default = 'UAH';
-                    }
-
-                    if (!isset($currencies[$default])) {
-                        $currencies[$default] = 1.0000;
-                    }
-
-                    foreach ($results as $result) {
-                        if (isset($currencies[$result['code']])) {
-                            $from = $currencies['UAH'];
-                            $to = $currencies[$result['code']];
-
-                            $base_rate = isset($currencies[$default]) ? $currencies[$default] : 1.0000;
-
-                            $this->model_localisation_currency->editValueByCode($result['code'], ($base_rate * ($from / $to)));
+						if ($code_node && $rate_node) {
+                            $code = $code_node->nodeValue;
+                            $curs = $rate_node->nodeValue;
+                            $currencies[$code] = floatval(str_replace(',', '.', $curs));
                         }
-                    }
-                }
+					}
 
-                $this->model_localisation_currency->editValueByCode($default, '1.00000');
+					if ($currencies) {
+						$this->load->model('localisation/currency');
+	
+						$results = $this->model_localisation_currency->getCurrencies();
+	
+						if (empty($default)) {
+							$default = 'UAH';
+						}
+	
+						if (!isset($currencies[$default])) {
+							$currencies[$default] = 1.0000;
+						}
+	
+						foreach ($results as $result) {
+							if (isset($currencies[$result['code']])) {
+								$from = $currencies['UAH'];
+								$to = $currencies[$result['code']];
+	
+								$base_rate = isset($currencies[$default]) ? $currencies[$default] : 1.0000;
+	
+								$this->model_localisation_currency->editValueByCode($result['code'], ($base_rate * ($from / $to)));
+							}
+						}
 
-                $this->cache->delete('currency');
+						$this->model_localisation_currency->editValueByCode($default, '1.00000');
+
+						$this->cache->delete('currency');
+					}
+				}
             }
         }
     }

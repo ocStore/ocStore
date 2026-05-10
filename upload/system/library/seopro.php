@@ -601,6 +601,9 @@ class SeoPro {
 
         if ($this->config->get('config_seo_url_cache')) {
             $this->product_categories = $this->cache->get('seopro.product_categories');
+            if (!is_array($this->product_categories)) {
+                $this->product_categories = [];
+            }
             if(isset($this->product_categories[$product_id]))
                 return $this->product_categories[$product_id];
         }
@@ -609,6 +612,9 @@ class SeoPro {
         $category_id = $this->getPathByCategory($query->num_rows ? (int)$query->row['category_id'] : 0);
 
         if ($this->config->get('config_seo_url_cache')) {
+            if (!is_array($this->product_categories)) {
+                $this->product_categories = [];
+            }
             $this->product_categories[$product_id] = $category_id;
         }
 

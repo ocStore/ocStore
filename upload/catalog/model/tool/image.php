@@ -3,19 +3,26 @@ namespace Opencart\Catalog\Model\Tool;
 /**
  * Class Image
  *
+ * Can be called using $this->load->model('tool/image');
+ *
  * @package Opencart\Catalog\Model\Tool
  */
 class Image extends \Opencart\System\Engine\Model {
 	/**
+	 * Resize
+	 *
 	 * @param string $filename
 	 * @param int    $width
 	 * @param int    $height
 	 * @param string $default
 	 *
-	 * @return string
 	 * @throws \Exception
+	 *
+	 * @return string
 	 */
 	public function resize(string $filename, int $width, int $height, string $default = ''): string {
+		$filename = html_entity_decode($filename, ENT_QUOTES, 'UTF-8');
+
 		if (!is_file(DIR_IMAGE . $filename) || substr(str_replace('\\', '/', realpath(DIR_IMAGE . $filename)), 0, strlen(DIR_IMAGE)) != DIR_IMAGE) {
 			return '';
 		}
@@ -26,12 +33,12 @@ class Image extends \Opencart\System\Engine\Model {
 		$image_new = 'cache/' . oc_substr($filename, 0, oc_strrpos($filename, '.')) . '-' . (int)$width . 'x' . (int)$height . '.' . $extension;
 
 		if (!is_file(DIR_IMAGE . $image_new) || (filemtime(DIR_IMAGE . $image_old) > filemtime(DIR_IMAGE . $image_new))) {
-			list($width_orig, $height_orig, $image_type) = getimagesize(DIR_IMAGE . $image_old);
-				 
+			[$width_orig, $height_orig, $image_type] = getimagesize(DIR_IMAGE . $image_old);
+
 			if (!in_array($image_type, [IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_GIF, IMAGETYPE_WEBP])) {
 				return $this->config->get('config_url') . 'image/' . $image_old;
 			}
-						
+
 			$path = '';
 
 			$directories = explode('/', dirname($image_new));
@@ -56,9 +63,9 @@ class Image extends \Opencart\System\Engine\Model {
 				copy(DIR_IMAGE . $image_old, DIR_IMAGE . $image_new);
 			}
 		}
-		
+
 		$image_new = str_replace(' ', '%20', $image_new);  // fix bug when attach image on email (gmail.com). it is automatically changing space from " " to +
-		
+
 		return $this->config->get('config_url') . 'image/' . $image_new;
 	}
 }

@@ -7,6 +7,8 @@ namespace Opencart\Install\Controller\Upgrade;
  */
 class Upgrade extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -34,7 +36,7 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 
 		$server = trim(HTTP_SERVER, '/');
 
-		$data['server'] = substr($server, 0, strrpos($server, '/')). '/';
+		$data['server'] = substr($server, 0, strrpos($server, '/')) . '/';
 		$data['total'] = count(glob(DIR_APPLICATION . 'controller/upgrade/upgrade_*.php'));
 
 		$data['header'] = $this->load->controller('common/header');

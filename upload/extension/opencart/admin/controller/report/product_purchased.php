@@ -1,12 +1,14 @@
 <?php
 namespace Opencart\Admin\Controller\Extension\Opencart\Report;
 /**
- * Class ProductPurchased
+ * Class Product Purchased
  *
  * @package Opencart\Admin\Controller\Extension\Opencart\Report
  */
 class ProductPurchased extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -45,6 +47,8 @@ class ProductPurchased extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -57,6 +61,7 @@ class ProductPurchased extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('report_product_purchased', $this->request->post);
@@ -69,6 +74,8 @@ class ProductPurchased extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Report
+	 *
 	 * @return void
 	 */
 	public function report(): void {
@@ -76,6 +83,7 @@ class ProductPurchased extends \Opencart\System\Engine\Controller {
 
 		$data['list'] = $this->getReport();
 
+		// Order Status
 		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
@@ -86,6 +94,8 @@ class ProductPurchased extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -95,6 +105,8 @@ class ProductPurchased extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get Report
+	 *
 	 * @return string
 	 */
 	public function getReport(): string {
@@ -122,11 +134,12 @@ class ProductPurchased extends \Opencart\System\Engine\Controller {
 			$page = 1;
 		}
 
+		// Product Purchased
 		$data['products'] = [];
 
 		$filter_data = [
-			'filter_date_start'	     => $filter_date_start,
-			'filter_date_end'	     => $filter_date_end,
+			'filter_date_start'      => $filter_date_start,
+			'filter_date_end'        => $filter_date_end,
 			'filter_order_status_id' => $filter_order_status_id,
 			'start'                  => ($page - 1) * $this->config->get('config_pagination'),
 			'limit'                  => $this->config->get('config_pagination')

@@ -3,11 +3,13 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Module;
 /**
  * Class Latest
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Module
  */
 class Latest extends \Opencart\System\Engine\Controller {
 	/**
-	 * @param array $setting
+	 * Index
+	 *
+	 * @param array<string, mixed> $setting array of filters
 	 *
 	 * @return string
 	 */
@@ -18,7 +20,10 @@ class Latest extends \Opencart\System\Engine\Controller {
 
 		$data['products'] = [];
 
+		// Latest
 		$this->load->model('extension/opencart/module/latest');
+
+		// Image
 		$this->load->model('tool/image');
 
 		$results = $this->model_extension_opencart_module_latest->getLatest($setting['limit']);

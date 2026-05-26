@@ -6,15 +6,19 @@ namespace Opencart\Admin\Controller\Mail;
  * @package Opencart\Admin\Controller\Mail
  */
 class Gdpr extends \Opencart\System\Engine\Controller {
-	// admin/model/customer/gdpr/editStatus
 	/**
-	 * @param string $route
-	 * @param array  $args
-	 * @param mixed  $output
+	 * Index
+	 *
+	 * admin/model/customer/gdpr/editStatus
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param mixed             $output
 	 *
 	 * @return void
 	 */
-	public function index(string &$route, array &$args, mixed &$output): void {
+	public function index(string &$route, array &$args, &$output): void {
+		// GDPR
 		$this->load->model('customer/gdpr');
 
 		$gdpr_info = $this->model_customer_gdpr->getGdpr($args[0]);
@@ -45,12 +49,16 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * @param array $gdpr_info
+	 * Export
+	 *
+	 * @param array<string, mixed> $gdpr_info
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
 	public function export(array $gdpr_info): void {
+		// Store
 		$this->load->model('setting/store');
 
 		$store_info = $this->model_setting_store->getStore($gdpr_info['store_id']);
@@ -97,6 +105,7 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 			$data['logo'] = '';
 		}
 
+		// Customer
 		$this->load->model('customer/customer');
 
 		$customer_info = $this->model_customer_customer->getCustomerByEmail($gdpr_info['email']);
@@ -140,7 +149,7 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 			}
 		}
 
-		// Order Addresses
+		// Order
 		$this->load->model('sale/order');
 
 		$results = $this->model_sale_order->getOrders(['filter_email' => $gdpr_info['email']]);
@@ -221,12 +230,16 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * @param array $gdpr_info
+	 * Approve
+	 *
+	 * @param array<string, mixed> $gdpr_info
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
 	public function approve(array $gdpr_info): void {
+		// Store
 		$this->load->model('setting/store');
 
 		$store_info = $this->model_setting_store->getStore($gdpr_info['store_id']);
@@ -267,6 +280,7 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 
 		$subject = sprintf($this->language->get('mail_text_subject'), $store_name);
 
+		// Image
 		$this->load->model('tool/image');
 
 		if (is_file(DIR_IMAGE . $store_logo)) {
@@ -275,6 +289,7 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 			$data['logo'] = '';
 		}
 
+		// Customer
 		$this->load->model('customer/customer');
 
 		$customer_info = $this->model_customer_customer->getCustomerByEmail($gdpr_info['email']);
@@ -312,12 +327,16 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * @param array $gdpr_info
+	 * Deny
+	 *
+	 * @param array<string, mixed> $gdpr_info
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
 	public function deny(array $gdpr_info): void {
+		// Store
 		$this->load->model('setting/store');
 
 		$store_info = $this->model_setting_store->getStore($gdpr_info['store_id']);
@@ -358,6 +377,7 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 
 		$subject = sprintf($this->language->get('mail_text_subject'), $store_name);
 
+		// Image
 		$this->load->model('tool/image');
 
 		if (is_file(DIR_IMAGE . $store_logo)) {
@@ -368,6 +388,7 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 
 		$data['text_request'] = $this->language->get('mail_text_' . $gdpr_info['action']);
 
+		// Customer
 		$this->load->model('customer/customer');
 
 		$customer_info = $this->model_customer_customer->getCustomerByEmail($gdpr_info['email']);
@@ -403,12 +424,16 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * @param array $gdpr_info
+	 * Remove
+	 *
+	 * @param array<string, mixed> $gdpr_info
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
 	public function remove(array $gdpr_info): void {
+		// Store
 		$this->load->model('setting/store');
 
 		$store_info = $this->model_setting_store->getStore($gdpr_info['store_id']);
@@ -449,6 +474,7 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 
 		$subject = sprintf($this->language->get('mail_text_subject'), $store_name);
 
+		// Image
 		$this->load->model('tool/image');
 
 		if (is_file(DIR_IMAGE . $store_logo)) {
@@ -457,6 +483,7 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 			$data['logo'] = '';
 		}
 
+		// Customer
 		$this->load->model('customer/customer');
 
 		$customer_info = $this->model_customer_customer->getCustomerByEmail($gdpr_info['email']);

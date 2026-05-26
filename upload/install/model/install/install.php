@@ -3,17 +3,24 @@ namespace Opencart\Install\Model\Install;
 /**
  * Class Install
  *
+ * @example $install_model = $this->model_install_install;
+ *
+ * Can be called from $this->load->model('install/install');
+ *
  * @package Opencart\Install\Model\Install
  */
 class Install extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $data
+	 * Database
+	 *
+	 * @param array<string, mixed> $data
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
 	public function database(array $data): void {
-		$db = new \Opencart\System\Library\DB($data['db_driver'], html_entity_decode($data['db_hostname'], ENT_QUOTES, 'UTF-8'), html_entity_decode($data['db_username'], ENT_QUOTES, 'UTF-8'), html_entity_decode($data['db_password'], ENT_QUOTES, 'UTF-8'), html_entity_decode($data['db_database'], ENT_QUOTES, 'UTF-8'), $data['db_port']);
+		$db = new \Opencart\System\Library\DB($data['db_driver'], html_entity_decode($data['db_hostname'], ENT_QUOTES, 'UTF-8'), html_entity_decode($data['db_username'], ENT_QUOTES, 'UTF-8'), html_entity_decode($data['db_password'], ENT_QUOTES, 'UTF-8'), html_entity_decode($data['db_database'], ENT_QUOTES, 'UTF-8'), $data['db_port'], $this->request->post['db_ssl_key'], $this->request->post['db_ssl_cert'], $this->request->post['db_ssl_ca']);
 
 		// Structure
 		$this->load->helper('db_schema');
@@ -84,7 +91,7 @@ class Install extends \Opencart\System\Engine\Model {
 		}
 		*/
 		// Data
-		$lines = file(DIR_APPLICATION . 'opencart.sql', FILE_IGNORE_NEW_LINES);
+		$lines = file(DIR_APPLICATION . 'opencart-' . $this->config->get('language_code') . '.sql', FILE_IGNORE_NEW_LINES);
 
 		if ($lines) {
 			$sql = '';
@@ -111,16 +118,16 @@ class Install extends \Opencart\System\Engine\Model {
 		}
 
 		$db->query("SET CHARACTER SET utf8mb4");
-		
+
 		$db->query("SET @@session.sql_mode = ''");
 
 		$db->query("DELETE FROM `" . $data['db_prefix'] . "user` WHERE `user_id` = '1'");
 		$db->query("INSERT INTO `" . $data['db_prefix'] . "user` SET `user_id` = '1', `user_group_id` = '1', `username` = '" . $db->escape($data['username']) . "', `password` = '" . $db->escape(password_hash(html_entity_decode($data['password'], ENT_QUOTES, 'UTF-8'), PASSWORD_DEFAULT)) . "', `firstname` = 'John', `lastname` = 'Doe', `email` = '" . $db->escape($data['email']) . "', `status` = '1', `date_added` = NOW()");
 
-		$db->query("UPDATE `" . $data['db_prefix'] . "setting` SET `code` = 'config', `key` = 'config_email', `value` = '" . $db->escape($data['email']) . "' WHERE `key` = 'config_email'");
+		$db->query("UPDATE `" . $data['db_prefix'] . "setting` SET `code` = 'config', `key` = 'config_language_catalog', `value` = '" . $db->escape($this->config->get('language_code')) . "' WHERE `key` = 'config_language_catalog'");
+		$db->query("UPDATE `" . $data['db_prefix'] . "setting` SET `code` = 'config', `key` = 'config_language_admin', `value` = '" . $db->escape($this->config->get('language_code')) . "' WHERE `key` = 'config_language_admin'");
 
-		$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_encryption'");
-		$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `code` = 'config', `key` = 'config_encryption', `value` = '" . $db->escape(oc_token(512)) . "'");
+		$db->query("UPDATE `" . $data['db_prefix'] . "setting` SET `code` = 'config', `key` = 'config_email', `value` = '" . $db->escape($data['email']) . "' WHERE `key` = 'config_email'");
 
 		$db->query("INSERT INTO `" . $data['db_prefix'] . "api` SET `username` = 'Default', `key` = '" . $db->escape(oc_token(256)) . "', `status` = '1', `date_added` = NOW(), `date_modified` = NOW()");
 
@@ -129,7 +136,7 @@ class Install extends \Opencart\System\Engine\Model {
 		$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_api_id'");
 		$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `code` = 'config', `key` = 'config_api_id', `value` = '" . (int)$api_id . "'");
 
-		// set the current years prefix
+		// Set the current years prefix
 		$db->query("UPDATE `" . $data['db_prefix'] . "setting` SET `value` = 'INV-" . date('Y') . "-00' WHERE `key` = 'config_invoice_prefix'");
 	}
     public function getCountries() {

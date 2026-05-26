@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Theme;
  */
 class Basic extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -40,6 +42,7 @@ class Basic extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('extension/opencart/theme/basic.save', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store_id);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=theme');
 
+		// Setting
 		if (isset($this->request->get['store_id'])) {
 			$this->load->model('setting/setting');
 
@@ -60,10 +63,14 @@ class Basic extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
 		$this->load->language('extension/opencart/theme/basic');
+
+		$json = [];
 
 		if (isset($this->request->get['store_id'])) {
 			$store_id = (int)$this->request->get['store_id'];
@@ -71,13 +78,12 @@ class Basic extends \Opencart\System\Engine\Controller {
 			$store_id = 0;
 		}
 
-		$json = [];
-
 		if (!$this->user->hasPermission('modify', 'extension/opencart/theme/basic')) {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('theme_basic', $this->request->post, $store_id);

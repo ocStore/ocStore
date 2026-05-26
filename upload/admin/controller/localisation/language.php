@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Localisation;
  */
 class Language extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -55,6 +57,8 @@ class Language extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -64,9 +68,11 @@ class Language extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
-	protected function getList(): string {
+	public function getList(): string {
 		if (isset($this->request->get['sort'])) {
 			$sort = (string)$this->request->get['sort'];
 		} else {
@@ -101,6 +107,7 @@ class Language extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('localisation/language.list', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		// Language
 		$data['languages'] = [];
 
 		$filter_data = [
@@ -112,19 +119,13 @@ class Language extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('localisation/language');
 
-		$language_total = $this->model_localisation_language->getTotalLanguages();
-
 		$results = $this->model_localisation_language->getLanguages($filter_data);
 
 		foreach ($results as $result) {
 			$data['languages'][] = [
-				'language_id' => $result['language_id'],
-				'name'        => $result['name'] . (($result['code'] == $this->config->get('config_language')) ? $this->language->get('text_default') : ''),
-				'code'        => $result['code'],
-				'status'      => $result['status'],
-				'sort_order'  => $result['sort_order'],
-				'edit'        => $this->url->link('localisation/language.form', 'user_token=' . $this->session->data['user_token'] . '&language_id=' . $result['language_id'] . $url)
-			];
+				'name' => $result['name'] . (($result['code'] == $this->config->get('config_language')) ? $this->language->get('text_default') : ''),
+				'edit' => $this->url->link('localisation/language.form', 'user_token=' . $this->session->data['user_token'] . '&language_id=' . $result['language_id'] . $url)
+			] + $result;
 		}
 
 		$url = '';
@@ -149,6 +150,8 @@ class Language extends \Opencart\System\Engine\Controller {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 
+		$language_total = $this->model_localisation_language->getTotalLanguages();
+
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $language_total,
 			'page'  => $page,
@@ -165,6 +168,8 @@ class Language extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Form
+	 *
 	 * @return void
 	 */
 	public function form(): void {
@@ -206,11 +211,11 @@ class Language extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['language_id'])) {
 			$this->load->model('localisation/language');
 
-			$language_info = $this->model_localisation_language->getLanguage($this->request->get['language_id']);
+			$language_info = $this->model_localisation_language->getLanguage((int)$this->request->get['language_id']);
 		}
 
-		if (isset($this->request->get['language_id'])) {
-			$data['language_id'] = (int)$this->request->get['language_id'];
+		if (!empty($language_info)) {
+			$data['language_id'] = $language_info['language_id'];
 		} else {
 			$data['language_id'] = 0;
 		}
@@ -259,6 +264,8 @@ class Language extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -270,37 +277,43 @@ class Language extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
-		if ((oc_strlen($this->request->post['name']) < 1) || (oc_strlen($this->request->post['name']) > 32)) {
+		$required = [
+			'language_id' => 0,
+			'name'        => '',
+			'code'        => '',
+			'locale'      => '',
+			'extension'   => '',
+			'sort_order'  => 0,
+			'status'      => 0
+		];
+
+		$post_info = $this->request->post + $required;
+
+		if (!oc_validate_length($post_info['name'], 1, 32)) {
 			$json['error']['name'] = $this->language->get('error_name');
 		}
 
-		if ((oc_strlen($this->request->post['code']) < 2) || (oc_strlen($this->request->post['code']) > 5)) {
+		if (!oc_validate_length($post_info['code'], 2, 5)) {
 			$json['error']['code'] = $this->language->get('error_code');
 		}
-		
-		if ((oc_strlen($this->request->post['locale']) < 2) || (oc_strlen($this->request->post['locale']) > 255)) {
+
+		if (!oc_validate_length($post_info['locale'], 2, 255)) {
 			$json['error']['locale'] = $this->language->get('error_locale');
 		}
-		
-		$language_info = $this->model_localisation_language->getLanguageByCode($this->request->post['code']);
 
-		if (!$this->request->post['language_id']) {
-			if ($language_info) {
-				$json['error']['warning'] = $this->language->get('error_exists');
-			}
-		} else {
-			if ($language_info && ($this->request->post['language_id'] != $language_info['language_id'])) {
-				$json['error']['warning'] = $this->language->get('error_exists');
-			}
+		$this->load->model('localisation/language');
+
+		$language_info = $this->model_localisation_language->getLanguageByCode($post_info['code']);
+
+		if ($language_info && (!$post_info['language_id'] || ($language_info['language_id'] != $post_info['language_id']))) {
+			$json['error']['code'] = $this->language->get('error_exists');
 		}
 
 		if (!$json) {
-			$this->load->model('localisation/language');
-
-			if (!$this->request->post['language_id']) {
-				$json['language_id'] = $this->model_localisation_language->addLanguage($this->request->post);
+			if (!$post_info['language_id']) {
+				$json['language_id'] = $this->model_localisation_language->addLanguage($post_info);
 			} else {
-				$this->model_localisation_language->editLanguage($this->request->post['language_id'], $this->request->post);
+				$this->model_localisation_language->editLanguage($post_info['language_id'], $post_info);
 			}
 
 			$json['success'] = $this->language->get('text_success');
@@ -311,6 +324,8 @@ class Language extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {
@@ -319,7 +334,7 @@ class Language extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['selected'])) {
-			$selected = $this->request->post['selected'];
+			$selected = (array)$this->request->post['selected'];
 		} else {
 			$selected = [];
 		}
@@ -328,7 +343,10 @@ class Language extends \Opencart\System\Engine\Controller {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
+		// Store
 		$this->load->model('setting/store');
+
+		// Order
 		$this->load->model('sale/order');
 
 		foreach ($selected as $language_id) {

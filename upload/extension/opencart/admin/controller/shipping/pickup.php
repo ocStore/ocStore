@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Shipping;
  */
 class Pickup extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -34,6 +36,7 @@ class Pickup extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('extension/opencart/shipping/pickup.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping');
 
+		// Geo Zone
 		$data['shipping_pickup_geo_zone_id'] = $this->config->get('shipping_pickup_geo_zone_id');
 
 		$this->load->model('localisation/geo_zone');
@@ -51,6 +54,8 @@ class Pickup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -63,6 +68,7 @@ class Pickup extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('shipping_pickup', $this->request->post);

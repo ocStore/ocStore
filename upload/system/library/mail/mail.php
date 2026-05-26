@@ -6,21 +6,24 @@ namespace Opencart\System\Library\Mail;
  * Basic PHP mail class
  */
 class Mail {
+	/**
+	 * @var array<string, mixed>
+	 */
 	protected array $option = [];
 
 	/**
 	 * Constructor
 	 *
-	 * @param    array  $option
+	 * @param array<string, mixed> $option
 	 */
-	public function __construct(array &$option = []) {
-		$this->option = &$option;
+	public function __construct(array $option = []) {
+		$this->option = $option;
 	}
 
 	/**
 	 * Send
 	 *
-	 * @return    bool
+	 * @return bool
 	 */
 	public function send(): bool {
 		if (is_array($this->option['to'])) {
@@ -29,13 +32,13 @@ class Mail {
 			$to = $this->option['to'];
 		}
 
-		if (version_compare(phpversion(), '8.0', '>=') || substr(PHP_OS, 0, 3) == 'WIN') {
+		if (version_compare(PHP_VERSION, '8.0', '>=')) {
 			$eol = "\r\n";
 		} else {
 			$eol = PHP_EOL;
 		}
 
-		$boundary = '----=_NextPart_' . md5(time());
+		$boundary = '----=_NextPart_' . md5((string)time());
 
 		$header  = 'MIME-Version: 1.0' . $eol;
 		$header .= 'Date: ' . date('D, d M Y H:i:s O') . $eol;
@@ -48,7 +51,7 @@ class Mail {
 		}
 
 		$header .= 'Return-Path: ' . $this->option['from'] . $eol;
-		$header .= 'X-Mailer: PHP/' . phpversion() . $eol;
+		$header .= 'X-Mailer: PHP/' . PHP_VERSION . $eol;
 		$header .= 'Content-Type: multipart/mixed; boundary="' . $boundary . '"' . $eol . $eol;
 
 		$message = '--' . $boundary . $eol;
@@ -56,7 +59,7 @@ class Mail {
 		if (empty($this->option['html'])) {
 			$message .= 'Content-Type: text/plain; charset="utf-8"' . $eol;
 			$message .= 'Content-Transfer-Encoding: base64' . $eol . $eol;
-			$message .= chunk_split(base64_encode($this->option['text']), 950) . $eol;
+			$message .= chunk_split(base64_encode($this->option['text'])) . $eol;
 		} else {
 			$message .= 'Content-Type: multipart/alternative; boundary="' . $boundary . '_alt"' . $eol . $eol;
 			$message .= '--' . $boundary . '_alt' . $eol;
@@ -64,15 +67,15 @@ class Mail {
 			$message .= 'Content-Transfer-Encoding: base64' . $eol . $eol;
 
 			if (!empty($this->option['text'])) {
-				$message .= chunk_split(base64_encode($this->option['text']), 950) . $eol;
+				$message .= chunk_split(base64_encode($this->option['text'])) . $eol;
 			} else {
-				$message .= chunk_split(base64_encode('This is a HTML email and your email client software does not support HTML email!'), 950) . $eol;
+				$message .= chunk_split(base64_encode(strip_tags($this->option['html']))) . $eol;
 			}
 
 			$message .= '--' . $boundary . '_alt' . $eol;
 			$message .= 'Content-Type: text/html; charset="utf-8"' . $eol;
 			$message .= 'Content-Transfer-Encoding: base64' . $eol . $eol;
-			$message .= chunk_split(base64_encode($this->option['html']), 950) . $eol;
+			$message .= chunk_split(base64_encode($this->option['html'])) . $eol;
 			$message .= '--' . $boundary . '_alt--' . $eol;
 		}
 
@@ -91,7 +94,7 @@ class Mail {
 					$message .= 'Content-Disposition: attachment; filename="' . basename($attachment) . '"' . $eol;
 					$message .= 'Content-ID: <' . urlencode(basename($attachment)) . '>' . $eol;
 					$message .= 'X-Attachment-Id: ' . urlencode(basename($attachment)) . $eol . $eol;
-					$message .= chunk_split(base64_encode($content), 950);
+					$message .= chunk_split(base64_encode($content));
 				}
 			}
 		}

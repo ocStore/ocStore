@@ -1,40 +1,42 @@
 <?php
 /**
- * @package		OpenCart
- * @author		Daniel Kerr
- * @copyright	Copyright (c) 2005 - 2022, OpenCart, Ltd. (https://www.opencart.com/)
- * @license		https://opensource.org/licenses/GPL-3.0
- * @link		https://www.opencart.com
-*/
+ * @package        OpenCart
+ *
+ * @author         Daniel Kerr
+ * @copyright      Copyright (c) 2005 - 2022, OpenCart, Ltd. (https://www.opencart.com/)
+ * @license        https://opensource.org/licenses/GPL-3.0
+ *
+ * @see           https://www.opencart.com
+ */
 namespace Opencart\System\Library;
 /**
  * Class Request
  */
 class Request {
 	/**
-	 * @var array|mixed
+	 * @var array<string, mixed>
 	 */
 	public array $get = [];
 	/**
-	 * @var array|mixed
+	 * @var array<string, mixed>
 	 */
 	public array $post = [];
 	/**
-	 * @var array|mixed
+	 * @var array<string, mixed>
 	 */
 	public array $cookie = [];
 	/**
-	 * @var array|mixed
+	 * @var array<string, mixed>
 	 */
 	public array $files = [];
 	/**
-	 * @var array|mixed
+	 * @var array<string, mixed>
 	 */
 	public array $server = [];
-	
+
 	/**
 	 * Constructor
- 	*/
+	 */
 	public function __construct() {
 		$this->get = $this->clean($_GET);
 		$this->post = $this->clean($_POST);
@@ -42,15 +44,71 @@ class Request {
 		$this->files = $this->clean($_FILES);
 		$this->server = $this->clean($_SERVER);
 	}
-	
+
+	public function get(string $key, string $type = ''): mixed {
+		if (isset($this->get[$key])) {
+			$value = $this->get[$key];
+		} else {
+			$value = null;
+		}
+
+		switch ($type) {
+			case 'string':
+				return (string)$value;
+				break;
+			case 'int':
+				return (int)$value;
+				break;
+			case 'float':
+				return (float)$value;
+				break;
+			case 'bool':
+				return (bool)$value;
+				break;
+			case 'array':
+				return (array)$value;
+				break;
+			default:
+				return $value;
+		}
+	}
+
+	public function post(string $key, string $type = ''): mixed {
+		if (isset($this->post[$key])) {
+			$value = $this->post[$key];
+		} else {
+			$value = null;
+		}
+
+		switch ($type) {
+			case 'string':
+				return (string)$value;
+				break;
+			case 'int':
+				return (int)$value;
+				break;
+			case 'float':
+				return (float)$value;
+				break;
+			case 'bool':
+				return (bool)$value;
+				break;
+			case 'array':
+				return (array)$value;
+				break;
+			default:
+				return $value;
+		}
+	}
+
 	/**
-     * Clean
+	 * Clean
 	 *
-	 * @param	mixed	$data
+	 * @param mixed $data
 	 *
-     * @return	mixed
-     */
-	public function clean(mixed $data): mixed {
+	 * @return mixed
+	 */
+	public function clean($data) {
 		if (is_array($data)) {
 			foreach ($data as $key => $value) {
 				unset($data[$key]);

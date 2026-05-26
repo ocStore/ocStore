@@ -1,12 +1,14 @@
 <?php
 namespace Opencart\Admin\Controller\Extension\Opencart\Report;
 /**
- * CLass SaleCoupon
+ * CLass Sale Coupon
  *
- * @package  Opencart\Admin\Controller\Extension\Opencart\Report
+ * @package Opencart\Admin\Controller\Extension\Opencart\Report
  */
 class SaleCoupon extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -45,6 +47,8 @@ class SaleCoupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -57,6 +61,7 @@ class SaleCoupon extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('report_sale_coupon', $this->request->post);
@@ -69,6 +74,8 @@ class SaleCoupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Report
+	 *
 	 * @return void
 	 */
 	public function report(): void {
@@ -82,6 +89,8 @@ class SaleCoupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -91,6 +100,8 @@ class SaleCoupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get Report
+	 *
 	 * @return string
 	 */
 	public function getReport(): string {
@@ -112,11 +123,12 @@ class SaleCoupon extends \Opencart\System\Engine\Controller {
 			$page = 1;
 		}
 
+		// Sale
 		$data['coupons'] = [];
 
 		$filter_data = [
-			'filter_date_start'	=> $filter_date_start,
-			'filter_date_end'	=> $filter_date_end,
+			'filter_date_start' => $filter_date_start,
+			'filter_date_end'   => $filter_date_end,
 			'start'             => ($page - 1) * $this->config->get('config_pagination'),
 			'limit'             => $this->config->get('config_pagination')
 		];

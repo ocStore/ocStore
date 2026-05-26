@@ -7,8 +7,12 @@ namespace Opencart\Catalog\Controller\Mail;
  */
 class Order extends \Opencart\System\Engine\Controller {
 	/**
-	 * @param string $route
-	 * @param array  $args
+	 * Index
+	 *
+	 * catalog/model/checkout/order.addHistory/before
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
 	 *
 	 * @return void
 	 */
@@ -48,19 +52,22 @@ class Order extends \Opencart\System\Engine\Controller {
 
 			// If the order status does not return 0, we send the update as a text email
 			if ($order_info['order_status_id'] && $order_status_id && $notify) {
-				$this->edit($order_info, $order_status_id, $comment, $notify);
+				$this->history($order_info, $order_status_id, $comment, $notify);
 			}
 		}
 	}
 
 	/**
-	 * @param array  $order_info
-	 * @param int    $order_status_id
-	 * @param string $comment
-	 * @param bool   $notify
+	 * Add
+	 *
+	 * @param array<string, mixed> $order_info
+	 * @param int                  $order_status_id
+	 * @param string               $comment
+	 * @param bool                 $notify
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
 	public function add(array $order_info, int $order_status_id, string $comment, bool $notify): void {
 		// Check for any downloadable products
@@ -77,6 +84,7 @@ class Order extends \Opencart\System\Engine\Controller {
 			}
 		}
 
+		// Store
 		$store_logo = html_entity_decode($this->config->get('config_logo'), ENT_QUOTES, 'UTF-8');
 		$store_name = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
@@ -91,6 +99,7 @@ class Order extends \Opencart\System\Engine\Controller {
 		$store_info = $this->model_setting_store->getStore($order_info['store_id']);
 
 		if ($store_info) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$store_logo = html_entity_decode($this->model_setting_setting->getValue('config_logo', $store_info['store_id']), ENT_QUOTES, 'UTF-8');
@@ -98,6 +107,7 @@ class Order extends \Opencart\System\Engine\Controller {
 			$store_url = $store_info['url'];
 		}
 
+		// Send the email in the correct language
 		$this->load->model('localisation/language');
 
 		$language_info = $this->model_localisation_language->getLanguage($order_info['language_id']);
@@ -121,6 +131,7 @@ class Order extends \Opencart\System\Engine\Controller {
 
 		$subject = sprintf($this->language->get('mail_text_subject'), $store_name, $order_info['order_id']);
 
+		// Image
 		$this->load->model('tool/image');
 
 		if (is_file(DIR_IMAGE . $store_logo)) {
@@ -147,8 +158,8 @@ class Order extends \Opencart\System\Engine\Controller {
 
 		$data['order_id'] = $order_info['order_id'];
 		$data['date_added'] = date($this->language->get('date_format_short'), strtotime($order_info['date_added']));
-		$data['payment_method'] = $order_info['payment_method']['name'];
-		$data['shipping_method'] = $order_info['shipping_method']['name'];
+		$data['payment_method'] = $order_info['payment_method']['name'] ?? '';
+		$data['shipping_method'] = $order_info['shipping_method']['name'] ?? '';
 		$data['email'] = $order_info['email'];
 		$data['telephone'] = $order_info['telephone'];
 		$data['ip'] = $order_info['ip'];
@@ -161,11 +172,7 @@ class Order extends \Opencart\System\Engine\Controller {
 			$data['order_status'] = '';
 		}
 
-		if ($comment) {
-			$data['comment'] = nl2br($comment);
-		} else {
-			$data['comment'] = '';
-		}
+		$data['comment'] = nl2br($order_info['comment']);
 
 		// Payment Address
 		if ($order_info['payment_address_format']) {
@@ -200,7 +207,19 @@ class Order extends \Opencart\System\Engine\Controller {
 			'country'   => $order_info['payment_country']
 		];
 
-		$data['payment_address'] = str_replace(["\r\n", "\r", "\n"], '<br/>', preg_replace(["/\s\s+/", "/\r\r+/", "/\n\n+/"], '<br/>', trim(str_replace($find, $replace, $format))));
+		$pattern_1 = [
+			"\r\n",
+			"\r",
+			"\n"
+		];
+
+		$pattern_2 = [
+			"/\\s\\s+/",
+			"/\r\r+/",
+			"/\n\n+/"
+		];
+
+		$data['payment_address'] = str_replace($pattern_1, '<br/>', preg_replace($pattern_2, '<br/>', trim(str_replace($find, $replace, $format))));
 
 		// Shipping Address
 		if ($order_info['shipping_address_format']) {
@@ -235,8 +254,9 @@ class Order extends \Opencart\System\Engine\Controller {
 			'country'   => $order_info['shipping_country']
 		];
 
-		$data['shipping_address'] = str_replace(["\r\n", "\r", "\n"], '<br/>', preg_replace(["/\s\s+/", "/\r\r+/", "/\n\n+/"], '<br/>', trim(str_replace($find, $replace, $format))));
+		$data['shipping_address'] = str_replace($pattern_1, '<br/>', preg_replace($pattern_2, '<br/>', trim(str_replace($find, $replace, $format))));
 
+		// Upload
 		$this->load->model('tool/upload');
 
 		// Products
@@ -260,14 +280,12 @@ class Order extends \Opencart\System\Engine\Controller {
 					}
 				}
 
-				$option_data[] = [
-					'name'  => $order_option['name'],
-					'value' => (oc_strlen($value) > 20 ? oc_substr($value, 0, 20) . '..' : $value)
-				];
+				$option_data[] = ['value' => (oc_strlen($value) > 20 ? oc_substr($value, 0, 20) . '..' : $value)] + $order_option;
 			}
 
 			$description = '';
 
+			// Order
 			$this->load->model('checkout/order');
 
 			$subscription_info = $this->model_checkout_order->getSubscription($order_info['order_id'], $order_product['order_product_id']);
@@ -295,27 +313,11 @@ class Order extends \Opencart\System\Engine\Controller {
 			}
 
 			$data['products'][] = [
-				'name'         => $order_product['name'],
-				'model'        => $order_product['model'],
 				'option'       => $option_data,
 				'subscription' => $description,
-				'quantity'     => $order_product['quantity'],
 				'price'        => $this->currency->format($order_product['price'] + ($this->config->get('config_tax') ? $order_product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value']),
-				'total'        => $this->currency->format($order_product['total'] + ($this->config->get('config_tax') ? ($order_product['tax'] * $order_product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']),
-				'reward'       => $order_product['reward']
-			];
-		}
-
-		// Vouchers
-		$data['vouchers'] = [];
-
-		$order_vouchers = $this->model_checkout_order->getVouchers($order_info['order_id']);
-
-		foreach ($order_vouchers as $order_voucher) {
-			$data['vouchers'][] = [
-				'description' => $order_voucher['description'],
-				'amount'      => $this->currency->format($order_voucher['amount'], $order_info['currency_code'], $order_info['currency_value']),
-			];
+				'total'        => $this->currency->format($order_product['total'] + ($this->config->get('config_tax') ? ($order_product['tax'] * $order_product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value'])
+			] + $order_product;
 		}
 
 		// Order Totals
@@ -324,12 +326,10 @@ class Order extends \Opencart\System\Engine\Controller {
 		$order_totals = $this->model_checkout_order->getTotals($order_info['order_id']);
 
 		foreach ($order_totals as $order_total) {
-			$data['totals'][] = [
-				'title' => $order_total['title'],
-				'text'  => $this->currency->format($order_total['value'], $order_info['currency_code'], $order_info['currency_value']),
-			];
+			$data['totals'][] = ['text' => $this->currency->format($order_total['value'], $order_info['currency_code'], $order_info['currency_value'])] + $order_total;
 		}
 
+		// Setting
 		$this->load->model('setting/setting');
 
 		$from = $this->model_setting_setting->getValue('config_email', $order_info['store_id']);
@@ -353,21 +353,26 @@ class Order extends \Opencart\System\Engine\Controller {
 			$mail->setFrom($from);
 			$mail->setSender($store_name);
 			$mail->setSubject($subject);
-			$mail->setHtml($this->load->view('mail/order_invoice', $data));
+			$mail->setHtml($this->load->view('mail/order_add', $data));
 			$mail->send();
 		}
 	}
 
 	/**
-	 * @param array  $order_info
-	 * @param int    $order_status_id
-	 * @param string $comment
-	 * @param bool   $notify
+	 * History
+	 *
+	 * catalog/model/checkout/order.addHistory/before
+	 *
+	 * @param array<string, mixed> $order_info
+	 * @param int                  $order_status_id
+	 * @param string               $comment
+	 * @param bool                 $notify
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function edit(array $order_info, int $order_status_id, string $comment, bool $notify): void {
+	public function history(array $order_info, int $order_status_id, string $comment, bool $notify): void {
 		$store_name = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
 		if (!defined('HTTP_CATALOG')) {
@@ -376,6 +381,7 @@ class Order extends \Opencart\System\Engine\Controller {
 			$store_url = HTTP_CATALOG;
 		}
 
+		// Store
 		$this->load->model('setting/store');
 
 		$store_info = $this->model_setting_store->getStore($order_info['store_id']);
@@ -385,6 +391,7 @@ class Order extends \Opencart\System\Engine\Controller {
 			$store_url = $store_info['url'];
 		}
 
+		// Send the email in the correct language
 		$this->load->model('localisation/language');
 
 		$language_info = $this->model_localisation_language->getLanguage($order_info['language_id']);
@@ -427,9 +434,11 @@ class Order extends \Opencart\System\Engine\Controller {
 
 		$data['comment'] = strip_tags($comment);
 
+		// Store
 		$data['store'] = $store_name;
 		$data['store_url'] = $store_url;
 
+		// Setting
 		$this->load->model('setting/setting');
 
 		$from = $this->model_setting_setting->getValue('config_email', $order_info['store_id']);
@@ -458,14 +467,17 @@ class Order extends \Opencart\System\Engine\Controller {
 		}
 	}
 
-	// catalog/model/checkout/order/addHistory/before
-
 	/**
-	 * @param string $route
-	 * @param array  $args
+	 * Alert
+	 *
+	 * catalog/model/checkout/order.addHistory/before
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
 	public function alert(string &$route, array &$args): void {
 		if (isset($args[0])) {
@@ -510,6 +522,7 @@ class Order extends \Opencart\System\Engine\Controller {
 				$data['order_status'] = '';
 			}
 
+			// Upload
 			$this->load->model('tool/upload');
 
 			$data['products'] = [];
@@ -534,15 +547,10 @@ class Order extends \Opencart\System\Engine\Controller {
 						}
 					}
 
-					$option_data[] = [
-						'name'  => $order_option['name'],
-						'value' => (oc_strlen($value) > 20 ? oc_substr($value, 0, 20) . '..' : $value)
-					];
+					$option_data[] = ['value' => (oc_strlen($value) > 20 ? oc_substr($value, 0, 20) . '..' : $value)] + $order_option;
 				}
 
 				$description = '';
-
-				$this->load->model('checkout/subscription');
 
 				$subscription_info = $this->model_checkout_order->getSubscription($order_info['order_id'], $order_product['order_product_id']);
 
@@ -569,24 +577,10 @@ class Order extends \Opencart\System\Engine\Controller {
 				}
 
 				$data['products'][] = [
-					'name'         => $order_product['name'],
-					'model'        => $order_product['model'],
-					'quantity'     => $order_product['quantity'],
 					'option'       => $option_data,
 					'subscription' => $description,
 					'total'        => html_entity_decode($this->currency->format($order_product['total'] + ($this->config->get('config_tax') ? $order_product['tax'] * $order_product['quantity'] : 0), $order_info['currency_code'], $order_info['currency_value']), ENT_NOQUOTES, 'UTF-8')
-				];
-			}
-
-			$data['vouchers'] = [];
-
-			$order_vouchers = $this->model_checkout_order->getVouchers($order_id);
-
-			foreach ($order_vouchers as $order_voucher) {
-				$data['vouchers'][] = [
-					'description' => $order_voucher['description'],
-					'amount'      => html_entity_decode($this->currency->format($order_voucher['amount'], $order_info['currency_code'], $order_info['currency_value']), ENT_NOQUOTES, 'UTF-8')
-				];
+				] + $order_product;
 			}
 
 			$data['totals'] = [];
@@ -594,10 +588,7 @@ class Order extends \Opencart\System\Engine\Controller {
 			$order_totals = $this->model_checkout_order->getTotals($order_id);
 
 			foreach ($order_totals as $order_total) {
-				$data['totals'][] = [
-					'title' => $order_total['title'],
-					'value' => html_entity_decode($this->currency->format($order_total['value'], $order_info['currency_code'], $order_info['currency_value']), ENT_NOQUOTES, 'UTF-8')
-				];
+				$data['totals'][] = ['value' => html_entity_decode($this->currency->format($order_total['value'], $order_info['currency_code'], $order_info['currency_value']), ENT_NOQUOTES, 'UTF-8')] + $order_total;
 			}
 
 			$data['comment'] = nl2br($order_info['comment']);
@@ -624,7 +615,7 @@ class Order extends \Opencart\System\Engine\Controller {
 				$mail->send();
 
 				// Send to additional alert emails
-				$emails = explode(',', $this->config->get('config_mail_alert_email'));
+				$emails = explode(',', (string)$this->config->get('config_mail_alert_email'));
 
 				foreach ($emails as $email) {
 					if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) {

@@ -3,10 +3,14 @@ namespace Opencart\Admin\Controller\Common;
 /**
  * Class Forgotten
  *
+ * Can be loaded using $this->load->controller('common/forgotten');
+ *
  * @package Opencart\Admin\Controller\Common
  */
 class Forgotten extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -40,6 +44,8 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Confirm
+	 *
 	 * @return void
 	 */
 	public function confirm(): void {
@@ -52,26 +58,22 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 			$json['redirect'] = $this->url->link('common/login', '', true);
 		}
 
-		$keys = ['email'];
+		if (!$json) {
+			$post_info = ['email' => ''] + $this->request->post;
 
-		foreach ($keys as $key) {
-			if (!isset($this->request->post[$key])) {
-				$this->request->post[$key] = '';
+			$this->load->model('user/user');
+
+			$user_info = $this->model_user_user->getUserByEmail((string)$post_info['email']);
+
+			if (!$user_info) {
+				$json['error'] = $this->language->get('error_email');
 			}
 		}
 
-		$this->load->model('user/user');
-
-		$user_info = $this->model_user_user->getUserByEmail($this->request->post['email']);
-
-		if (!$user_info) {
-			$json['error'] = $this->language->get('error_email');
-		}
-
 		if (!$json) {
-			$this->model_user_user->editCode($this->request->post['email'], oc_token(40));
-
 			$this->session->data['success'] = $this->language->get('text_success');
+
+			$this->model_user_user->addToken($user_info['customer_id'], 'password', oc_token(40));
 
 			$json['redirect'] = $this->url->link('common/login', '', true);
 		}
@@ -81,6 +83,8 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Reset
+	 *
 	 * @return void
 	 */
 	public function reset(): void {
@@ -102,12 +106,13 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 			$this->response->redirect($this->url->link('common/login', '', true));
 		}
 
+		// User
 		$this->load->model('user/user');
 
-		$user_info = $this->model_user_user->getUserByEmail($email);
+		$user_info = $this->model_user_user->getTokenByCode($code);
 
-		if (!$user_info || !$user_info['code'] || $user_info['code'] !== $code) {
-			$this->model_user_user->editCode($email, '');
+		if (!$user_info || !$user_info['email'] || $user_info['email'] !== $email || $user_info['type'] != 'password') {
+			$this->model_account_customer->deleteTokenByCode($code);
 
 			$this->session->data['error'] = $this->language->get('error_code');
 
@@ -128,7 +133,7 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 			'href' => $this->url->link('common/forgotten.reset')
 		];
 
-		$this->session->data['reset_token'] = substr(bin2hex(openssl_random_pseudo_bytes(26)), 0, 26);
+		$this->session->data['reset_token'] = oc_token(26);
 
 		$data['reset'] = $this->url->link('common/forgotten.password', 'email=' . urlencode($email) . '&code=' . $code . '&reset_token=' . $this->session->data['reset_token']);
 		$data['back'] = $this->url->link('common/login');
@@ -140,6 +145,8 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Password
+	 *
 	 * @return void
 	 */
 	public function password(): void {
@@ -148,7 +155,7 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->get['email'])) {
-			$email = (string)$this->request->get['email'];
+			$email = urldecode((string)$this->request->get['email']);
 		} else {
 			$email = '';
 		}
@@ -159,29 +166,24 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 			$code = '';
 		}
 
-		$keys = [
-			'password',
-			'confirm'
-		];
-
-		foreach ($keys as $key) {
-			if (!isset($this->request->post[$key])) {
-				$this->request->post[$key] = '';
-			}
+		if ($this->user->isLogged() || !$this->config->get('config_mail_engine')) {
+			$this->response->redirect($this->url->link('common/login', '', true));
 		}
 
 		if (!isset($this->request->get['reset_token']) || !isset($this->session->data['reset_token']) || ($this->session->data['reset_token'] != $this->request->get['reset_token'])) {
 			$this->session->data['error'] = $this->language->get('error_session');
 
-			$json['redirect'] = $this->url->link('account/forgotten', true);
+			$json['redirect'] = $this->url->link('account/forgotten', '', true);
 		}
 
+		// User
 		$this->load->model('user/user');
 
 		$user_info = $this->model_user_user->getUserByEmail($email);
 
-		if (!$user_info || !$user_info['code'] || $user_info['code'] !== $code) {
-			$this->model_user_user->editCode($email, '');
+		if (!$user_info || !$user_info['email'] || $user_info['email'] !== $email || $user_info['type'] != 'password') {
+			// Reset token
+			$this->model_account_customer->deleteTokenByCode($code);
 
 			$this->session->data['error'] = $this->language->get('error_code');
 
@@ -189,21 +191,50 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			if ((oc_strlen(html_entity_decode($this->request->post['password'], ENT_QUOTES, 'UTF-8')) < 4) || (oc_strlen(html_entity_decode($this->request->post['password'], ENT_QUOTES, 'UTF-8')) > 40)) {
-				$json['error']['password'] = $this->language->get('error_password');
+			$post_info = $this->request->post;
+
+			$password = html_entity_decode((string)$post_info['password'], ENT_QUOTES, 'UTF-8');
+
+			if (!oc_validate_length($password, (int)$this->config->get('config_user_password_length'), 40)) {
+				$json['error']['password'] = sprintf($this->language->get('error_password_length'), (int)$this->config->get('config_user_password_length'));
 			}
 
-			if ($this->request->post['confirm'] != $this->request->post['password']) {
+			$required = [];
+
+			if ($this->config->get('config_user_password_uppercase') && !preg_match('/[A-Z]/', $password)) {
+				$required[] = $this->language->get('error_password_uppercase');
+			}
+
+			if ($this->config->get('config_user_password_lowercase') && !preg_match('/[a-z]/', $password)) {
+				$required[] = $this->language->get('error_password_lowercase');
+			}
+
+			if ($this->config->get('config_user_password_number') && !preg_match('/[0-9]/', $password)) {
+				$required[] = $this->language->get('error_password_number');
+			}
+
+			if ($this->config->get('config_user_password_symbol') && !preg_match('/[^a-zA-Z0-9]/', $password)) {
+				$required[] = $this->language->get('error_password_symbol');
+			}
+
+			if ($required) {
+				$json['error']['password'] = sprintf($this->language->get('error_password'), implode(', ', $required), (int)$this->config->get('config_user_password_length'));
+			}
+
+			if ($post_info['confirm'] != $post_info['password']) {
 				$json['error']['confirm'] = $this->language->get('error_confirm');
 			}
 		}
 
 		if (!$json) {
-			$this->model_user_user->editPassword($user_info['user_id'], $this->request->post['password']);
-
 			$this->session->data['success'] = $this->language->get('text_reset');
 
+			$this->model_user_user->editPassword($user_info['user_id'], $post_info['password']);
+
+			// Remove for token
 			unset($this->session->data['reset_token']);
+
+			$this->model_account_customer->deleteTokenByCode($code);
 
 			$json['redirect'] = $this->url->link('common/login', '', true);
 		}

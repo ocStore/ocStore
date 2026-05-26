@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Localisation;
  */
 class Currency extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -56,6 +58,8 @@ class Currency extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -65,9 +69,11 @@ class Currency extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
-	protected function getList(): string {
+	public function getList(): string {
 		if (isset($this->request->get['sort'])) {
 			$sort = (string)$this->request->get['sort'];
 		} else {
@@ -114,6 +120,7 @@ class Currency extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('localisation/currency.list', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		// Currency
 		$data['currencies'] = [];
 
 		$filter_data = [
@@ -125,20 +132,14 @@ class Currency extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('localisation/currency');
 
-		$currency_total = $this->model_localisation_currency->getTotalCurrencies();
-
 		$results = $this->model_localisation_currency->getCurrencies($filter_data);
 
 		foreach ($results as $result) {
 			$data['currencies'][] = [
-				'currency_id'   => $result['currency_id'],
 				'title'         => $result['title'] . (($result['code'] == $this->config->get('config_currency')) ? $this->language->get('text_default') : ''),
-				'code'          => $result['code'],
-				'value'         => $result['value'],
-				'status'        => $result['status'],
 				'date_modified' => date($this->language->get('date_format_short'), strtotime($result['date_modified'])),
 				'edit'          => $this->url->link('localisation/currency.form', 'user_token=' . $this->session->data['user_token'] . '&currency_id=' . $result['currency_id'] . $url)
-			];
+			] + $result;
 		}
 
 		$url = '';
@@ -165,6 +166,8 @@ class Currency extends \Opencart\System\Engine\Controller {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 
+		$currency_total = $this->model_localisation_currency->getTotalCurrencies();
+
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $currency_total,
 			'page'  => $page,
@@ -181,6 +184,8 @@ class Currency extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Form
+	 *
 	 * @return void
 	 */
 	public function form(): void {
@@ -222,11 +227,11 @@ class Currency extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['currency_id'])) {
 			$this->load->model('localisation/currency');
 
-			$currency_info = $this->model_localisation_currency->getCurrency($this->request->get['currency_id']);
+			$currency_info = $this->model_localisation_currency->getCurrency((int)$this->request->get['currency_id']);
 		}
 
-		if (isset($this->request->get['currency_id'])) {
-			$data['currency_id'] = (int)$this->request->get['currency_id'];
+		if (!empty($currency_info)) {
+			$data['currency_id'] = $currency_info['currency_id'];
 		} else {
 			$data['currency_id'] = 0;
 		}
@@ -283,6 +288,8 @@ class Currency extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -294,21 +301,40 @@ class Currency extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
-		if ((oc_strlen($this->request->post['title']) < 3) || (oc_strlen($this->request->post['title']) > 32)) {
+		$required = [
+			'currency_id'   => 0,
+			'title'         => '',
+			'code'          => '',
+			'symbol_left'   => '',
+			'symbol_right'  => '',
+			'decimal_place' => 0,
+			'value'         => 0.0,
+			'status'        => 0
+		];
+
+		$post_info = $this->request->post + $required;
+
+		if (!oc_validate_length($post_info['title'], 3, 32)) {
 			$json['error']['title'] = $this->language->get('error_title');
 		}
 
-		if (oc_strlen($this->request->post['code']) != 3) {
+		if (oc_strlen($post_info['code']) != 3) {
 			$json['error']['code'] = $this->language->get('error_code');
 		}
 
-		if (!$json) {
-			$this->load->model('localisation/currency');
+		$this->load->model('localisation/currency');
 
-			if (!$this->request->post['currency_id']) {
-				$json['currency_id'] = $this->model_localisation_currency->addCurrency($this->request->post);
+		$currency_info = $this->model_localisation_currency->getCurrencyByCode($post_info['code']);
+
+		if ($currency_info && (!$post_info['currency_id'] || ($currency_info['currency_id'] != $post_info['currency_id']))) {
+			$json['error']['code'] = $this->language->get('error_exists');
+		}
+
+		if (!$json) {
+			if (!$post_info['currency_id']) {
+				$json['currency_id'] = $this->model_localisation_currency->addCurrency($post_info);
 			} else {
-				$this->model_localisation_currency->editCurrency($this->request->post['currency_id'], $this->request->post);
+				$this->model_localisation_currency->editCurrency($post_info['currency_id'], $post_info);
 			}
 
 			$json['success'] = $this->language->get('text_success');
@@ -319,6 +345,8 @@ class Currency extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Refresh
+	 *
 	 * @return void
 	 */
 	public function refresh(): void {
@@ -330,6 +358,7 @@ class Currency extends \Opencart\System\Engine\Controller {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
+		// Extension
 		$this->load->model('setting/extension');
 
 		$extension_info = $this->model_setting_extension->getExtensionByCode('currency', $this->config->get('config_currency_engine'));
@@ -349,6 +378,8 @@ class Currency extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {
@@ -357,7 +388,7 @@ class Currency extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['selected'])) {
-			$selected = $this->request->post['selected'];
+			$selected = (array)$this->request->post['selected'];
 		} else {
 			$selected = [];
 		}
@@ -366,8 +397,13 @@ class Currency extends \Opencart\System\Engine\Controller {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
+		// Currency
 		$this->load->model('localisation/currency');
+
+		// Store
 		$this->load->model('setting/store');
+
+		// Order
 		$this->load->model('sale/order');
 
 		foreach ($selected as $currency_id) {

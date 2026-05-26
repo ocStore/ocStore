@@ -7,6 +7,8 @@ namespace Opencart\Install\Controller\Upgrade;
  */
 class Upgrade1 extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -71,7 +73,7 @@ class Upgrade1 extends \Opencart\System\Engine\Controller {
 			}
 
 			if (!is_writable($file)) {
-				$json['error'] =  sprintf($this->language->get('error_writable'), $file);
+				$json['error'] = sprintf($this->language->get('error_writable'), $file);
 			}
 		} else {
 			$json['error'] = sprintf($this->language->get('error_file'), $file);
@@ -91,7 +93,7 @@ class Upgrade1 extends \Opencart\System\Engine\Controller {
 			} else {
 				if (!empty($config['HTTPS_SERVER'])) {
 					$output .= 'define(\'HTTP_SERVER\', \'' . $config['HTTPS_SERVER'] . '\');' . "\n\n";
-				} else {
+				} elseif (!empty($config['HTTP_SERVER'])) {
 					$output .= 'define(\'HTTP_SERVER\', \'' . $config['HTTP_SERVER'] . '\');' . "\n\n";
 				}
 			}
@@ -120,9 +122,10 @@ class Upgrade1 extends \Opencart\System\Engine\Controller {
 
 			$output .= '// DB' . "\n";
 			$output .= 'define(\'DB_DRIVER\', \'' . DB_DRIVER . '\');' . "\n";
-			$output .= 'define(\'DB_HOSTNAME\', \'' .DB_HOSTNAME . '\');' . "\n";
+			$output .= 'define(\'DB_HOSTNAME\', \'' . DB_HOSTNAME . '\');' . "\n";
 			$output .= 'define(\'DB_USERNAME\', \'' . DB_USERNAME . '\');' . "\n";
 			$output .= 'define(\'DB_PASSWORD\', \'' . DB_PASSWORD . '\');' . "\n";
+
 			$output .= 'define(\'DB_DATABASE\', \'' . DB_DATABASE . '\');' . "\n";
 
 			if (defined('DB_PORT')) {
@@ -131,7 +134,25 @@ class Upgrade1 extends \Opencart\System\Engine\Controller {
 				$output .= 'define(\'DB_PORT\', \'3306\');' . "\n";
 			}
 
-			$output .= 'define(\'DB_PREFIX\', \'' . DB_PREFIX . '\');' . "\n\n";
+			$output .= 'define(\'DB_PREFIX\', \'' . DB_PREFIX . '\');' . "\n";
+
+			if (defined('DB_SSL_KEY')) {
+				$output .= 'define(\'DB_SSL_KEY\', \'' . DB_SSL_KEY . '\');' . "\n";
+			} else {
+				$output .= 'define(\'DB_SSL_KEY\', \'\');' . "\n";
+			}
+
+			if (defined('DB_SSL_CERT')) {
+				$output .= 'define(\'DB_SSL_CERT\', \'' . DB_SSL_CERT . '\');' . "\n";
+			} else {
+				$output .= 'define(\'DB_SSL_CERT\', \'\');' . "\n";
+			}
+
+			if (defined('DB_SSL_CA')) {
+				$output .= 'define(\'DB_SSL_CA\', \'' . DB_SSL_CA . '\');' . "\n";
+			} else {
+				$output .= 'define(\'DB_SSL_CA\', \'\');' . "\n";
+			}
 
 			// Save file
 			file_put_contents($file, $output);
@@ -251,13 +272,13 @@ class Upgrade1 extends \Opencart\System\Engine\Controller {
 
 			if (!empty($config['HTTPS_SERVER'])) {
 				$output .= 'define(\'HTTP_SERVER\', \'' . $config['HTTPS_SERVER'] . '\');' . "\n";
-			} else {
+			} elseif (!empty($config['HTTP_SERVER'])) {
 				$output .= 'define(\'HTTP_SERVER\', \'' . $config['HTTP_SERVER'] . '\');' . "\n";
 			}
 
 			if (!empty($config['HTTPS_CATALOG'])) {
 				$output .= 'define(\'HTTP_CATALOG\', \'' . $config['HTTPS_CATALOG'] . '\');' . "\n\n";
-			} else {
+			} elseif (!empty($config['HTTP_CATALOG'])) {
 				$output .= 'define(\'HTTP_CATALOG\', \'' . $config['HTTP_CATALOG'] . '\');' . "\n\n";
 			}
 
@@ -286,7 +307,7 @@ class Upgrade1 extends \Opencart\System\Engine\Controller {
 
 			$output .= '// DB' . "\n";
 			$output .= 'define(\'DB_DRIVER\', \'' . DB_DRIVER . '\');' . "\n";
-			$output .= 'define(\'DB_HOSTNAME\', \'' .DB_HOSTNAME . '\');' . "\n";
+			$output .= 'define(\'DB_HOSTNAME\', \'' . DB_HOSTNAME . '\');' . "\n";
 			$output .= 'define(\'DB_USERNAME\', \'' . DB_USERNAME . '\');' . "\n";
 			$output .= 'define(\'DB_PASSWORD\', \'' . DB_PASSWORD . '\');' . "\n";
 			$output .= 'define(\'DB_DATABASE\', \'' . DB_DATABASE . '\');' . "\n";
@@ -297,7 +318,25 @@ class Upgrade1 extends \Opencart\System\Engine\Controller {
 				$output .= 'define(\'DB_PORT\', \'3306\');' . "\n";
 			}
 
-			$output .= 'define(\'DB_PREFIX\', \'' . DB_PREFIX . '\');' . "\n\n";
+			$output .= 'define(\'DB_PREFIX\', \'' . DB_PREFIX . '\');' . "\n";
+
+			if (defined('DB_SSL_KEY')) {
+				$output .= 'define(\'DB_SSL_KEY\', \'' . DB_SSL_KEY . '\');' . "\n";
+			} else {
+				$output .= 'define(\'DB_SSL_KEY\', \'\');' . "\n";
+			}
+
+			if (defined('DB_SSL_CERT')) {
+				$output .= 'define(\'DB_SSL_CERT\', \'' . DB_SSL_CERT . '\');' . "\n";
+			} else {
+				$output .= 'define(\'DB_SSL_CERT\', \'\');' . "\n";
+			}
+
+			if (defined('DB_SSL_CA')) {
+				$output .= 'define(\'DB_SSL_CA\', \'' . DB_SSL_CA . '\');' . "\n\n";
+			} else {
+				$output .= 'define(\'DB_SSL_CA\', \'\');' . "\n\n";
+			}
 
 			$output .= '// OpenCart API' . "\n";
 			$output .= 'define(\'OPENCART_SERVER\', \'https://www.opencart.com/\');' . "\n";
@@ -325,7 +364,7 @@ class Upgrade1 extends \Opencart\System\Engine\Controller {
 
 		foreach ($directories as $directory) {
 			if (!is_dir($storage . $directory)) {
-				mkdir($storage . $directory, '0644');
+				mkdir($storage . $directory, 0644);
 
 				$handle = fopen($storage . $directory . '/index.html', 'w');
 
@@ -437,7 +476,7 @@ class Upgrade1 extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$json['text'] = sprintf($this->language->get('text_progress'), 1, 1, 9);
+			$json['text'] = sprintf($this->language->get('text_patch'), 1, 1, 11);
 
 			$url = '';
 

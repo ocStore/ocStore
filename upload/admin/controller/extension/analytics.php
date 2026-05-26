@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension;
  */
 class Analytics extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -14,6 +16,8 @@ class Analytics extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
 	public function getList(): string {
@@ -24,15 +28,16 @@ class Analytics extends \Opencart\System\Engine\Controller {
 
 		$available = [];
 
-		$this->load->model('setting/extension');
-
-		$results = $this->model_setting_extension->getPaths('%/admin/controller/analytics/%.php');
+		$results = glob(DIR_EXTENSION . '*/admin/controller/analytics/*.php');
 
 		foreach ($results as $result) {
-			$available[] = basename($result['path'], '.php');
+			$available[] = basename($result, '.php');
 		}
 
 		$installed = [];
+
+		// Extension
+		$this->load->model('setting/extension');
 
 		$extensions = $this->model_setting_extension->getExtensionsByType('analytics');
 
@@ -45,20 +50,26 @@ class Analytics extends \Opencart\System\Engine\Controller {
 			}
 		}
 
+		// Store
 		$this->load->model('setting/store');
+
+		// Setting
 		$this->load->model('setting/setting');
 
 		$stores = $this->model_setting_store->getStores();
 
+		// Extension
 		$data['extensions'] = [];
 
 		$this->load->model('setting/extension');
 
 		if ($results) {
 			foreach ($results as $result) {
-				$extension = substr($result['path'], 0, strpos($result['path'], '/'));
+				$path = substr($result, strlen(DIR_EXTENSION));
 
-				$code = basename($result['path'], '.php');
+				$extension = substr($path, 0, strpos($path, '/'));
+
+				$code = basename($result, '.php');
 
 				$this->load->language('extension/' . $extension . '/analytics/' . $code, $code);
 
@@ -67,23 +78,22 @@ class Analytics extends \Opencart\System\Engine\Controller {
 				$store_data[] = [
 					'name'   => $this->config->get('config_name'),
 					'edit'   => $this->url->link('extension/' . $extension . '/analytics/' . $code, 'user_token=' . $this->session->data['user_token'] . '&store_id=0'),
-					'status' => $this->config->get('analytics_' . $code . '_status') ? $this->language->get('text_enabled') : $this->language->get('text_disabled')
+					'status' => $this->config->get('analytics_' . $code . '_status')
 				];
 
 				foreach ($stores as $store) {
 					$store_data[] = [
-						'name'   => $store['name'],
 						'edit'   => $this->url->link('extension/' . $extension . '/analytics/' . $code, 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store['store_id']),
-						'status' => $this->model_setting_setting->getValue('analytics_' . $code . '_status', $store['store_id']) ? $this->language->get('text_enabled') : $this->language->get('text_disabled')
-					];
+						'status' => $this->model_setting_setting->getValue('analytics_' . $code . '_status', $store['store_id'])
+					] + $store;
 				}
 
 				$data['extensions'][] = [
-					'name' => $this->language->get($code . '_heading_title'),
-					'install' => $this->url->link('extension/analytics.install', 'user_token=' . $this->session->data['user_token'] . '&extension=' . $extension . '&code=' . $code),
+					'name'      => $this->language->get($code . '_heading_title'),
+					'install'   => $this->url->link('extension/analytics.install', 'user_token=' . $this->session->data['user_token'] . '&extension=' . $extension . '&code=' . $code),
 					'uninstall' => $this->url->link('extension/analytics.uninstall', 'user_token=' . $this->session->data['user_token'] . '&extension=' . $extension . '&code=' . $code),
 					'installed' => in_array($code, $installed),
-					'store' => $store_data
+					'store'     => $store_data
 				];
 			}
 		}
@@ -92,6 +102,8 @@ class Analytics extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Install
+	 *
 	 * @return void
 	 */
 	public function install(): void {
@@ -120,10 +132,12 @@ class Analytics extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Extension
 			$this->load->model('setting/extension');
 
 			$this->model_setting_extension->install('analytics', $extension, $code);
 
+			// User Group
 			$this->load->model('user/user_group');
 
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/' . $extension . '/analytics/' . $code);
@@ -156,6 +170,8 @@ class Analytics extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Uninstall
+	 *
 	 * @return void
 	 */
 	public function uninstall(): void {
@@ -168,6 +184,7 @@ class Analytics extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Extension
 			$this->load->model('setting/extension');
 
 			$this->model_setting_extension->uninstall('analytics', $this->request->get['code']);

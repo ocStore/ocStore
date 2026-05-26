@@ -3,13 +3,17 @@ namespace Opencart\Catalog\Model\Extension\Opencart\Total;
 /**
  * Class Credit
  *
- * @package
+ * Can be called from $this->load->model('extension/opencart/total/credit');
+ *
+ * @package Opencart\Catalog\Model\Extension\Opencart\Total
  */
 class Credit extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $totals
-	 * @param array $taxes
-	 * @param float $total
+	 * Get Total
+	 *
+	 * @param array<int, array<string, mixed>> $totals
+	 * @param array<int, float>                $taxes
+	 * @param float                            $total
 	 *
 	 * @return void
 	 */
@@ -36,8 +40,10 @@ class Credit extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param array $order_info
-	 * @param array $order_total
+	 * Confirm
+	 *
+	 * @param array<string, mixed> $order_info
+	 * @param array<string, mixed> $order_total
 	 *
 	 * @return void
 	 */
@@ -45,16 +51,23 @@ class Credit extends \Opencart\System\Engine\Model {
 		$this->load->language('extension/opencart/total/credit');
 
 		if ($order_info['customer_id']) {
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "customer_transaction` SET `customer_id` = '" . (int)$order_info['customer_id'] . "', `order_id` = '" . (int)$order_info['order_id'] . "', `description` = '" . $this->db->escape(sprintf($this->language->get('text_order_id'), (int)$order_info['order_id'])) . "', `amount` = '" . (float)$order_total['value'] . "', `date_added` = NOW()");
+			// Transaction
+			$this->load->model('account/transaction');
+
+			$this->model_account_transaction->addTransaction($order_info['customer_id'], $order_info['order_id'], sprintf($this->language->get('text_order_id'), (int)$order_info['order_id']), (float)$order_total['value']);
 		}
 	}
 
 	/**
-	 * @param int $order_id
+	 * Unconfirm
+	 *
+	 * @param array<string, mixed> $order_info
 	 *
 	 * @return void
 	 */
-	public function unconfirm(int $order_id): void {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer_transaction` WHERE `order_id` = '" . (int)$order_id . "'");
+	public function unconfirm(array $order_info): void {
+		$this->load->model('account/transaction');
+
+		$this->model_account_transaction->deleteTransactionByOrderId($order_info['order_id']);
 	}
 }

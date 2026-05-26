@@ -3,10 +3,14 @@ namespace Opencart\Admin\Controller\Common;
 /**
  * Class Login
  *
+ * Can be loaded using $this->load->controller('common/login');
+ *
  * @package Opencart\Admin\Controller\Common
  */
 class Login extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -49,25 +53,6 @@ class Login extends \Opencart\System\Engine\Controller {
 			$data['forgotten'] = '';
 		}
 
-		if (isset($this->request->get['route']) && $this->request->get['route'] != 'common/login') {
-			$args = $this->request->get;
-
-			$route = $args['route'];
-
-			unset($args['route']);
-			unset($args['user_token']);
-
-			$url = '';
-
-			if ($this->request->get) {
-				$url .= http_build_query($args);
-			}
-
-			$data['redirect'] = $this->url->link($route, $url);
-		} else {
-			$data['redirect'] = '';
-		}
-
 		$data['header'] = $this->load->controller('common/header');
 		$data['footer'] = $this->load->controller('common/footer');
 
@@ -75,6 +60,8 @@ class Login extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Login
+	 *
 	 * @return void
 	 */
 	public function login(): void {
@@ -83,17 +70,13 @@ class Login extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		// Stop any undefined index messages.
-		$keys = [
-			'username',
-			'password',
-			'redirect'
+		$required = [
+			'username' => '',
+			'password' => '',
+			'redirect' => ''
 		];
 
-		foreach ($keys as $key) {
-			if (!isset($this->request->post[$key])) {
-				$this->request->post[$key] = '';
-			}
-		}
+		$post_info = $this->request->post + $required;
 
 		if ($this->user->isLogged() && isset($this->request->get['user_token']) && isset($this->session->data['user_token']) && ($this->request->get['user_token'] == $this->session->data['user_token'])) {
 			$json['redirect'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true);
@@ -105,7 +88,7 @@ class Login extends \Opencart\System\Engine\Controller {
 			$json['redirect'] = $this->url->link('common/login', '', true);
 		}
 
-		if (!$json && !$this->user->login($this->request->post['username'], html_entity_decode($this->request->post['password'], ENT_QUOTES, 'UTF-8'))) {
+		if (!$json && !$this->user->login($post_info['username'], html_entity_decode($post_info['password'], ENT_QUOTES, 'UTF-8'))) {
 			$json['error'] = $this->language->get('error_login');
 		}
 
@@ -116,7 +99,7 @@ class Login extends \Opencart\System\Engine\Controller {
 			unset($this->session->data['login_token']);
 
 			$login_data = [
-				'ip'         => $this->request->server['REMOTE_ADDR'],
+				'ip'         => oc_get_ip(),
 				'user_agent' => $this->request->server['HTTP_USER_AGENT']
 			];
 
@@ -124,11 +107,7 @@ class Login extends \Opencart\System\Engine\Controller {
 
 			$this->model_user_user->addLogin($this->user->getId(), $login_data);
 
-			if ($this->request->post['redirect'] && (strpos($this->request->post['redirect'], HTTP_SERVER) === 0)) {
-				$json['redirect'] = str_replace('&amp;', '&',  $this->request->post['redirect'] . '&user_token=' . $this->session->data['user_token']);
-			} else {
-				$json['redirect'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true);
-			}
+			$json['redirect'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true);
 		}
 
 		$this->response->addHeader('Content-Type: application/json');

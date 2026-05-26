@@ -3,19 +3,22 @@ namespace Opencart\System\Library\Template;
 /**
  * Class Template
  *
- * @package
+ * @package Opencart\System\Library\Template
  */
 class Template {
 	protected string $directory = '';
+	/**
+	 * @var array<string, string>
+	 */
 	protected array $path = [];
 
 	/**
-	 * addPath
+	 * Add Path
 	 *
-	 * @param    string  $namespace
-	 * @param    string  $directory
+	 * @param string $namespace
+	 * @param string $directory
 	 *
-	 * @return	 void
+	 * @return void
 	 */
 	public function addPath(string $namespace, string $directory = ''): void {
 		if (!$directory) {
@@ -28,11 +31,11 @@ class Template {
 	/**
 	 * Render
 	 *
-	 * @param	string	$filename
-	 * @param	array	$data
-	 * @param	string	$code
+	 * @param string               $filename
+	 * @param array<string, mixed> $data
+	 * @param string               $code
 	 *
-	 * @return	string
+	 * @return string
 	 */
 	public function render(string $filename, array $data = [], string $code = ''): string {
 		if (!$code) {
@@ -54,7 +57,7 @@ class Template {
 				}
 			}
 
-			if (isset($file) && is_file($file)) {
+			if (is_file($file)) {
 				$code = file_get_contents($file);
 			} else {
 				throw new \Exception('Error: Could not load template ' . $filename . '!');
@@ -77,10 +80,10 @@ class Template {
 	/**
 	 * Compile
 	 *
-	 * @param	string	$filename
-	 * @param	string	$code
+	 * @param string $filename
+	 * @param string $code
 	 *
-	 * @return	string
+	 * @return string
 	 */
 	protected function compile(string $filename, string $code): string {
 		$file = DIR_CACHE . 'template/' . hash('md5', $filename . $code) . '.php';

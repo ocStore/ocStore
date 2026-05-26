@@ -1,19 +1,24 @@
 <?php
 namespace Opencart\Catalog\Model\Checkout;
 /**
- * Class ShippingMethod
+ * Class Shipping Method
+ *
+ * Can be called using $this->load->model('checkout/shipping_method');
  *
  * @package Opencart\Catalog\Model\Checkout
  */
-class ShippingMethod extends \Opencart\System\Engine\Controller {
+class ShippingMethod extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $shipping_address
+	 * Get Methods
 	 *
-	 * @return array
+	 * @param array<string, mixed> $shipping_address array of data
+	 *
+	 * @return array<string, array<string, mixed>>
 	 */
 	public function getMethods(array $shipping_address): array {
 		$method_data = [];
 
+		// Extension
 		$this->load->model('setting/extension');
 
 		$results = $this->model_setting_extension->getExtensionsByType('shipping');
@@ -22,10 +27,14 @@ class ShippingMethod extends \Opencart\System\Engine\Controller {
 			if ($this->config->get('shipping_' . $result['code'] . '_status')) {
 				$this->load->model('extension/' . $result['extension'] . '/shipping/' . $result['code']);
 
-				$quote = $this->{'model_extension_' . $result['extension'] . '_shipping_' . $result['code']}->getQuote($shipping_address);
+				$key = 'model_extension_' . $result['extension'] . '_shipping_' . $result['code'];
 
-				if ($quote) {
-					$method_data[$result['code']] = $quote;
+				if (isset($this->{$key}->getQuote)) {
+					$quote = $this->{$key}->getQuote($shipping_address);
+
+					if ($quote) {
+						$method_data[$result['code']] = $quote;
+					}
 				}
 			}
 		}

@@ -7,6 +7,8 @@ namespace Opencart\Catalog\Controller\Cron;
  */
 class Currency extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @param int    $cron_id
 	 * @param string $code
 	 * @param string $cycle
@@ -16,6 +18,7 @@ class Currency extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function index(int $cron_id, string $code, string $cycle, string $date_added, string $date_modified): void {
+		// Extension
 		$this->load->model('setting/extension');
 
 		$extension_info = $this->model_setting_extension->getExtensionByCode('currency', $this->config->get('config_currency_engine'));

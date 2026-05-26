@@ -7,14 +7,19 @@ namespace Opencart\Admin\Controller\Mail;
  */
 class Reward extends \Opencart\System\Engine\Controller {
 	/**
-	 * @param string $route
-	 * @param array  $args
-	 * @param mixed  $output
+	 * Index
+	 *
+	 * admin/model/customer/customer.addReward/after
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param mixed             $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function index(string $route, array $args, mixed $output): void {
+	public function index(string $route, array $args, $output): void {
 		if (isset($args[0])) {
 			$customer_id = (int)$args[0];
 		} else {
@@ -39,6 +44,7 @@ class Reward extends \Opencart\System\Engine\Controller {
 			$order_id = 0;
 		}
 
+		// Customer
 		$this->load->model('customer/customer');
 
 		$customer_info = $this->model_customer_customer->getCustomer($customer_id);
@@ -46,6 +52,7 @@ class Reward extends \Opencart\System\Engine\Controller {
 		if ($customer_info) {
 			$this->load->language('mail/reward');
 
+			// Store
 			$this->load->model('setting/store');
 
 			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
@@ -58,6 +65,7 @@ class Reward extends \Opencart\System\Engine\Controller {
 				$store_url = HTTP_CATALOG;
 			}
 
+			// Send the email in the correct language
 			$this->load->model('localisation/language');
 
 			$language_info = $this->model_localisation_language->getLanguage($customer_info['language_id']);

@@ -1,12 +1,14 @@
 <?php
 namespace Opencart\Admin\Controller\Extension\Opencart\Report;
 /**
- * Class ProductViewed
+ * Class Product Viewed
  *
  * @package Opencart\Admin\Controller\Extension\Opencart\Report
  */
 class ProductViewed extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -45,6 +47,8 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -57,6 +61,7 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('report_product_viewed', $this->request->post);
@@ -69,6 +74,8 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Install
+	 *
 	 * @return void
 	 */
 	public function install(): void {
@@ -80,6 +87,8 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Uninstall
+	 *
 	 * @return void
 	 */
 	public function uninstall(): void {
@@ -91,6 +100,8 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Report
+	 *
 	 * @return void
 	 */
 	public function report(): void {
@@ -104,6 +115,8 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -113,6 +126,8 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get Report
+	 *
 	 * @return string
 	 */
 	public function getReport(): string {
@@ -124,7 +139,10 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 
 		$data['products'] = [];
 
+		// Product Viewed
 		$this->load->model('extension/opencart/report/product_viewed');
+
+		// Product
 		$this->load->model('catalog/product');
 
 		$total = $this->model_extension_opencart_report_product_viewed->getTotal();
@@ -171,6 +189,8 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Generate
+	 *
 	 * @return void
 	 */
 	public function generate(): void {
@@ -202,6 +222,7 @@ class ProductViewed extends \Opencart\System\Engine\Controller {
 				'limit' => $limit
 			];
 
+			// Product
 			$this->load->model('catalog/product');
 
 			$product_total = $this->model_catalog_product->getTotalProducts();

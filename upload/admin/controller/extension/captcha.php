@@ -7,13 +7,17 @@ namespace Opencart\Admin\Controller\Extension;
  */
 class Captcha extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
- 		$this->response->setOutput($this->getList());
+		$this->response->setOutput($this->getList());
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
 	public function getList(): string {
@@ -22,15 +26,16 @@ class Captcha extends \Opencart\System\Engine\Controller {
 
 		$available = [];
 
-		$this->load->model('setting/extension');
-
-		$results = $this->model_setting_extension->getPaths('%/admin/controller/captcha/%.php');
+		$results = glob(DIR_EXTENSION . '*/admin/controller/captcha/*.php');
 
 		foreach ($results as $result) {
-			$available[] = basename($result['path'], '.php');
+			$available[] = basename($result, '.php');
 		}
 
 		$installed = [];
+
+		// Extension
+		$this->load->model('setting/extension');
 
 		$extensions = $this->model_setting_extension->getExtensionsByType('captcha');
 
@@ -46,15 +51,17 @@ class Captcha extends \Opencart\System\Engine\Controller {
 
 		if ($results) {
 			foreach ($results as $result) {
-				$extension = substr($result['path'], 0, strpos($result['path'], '/'));
+				$path = substr($result, strlen(DIR_EXTENSION));
 
-				$code = basename($result['path'], '.php');
+				$extension = substr($path, 0, strpos($path, '/'));
+
+				$code = basename($result, '.php');
 
 				$this->load->language('extension/' . $extension . '/captcha/' . $code, $code);
 
 				$data['extensions'][] = [
 					'name'      => $this->language->get($code . '_heading_title') . ($code == $this->config->get('config_captcha') ? $this->language->get('text_default') : ''),
-					'status'    => $this->config->get('captcha_' . $code . '_status') ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
+					'status'    => $this->config->get('captcha_' . $code . '_status'),
 					'install'   => $this->url->link('extension/captcha.install', 'user_token=' . $this->session->data['user_token'] . '&extension=' . $extension . '&code=' . $code),
 					'uninstall' => $this->url->link('extension/captcha.uninstall', 'user_token=' . $this->session->data['user_token'] . '&extension=' . $extension . '&code=' . $code),
 					'installed' => in_array($code, $installed),
@@ -69,6 +76,8 @@ class Captcha extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Install
+	 *
 	 * @return void
 	 */
 	public function install(): void {
@@ -97,10 +106,12 @@ class Captcha extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Extension
 			$this->load->model('setting/extension');
 
 			$this->model_setting_extension->install('captcha', $extension, $code);
 
+			// User Group
 			$this->load->model('user/user_group');
 
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/' . $extension . '/captcha/' . $code);
@@ -133,6 +144,8 @@ class Captcha extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Uninstall
+	 *
 	 * @return void
 	 */
 	public function uninstall(): void {
@@ -145,6 +158,7 @@ class Captcha extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Extension
 			$this->load->model('setting/extension');
 
 			$this->model_setting_extension->uninstall('captcha', $this->request->get['code']);

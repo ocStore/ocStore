@@ -7,9 +7,16 @@ namespace Opencart\Catalog\Controller\Startup;
  */
 class SeoUrl extends \Opencart\System\Engine\Controller {
 	/**
-	 * @return void
+	 * @var array<string, string>
 	 */
-	public function index(): void {
+	private array $data = [];
+
+	/**
+	 * Index
+	 *
+	 * @return null
+	 */
+	public function index() {
 		// Add rewrite to URL class
 		if ($this->config->get('config_seo_url')) {
 			$this->url->addRewrite($this);
@@ -25,18 +32,32 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 					array_pop($parts);
 				}
 
-				foreach ($parts as $part) {
-					$seo_url_info = $this->model_design_seo_url->getSeoUrlByKeyword($part);
+				foreach ($parts as $key => $value) {
+					$seo_url_info = $this->model_design_seo_url->getSeoUrlByKeyword($value);
 
 					if ($seo_url_info) {
 						$this->request->get[$seo_url_info['key']] = html_entity_decode($seo_url_info['value'], ENT_QUOTES, 'UTF-8');
+
+						unset($parts[$key]);
 					}
+				}
+
+				if (!isset($this->request->get['route'])) {
+					$this->request->get['route'] = $this->config->get('action_default');
+				}
+
+				if ($parts) {
+					$this->request->get['route'] = $this->config->get('action_error');
 				}
 			}
 		}
+
+		return null;
 	}
 
 	/**
+	 * Rewrite
+	 *
 	 * @param string $link
 	 *
 	 * @return string
@@ -63,6 +84,8 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 
 		parse_str($url_info['query'], $query);
 
+		$language_id = $this->config->get('config_language_id');
+
 		// Start changing the URL query into a path
 		$paths = [];
 
@@ -70,12 +93,26 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 		$parts = explode('&', $url_info['query']);
 
 		foreach ($parts as $part) {
-			[$key, $value] = explode('=', $part);
+			$pair = explode('=', $part);
 
-			$result = $this->model_design_seo_url->getSeoUrlByKeyValue((string)$key, (string)$value);
+			if (isset($pair[0])) {
+				$key = (string)$pair[0];
+			}
 
-			if ($result) {
-				$paths[] = $result;
+			if (isset($pair[1])) {
+				$value = (string)$pair[1];
+			} else {
+				$value = '';
+			}
+
+			$index = $key . '=' . $value;
+
+			if (!isset($this->data[$language_id][$index])) {
+				$this->data[$language_id][$index] = $this->model_design_seo_url->getSeoUrlByKeyValue((string)$key, (string)$value);
+			}
+
+			if ($this->data[$language_id][$index]) {
+				$paths[] = $this->data[$language_id][$index];
 
 				unset($query[$key]);
 			}

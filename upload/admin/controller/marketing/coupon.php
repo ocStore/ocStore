@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Marketing;
  */
 class Coupon extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -55,6 +57,8 @@ class Coupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -64,9 +68,11 @@ class Coupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
-	protected function getList(): string {
+	public function getList(): string {
 		if (isset($this->request->get['sort'])) {
 			$sort = (string)$this->request->get['sort'];
 		} else {
@@ -101,6 +107,7 @@ class Coupon extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('marketing/coupon.list', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		// Coupon
 		$data['coupons'] = [];
 
 		$filter_data = [
@@ -112,21 +119,14 @@ class Coupon extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('marketing/coupon');
 
-		$coupon_total = $this->model_marketing_coupon->getTotalCoupons();
-
 		$results = $this->model_marketing_coupon->getCoupons($filter_data);
 
 		foreach ($results as $result) {
 			$data['coupons'][] = [
-				'coupon_id'  => $result['coupon_id'],
-				'name'       => $result['name'],
-				'code'       => $result['code'],
-				'discount'   => $result['discount'],
 				'date_start' => date($this->language->get('date_format_short'), strtotime($result['date_start'])),
 				'date_end'   => date($this->language->get('date_format_short'), strtotime($result['date_end'])),
-				'status'     => $result['status'],
 				'edit'       => $this->url->link('marketing/coupon.form', 'user_token=' . $this->session->data['user_token'] . '&coupon_id=' . $result['coupon_id'] . $url)
-			];
+			] + $result;
 		}
 
 		$url = '';
@@ -142,7 +142,6 @@ class Coupon extends \Opencart\System\Engine\Controller {
 		$data['sort_discount'] = $this->url->link('marketing/coupon.list', 'user_token=' . $this->session->data['user_token'] . '&sort=discount' . $url);
 		$data['sort_date_start'] = $this->url->link('marketing/coupon.list', 'user_token=' . $this->session->data['user_token'] . '&sort=date_start' . $url);
 		$data['sort_date_end'] = $this->url->link('marketing/coupon.list', 'user_token=' . $this->session->data['user_token'] . '&sort=date_end' . $url);
-		$data['sort_status'] = $this->url->link('marketing/coupon.list', 'user_token=' . $this->session->data['user_token'] . '&sort=status' . $url);
 
 		$url = '';
 
@@ -153,6 +152,8 @@ class Coupon extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['order'])) {
 			$url .= '&order=' . $this->request->get['order'];
 		}
+
+		$coupon_total = $this->model_marketing_coupon->getTotalCoupons();
 
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $coupon_total,
@@ -170,6 +171,8 @@ class Coupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Form
+	 *
 	 * @return void
 	 */
 	public function form(): void {
@@ -214,8 +217,8 @@ class Coupon extends \Opencart\System\Engine\Controller {
 			$coupon_info = $this->model_marketing_coupon->getCoupon($this->request->get['coupon_id']);
 		}
 
-		if (isset($this->request->get['coupon_id'])) {
-			$data['coupon_id'] = (int)$this->request->get['coupon_id'];
+		if (!empty($coupon_info)) {
+			$data['coupon_id'] = $coupon_info['coupon_id'];
 		} else {
 			$data['coupon_id'] = 0;
 		}
@@ -262,8 +265,9 @@ class Coupon extends \Opencart\System\Engine\Controller {
 			$data['total'] = '';
 		}
 
+		// Product
 		if (!empty($coupon_info)) {
-			$products = $this->model_marketing_coupon->getProducts($this->request->get['coupon_id']);
+			$products = $this->model_marketing_coupon->getProducts($coupon_info['coupon_id']);
 		} else {
 			$products = [];
 		}
@@ -283,8 +287,9 @@ class Coupon extends \Opencart\System\Engine\Controller {
 			}
 		}
 
+		// Category
 		if (!empty($coupon_info)) {
-			$categories = $this->model_marketing_coupon->getCategories($this->request->get['coupon_id']);
+			$categories = $this->model_marketing_coupon->getCategories($coupon_info['coupon_id']);
 		} else {
 			$categories = [];
 		}
@@ -346,6 +351,8 @@ class Coupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -357,31 +364,42 @@ class Coupon extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
-		if ((oc_strlen($this->request->post['name']) < 3) || (oc_strlen($this->request->post['name']) > 128)) {
+		$required = [
+			'coupon_id'  => 0,
+			'name'       => '',
+			'code'       => '',
+			'discount'   => 0.0,
+			'type'       => '',
+			'total'      => 0.0,
+			'logged'     => 0,
+			'shipping'   => 0,
+			'date_start' => '',
+			'date_end'   => ''
+		];
+
+		$post_info = $this->request->post + $required;
+
+		if (!oc_validate_length($post_info['name'], 3, 128)) {
 			$json['error']['name'] = $this->language->get('error_name');
 		}
 
-		if ((oc_strlen($this->request->post['code']) < 3) || (oc_strlen($this->request->post['code']) > 20)) {
+		if (!oc_validate_length($post_info['code'], 3, 20)) {
 			$json['error']['code'] = $this->language->get('error_code');
 		}
 
 		$this->load->model('marketing/coupon');
 
-		$coupon_info = $this->model_marketing_coupon->getCouponByCode($this->request->post['code']);
+		$coupon_info = $this->model_marketing_coupon->getCouponByCode($post_info['code']);
 
-		if ($coupon_info) {
-			if (!isset($this->request->post['coupon_id'])) {
-				$json['error']['warning'] = $this->language->get('error_exists');
-			} elseif ($coupon_info['coupon_id'] != (int)$this->request->post['coupon_id']) {
-				$json['error']['warning'] = $this->language->get('error_exists');
-			}
+		if ($coupon_info && (!$post_info['coupon_id'] || ($coupon_info['coupon_id'] != (int)$post_info['coupon_id']))) {
+			$json['error']['code'] = $this->language->get('error_exists');
 		}
 
 		if (!$json) {
-			if (!$this->request->post['coupon_id']) {
-				$json['coupon_id'] = $this->model_marketing_coupon->addCoupon($this->request->post);
+			if (!$post_info['coupon_id']) {
+				$json['coupon_id'] = $this->model_marketing_coupon->addCoupon($post_info);
 			} else {
-				$this->model_marketing_coupon->editCoupon($this->request->post['coupon_id'], $this->request->post);
+				$this->model_marketing_coupon->editCoupon($post_info['coupon_id'], $post_info);
 			}
 
 			$json['success'] = $this->language->get('text_success');
@@ -392,6 +410,8 @@ class Coupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {
@@ -400,7 +420,7 @@ class Coupon extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['selected'])) {
-			$selected = $this->request->post['selected'];
+			$selected = (array)$this->request->post['selected'];
 		} else {
 			$selected = [];
 		}
@@ -424,6 +444,8 @@ class Coupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * History
+	 *
 	 * @return void
 	 */
 	public function history(): void {
@@ -433,6 +455,8 @@ class Coupon extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get History
+	 *
 	 * @return string
 	 */
 	public function getHistory(): string {

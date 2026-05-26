@@ -116,36 +116,20 @@
               <div class="row mb-3">
                 <label class="col-sm-2 col-form-label">{{ entry_image }}</label>
                 <div class="col-sm-10">
-                  <div class="card image">
-                    <img src="{{ thumb }}" alt="" title="" id="thumb-image" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/> <input type="hidden" name="image" value="{{ image }}" id="input-image"/>
-                    <div class="card-body">
-                      <button type="button" data-oc-toggle="image" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-primary btn-sm btn-block"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
-                      <button type="button" data-oc-toggle="clear" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-warning btn-sm btn-block"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
+                  <div class="border rounded d-block" style="max-width: 300px;">
+                    <img src="{{ thumb }}" alt="" title="" id="thumb-image" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                    <input type="hidden" name="image" value="{{ image }}" id="input-image"/>
+                    <div class="d-grid">
+                      <button type="button" data-oc-toggle="image" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-primary rounded-0"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
+                      <button type="button" data-oc-toggle="clear" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-warning rounded-0"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="row mb-3">
-                <label class="col-sm-2 col-form-label">{{ entry_top }}</label>
-                <div class="col-sm-10">
-                  <div class="form-check form-switch form-switch-lg">
-                    <input type="hidden" name="top" value="0"/>
-                    <input type="checkbox" name="top" value="1" id="input-top" class="form-check-input"{% if top %} checked{% endif %}/>
-                  </div>
-                  <div class="form-text">{{ help_top }}</div>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="input-column" class="col-sm-2 col-form-label">{{ entry_column }}</label>
-                <div class="col-sm-10">
-                  <input type="text" name="column" value="{{ column }}" placeholder="{{ entry_column }}" id="input-column" class="form-control"/>
-                  <div class="form-text">{{ help_column }}</div>
-                </div>
-              </div>
-              <div class="row mb-3">
                 <label for="input-sort-order" class="col-sm-2 col-form-label">{{ entry_sort_order }}</label>
                 <div class="col-sm-10">
-                  <input type="text" name="sort_order" value="{{ sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
+                  <input type="number" name="sort_order" value="{{ sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
                 </div>
               </div>
               <div class="row mb-3">
@@ -153,7 +137,7 @@
                 <div class="col-sm-10">
                   <div class="form-check form-switch form-switch-lg">
                     <input type="hidden" name="status" value="0"/>
-                    <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input"{% if status %} checked{% endif %}/>
+                    <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input" {% if status %} checked{% endif %}/>
                   </div>
                 </div>
               </div>
@@ -164,23 +148,22 @@
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <td class="text-start">{{ entry_store }}</td>
-                      <td class="text-start">{{ entry_keyword }}</td>
+                      <th>{{ entry_store }}</th>
+                      <th>{{ entry_keyword }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for store in stores %}
                       <tr>
-                        <td class="text-start">{{ store.name }}</td>
-                        <td class="text-start">
+                        <td>{{ store.name }}</td>
+                        <td>
                           {% for language in languages %}
                             <div class="input-group">
                               <div class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></div>
                               <input type="text" name="category_seo_url[{{ store.store_id }}][{{ language.language_id }}]" value="{% if category_seo_url[store.store_id][language.language_id] %}{{ category_seo_url[store.store_id][language.language_id] }}{% endif %}" placeholder="{{ entry_keyword }}" id="input-keyword-{{ store.store_id }}-{{ language.language_id }}" class="form-control"/>
                             </div>
                             <div id="error-keyword-{{ store.store_id }}-{{ language.language_id }}" class="invalid-feedback"></div>
-                          {% endfor %}
-                        </td>
+                          {% endfor %}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -192,15 +175,15 @@
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <td class="text-start">{{ entry_store }}</td>
-                      <td class="text-start">{{ entry_layout }}</td>
+                      <th>{{ entry_store }}</th>
+                      <th>{{ entry_layout }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for store in stores %}
                       <tr>
-                        <td class="text-start">{{ store.name }}</td>
-                        <td class="text-start"><select name="category_layout[{{ store.store_id }}]" class="form-select">
+                        <td>{{ store.name }}</td>
+                        <td><select name="category_layout[{{ store.store_id }}]" class="form-select">
                             <option value=""></option>
                             {% for layout in layouts %}
                               <option value="{{ layout.layout_id }}"{% if category_layout[store.store_id] and category_layout[store.store_id] == layout.layout_id %} selected{% endif %}>{{ layout.name }}</option>
@@ -213,7 +196,8 @@
               </div>
             </div>
           </div>
-          <input type="hidden" name="category_id" value="{{ category_id }}" id="input-category-id"/></form>
+          <input type="hidden" name="category_id" value="{{ category_id }}" id="input-category-id"/>
+        </form>
       </div>
     </div>
   </div>
@@ -224,17 +208,17 @@ $('textarea[data-oc-toggle=\'ckeditor\']').ckeditor({
 });
 
 $('#input-parent').autocomplete({
-    'source': function (request, response) {
+    'source': function(request, response) {
         $.ajax({
             url: 'index.php?route=catalog/category.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
             dataType: 'json',
-            success: function (json) {
+            success: function(json) {
                 json.unshift({
-                    'name': '{{ text_none }}',
-                    'category_id': '0'
+                    'category_id': '0',
+                    'name': '{{ text_none }}'
                 });
 
-                response($.map(json, function (item) {
+                response($.map(json, function(item) {
                     return {
                         value: item['category_id'],
                         label: item['name']
@@ -243,19 +227,19 @@ $('#input-parent').autocomplete({
             }
         });
     },
-    'select': function (item) {
-        $('#input-parent').val(item['label']);
+    'select': function(item) {
+        $('#input-parent').val(decodeHTMLEntities(item['label']));
         $('#input-parent-id').val(item['value']);
     }
 });
 
 $('#input-filter').autocomplete({
-    'source': function (request, response) {
+    'source': function(request, response) {
         $.ajax({
             url: 'index.php?route=catalog/filter.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
             dataType: 'json',
-            success: function (json) {
-                response($.map(json, function (item) {
+            success: function(json) {
+                response($.map(json, function(item) {
                     return {
                         label: item['name'],
                         value: item['filter_id']
@@ -264,7 +248,7 @@ $('#input-filter').autocomplete({
             }
         });
     },
-    'select': function (item) {
+    'select': function(item) {
         $('#input-filter').val('');
 
         $('#category-filter-' + item['value']).remove();
@@ -278,7 +262,7 @@ $('#input-filter').autocomplete({
     }
 });
 
-$('#category-filter').on('click', '.btn', function () {
+$('#category-filter').on('click', '.btn', function() {
     $(this).parent().parent().remove();
 });
 //--></script>

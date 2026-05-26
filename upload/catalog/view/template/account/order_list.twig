@@ -13,24 +13,23 @@
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
-                <td class="text-end">{{ column_order_id }}</td>
-                <td class="text-start">{{ column_customer }}</td>
-                <td class="text-end">{{ column_product }}</td>
-                <td class="text-start">{{ column_status }}</td>
-                <td class="text-end">{{ column_total }}</td>
-                <td class="text-start">{{ column_date_added }}</td>
-                <td></td>
+                <th class="text-end">{{ column_order_id }}</th>
+
+                <th class="text-end">{{ column_product_total }}</th>
+                <th>{{ column_status }}</th>
+                <th class="text-end">{{ column_total }}</th>
+                <th>{{ column_date_added }}</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {% for order in orders %}
                 <tr>
                   <td class="text-end">#{{ order.order_id }}</td>
-                  <td class="text-start">{{ order.name }}</td>
-                  <td class="text-end">{{ order.products }}</td>
-                  <td class="text-start">{{ order.status }}</td>
+                  <td class="text-end">{{ order.product_total }}</td>
+                  <td>{{ order.status }}</td>
                   <td class="text-end">{{ order.total }}</td>
-                  <td class="text-start">{{ order.date_added }}</td>
+                  <td>{{ order.date_added }}</td>
                   <td class="text-end"><a href="{{ order.view }}" data-bs-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa-solid fa-eye"></i></a></td>
                 </tr>
               {% endfor %}

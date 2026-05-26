@@ -7,6 +7,8 @@ namespace Opencart\Install\Controller\Upgrade;
  */
 class Upgrade4 extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -51,12 +53,44 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 			// Add missing keys and values
 			$missing = [];
 
-			$missing[] = [
-				'key'        => 'config_meta_title',
-				'value'      => $settings['config_name'],
-				'code'       => 'config',
-				'serialized' => 0
-			];
+			if (!isset($settings['config_description'])) {
+				if (isset($settings['config_meta_title'])) {
+					$meta_title = $settings['config_meta_title'];
+				} else {
+					$meta_title = $settings['config_name'];
+				}
+
+				if (isset($settings['config_meta_description'])) {
+					$meta_description = $settings['config_meta_description'];
+				} else {
+					$meta_description = '';
+				}
+
+				if (isset($settings['config_meta_keyword'])) {
+					$meta_keyword = $settings['config_meta_keyword'];
+				} else {
+					$meta_keyword = '';
+				}
+
+				$description_data = [];
+
+				$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "language`");
+
+				foreach ($query->rows as $language) {
+					$description_data[$language['language_id']] = [
+						'meta_title'       => $meta_title,
+						'meta_description' => $meta_description,
+						'meta_keyword'     => $meta_keyword
+					];
+				}
+
+				$missing[] = [
+					'key'        => 'config_description',
+					'value'      => $description_data,
+					'code'       => 'config',
+					'serialized' => 1
+				];
+			}
 
 			// Add config_theme if missing and still using config_template
 			if (isset($settings['config_template'])) {
@@ -99,27 +133,6 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 					'serialized' => 0
 				];
 			}
-
-			$missing[] = [
-				'key'        => 'config_encryption',
-				'value'      => hash('sha512', oc_token(32)),
-				'code'       => 'config',
-				'serialized' => 0
-			];
-
-			$missing[] = [
-				'key'        => 'config_voucher_min',
-				'value'      => 1,
-				'code'       => 'config',
-				'serialized' => 0
-			];
-
-			$missing[] = [
-				'key'        => 'config_voucher_max',
-				'value'      => 1000,
-				'code'       => 'config',
-				'serialized' => 0
-			];
 
 			$missing[] = [
 				'key'        => 'config_fraud_status_id',
@@ -180,15 +193,6 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 				];
 			}
 
-			if (isset($settings['config_smtp_timeout'])) {
-				$missing[] = [
-					'key'        => 'config_mail_smtp_timeout',
-					'value'      => $settings['config_smtp_timeout'],
-					'code'       => 'config',
-					'serialized' => 0
-				];
-			}
-
 			$missing[] = [
 				'key'        => 'config_article_description_length',
 				'value'      => 100,
@@ -197,15 +201,43 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 			];
 
 			$missing[] = [
-				'key'        => 'config_image_blog_width',
-				'value'      => 90,
+				'key'        => 'config_image_default_width',
+				'value'      => 300,
 				'code'       => 'config',
 				'serialized' => 0
 			];
 
 			$missing[] = [
-				'key'        => 'config_image_blog_height',
-				'value'      => 90,
+				'key'        => 'config_image_default_height',
+				'value'      => 300,
+				'code'       => 'config',
+				'serialized' => 0
+			];
+
+			$missing[] = [
+				'key'        => 'config_image_article_width',
+				'value'      => 1140,
+				'code'       => 'config',
+				'serialized' => 0
+			];
+
+			$missing[] = [
+				'key'        => 'config_image_article_height',
+				'value'      => 380,
+				'code'       => 'config',
+				'serialized' => 0
+			];
+
+			$missing[] = [
+				'key'        => 'config_image_topic_width',
+				'value'      => 1140,
+				'code'       => 'config',
+				'serialized' => 0
+			];
+
+			$missing[] = [
+				'key'        => 'config_image_topic_height',
+				'value'      => 380,
 				'code'       => 'config',
 				'serialized' => 0
 			];
@@ -288,7 +320,6 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 				'serialized' => 0
 			];
 
-
 			$missing[] = [
 				'key'        => 'config_subscription_denied_status_id',
 				'value'      => 5,
@@ -318,6 +349,20 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 				'serialized' => 1
 			];
 
+			$missing[] = [
+				'key'        => 'config_2fa_expire',
+				'value'      => 90,
+				'code'       => 'config',
+				'serialized' => 0
+			];
+
+			$missing[] = [
+				'key'        => 'config_password_length',
+				'value'      => 6,
+				'code'       => 'config',
+				'serialized' => 0
+			];
+
 			// Add missing keys and serialized values
 			foreach ($missing as $setting) {
 				$query = $this->db->query("SELECT setting_id FROM `" . DB_PREFIX . "setting` WHERE `store_id` = '0' AND `key` = '" . $this->db->escape($setting['key']) . "'");
@@ -338,7 +383,7 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 
 			foreach ($query->rows as $extension) {
 				//get all setting from setting table
-				$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "setting` WHERE `code` = '" . $extension['code'] . "'");
+				$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "setting` WHERE `code` = '" . $this->db->escape($extension['code']) . "'");
 
 				if ($query->num_rows) {
 					foreach ($query->rows as $result) {
@@ -353,9 +398,13 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 			// Update some language settings
 			$this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `value` = 'en-gb' WHERE `key` = 'config_language' AND `value` = 'en'");
 			$this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `value` = 'en-gb' WHERE `key` = 'config_language_admin' AND `value` = 'en'");
+			$this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `key` = 'config_language_catalog' WHERE `key` = 'config_language'");
 
 			// Remove some setting keys
 			$remove = [
+				'config_meta_title',
+				'config_meta_description',
+				'config_meta_keywords',
 				'config_template',
 				'config_limit_admin',
 				'config_smtp_host',
@@ -385,7 +434,6 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 				'category',
 				'account',
 				'reward',
-				'voucher',
 				'free_checkout',
 				'featured',
 				'basic',
@@ -426,7 +474,6 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 			$this->db->query("UPDATE `" . DB_PREFIX . "product` SET `image` = REPLACE(image, 'data/', 'catalog/')");
 			$this->db->query("UPDATE `" . DB_PREFIX . "product_image` SET `image` = REPLACE(image, 'data/', 'catalog/')");
 			$this->db->query("UPDATE `" . DB_PREFIX . "option_value` SET `image` = REPLACE(image, 'data/', 'catalog/')");
-			$this->db->query("UPDATE `" . DB_PREFIX . "voucher_theme` SET `image` = REPLACE(image, 'data/', 'catalog/')");
 			$this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `value` = REPLACE(value, 'data/', 'catalog/')");
 			$this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `value` = REPLACE(value, 'data/', 'catalog/')");
 			$this->db->query("UPDATE `" . DB_PREFIX . "product_description` SET `description` = REPLACE(description, 'data/', 'catalog/')");
@@ -437,7 +484,7 @@ class Upgrade4 extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$json['text'] = sprintf($this->language->get('text_progress'), 4, 4, 9);
+			$json['text'] = sprintf($this->language->get('text_patch'), 4, 4, 11);
 
 			$url = '';
 

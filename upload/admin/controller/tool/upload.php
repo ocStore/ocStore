@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Tool;
  */
 class Upload extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -55,6 +57,8 @@ class Upload extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -64,9 +68,11 @@ class Upload extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
-	protected function getList(): string {
+	public function getList(): string {
 		if (isset($this->request->get['filter_name'])) {
 			$filter_name = $this->request->get['filter_name'];
 		} else {
@@ -131,6 +137,7 @@ class Upload extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('tool/upload.list', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		// Upload
 		$data['uploads'] = [];
 
 		$filter_data = [
@@ -145,18 +152,13 @@ class Upload extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('tool/upload');
 
-		$upload_total = $this->model_tool_upload->getTotalUploads($filter_data);
-
 		$results = $this->model_tool_upload->getUploads($filter_data);
 
 		foreach ($results as $result) {
 			$data['uploads'][] = [
-				'upload_id'  => $result['upload_id'],
-				'name'       => $result['name'],
-				'code'       => $result['code'],
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
 				'download'   => $this->url->link('tool/upload.download', 'user_token=' . $this->session->data['user_token'] . '&code=' . $result['code'] . $url)
-			];
+			] + $result;
 		}
 
 		$url = '';
@@ -209,6 +211,8 @@ class Upload extends \Opencart\System\Engine\Controller {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 
+		$upload_total = $this->model_tool_upload->getTotalUploads($filter_data);
+
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $upload_total,
 			'page'  => $page,
@@ -229,6 +233,8 @@ class Upload extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {
@@ -237,7 +243,7 @@ class Upload extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['selected'])) {
-			$selected = $this->request->post['selected'];
+			$selected = (array)$this->request->post['selected'];
 		} else {
 			$selected = [];
 		}
@@ -268,6 +274,8 @@ class Upload extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Download
+	 *
 	 * @return void
 	 */
 	public function download(): void {
@@ -291,14 +299,14 @@ class Upload extends \Opencart\System\Engine\Controller {
 				if (is_file($file)) {
 					header('Content-Type: application/octet-stream');
 					header('Content-Description: File Transfer');
-					header('Content-Disposition: attachment; filename="' . ($mask ? $mask : basename($file)) . '"');
+					header('Content-Disposition: attachment; filename="' . ($mask ?: basename($file)) . '"');
 					header('Content-Transfer-Encoding: binary');
 					header('Expires: 0');
 					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 					header('Pragma: public');
 					header('Content-Length: ' . filesize($file));
 
-					readfile($file, 'rb');
+					readfile($file);
 					exit;
 				} else {
 					exit(sprintf($this->language->get('error_not_found'), basename($file)));
@@ -332,6 +340,8 @@ class Upload extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Upload
+	 *
 	 * @return void
 	 */
 	public function upload(): void {
@@ -353,7 +363,7 @@ class Upload extends \Opencart\System\Engine\Controller {
 			$filename = basename(html_entity_decode($this->request->files['file']['name'], ENT_QUOTES, 'UTF-8'));
 
 			// Validate the filename length
-			if ((oc_strlen($filename) < 3) || (oc_strlen($filename) > 128)) {
+			if (!oc_validate_length($filename, 3, 128)) {
 				$json['error'] = $this->language->get('error_filename');
 			}
 

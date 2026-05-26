@@ -7,7 +7,7 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Shipping;
  */
 class Flat extends \Opencart\System\Engine\Controller {
 	/**
-	 * index
+	 * Index
 	 *
 	 * @return void
 	 */
@@ -18,25 +18,37 @@ class Flat extends \Opencart\System\Engine\Controller {
 
 		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = ['text' => $this->language->get('text_home'), 'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])];
+		$data['breadcrumbs'][] = [
+			'text' => $this->language->get('text_home'),
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
+		];
 
-		$data['breadcrumbs'][] = ['text' => $this->language->get('text_extension'), 'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping')];
+		$data['breadcrumbs'][] = [
+			'text' => $this->language->get('text_extension'),
+			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping')
+		];
 
-		$data['breadcrumbs'][] = ['text' => $this->language->get('heading_title'), 'href' => $this->url->link('extension/opencart/shipping/flat', 'user_token=' . $this->session->data['user_token'])];
+		$data['breadcrumbs'][] = [
+			'text' => $this->language->get('heading_title'),
+			'href' => $this->url->link('extension/opencart/shipping/flat', 'user_token=' . $this->session->data['user_token'])
+		];
 
 		$data['save'] = $this->url->link('extension/opencart/shipping/flat.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping');
 
 		$data['shipping_flat_cost'] = $this->config->get('shipping_flat_cost');
-		$data['shipping_flat_tax_class_id'] = $this->config->get('shipping_flat_tax_class_id');
 
+		// Tax Class
 		$this->load->model('localisation/tax_class');
+
+		$data['shipping_flat_tax_class_id'] = (int)$this->config->get('shipping_flat_tax_class_id');
 
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
-		$data['shipping_flat_geo_zone_id'] = $this->config->get('shipping_flat_geo_zone_id');
-
+		// Geo Zone
 		$this->load->model('localisation/geo_zone');
+
+		$data['shipping_flat_geo_zone_id'] = $this->config->get('shipping_flat_geo_zone_id');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -51,6 +63,8 @@ class Flat extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -63,6 +77,7 @@ class Flat extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('shipping_flat', $this->request->post);

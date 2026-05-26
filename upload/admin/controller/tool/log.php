@@ -7,11 +7,13 @@ namespace Opencart\Admin\Controller\Tool;
  */
 class Log extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
 		$this->load->language('tool/log');
-		
+
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$data['breadcrumbs'] = [];
@@ -40,7 +42,6 @@ class Log extends \Opencart\System\Engine\Controller {
 			file_put_contents($file, '', FILE_APPEND);
 		}
 
-
 		$data['log'] = [];
 
 		$files = glob(DIR_LOGS . '*.log');
@@ -68,7 +69,7 @@ class Log extends \Opencart\System\Engine\Controller {
 				$i = 0;
 
 				while (($size / 1024) > 1) {
-					$size = $size / 1024;
+					$size /= 1024;
 					$i++;
 				}
 
@@ -98,13 +99,15 @@ class Log extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Download
+	 *
 	 * @return void
 	 */
 	public function download(): void {
 		$this->load->language('tool/log');
 
 		if (isset($this->request->get['filename'])) {
-			$filename = (string)basename($this->request->get['filename']);
+			$filename = (string)basename(html_entity_decode($this->request->get['filename'], ENT_QUOTES, 'UTF-8'));
 		} else {
 			$filename = '';
 		}
@@ -127,20 +130,22 @@ class Log extends \Opencart\System\Engine\Controller {
 		$this->response->addheader('Expires: 0');
 		$this->response->addheader('Content-Description: File Transfer');
 		$this->response->addheader('Content-Type: application/octet-stream');
-		$this->response->addheader('Content-Disposition: attachment; filename="' . $this->config->get('config_name') . '_' . date('Y-m-d_H-i-s', time()) . '_error.log"');
+		$this->response->addheader('Content-Disposition: attachment; filename="' . $filename . '_' . date('Y-m-d_H-i-s', time()) . '_error.log"');
 		$this->response->addheader('Content-Transfer-Encoding: binary');
 
-		$this->response->setOutput(file_get_contents($file, FILE_USE_INCLUDE_PATH, null));
+		$this->response->setOutput(file_get_contents($file, true, null));
 	}
 
 	/**
+	 * Clear
+	 *
 	 * @return void
 	 */
 	public function clear(): void {
 		$this->load->language('tool/log');
 
 		if (isset($this->request->get['filename'])) {
-			$filename = (string)$this->request->get['filename'];
+			$filename = (string)basename(html_entity_decode($this->request->get['filename'], ENT_QUOTES, 'UTF-8'));
 		} else {
 			$filename = '';
 		}

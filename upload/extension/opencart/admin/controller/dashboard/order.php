@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Dashboard;
  */
 class Order extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -32,13 +34,12 @@ class Order extends \Opencart\System\Engine\Controller {
 		];
 
 		$data['save'] = $this->url->link('extension/opencart/dashboard/order.save', 'user_token=' . $this->session->data['user_token']);
-
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=dashboard');
 
 		$data['dashboard_order_width'] = $this->config->get('dashboard_order_width');
 
 		$data['columns'] = [];
-		
+
 		for ($i = 3; $i <= 12; $i++) {
 			$data['columns'][] = $i;
 		}
@@ -54,6 +55,8 @@ class Order extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -62,10 +65,11 @@ class Order extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (!$this->user->hasPermission('modify', 'extension/opencart/dashboard/order')) {
-			$json['error']  = $this->language->get('error_permission');
+			$json['error'] = $this->language->get('error_permission');
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('dashboard_order', $this->request->post);
@@ -78,6 +82,8 @@ class Order extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Dashboard
+	 *
 	 * @return string
 	 */
 	public function dashboard(): string {
@@ -87,9 +93,7 @@ class Order extends \Opencart\System\Engine\Controller {
 		$this->load->model('sale/order');
 
 		$today = $this->model_sale_order->getTotalOrders(['filter_date_added' => date('Y-m-d', strtotime('-1 day'))]);
-
 		$yesterday = $this->model_sale_order->getTotalOrders(['filter_date_added' => date('Y-m-d', strtotime('-2 day'))]);
-
 		$difference = $today - $yesterday;
 
 		if ($difference && $today) {

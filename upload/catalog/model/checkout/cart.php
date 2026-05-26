@@ -3,14 +3,26 @@ namespace Opencart\Catalog\Model\Checkout;
 /**
  * Class Cart
  *
+ * Can be called using $this->load->model('checkout/cart');
+ *
  * @package Opencart\Catalog\Model\Checkout
  */
 class Cart extends \Opencart\System\Engine\Model {
 	/**
-	 * @return array
+	 * Get Products
+	 *
+	 * @return array<int, array<string, mixed>> product records
+	 *
+	 * @example
+	 *
+	 * $this->load->model('checkout/cart');
+	 *
+	 * $cart = $this->model_checkout_cart->getProducts();
 	 */
 	public function getProducts(): array {
-		$this->load->model('tool/image');
+		$this->load->language('checkout/cart');
+
+		// Upload
 		$this->load->model('tool/upload');
 
 		// Products
@@ -19,112 +31,76 @@ class Cart extends \Opencart\System\Engine\Model {
 		$products = $this->cart->getProducts();
 
 		foreach ($products as $product) {
-			if ($product['image']) {
-				$image = $this->model_tool_image->resize(html_entity_decode($product['image'], ENT_QUOTES, 'UTF-8'), $this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height'));
+			if ($product['image'] && is_file(DIR_IMAGE . html_entity_decode($product['image'], ENT_QUOTES, 'UTF-8'))) {
+				$image = $product['image'];
 			} else {
-				$image = $this->model_tool_image->resize('placeholder.png', $this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height'));
+				$image = 'placeholder.png';
 			}
 
 			$option_data = [];
 
 			foreach ($product['option'] as $option) {
-				if ($option['type'] != 'file') {
-					$value = $option['value'];
-				} else {
+				$value = $option['value'];
+
+				if ($option['type'] == 'date') {
+					$value = date('Y-m-d', strtotime($option['value']));
+				}
+
+				if ($option['type'] == 'time') {
+					$value = date('H:i:s', strtotime($option['value']));
+				}
+
+				if ($option['type'] == 'datetime') {
+					$value = date('Y-m-d H:i:s', strtotime($option['value']));
+				}
+
+				if ($option['type'] == 'file') {
 					$upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
 
 					if ($upload_info) {
-						$value = $upload_info['name'];
-					} else {
-						$value = '';
+						$value = $upload_info['code'];
 					}
 				}
 
-				$option_data[] = [
-					'product_option_id'       => $option['product_option_id'],
-					'product_option_value_id' => $option['product_option_value_id'],
-					'option_id'               => $option['option_id'],
-					'option_value_id'         => $option['option_value_id'],
-					'name'                    => $option['name'],
-					'value'                   => $value,
-					'type'                    => $option['type']
-				];
+				$option_data[] = ['value' => $value] + $option;
 			}
 
-			$product_total = 0;
+			$subscription_data = [];
 
-			foreach ($products as $product_2) {
-				if ($product_2['product_id'] == $product['product_id']) {
-					$product_total += $product_2['quantity'];
-				}
-			}
-
-			if ($product['minimum'] > $product_total) {
-				$minimum = false;
-			} else {
-				$minimum = true;
+			if ($product['subscription']) {
+				$subscription_data = [
+					'trial_frequency_text' => $this->language->get('text_' . $product['subscription']['trial_frequency']),
+					'trial_price_text'     => $this->currency->format($this->tax->calculate($product['subscription']['trial_price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']),
+					'frequency_text'       => $this->language->get('text_' . $product['subscription']['frequency']),
+					'price_text'           => $this->currency->format($this->tax->calculate($product['subscription']['price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'])
+				] + $product['subscription'];
 			}
 
 			$product_data[] = [
-				'cart_id'      => $product['cart_id'],
-				'product_id'   => $product['product_id'],
-				'master_id'    => $product['master_id'],
 				'image'        => $image,
-				'name'         => $product['name'],
-				'model'        => $product['model'],
+				'subscription' => $subscription_data,
 				'option'       => $option_data,
-				'subscription' => $product['subscription'],
-				'download'     => $product['download'],
-				'quantity'     => $product['quantity'],
-				'stock'        => $product['stock'],
-				'minimum'      => $minimum,
-				'shipping'     => $product['shipping'],
-				'subtract'     => $product['subtract'],
-				'reward'       => $product['reward'],
-				'tax_class_id' => $product['tax_class_id'],
-				'price'        => $product['price'],
-				'total'        => $product['total']
-			];
+				'price_text'   => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']),
+				'total_text'   => $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'])
+			] + $product;
 		}
 
 		return $product_data;
 	}
 
 	/**
-	 * @return array
-	 */
-	public function getVouchers(): array {
-		$voucher_data = [];
-
-		if (!empty($this->session->data['vouchers'])) {
-			foreach ($this->session->data['vouchers'] as $voucher) {
-				$voucher_data[] = [
-					'code'             => $voucher['code'],
-					'description'      => $voucher['description'],
-					'from_name'        => $voucher['from_name'],
-					'from_email'       => $voucher['from_email'],
-					'to_name'          => $voucher['to_name'],
-					'to_email'         => $voucher['to_email'],
-					'voucher_theme_id' => $voucher['voucher_theme_id'],
-					'message'          => $voucher['message'],
-					'amount'           => $voucher['amount']
-				];
-			}
-		}
-
-		return $voucher_data;
-	}
-
-	/**
-	 * @param array $totals
-	 * @param array $taxes
-	 * @param int   $total
+	 * Get Totals
+	 *
+	 * @param array<int, array<string, mixed>> $totals
+	 * @param array<int, float>                $taxes
+	 * @param int                              $total
 	 *
 	 * @return void
 	 */
 	public function getTotals(array &$totals, array &$taxes, int &$total): void {
 		$sort_order = [];
 
+		// Extension
 		$this->load->model('setting/extension');
 
 		$results = $this->model_setting_extension->getExtensionsByType('total');
@@ -139,7 +115,7 @@ class Cart extends \Opencart\System\Engine\Model {
 			if ($this->config->get('total_' . $result['code'] . '_status')) {
 				$this->load->model('extension/' . $result['extension'] . '/total/' . $result['code']);
 
-				// __call magic method cannot pass-by-reference so we get PHP to call it as an anonymous function.
+				// __call magic method cannot pass-by-reference so PHP calls it as an anonymous function.
 				($this->{'model_extension_' . $result['extension'] . '_total_' . $result['code']}->getTotal)($totals, $taxes, $total);
 			}
 		}

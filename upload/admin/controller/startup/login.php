@@ -7,9 +7,11 @@ namespace Opencart\Admin\Controller\Startup;
  */
 class Login extends \Opencart\System\Engine\Controller {
 	/**
-	 * @return object|\Opencart\System\Engine\Action|null
+	 * Index
+	 *
+	 * @return \Opencart\System\Engine\Action
 	 */
-	public function index(): object|null {
+	public function index(): ?object {
 		if (isset($this->request->get['route'])) {
 			$route = (string)$this->request->get['route'];
 		} else {
@@ -26,7 +28,8 @@ class Login extends \Opencart\System\Engine\Controller {
 		$ignore = [
 			'common/login',
 			'common/forgotten',
-			'common/language'
+			'common/language',
+			'common/authorize'
 		];
 
 		// User
@@ -41,6 +44,7 @@ class Login extends \Opencart\System\Engine\Controller {
 			'common/logout',
 			'common/forgotten',
 			'common/language',
+			'common/authorize',
 			'error/not_found',
 			'error/permission'
 		];

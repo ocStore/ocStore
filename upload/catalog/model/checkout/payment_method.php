@@ -1,19 +1,24 @@
 <?php
 namespace Opencart\Catalog\Model\Checkout;
 /**
- * Class PaymentMethod
+ * Class Payment Method
+ *
+ * Can be called using $this->load->model('checkout/payment_method');
  *
  * @package Opencart\Catalog\Model\Checkout
  */
-class PaymentMethod extends \Opencart\System\Engine\Controller {
+class PaymentMethod extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $payment_address
+	 * Get Methods
 	 *
-	 * @return array
+	 * @param array<string, mixed> $payment_address array of data
+	 *
+	 * @return array<string, mixed>
 	 */
 	public function getMethods(array $payment_address = []): array {
 		$method_data = [];
 
+		// Extension
 		$this->load->model('setting/extension');
 
 		$results = $this->model_setting_extension->getExtensionsByType('payment');
@@ -22,10 +27,14 @@ class PaymentMethod extends \Opencart\System\Engine\Controller {
 			if ($this->config->get('payment_' . $result['code'] . '_status')) {
 				$this->load->model('extension/' . $result['extension'] . '/payment/' . $result['code']);
 
-				$payment_methods = $this->{'model_extension_' . $result['extension'] . '_payment_' . $result['code']}->getMethods($payment_address);
+				$key = 'model_extension_' . $result['extension'] . '_payment_' . $result['code'];
 
-				if ($payment_methods) {
-					$method_data[$result['code']] = $payment_methods;
+				if ($this->{$key}->getMethods) {
+					$payment_methods = $this->{$key}->getMethods($payment_address);
+
+					if ($payment_methods) {
+						$method_data[$result['code']] = $payment_methods;
+					}
 				}
 			}
 		}

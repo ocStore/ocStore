@@ -5,22 +5,28 @@ CREATE TABLE IF NOT EXISTS `session` (
   `data` text NOT NULL,
   `expire` datetime NOT NULL,
   PRIMARY KEY (`session_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 */
 namespace Opencart\System\Library\Session;
 /**
  * Class DB
  *
- * @package
+ * @package Opencart\System\Library\Session
  */
 class DB {
+	/**
+	 * @var object
+	 */
 	private object $db;
+	/**
+	 * @var object
+	 */
 	private object $config;
 
 	/**
 	 * Constructor
 	 *
-	 * @param    object  $registry
+	 * @param \Opencart\System\Engine\Registry $registry
 	 */
 	public function __construct(\Opencart\System\Engine\Registry $registry) {
 		$this->db = $registry->get('db');
@@ -30,12 +36,12 @@ class DB {
 	/**
 	 * Read
 	 *
-	 * @param    string  $session_id
+	 * @param string $session_id
 	 *
-	 * @return   array
+	 * @return array<mixed>
 	 */
 	public function read(string $session_id): array {
-		$query = $this->db->query("SELECT `data` FROM `" . DB_PREFIX . "session` WHERE `session_id` = '" . $this->db->escape($session_id) . "' AND `expire` > '" . $this->db->escape(gmdate('Y-m-d H:i:s'))  . "'");
+		$query = $this->db->query("SELECT `data` FROM `" . DB_PREFIX . "session` WHERE `session_id` = '" . $this->db->escape($session_id) . "' AND `expire` > '" . $this->db->escape(gmdate('Y-m-d H:i:s')) . "'");
 
 		if ($query->num_rows) {
 			return (array)json_decode($query->row['data'], true);
@@ -43,14 +49,14 @@ class DB {
 			return [];
 		}
 	}
-	
+
 	/**
 	 * Write
 	 *
-	 * @param    string  $session_id
-	 * @param    array  $data
+	 * @param string       $session_id
+	 * @param array<mixed> $data
 	 *
-	 * @return   bool
+	 * @return bool
 	 */
 	public function write(string $session_id, array $data): bool {
 		if ($session_id) {
@@ -63,9 +69,9 @@ class DB {
 	/**
 	 * Destroy
 	 *
-	 * @param    string  $session_id
+	 * @param string $session_id
 	 *
-	 * @return   bool
+	 * @return bool
 	 */
 	public function destroy(string $session_id): bool {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "session` WHERE `session_id` = '" . $this->db->escape($session_id) . "'");
@@ -76,10 +82,10 @@ class DB {
 	/**
 	 * GC
 	 *
-	 * @return   bool
+	 * @return bool
 	 */
 	public function gc(): bool {
-		if (round(rand(1, $this->config->get('session_divisor') / $this->config->get('session_probability'))) == 1) {
+		if (round(mt_rand(1, $this->config->get('session_divisor') / $this->config->get('session_probability'))) == 1) {
 			$this->db->query("DELETE FROM `" . DB_PREFIX . "session` WHERE `expire` < '" . $this->db->escape(gmdate('Y-m-d H:i:s', time())) . "'");
 		}
 

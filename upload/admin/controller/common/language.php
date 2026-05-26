@@ -3,13 +3,18 @@ namespace Opencart\Admin\Controller\Common;
 /**
  * Class Language
  *
+ * Can be loaded using $this->load->controller('common/language');
+ *
  * @package Opencart\Admin\Controller\Common
  */
 class Language extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
+		// Language
 		$data['languages'] = [];
 
 		$this->load->model('localisation/language');
@@ -27,7 +32,7 @@ class Language extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->cookie['language'])) {
 			$data['code'] = $this->request->cookie['language'];
 		} else {
-			$data['code'] = $this->config->get('config_language');
+			$data['code'] = $this->config->get('config_language_admin');
 		}
 
 		// Redirect
@@ -55,6 +60,8 @@ class Language extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -63,17 +70,18 @@ class Language extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['code'])) {
-			$code = $this->request->post['code'];
+			$code = (string)$this->request->post['code'];
 		} else {
 			$code = '';
 		}
 
 		if (isset($this->request->post['redirect'])) {
-			$redirect = htmlspecialchars_decode($this->request->post['redirect'], ENT_COMPAT);
+			$redirect = html_entity_decode((string)$this->request->post['redirect'], ENT_QUOTES, 'UTF-8');
 		} else {
 			$redirect = '';
 		}
 
+		// Language
 		$this->load->model('localisation/language');
 
 		$language_info = $this->model_localisation_language->getLanguageByCode($code);
@@ -83,9 +91,16 @@ class Language extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			setcookie('language', $code, time() + 60 * 60 * 24 * 365 * 10);
+			$option = [
+				'expires'  => time() + 60 * 60 * 24 * 365 * 10,
+				'path'     => $this->config->get('session_path'),
+				'secure'   => $this->request->server['HTTPS'],
+				'SameSite' => $this->config->get('config_session_samesite')
+			];
 
-			if ($redirect && substr($redirect, 0, strlen($this->config->get('config_url'))) == $this->config->get('config_url')) {
+			setcookie('language', $code, $option);
+
+			if ($redirect && str_starts_with($redirect, $this->config->get('config_url'))) {
 				$json['redirect'] = $redirect;
 			} else {
 				$json['redirect'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true);

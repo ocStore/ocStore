@@ -2,14 +2,19 @@
 <footer>
   <div class="container">
     <div class="row">
-      <div class="col-sm-3">
-        <h5>{{ text_information }}</h5>
-        <ul class="list-unstyled">
-          {% for information in informations %}
-            <li><a href="{{ information.href }}">{{ information.title }}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
+      {% if informations or blog %}
+        <div class="col-sm-3">
+          <h5>{{ text_information }}</h5>
+          <ul class="list-unstyled">
+            {% if blog %}
+              <li><a href="{{ blog }}">{{ text_blog }}</a></li>
+            {% endif %}
+            {% for information in informations %}
+              <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
       <div class="col-sm-3">
         <h5>{{ text_service }}</h5>
         <ul class="list-unstyled">
@@ -25,7 +30,6 @@
         <h5>{{ text_extra }}</h5>
         <ul class="list-unstyled">
           <li><a href="{{ manufacturer }}">{{ text_manufacturer }}</a></li>
-          <li><a href="{{ voucher }}">{{ text_voucher }}</a></li>
           {% if affiliate %}
             <li><a href="{{ affiliate }}">{{ text_affiliate }}</a></li>
           {% endif %}
@@ -50,6 +54,7 @@ Please donate via PayPal to donate@opencart.com
 //-->
   </div>
 </footer>
+</div>
 {{ cookie }}
 <script src="{{ bootstrap }}" type="text/javascript"></script>
 {% for script in scripts %}

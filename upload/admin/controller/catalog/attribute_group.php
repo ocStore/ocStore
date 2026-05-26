@@ -3,10 +3,14 @@ namespace Opencart\Admin\Controller\Catalog;
 /**
  * Class Attribute Group
  *
+ * Can be loaded using $this->load->controller('catalog/attribute_group');
+ *
  * @package Opencart\Admin\Controller\Catalog
  */
 class AttributeGroup extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -19,7 +23,6 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['sort'])) {
 			$url .= '&sort=' . $this->request->get['sort'];
 		}
-
 		if (isset($this->request->get['order'])) {
 			$url .= '&order=' . $this->request->get['order'];
 		}
@@ -43,7 +46,7 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 		$data['add'] = $this->url->link('catalog/attribute_group.form', 'user_token=' . $this->session->data['user_token'] . $url);
 		$data['delete'] = $this->url->link('catalog/attribute_group.delete', 'user_token=' . $this->session->data['user_token']);
 
-		$data['list'] = $this->getList();
+		$data['list'] = $this->load->controller('catalog/attribute_group.getList');
 
 		$data['user_token'] = $this->session->data['user_token'];
 
@@ -55,18 +58,22 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
 		$this->load->language('catalog/attribute_group');
 
-		$this->response->setOutput($this->getList());
+		$this->response->setOutput($this->load->controller('catalog/attribute_group.getList'));
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
-	protected function getList(): string {
+	public function getList(): string {
 		if (isset($this->request->get['sort'])) {
 			$sort = (string)$this->request->get['sort'];
 		} else {
@@ -101,6 +108,7 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('catalog/attribute_group.list', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		// Attribute Group
 		$data['attribute_groups'] = [];
 
 		$filter_data = [
@@ -112,17 +120,10 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('catalog/attribute_group');
 
-		$attribute_group_total = $this->model_catalog_attribute_group->getTotalAttributeGroups();
-
 		$results = $this->model_catalog_attribute_group->getAttributeGroups($filter_data);
 
 		foreach ($results as $result) {
-			$data['attribute_groups'][] = [
-				'attribute_group_id' => $result['attribute_group_id'],
-				'name'               => $result['name'],
-				'sort_order'         => $result['sort_order'],
-				'edit'               => $this->url->link('catalog/attribute_group.form', 'user_token=' . $this->session->data['user_token'] . '&attribute_group_id=' . $result['attribute_group_id'] . $url)
-			];
+			$data['attribute_groups'][] = ['edit' => $this->url->link('catalog/attribute_group.form', 'user_token=' . $this->session->data['user_token'] . '&attribute_group_id=' . $result['attribute_group_id'] . $url)] + $result;
 		}
 
 		$url = '';
@@ -146,6 +147,8 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 
+		$attribute_group_total = $this->model_catalog_attribute_group->getTotalAttributeGroups();
+
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $attribute_group_total,
 			'page'  => $page,
@@ -162,6 +165,8 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Form
+	 *
 	 * @return void
 	 */
 	public function form(): void {
@@ -203,21 +208,22 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['attribute_group_id'])) {
 			$this->load->model('catalog/attribute_group');
 
-			$attribute_group_info = $this->model_catalog_attribute_group->getAttributeGroup($this->request->get['attribute_group_id']);
+			$attribute_group_info = $this->model_catalog_attribute_group->getAttributeGroup((int)$this->request->get['attribute_group_id']);
 		}
 
-		if (isset($this->request->get['attribute_group_id'])) {
-			$data['attribute_group_id'] = (int)$this->request->get['attribute_group_id'];
+		if (!empty($attribute_group_info)) {
+			$data['attribute_group_id'] = $attribute_group_info['attribute_group_id'];
 		} else {
 			$data['attribute_group_id'] = 0;
 		}
 
+		// Language
 		$this->load->model('localisation/language');
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
-		if (isset($this->request->get['attribute_group_id'])) {
-			$data['attribute_group_description'] = $this->model_catalog_attribute_group->getDescriptions($this->request->get['attribute_group_id']);
+		if (!empty($attribute_group_info)) {
+			$data['attribute_group_description'] = $this->model_catalog_attribute_group->getDescriptions($attribute_group_info['attribute_group_id']);
 		} else {
 			$data['attribute_group_description'] = [];
 		}
@@ -238,6 +244,8 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -249,8 +257,16 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
-		foreach ($this->request->post['attribute_group_description'] as $language_id => $value) {
-			if ((oc_strlen(trim($value['name'])) < 1) || (oc_strlen($value['name']) > 64)) {
+		$required = [
+			'attribute_group_id'    => 0,
+			'attribute_description' => [],
+			'sort_order'            => 0
+		];
+
+		$post_info = $this->request->post + $required;
+
+		foreach ($post_info['attribute_group_description'] as $language_id => $value) {
+			if (!oc_validate_length((string)$value['name'], 1, 64)) {
 				$json['error']['name_' . $language_id] = $this->language->get('error_name');
 			}
 		}
@@ -262,10 +278,10 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			$this->load->model('catalog/attribute_group');
 
-			if (!$this->request->post['attribute_group_id']) {
-				$json['attribute_group_id'] = $this->model_catalog_attribute_group->addAttributeGroup($this->request->post);
+			if (!$post_info['attribute_group_id']) {
+				$json['attribute_group_id'] = $this->model_catalog_attribute_group->addAttributeGroup($post_info);
 			} else {
-				$this->model_catalog_attribute_group->editAttributeGroup($this->request->post['attribute_group_id'], $this->request->post);
+				$this->model_catalog_attribute_group->editAttributeGroup((int)$post_info['attribute_group_id'], $post_info);
 			}
 
 			$json['success'] = $this->language->get('text_success');
@@ -276,6 +292,8 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {
@@ -284,7 +302,7 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['selected'])) {
-			$selected = $this->request->post['selected'];
+			$selected = (array)$this->request->post['selected'];
 		} else {
 			$selected = [];
 		}
@@ -293,6 +311,7 @@ class AttributeGroup extends \Opencart\System\Engine\Controller {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
+		// Attribute
 		$this->load->model('catalog/attribute');
 
 		foreach ($selected as $attribute_group_id) {

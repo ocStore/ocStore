@@ -3,11 +3,13 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Module;
 /**
  * Class BestSeller
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Module
  */
 class BestSeller extends \Opencart\System\Engine\Controller {
 	/**
-	 * @param array $setting
+	 * Index
+	 *
+	 * @param array<string, mixed> $setting array of filters
 	 *
 	 * @return string
 	 */
@@ -18,7 +20,10 @@ class BestSeller extends \Opencart\System\Engine\Controller {
 
 		$data['products'] = [];
 
+		// Bestseller
 		$this->load->model('extension/opencart/module/bestseller');
+
+		// Image
 		$this->load->model('tool/image');
 
 		$results = $this->model_extension_opencart_module_bestseller->getBestSellers($setting['limit']);
@@ -65,7 +70,7 @@ class BestSeller extends \Opencart\System\Engine\Controller {
 				$data['products'][] = $this->load->controller('product/thumb', $product_data);
 			}
 
-            return $this->load->view('extension/opencart/module/bestseller', $data);
+			return $this->load->view('extension/opencart/module/bestseller', $data);
 		} else {
 			return '';
 		}

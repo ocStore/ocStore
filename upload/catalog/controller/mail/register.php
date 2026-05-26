@@ -6,16 +6,20 @@ namespace Opencart\Catalog\Controller\Mail;
  * @package Opencart\Catalog\Controller\Mail
  */
 class Register extends \Opencart\System\Engine\Controller {
-	// catalog/model/account/customer/addCustomer/after
 	/**
-	 * @param string $route
-	 * @param array  $args
-	 * @param mixed  $output
+	 * Index
+	 *
+	 * catalog/model/account/customer.addCustomer/after
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param mixed             $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function index(string &$route, array &$args, mixed &$output): void {
+	public function index(string &$route, array &$args, &$output): void {
 		$this->load->language('mail/register');
 
 		$store_name = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
@@ -24,6 +28,7 @@ class Register extends \Opencart\System\Engine\Controller {
 
 		$data['text_welcome'] = sprintf($this->language->get('text_welcome'), $store_name);
 
+		// Customer Group
 		$this->load->model('account/customer_group');
 
 		if (isset($args[0]['customer_group_id'])) {
@@ -65,17 +70,20 @@ class Register extends \Opencart\System\Engine\Controller {
 		}
 	}
 
-	// catalog/model/account/customer/addCustomer/after
-
 	/**
-	 * @param string $route
-	 * @param array  $args
-	 * @param mixed  $output
+	 * Alert
+	 *
+	 * catalog/model/account/customer.addCustomer/after
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param mixed             $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function alert(string &$route, array &$args, mixed &$output): void {
+	public function alert(string &$route, array &$args, &$output): void {
 		// Send to main admin email if new account email is enabled
 		if (in_array('account', (array)$this->config->get('config_mail_alert'))) {
 			$this->load->language('mail/register');
@@ -89,6 +97,7 @@ class Register extends \Opencart\System\Engine\Controller {
 
 			$data['login'] = $this->url->link('account/login', 'language=' . $this->config->get('config_language'), true);
 
+			// Customer Group
 			$this->load->model('account/customer_group');
 
 			if (isset($args[0]['customer_group_id'])) {

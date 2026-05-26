@@ -6,19 +6,24 @@ namespace Opencart\Catalog\Controller\Mail;
  * @package Opencart\Catalog\Controller\Mail
  */
 class Review extends \Opencart\System\Engine\Controller {
-	// catalog/model/catalog/review/addReview/after
 	/**
-	 * @param string $route
-	 * @param array  $args
-	 * @param mixed  $output
+	 * Index
+	 *
+	 * catalog/model/catalog/review.addReview/after
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param mixed             $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function index(string &$route, array &$args, mixed &$output): void {
+	public function index(string &$route, array &$args, &$output): void {
 		if (in_array('review', (array)$this->config->get('config_mail_alert'))) {
 			$this->load->language('mail/review');
 
+			// Product
 			$this->load->model('catalog/product');
 
 			$product_info = $this->model_catalog_product->getProduct((int)$args[0]);
@@ -29,7 +34,7 @@ class Review extends \Opencart\System\Engine\Controller {
 				$subject = sprintf($this->language->get('text_subject'), $store_name);
 
 				$data['product'] = html_entity_decode($product_info['name'], ENT_QUOTES, 'UTF-8');
-				$data['reviewer'] = html_entity_decode($args[1]['name'], ENT_QUOTES, 'UTF-8');
+				$data['reviewer'] = html_entity_decode($args[1]['author'], ENT_QUOTES, 'UTF-8');
 				$data['rating'] = (int)$args[1]['rating'];
 				$data['text'] = nl2br($args[1]['text']);
 

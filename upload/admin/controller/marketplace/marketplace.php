@@ -7,12 +7,12 @@ namespace Opencart\Admin\Controller\Marketplace;
  */
 class Marketplace extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
 		$this->load->language('marketplace/marketplace');
-
-		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (isset($this->request->get['filter_search'])) {
 			$filter_search = (string)$this->request->get['filter_search'];
@@ -61,6 +61,8 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 		} else {
 			$page = 1;
 		}
+
+		$this->document->setTitle($this->language->get('heading_title'));
 
 		$url = '';
 
@@ -117,7 +119,7 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 		$string .= VERSION . "\n";
 		$string .= $time . "\n";
 
-		$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), 1));
+		$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), true));
 
 		$url  = '&username=' . urlencode($this->config->get('opencart_username'));
 		$url .= '&domain=' . $this->request->server['HTTP_HOST'];
@@ -171,7 +173,11 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 		curl_close($curl);
 
-		$response_info = json_decode($response, true);
+		if ($status == 200) {
+			$response_info = json_decode($response, true);
+		} else {
+			$response_info = [];
+		}
 
 		if (isset($response_info['extension_total'])) {
 			$extension_total = (int)$response_info['extension_total'];
@@ -215,18 +221,9 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 		$data['promotions'] = [];
 
-		if (isset($response_info['promotions']) && $page == 1) {
+		if ($page == 1 && isset($response_info['promotions'])) {
 			foreach ($response_info['promotions'] as $result) {
-				$data['promotions'][] = [
-					'name'         => $result['name'],
-					'description'  => $result['description'],
-					'image'        => $result['image'],
-					'license'      => $result['license'],
-					'price'        => $result['price'],
-					'rating'       => $result['rating'],
-					'rating_total' => $result['rating_total'],
-					'href'         => $this->url->link('marketplace/marketplace.info', 'user_token=' . $this->session->data['user_token'] . '&extension_id=' . $result['extension_id'] . $url)
-				];
+				$data['promotions'][] = ['href' => $this->url->link('marketplace/marketplace.info', 'user_token=' . $this->session->data['user_token'] . '&extension_id=' . $result['extension_id'] . $url)] + $result;
 			}
 		}
 
@@ -234,16 +231,7 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 		if (isset($response_info['extensions'])) {
 			foreach ($response_info['extensions'] as $result) {
-				$data['extensions'][] = [
-					'name'         => $result['name'],
-					'description'  => $result['description'],
-					'image'        => $result['image'],
-					'license'      => $result['license'],
-					'price'        => $result['price'],
-					'rating'       => $result['rating'],
-					'rating_total' => $result['rating_total'],
-					'href'         => $this->url->link('marketplace/marketplace.info', 'user_token=' . $this->session->data['user_token'] . '&extension_id=' . $result['extension_id'] . $url)
-				];
+				$data['extensions'][] = ['href' => $this->url->link('marketplace/marketplace.info', 'user_token=' . $this->session->data['user_token'] . '&extension_id=' . $result['extension_id'] . $url)] + $result;
 			}
 		}
 
@@ -317,9 +305,9 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 		];
 
 		$data['categories'][] = [
-			'text' => $this->language->get('text_shipping'),
+			'text'  => $this->language->get('text_shipping'),
 			'value' => 'shipping',
-			'href' => $this->url->link('marketplace/marketplace', 'user_token=' . $this->session->data['user_token'] . '&filter_category=shipping' . $url)
+			'href'  => $this->url->link('marketplace/marketplace', 'user_token=' . $this->session->data['user_token'] . '&filter_category=shipping' . $url)
 		];
 
 		$data['categories'][] = [
@@ -517,6 +505,7 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 		$data['filter_license'] = $filter_license;
 		$data['filter_member_type'] = $filter_member_type;
 		$data['filter_rating'] = $filter_rating;
+
 		$data['sort'] = $sort;
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -529,9 +518,11 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * @return object|\Opencart\System\Engine\Action|null
+	 * Info
+	 *
+	 * @return \Opencart\System\Engine\Action|null
 	 */
-	public function info(): object|null {
+	public function info(): ?\Opencart\System\Engine\Action {
 		if (isset($this->request->get['extension_id'])) {
 			$extension_id = (int)$this->request->get['extension_id'];
 		} else {
@@ -548,7 +539,7 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 		$string .= $extension_id . "\n";
 		$string .= $time . "\n";
 
-		$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), 1));
+		$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), true));
 
 		$url  = '&username=' . urlencode($this->config->get('opencart_username'));
 		$url .= '&domain=' . $this->request->server['HTTP_HOST'];
@@ -571,7 +562,11 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 		curl_close($curl);
 
-		$response_info = json_decode($response, true);
+		if ($status == 200) {
+			$response_info = json_decode($response, true);
+		} else {
+			$response_info = [];
+		}
 
 		if ($response_info) {
 			$this->load->language('marketplace/marketplace');
@@ -669,6 +664,7 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 				];
 			}
 
+			// Extension
 			$this->load->model('setting/extension');
 
 			$data['downloads'] = [];
@@ -676,7 +672,6 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 			if ($response_info['downloads']) {
 				$this->session->data['extension_download'][$extension_id] = $response_info['downloads'];
 			} else {
-				$this->session->data['extension_download'][$extension_id] = [];
 				$this->session->data['extension_download'][$extension_id] = [];
 			}
 
@@ -698,11 +693,14 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Extension
+	 *
 	 * @return void
 	 */
 	public function extension(): void {
 		$this->load->language('marketplace/marketplace');
 
+		// Extension
 		if (isset($this->request->get['extension_id'])) {
 			$extension_id = (int)$this->request->get['extension_id'];
 		} else {
@@ -729,7 +727,7 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 						$download = '';
 					}
 
-			 		// Install
+					// Install
 					if ($install_info && !$install_info['status']) {
 						$install = $this->url->link('marketplace/installer.install', 'user_token=' . $this->session->data['user_token'] . '&extension_install_id=' . $install_info['extension_install_id']);
 					} else {
@@ -766,6 +764,8 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Purchase
+	 *
 	 * @return void
 	 */
 	public function purchase(): void {
@@ -803,7 +803,7 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 			$string .= $this->request->post['pin'] . "\n";
 			$string .= $time . "\n";
 
-			$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), 1));
+			$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), true));
 
 			$url  = '&username=' . urlencode($this->config->get('opencart_username'));
 			$url .= '&domain=' . $this->request->server['HTTP_HOST'];
@@ -821,9 +821,15 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 			$response = curl_exec($curl);
 
+			$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
 			curl_close($curl);
 
-			$response_info = json_decode($response, true);
+			if ($status == 200) {
+				$response_info = json_decode($response, true);
+			} else {
+				$response_info = [];
+			}
 
 			if (isset($response_info['success'])) {
 				// If purchase complete we update the status for all downloads to be available.
@@ -848,6 +854,8 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Download
+	 *
 	 * @return void
 	 */
 	public function download(): void {
@@ -883,7 +891,7 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 			$string .= $extension_download_id . "\n";
 			$string .= $time . "\n";
 
-			$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), 1));
+			$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), true));
 
 			$url  = '&username=' . urlencode($this->config->get('opencart_username'));
 			$url .= '&domain=' . $this->request->server['HTTP_HOST'];
@@ -902,9 +910,15 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 			$response = curl_exec($curl);
 
-			$response_info = json_decode($response, true);
+			$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 			curl_close($curl);
+
+			if ($status == 200) {
+				$response_info = json_decode($response, true);
+			} else {
+				$response_info = [];
+			}
 
 			if (isset($response_info['download'])) {
 				if (substr($response_info['filename'], -10) == '.ocmod.zip') {
@@ -916,14 +930,16 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 					fclose($handle);
 
+					// Extension
 					$extension_data = [
 						'extension_id'          => $extension_id,
 						'extension_download_id' => $extension_download_id,
 						'name'                  => $response_info['name'],
-						'code' 				    => basename($response_info['filename'], '.ocmod.zip'),
+						'description'           => $response_info['description'] ?? '',
+						'code'                  => basename($response_info['filename'], '.ocmod.zip'),
 						'author'                => $response_info['author'],
 						'version'               => $response_info['version'],
-						'link' 					=> OPENCART_SERVER . 'index.php?route=marketplace/extension.info&extension_id=' . $extension_id
+						'link'                  => OPENCART_SERVER . 'index.php?route=marketplace/extension.info&extension_id=' . $extension_id
 					];
 
 					$this->load->model('setting/extension');
@@ -946,6 +962,8 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Add Comment
+	 *
 	 * @return void
 	 */
 	public function addComment(): void {
@@ -986,7 +1004,7 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 			$string .= urlencode(base64_encode($this->request->post['comment'])) . "\n";
 			$string .= $time . "\n";
 
-			$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), 1));
+			$signature = base64_encode(hash_hmac('sha1', $string, $this->config->get('opencart_secret'), true));
 
 			$url  = '&username=' . $this->config->get('opencart_username');
 			$url .= '&domain=' . $this->request->server['HTTP_HOST'];
@@ -1007,9 +1025,15 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 			$response = curl_exec($curl);
 
+			$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
 			curl_close($curl);
 
-			$response_info = json_decode($response, true);
+			if ($status == 200) {
+				$response_info = json_decode($response, true);
+			} else {
+				$response_info = [];
+			}
 
 			if (isset($response_info['success'])) {
 				$json['success'] = $response_info['success'];
@@ -1025,6 +1049,8 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Comment
+	 *
 	 * @return void
 	 */
 	public function comment(): void {
@@ -1054,13 +1080,17 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 		$response = curl_exec($curl);
 
+		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
 		curl_close($curl);
 
-		$json = json_decode($response, true);
+		if ($status == 200) {
+			$json = json_decode($response, true);
+		} else {
+			$json = [];
+		}
 
 		$data['comments'] = [];
-
-		$comment_total = $json['comment_total'];
 
 		if ($json['comments']) {
 			$results = $json['comments'];
@@ -1086,6 +1116,8 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 			}
 		}
 
+		$comment_total = $json['comment_total'];
+
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $comment_total,
 			'page'  => $page,
@@ -1099,6 +1131,8 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Reply
+	 *
 	 * @return void
 	 */
 	public function reply(): void {
@@ -1131,7 +1165,15 @@ class Marketplace extends \Opencart\System\Engine\Controller {
 
 		$response = curl_exec($curl);
 
-		$json = json_decode($response, true);
+		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+		curl_close($curl);
+
+		if ($status == 200) {
+			$json = json_decode($response, true);
+		} else {
+			$json = [];
+		}
 
 		$data['replies'] = [];
 

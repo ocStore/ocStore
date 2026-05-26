@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Dashboard;
  */
 class Sale extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -53,6 +55,8 @@ class Sale extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -65,6 +69,7 @@ class Sale extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('dashboard_sale', $this->request->post);
@@ -77,17 +82,18 @@ class Sale extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Dashboard
+	 *
 	 * @return string
 	 */
 	public function dashboard(): string {
 		$this->load->language('extension/opencart/dashboard/sale');
 
+		// Sale
 		$this->load->model('extension/opencart/report/sale');
 
 		$today = $this->model_extension_opencart_report_sale->getTotalSales(['filter_date_added' => date('Y-m-d', strtotime('-1 day'))]);
-
 		$yesterday = $this->model_extension_opencart_report_sale->getTotalSales(['filter_date_added' => date('Y-m-d', strtotime('-2 day'))]);
-
 		$difference = $today - $yesterday;
 
 		if ($difference && (int)$today) {

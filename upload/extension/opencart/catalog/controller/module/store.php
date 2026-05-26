@@ -3,10 +3,12 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Module;
 /**
  * Class Store
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Module
  */
 class Store extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
@@ -19,6 +21,7 @@ class Store extends \Opencart\System\Engine\Controller {
 		}
 
 		if ($status) {
+			// Store
 			$this->load->language('extension/opencart/module/store');
 
 			$data['store_id'] = $this->config->get('config_store_id');
@@ -44,6 +47,8 @@ class Store extends \Opencart\System\Engine\Controller {
 			}
 
 			return $this->load->view('extension/opencart/module/store', $data);
+		} else {
+			return '';
 		}
 	}
 }

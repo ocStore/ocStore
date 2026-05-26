@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Module;
  */
 class Featured extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -46,6 +48,7 @@ class Featured extends \Opencart\System\Engine\Controller {
 
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module');
 
+		// Extension
 		if (isset($this->request->get['module_id'])) {
 			$this->load->model('setting/module');
 
@@ -58,6 +61,7 @@ class Featured extends \Opencart\System\Engine\Controller {
 			$data['name'] = '';
 		}
 
+		// Product
 		$this->load->model('catalog/product');
 
 		$data['products'] = [];
@@ -82,7 +86,7 @@ class Featured extends \Opencart\System\Engine\Controller {
 		if (!empty($module_info['axis'])) {
 			$data['axis'] = $module_info['axis'];
 		} else {
-			$data['axis'] ='';
+			$data['axis'] = '';
 		}
 
 		if (isset($module_info['width'])) {
@@ -102,7 +106,7 @@ class Featured extends \Opencart\System\Engine\Controller {
 		} else {
 			$data['status'] = '';
 		}
-		
+
 		if (isset($this->request->get['module_id'])) {
 			$data['module_id'] = (int)$this->request->get['module_id'];
 		} else {
@@ -119,6 +123,8 @@ class Featured extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -130,25 +136,35 @@ class Featured extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
-		if ((oc_strlen($this->request->post['name']) < 3) || (oc_strlen($this->request->post['name']) > 64)) {
+		$required = [
+			'module_id' => 0,
+			'name'      => '',
+			'width'     => 0,
+			'height'    => 0
+		];
+
+		$post_info = $this->request->post + $required;
+
+		if (!oc_validate_length($post_info['name'], 3, 64)) {
 			$json['error']['name'] = $this->language->get('error_name');
 		}
 
-		if (!$this->request->post['width']) {
+		if (!$post_info['width']) {
 			$json['error']['width'] = $this->language->get('error_width');
 		}
 
-		if (!$this->request->post['height']) {
+		if (!$post_info['height']) {
 			$json['error']['height'] = $this->language->get('error_height');
 		}
 
 		if (!$json) {
+			// Extension
 			$this->load->model('setting/module');
 
-			if (!$this->request->post['module_id']) {
-				$json['module_id'] = $this->model_setting_module->addModule('opencart.featured', $this->request->post);
+			if (!$post_info['module_id']) {
+				$json['module_id'] = $this->model_setting_module->addModule('opencart.featured', $post_info);
 			} else {
-				$this->model_setting_module->editModule($this->request->post['module_id'], $this->request->post);
+				$this->model_setting_module->editModule($post_info['module_id'], $post_info);
 			}
 
 			$json['success'] = $this->language->get('text_success');

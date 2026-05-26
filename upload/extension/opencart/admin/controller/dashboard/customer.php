@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Dashboard;
  */
 class Customer extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -37,7 +39,7 @@ class Customer extends \Opencart\System\Engine\Controller {
 		$data['dashboard_customer_width'] = $this->config->get('dashboard_customer_width');
 
 		$data['columns'] = [];
-		
+
 		for ($i = 3; $i <= 12; $i++) {
 			$data['columns'][] = $i;
 		}
@@ -53,6 +55,8 @@ class Customer extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -65,6 +69,7 @@ class Customer extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('dashboard_customer', $this->request->post);
@@ -77,6 +82,8 @@ class Customer extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Dashboard
+	 *
 	 * @return string
 	 */
 	public function dashboard(): string {
@@ -84,13 +91,11 @@ class Customer extends \Opencart\System\Engine\Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		// Total Orders
+		// Total Customers
 		$this->load->model('customer/customer');
 
 		$today = $this->model_customer_customer->getTotalCustomers(['filter_date_added' => date('Y-m-d', strtotime('-1 day'))]);
-
 		$yesterday = $this->model_customer_customer->getTotalCustomers(['filter_date_added' => date('Y-m-d', strtotime('-2 day'))]);
-
 		$difference = $today - $yesterday;
 
 		if ($difference && $today) {

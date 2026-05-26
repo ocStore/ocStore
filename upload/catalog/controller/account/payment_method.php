@@ -7,15 +7,17 @@ namespace Opencart\Catalog\Controller\Account;
  */
 class PaymentMethod extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
 		$this->load->language('account/payment_method');
 
-		if (!$this->customer->isLogged() || (!isset($this->request->get['customer_token']) || !isset($this->session->data['customer_token']) || ($this->request->get['customer_token'] != $this->session->data['customer_token']))) {
+		if (!$this->load->controller('account/login.validate')) {
 			$this->session->data['redirect'] = $this->url->link('account/payment_method', 'language=' . $this->config->get('config_language'));
 
-			$this->response->redirect($this->url->link('account/login', 'language=' . $this->config->get('config_language')));
+			$this->response->redirect($this->url->link('account/login', 'language=' . $this->config->get('config_language'), true));
 		}
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -45,7 +47,7 @@ class PaymentMethod extends \Opencart\System\Engine\Controller {
 
 		$data['list'] = $this->getList();
 
-		$data['continue'] = $this->url->link('account/account', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token']);
+		$data['back'] = $this->url->link('account/account', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token']);
 
 		$data['language'] = $this->config->get('config_language');
 
@@ -62,103 +64,51 @@ class PaymentMethod extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
 		$this->load->language('account/payment_method');
 
-		if (!$this->customer->isLogged() || (!isset($this->request->get['customer_token']) || !isset($this->session->data['customer_token']) || ($this->request->get['customer_token'] != $this->session->data['customer_token']))) {
+		if (!$this->load->controller('account/login.validate')) {
 			$this->session->data['redirect'] = $this->url->link('account/payment_method', 'language=' . $this->config->get('config_language'));
 
-			$this->response->redirect($this->url->link('account/login', 'language=' . $this->config->get('config_language')));
+			$this->response->redirect($this->url->link('account/login', 'language=' . $this->config->get('config_language'), true));
 		}
 
 		$this->response->setOutput($this->getList());
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
 	protected function getList(): string {
+		if (!$this->load->controller('account/login.validate')) {
+			$this->session->data['redirect'] = $this->url->link('account/payment_method', 'language=' . $this->config->get('config_language'));
+
+			$this->response->redirect($this->url->link('account/login', 'language=' . $this->config->get('config_language'), true));
+		}
+
 		$data['payment_methods'] = [];
 
-		$this->load->model('account/payment_method');
-
+		// Extension
 		$this->load->model('setting/extension');
 
 		$results = $this->model_setting_extension->getExtensionsByType('payment');
 
 		foreach ($results as $result) {
 			if ($this->config->get('payment_' . $result['code'] . '_status')) {
-				$this->load->model('extension/' . $result['extension'] . '/payment/' . $result['code']);
+				$output = $this->load->controller('extension/' . $result['extension'] . '/account/' . $result['code']);
 
-				//$payment_method = $this->{'model_extension_' . $result['extension'] . '_payment_' . $result['code']}->getMethods($payment_address);
-
-				if ($payment_method) {
-					$method_data[$result['code']] = $payment_method;
+				if (is_string($output)) {
+					$data['payment_methods'][] = $output;
 				}
 			}
 		}
 
-
-		foreach ($results as $result) {
-			$data['payment_methods'][] = [
-				'code'        => $result['code'],
-				'name'        => $result['name'],
-				'image'       => $result['image'],
-				'type'        => $result['type'],
-				'date_expire' => date('m-Y', strtotime($result['date_expire'])),
-				'delete'      => $this->url->link('account/payment_method.delete', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token'] . '&customer_payment_id=' . $result['customer_payment_id'])
-			];
-		}
-
 		return $this->load->view('account/payment_method_list', $data);
-	}
-
-	/**
-	 * @return void
-	 */
-	public function delete(): void {
-		$this->load->language('account/payment_method');
-
-		$json = [];
-
-		if (isset($this->request->get['customer_payment_id'])) {
-			$customer_payment_id = (int)$this->request->get['customer_payment_id'];
-		} else {
-			$customer_payment_id = 0;
-		}
-
-		if (!$this->customer->isLogged() || (!isset($this->request->get['customer_token']) || !isset($this->session->data['customer_token']) || ($this->request->get['customer_token'] != $this->session->data['customer_token']))) {
-			$this->session->data['redirect'] = $this->url->link('account/payment_method', 'language=' . $this->config->get('config_language'));
-
-			$json['redirect'] = $this->url->link('account/login', 'language=' . $this->config->get('config_language'), true);
-		}
-
-		if (!$json) {
-			$this->load->model('account/payment_method');
-
-			$payment_method_info = $this->model_account_payment_method->getPaymentMethod($this->customer->getId(), $customer_payment_id);
-
-			if (!$payment_method_info) {
-				$json['error'] = $this->language->get('error_payment_method');
-			}
-		}
-
-		if (!$json) {
-			$this->load->model('extension/' . $payment_method_info['extension'] . '/payment/' . $payment_method_info['code']);
-
-			if ($this->{'model_extension_' . $payment_method_info['extension'] . '_payment_' . $payment_method_info['code']}->delete($customer_payment_id)) {
-
-			}
-
-			// Delete payment method from database.
-			$this->model_account_payment_method->deletePaymentMethod($customer_payment_id);
-
-			$json['success'] = $this->language->get('text_success');
-		}
-
-		$this->response->addHeader('Content-Type: application/json');
-		$this->response->setOutput(json_encode($json));
 	}
 }

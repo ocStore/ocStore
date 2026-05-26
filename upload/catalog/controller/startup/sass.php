@@ -7,8 +7,11 @@ namespace Opencart\Catalog\Controller\Startup;
  */
 class Sass extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
+	 * @throws \Exception\ScssPhp\ScssPhp\Exception\SassException
+	 *
 	 * @return void
-	 * @throws \ScssPhp\ScssPhp\Exception\SassException
 	 */
 	public function index(): void {
 		$files = glob(DIR_APPLICATION . 'view/stylesheet/*.scss');

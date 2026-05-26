@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Payment;
  */
 class Cheque extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -35,12 +37,15 @@ class Cheque extends \Opencart\System\Engine\Controller {
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment');
 
 		$data['payment_cheque_payable'] = $this->config->get('payment_cheque_payable');
-		$data['payment_cheque_order_status_id'] = $this->config->get('payment_cheque_order_status_id');
+
+		// Order Status
+		$data['payment_cheque_order_status_id'] = (int)$this->config->get('payment_cheque_order_status_id');
 
 		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
+		// Geo Zone
 		$data['payment_cheque_geo_zone_id'] = $this->config->get('payment_cheque_geo_zone_id');
 
 		$this->load->model('localisation/geo_zone');
@@ -58,6 +63,8 @@ class Cheque extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -74,6 +81,7 @@ class Cheque extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('payment_cheque', $this->request->post);

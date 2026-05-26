@@ -10,6 +10,7 @@
 //                               --email       email@example.com
 //                               --password    password
 //                               --http_server http://localhost/opencart/
+//                               --language    en-gb
 //                               --db_driver   mysqli
 //                               --db_hostname localhost
 //                               --db_username root
@@ -18,9 +19,13 @@
 //								 --db_port     3306
 //                               --db_prefix   oc_
 //
+//                               --db_ssl_key
+//                               --db_ssl_cert
+//                               --db_ssl_ca
+//
 // Example:
 //
-// php c://xampp/htdocs/opencart-master/upload/install/cli_install.php install --username admin --password mexico --email email@example.com --http_server http://localhost/opencart-master/upload/ --db_driver mysqli --db_hostname localhost --db_username root --db_database opencart-master --db_port 3306 --db_prefix oc_
+// php c://xampp/htdocs/opencart-master/upload/install/cli_install.php install --username admin --password --email email@example.com --http_server http://localhost/opencart-master/upload/ --language en-gb --db_driver mysqli --db_hostname localhost --db_username root --db_database opencart-master --db_port 3306 --db_prefix oc_
 //
 
 namespace Install;
@@ -33,7 +38,7 @@ error_reporting(E_ALL);
 define('APPLICATION', 'Install');
 
 // DIR
-define('DIR_OPENCART', str_replace('\\', '/', realpath(dirname(__FILE__) . '/../')) . '/');
+define('DIR_OPENCART', str_replace('\\', '/', realpath(__DIR__ . '/../')) . '/');
 define('DIR_APPLICATION', DIR_OPENCART . 'install/');
 define('DIR_EXTENSION', DIR_OPENCART . 'extension/');
 define('DIR_SYSTEM', DIR_OPENCART . 'system/');
@@ -75,7 +80,7 @@ $response = new \Opencart\System\Library\Response();
 $response->addHeader('Content-Type: text/plain; charset=utf-8');
 $registry->set('response', $response);
 
-set_error_handler(function($code, $message, $file, $line, array $errcontext) {
+set_error_handler(function(int $code, string $message, string $file, int $line) {
 	// error was suppressed with the @-operator
 	if (error_reporting() === 0) {
 		return false;
@@ -84,7 +89,17 @@ set_error_handler(function($code, $message, $file, $line, array $errcontext) {
 	throw new \ErrorException($message, 0, $code, $file, $line);
 });
 
+/**
+ * Class CliInstall
+ *
+ * @package Opencart\Install
+ */
 class CliInstall extends \Opencart\System\Engine\Controller {
+	/**
+	 * Index
+	 *
+	 * @return void
+	 */
 	public function index(): void {
 		if (isset($this->request->server['argv'])) {
 			$argv = $this->request->server['argv'];
@@ -104,22 +119,33 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 				break;
 			case 'usage':
 			default:
-				$output = $this->usage($argv);
+				$output = $this->usage();
 				break;
 		}
 
 		$this->response->setOutput($output);
 	}
 
-	public function install($argv): string {
+	/**
+	 * Install
+	 *
+	 * @param array<int, string> $argv
+	 *
+	 * @return string
+	 */
+	public function install(array $argv): string {
 		// Options
 		$option = [
 			'username'    => 'admin',
+			'language'    => 'en-gb',
 			'db_driver'   => 'mysqli',
 			'db_hostname' => 'localhost',
 			'db_password' => '',
 			'db_port'     => '3306',
-			'db_prefix'   => 'oc_'
+			'db_prefix'   => 'oc_',
+			'db_ssl_key'  => '',
+			'db_ssl_cert' => '',
+			'db_ssl_ca'   => ''
 		];
 
 		// Turn args into an array
@@ -166,14 +192,14 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		}
 
 		if (count($missing)) {
-			return 'ERROR: Following inputs were missing or invalid: ' . implode(', ', $missing)  . "\n";
+			return 'ERROR: Following inputs were missing or invalid: ' . implode(', ', $missing) . "\n";
 		}
 
 		// Pre-installation check
 		$error = '';
 
-		if (version_compare(phpversion(), '8.0.0', '<')) {
-			$error .= 'ERROR: You need to use PHP8+ or above for OpenCart to work!' . "\n";
+		if (version_compare(PHP_VERSION, '8.0', '<')) {
+			$error .= 'ERROR: You need to use PHP8.0+ or above for OpenCart to work!' . "\n";
 		}
 
 		if (!ini_get('file_uploads')) {
@@ -221,7 +247,7 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		// Pre-installation check
 		$error = '';
 
-		if ((oc_strlen($option['username']) < 3) || (oc_strlen($option['username']) > 20)) {
+		if (!oc_validate_length($option['username'], 3, 20)) {
 			$error .= 'ERROR: Username must be between 3 and 20 characters!' . "\n";
 		}
 
@@ -229,11 +255,16 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 			$error .= 'ERROR: E-Mail Address does not appear to be valid!' . "\n";
 		}
 
+		// Make sure there is a SQL file to load sample data
+		$file = DIR_APPLICATION . 'opencart-' . basename($option['language']) . '.sql';
+
+		if (!is_file($file)) {
+			$error .= 'ERROR: Install language not available!' . "\n";
+		}
+
 		// If not cloud then we validate the password
 		if ($option['db_password']) {
-			$password = html_entity_decode($option['password'], ENT_QUOTES, 'UTF-8');
-
-			if ((oc_strlen($password) < 5) || (oc_strlen($password) > 20)) {
+			if (!oc_validate_length(html_entity_decode($option['password'], ENT_QUOTES, 'UTF-8'), 5, 20)) {
 				$error .= 'ERROR: Password must be between 5 and 20 characters!' . "\n";
 			}
 		}
@@ -241,9 +272,6 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		if ($error) {
 			return $error;
 		}
-
-		// Make sure there is a SQL file to load sample data
-		$file = DIR_APPLICATION . 'opencart.sql';
 
 		if (!is_file($file)) {
 			return 'ERROR: Could not load SQL file: ' . $file;
@@ -257,9 +285,13 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		$db_port = $option['db_port'];
 		$db_prefix = $option['db_prefix'];
 
+		$db_ssl_key = html_entity_decode($option['db_ssl_key'], ENT_QUOTES, 'UTF-8');
+		$db_ssl_cert = html_entity_decode($option['db_ssl_cert'], ENT_QUOTES, 'UTF-8');
+		$db_ssl_ca = html_entity_decode($option['db_ssl_ca'], ENT_QUOTES, 'UTF-8');
+
 		try {
 			// Database
-			$db = new \Opencart\System\Library\DB($db_driver, $db_hostname, $db_username, $db_password, $db_database, $db_port);
+			$db = new \Opencart\System\Library\DB($db_driver, $db_hostname, $db_username, $db_password, $db_database, $db_port, $db_ssl_key, $db_ssl_cert, $db_ssl_ca);
 		} catch (\Exception $e) {
 			return 'Error: Could not make a database link using ' . $db_username . '@' . $db_hostname . '!' . "\n";
 		}
@@ -354,7 +386,7 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 			$db->query("DELETE FROM `" . $db_prefix . "setting` WHERE `key` = 'config_api_id'");
 			$db->query("INSERT INTO `" . $db_prefix . "setting` SET `code` = 'config', `key` = 'config_api_id', `value` = '" . (int)$last_id . "'");
 
-			// set the current years prefix
+			// Set the current years prefix
 			$db->query("UPDATE `" . $db_prefix . "setting` SET `value` = 'INV-" . date('Y') . "-00' WHERE `key` = 'config_invoice_prefix'");
 		}
 
@@ -391,6 +423,18 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		$output .= 'define(\'DB_DATABASE\', \'' . addslashes($option['db_database']) . '\');' . "\n";
 		$output .= 'define(\'DB_PREFIX\', \'' . addslashes($option['db_prefix']) . '\');' . "\n";
 		$output .= 'define(\'DB_PORT\', \'' . addslashes($option['db_port']) . '\');' . "\n";
+
+		if ($option['db_ssl_key']) {
+			$output .= 'define(\'DB_SSL_KEY\', \'' . addslashes($option['db_ssl_key']) . '\');' . "\n";
+		}
+
+		if ($option['db_ssl_cert']) {
+			$output .= 'define(\'DB_SSL_CERT\', \'' . addslashes($option['db_ssl_cert']) . '\');' . "\n";
+		}
+
+		if ($option['db_ssl_ca']) {
+			$output .= 'define(\'DB_SSL_CA\', \'' . addslashes($option['db_ssl_ca']) . '\');' . "\n";
+		}
 
 		$file = fopen(DIR_OPENCART . 'config.php', 'w');
 
@@ -433,6 +477,18 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		$output .= 'define(\'DB_PREFIX\', \'' . addslashes($option['db_prefix']) . '\');' . "\n";
 		$output .= 'define(\'DB_PORT\', \'' . addslashes($option['db_port']) . '\');' . "\n\n";
 
+		if ($option['db_ssl_key']) {
+			$output .= 'define(\'DB_SSL_KEY\', \'' . addslashes($option['db_ssl_key']) . '\');' . "\n";
+		}
+
+		if ($option['db_ssl_cert']) {
+			$output .= 'define(\'DB_SSL_CERT\', \'' . addslashes($option['db_ssl_cert']) . '\');' . "\n";
+		}
+
+		if ($option['db_ssl_ca']) {
+			$output .= 'define(\'DB_SSL_CA\', \'' . addslashes($option['db_ssl_ca']) . '\');' . "\n";
+		}
+
 		$output .= '// OpenCart API' . "\n";
 		$output .= 'define(\'OPENCART_SERVER\', \'https://www.opencart.com/\');';
 		$output .= 'define(\'OPENCARTFORUM_SERVER\', \'https://opencartforum.com/\');';
@@ -451,6 +507,11 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		return $output;
 	}
 
+	/**
+	 * Usage
+	 *
+	 * @return string
+	 */
 	public function usage(): string {
 		$option = implode(' ', [
 			'--username',

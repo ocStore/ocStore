@@ -3,27 +3,24 @@ namespace Opencart\System\Library\Cache;
 /**
  * Class Memcached
  *
- * @package
+ * @package Opencart\System\Library\Cache
  */
 class Memcached {
 	/**
-	 * @var object|\Memcached
+	 * @var \Memcached
 	 */
-	private object $memcached;
+	private \Memcached $memcached;
 	/**
 	 * @var int
 	 */
 	private int $expire;
 
-	/**
-	 *
-	 */
-	const CACHEDUMP_LIMIT = 9999;
+	public const CACHEDUMP_LIMIT = 9999;
 
 	/**
 	 * Constructor
 	 *
-	 * @param    int  $expire
+	 * @param int $expire
 	 */
 	public function __construct(int $expire = 3600) {
 		$this->expire = $expire;
@@ -35,22 +32,24 @@ class Memcached {
 	/**
 	 * Get
 	 *
-	 * @param    string  $key
+	 * @param string $key
 	 *
-	 * @return	 array|string|null
+	 * @return mixed
 	 */
-	public function get(string $key): array|string|null {
+	public function get(string $key) {
 		return $this->memcached->get(CACHE_PREFIX . $key);
 	}
 
 	/**
 	 * Set
 	 *
-	 * @param    string  $key
-	 * @param    array|string|null  $value
-	 * @param	 int  $expire
+	 * @param string $key
+	 * @param mixed  $value
+	 * @param int    $expire
+	 *
+	 * @return void
 	 */
-	public function set(string $key, array|string|null $value, int $expire = 0) {
+	public function set(string $key, $value, int $expire = 0): void {
 		if (!$expire) {
 			$expire = $this->expire;
 		}
@@ -61,9 +60,11 @@ class Memcached {
 	/**
 	 * Delete
 	 *
-	 * @param    string  $key
+	 * @param string $key
+	 *
+	 * @return void
 	 */
-	public function delete(string $key) {
+	public function delete(string $key): void {
 		$this->memcached->delete(CACHE_PREFIX . $key);
 	}
 }

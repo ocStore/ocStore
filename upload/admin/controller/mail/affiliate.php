@@ -7,14 +7,18 @@ namespace Opencart\Admin\Controller\Mail;
  */
 class Affiliate extends \Opencart\System\Engine\Controller {
 	/**
-	 * @param string $route
-	 * @param array  $args
-	 * @param mixed  $output
+	 * Approve
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param mixed             $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function approve(string &$route, array &$args, mixed &$output): void {
+	public function approve(string &$route, array &$args, &$output): void {
+		// Customer
 		if (isset($args[0])) {
 			$customer_id = (int)$args[0];
 		} else {
@@ -26,6 +30,7 @@ class Affiliate extends \Opencart\System\Engine\Controller {
 		$customer_info = $this->model_customer_customer->getCustomer($customer_id);
 
 		if ($customer_info) {
+			// Store
 			$this->load->model('setting/store');
 
 			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
@@ -38,6 +43,7 @@ class Affiliate extends \Opencart\System\Engine\Controller {
 				$store_url = HTTP_CATALOG;
 			}
 
+			// Language
 			$this->load->model('localisation/language');
 
 			$language_info = $this->model_localisation_language->getLanguage($customer_info['language_id']);
@@ -90,14 +96,18 @@ class Affiliate extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * @param string $route
-	 * @param array  $args
-	 * @param mixed  $output
+	 * Deny
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param mixed             $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function deny(string &$route, array &$args, mixed &$output): void {
+	public function deny(string &$route, array &$args, &$output): void {
+		// Customer
 		if (isset($args[0])) {
 			$customer_id = (int)$args[0];
 		} else {
@@ -109,6 +119,7 @@ class Affiliate extends \Opencart\System\Engine\Controller {
 		$customer_info = $this->model_customer_customer->getCustomer($customer_id);
 
 		if ($customer_info) {
+			// Store
 			$this->load->model('setting/store');
 
 			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
@@ -121,6 +132,7 @@ class Affiliate extends \Opencart\System\Engine\Controller {
 				$store_url = HTTP_CATALOG;
 			}
 
+			// Language
 			$this->load->model('localisation/language');
 
 			$language_info = $this->model_localisation_language->getLanguage($customer_info['language_id']);

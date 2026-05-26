@@ -1,15 +1,19 @@
 <?php
 namespace Opencart\Catalog\Model\Extension\Opencart\Total;
 /**
- * Class SubTotal
+ * Class Sub Total
  *
- * @package
+ * Can be called from $this->load->model('extension/opencart/total/sub_total');
+ *
+ * @package Opencart\Catalog\Model\Extension\Opencart\Total
  */
 class SubTotal extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $totals
-	 * @param array $taxes
-	 * @param float $total
+	 * Get Total
+	 *
+	 * @param array<int, array<string, mixed>> $totals
+	 * @param array<int, float>                $taxes
+	 * @param float                            $total
 	 *
 	 * @return void
 	 */
@@ -17,12 +21,6 @@ class SubTotal extends \Opencart\System\Engine\Model {
 		$this->load->language('extension/opencart/total/sub_total');
 
 		$sub_total = $this->cart->getSubTotal();
-
-		if (!empty($this->session->data['vouchers'])) {
-			foreach ($this->session->data['vouchers'] as $voucher) {
-				$sub_total += $voucher['amount'];
-			}
-		}
 
 		$totals[] = [
 			'extension'  => 'opencart',

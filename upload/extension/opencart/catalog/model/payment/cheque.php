@@ -3,13 +3,17 @@ namespace Opencart\Catalog\Model\Extension\Opencart\Payment;
 /**
  * Class Cheque
  *
- * @package
+ * Can be called from $this->load->model('extension/opencart/payment/cheque');
+ *
+ * @package Opencart\Catalog\Model\Extension\Opencart\Payment
  */
 class Cheque extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $address
+	 * Get Methods
 	 *
-	 * @return array
+	 * @param array<string, mixed> $address array of data
+	 *
+	 * @return array<string, mixed>
 	 */
 	public function getMethods(array $address = []): array {
 		$this->load->language('extension/opencart/payment/cheque');
@@ -21,9 +25,12 @@ class Cheque extends \Opencart\System\Engine\Model {
 		} elseif (!$this->config->get('payment_cheque_geo_zone_id')) {
 			$status = true;
 		} else {
-			$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone_to_geo_zone` WHERE `geo_zone_id` = '" . (int)$this->config->get('payment_cheque_geo_zone_id') . "' AND `country_id` = '" . (int)$address['country_id'] . "' AND (`zone_id` = '" . (int)$address['zone_id'] . "' OR `zone_id` = '0')");
+			// Geo Zone
+			$this->load->model('localisation/geo_zone');
 
-			if ($query->num_rows) {
+			$results = $this->model_localisation_geo_zone->getGeoZone((int)$this->config->get('payment_cheque_geo_zone_id'), (int)$address['country_id'], (int)$address['zone_id']);
+
+			if ($results) {
 				$status = true;
 			} else {
 				$status = false;

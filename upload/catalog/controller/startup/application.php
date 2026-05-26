@@ -7,6 +7,8 @@ namespace Opencart\Catalog\Controller\Startup;
  */
 class Application extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -18,5 +20,8 @@ class Application extends \Opencart\System\Engine\Controller {
 
 		// Cart
 		$this->registry->set('cart', new \Opencart\System\Library\Cart\Cart($this->registry));
+
+		// Validation
+		$this->load->helper('validation');
 	}
 }

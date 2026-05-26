@@ -8,38 +8,38 @@ namespace Opencart\System\Library\Mail;
  */
 class Smtp {
 	/**
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected array $option = [];
 	/**
-	 * @var array|int[]
+	 * @var array<string, false|int>
 	 */
 	protected array $default = [
-		'smtp_port'     => 25,
-		'smtp_timeout'  => 5,
-		'max_attempts'  => 3,
-		'verp'          => false
+		'smtp_port'    => 25,
+		'smtp_timeout' => 5,
+		'max_attempts' => 3,
+		'verp'         => false
 	];
 
 	/**
 	 * Constructor
 	 *
-	 * @param    array  $option
+	 * @param array<string, mixed> $option
 	 */
-	public function __construct(array &$option = []) {
+	public function __construct(array $option = []) {
 		foreach ($this->default as $key => $value) {
 			if (!isset($option[$key])) {
 				$option[$key] = $value;
 			}
 		}
 
-		$this->option = &$option;
+		$this->option = $option;
 	}
 
 	/**
 	 * Send
 	 *
-	 * @return    bool
+	 * @return bool
 	 */
 	public function send(): bool {
 		if (empty($this->option['smtp_hostname'])) {
@@ -68,7 +68,7 @@ class Smtp {
 			$to = $this->option['to'];
 		}
 
-		$boundary = '----=_NextPart_' . md5(time());
+		$boundary = '----=_NextPart_' . md5((string)time());
 
 		$header = 'MIME-Version: 1.0' . PHP_EOL;
 		$header .= 'To: <' . $to . '>' . PHP_EOL;
@@ -82,8 +82,9 @@ class Smtp {
 			$header .= 'Reply-To: =?UTF-8?B?' . base64_encode($this->option['reply_to']) . '?= <' . $this->option['reply_to'] . '>' . PHP_EOL;
 		}
 
+		$header .= 'Message-ID: <' . base_convert(str_replace(['.', ' '], '', microtime()), 10, 36) . '.' . base_convert(bin2hex(openssl_random_pseudo_bytes(8)), 16, 36) . substr($this->option['from'], strrpos($this->option['from'], '@')) . '>' . PHP_EOL;
 		$header .= 'Return-Path: ' . $this->option['from'] . PHP_EOL;
-		$header .= 'X-Mailer: PHP/' . phpversion() . PHP_EOL;
+		$header .= 'X-Mailer: PHP/' . PHP_VERSION . PHP_EOL;
 		$header .= 'Content-Type: multipart/mixed; boundary="' . $boundary . '"' . PHP_EOL . PHP_EOL;
 
 		$message = '--' . $boundary . PHP_EOL;
@@ -91,7 +92,7 @@ class Smtp {
 		if (empty($this->option['html'])) {
 			$message .= 'Content-Type: text/plain; charset="utf-8"' . PHP_EOL;
 			$message .= 'Content-Transfer-Encoding: base64' . PHP_EOL . PHP_EOL;
-			$message .= chunk_split(base64_encode($this->option['text']), 950) . PHP_EOL;
+			$message .= chunk_split(base64_encode($this->option['text'])) . PHP_EOL;
 		} else {
 			$message .= 'Content-Type: multipart/alternative; boundary="' . $boundary . '_alt"' . PHP_EOL . PHP_EOL;
 			$message .= '--' . $boundary . '_alt' . PHP_EOL;
@@ -99,15 +100,15 @@ class Smtp {
 			$message .= 'Content-Transfer-Encoding: base64' . PHP_EOL . PHP_EOL;
 
 			if (!empty($this->option['text'])) {
-				$message .= chunk_split(base64_encode($this->option['text']), 950) . PHP_EOL;
+				$message .= chunk_split(base64_encode($this->option['text'])) . PHP_EOL;
 			} else {
-				$message .= chunk_split(base64_encode('This is a HTML email and your email client software does not support HTML email!'), 950) . PHP_EOL;
+				$message .= chunk_split(base64_encode(strip_tags($this->option['html']))) . PHP_EOL;
 			}
 
 			$message .= '--' . $boundary . '_alt' . PHP_EOL;
 			$message .= 'Content-Type: text/html; charset="utf-8"' . PHP_EOL;
 			$message .= 'Content-Transfer-Encoding: base64' . PHP_EOL . PHP_EOL;
-			$message .= chunk_split(base64_encode($this->option['html']), 950) . PHP_EOL;
+			$message .= chunk_split(base64_encode($this->option['html'])) . PHP_EOL;
 			$message .= '--' . $boundary . '_alt--' . PHP_EOL;
 		}
 
@@ -126,7 +127,7 @@ class Smtp {
 					$message .= 'Content-Disposition: attachment; filename="' . basename($attachment) . '"' . PHP_EOL;
 					$message .= 'Content-ID: <' . urlencode(basename($attachment)) . '>' . PHP_EOL;
 					$message .= 'X-Attachment-Id: ' . urlencode(basename($attachment)) . PHP_EOL . PHP_EOL;
-					$message .= chunk_split(base64_encode($content), 950);
+					$message .= chunk_split(base64_encode($content));
 				}
 			}
 		}
@@ -143,7 +144,7 @@ class Smtp {
 
 		if ($handle) {
 			if (substr(PHP_OS, 0, 3) != 'WIN') {
-				socket_set_timeout($handle, $this->option['smtp_timeout'], 0);
+				stream_set_timeout($handle, $this->option['smtp_timeout'], 0);
 			}
 
 			while ($line = fgets($handle, 515)) {
@@ -152,7 +153,7 @@ class Smtp {
 				}
 			}
 
-			fputs($handle, 'EHLO ' . getenv('SERVER_NAME') . "\r\n");
+			fwrite($handle, 'EHLO ' . getenv('SERVER_NAME') . "\r\n");
 
 			$reply = '';
 
@@ -174,7 +175,7 @@ class Smtp {
 			}
 
 			if (substr($this->option['smtp_hostname'], 0, 3) == 'tls') {
-				fputs($handle, 'STARTTLS' . "\r\n");
+				fwrite($handle, 'STARTTLS' . "\r\n");
 
 				$this->handleReply($handle, 220, 'Error: STARTTLS not accepted from server!');
 
@@ -182,40 +183,33 @@ class Smtp {
 					throw new \Exception('Error: TLS could not be established!');
 				}
 
-				fputs($handle, 'EHLO ' . getenv('SERVER_NAME') . "\r\n");
+				fwrite($handle, 'EHLO ' . getenv('SERVER_NAME') . "\r\n");
 
 				$this->handleReply($handle, 250, 'Error: EHLO not accepted from server!');
 			}
 
-			if (!empty($this->option['smtp_username']) && !empty($this->option['smtp_password'])) {
-				fputs($handle, 'AUTH LOGIN' . "\r\n");
+			fwrite($handle, 'AUTH LOGIN' . "\r\n");
 
-				$this->handleReply($handle, 334, 'Error: AUTH LOGIN not accepted from server!');
+			$this->handleReply($handle, 334, 'Error: AUTH LOGIN not accepted from server!');
 
-				fputs($handle, base64_encode($this->option['smtp_username']) . "\r\n");
+			fwrite($handle, base64_encode($this->option['smtp_username']) . "\r\n");
 
-				$this->handleReply($handle, 334, 'Error: Username not accepted from server!');
+			$this->handleReply($handle, 334, 'Error: Username not accepted from server!');
 
-				fputs($handle, base64_encode($this->option['smtp_password']) . "\r\n");
+			fwrite($handle, base64_encode($this->option['smtp_password']) . "\r\n");
 
-				$this->handleReply($handle, 235, 'Error: Password not accepted from server!');
-
-			} else {
-				fputs($handle, 'HELO ' . getenv('SERVER_NAME') . "\r\n");
-
-				$this->handleReply($handle, 250, 'Error: HELO not accepted from server!');
-			}
+			$this->handleReply($handle, 235, 'Error: Password not accepted from server!');
 
 			if ($this->option['verp']) {
-				fputs($handle, 'MAIL FROM: <' . $this->option['from'] . '>XVERP' . "\r\n");
+				fwrite($handle, 'MAIL FROM: <' . $this->option['from'] . '>XVERP' . "\r\n");
 			} else {
-				fputs($handle, 'MAIL FROM: <' . $this->option['from'] . '>' . "\r\n");
+				fwrite($handle, 'MAIL FROM: <' . $this->option['from'] . '>' . "\r\n");
 			}
 
 			$this->handleReply($handle, 250, 'Error: MAIL FROM not accepted from server!');
 
 			if (!is_array($this->option['to'])) {
-				fputs($handle, 'RCPT TO: <' . $this->option['to'] . '>' . "\r\n");
+				fwrite($handle, 'RCPT TO: <' . $this->option['to'] . '>' . "\r\n");
 
 				$reply = $this->handleReply($handle, false, 'RCPT TO [!array]');
 
@@ -224,7 +218,7 @@ class Smtp {
 				}
 			} else {
 				foreach ($this->option['to'] as $recipient) {
-					fputs($handle, 'RCPT TO: <' . $recipient . '>' . "\r\n");
+					fwrite($handle, 'RCPT TO: <' . $recipient . '>' . "\r\n");
 
 					$reply = $this->handleReply($handle, false, 'RCPT TO [array]');
 
@@ -234,7 +228,7 @@ class Smtp {
 				}
 			}
 
-			fputs($handle, 'DATA' . "\r\n");
+			fwrite($handle, 'DATA' . "\r\n");
 
 			$this->handleReply($handle, 354, 'Error: DATA not accepted from server!');
 
@@ -249,39 +243,31 @@ class Smtp {
 				$results = ($line === '') ? [''] : str_split($line, 998);
 
 				foreach ($results as $result) {
-					fputs($handle, $result . "\r\n");
+					fwrite($handle, $result . "\r\n");
 				}
 			}
 
-			fputs($handle, '.' . "\r\n");
+			fwrite($handle, '.' . "\r\n");
 
 			$this->handleReply($handle, 250, 'Error: DATA not accepted from server!');
-
-			fputs($handle, 'QUIT' . "\r\n");
-
-			$this->handleReply($handle, 221, 'Error: QUIT not accepted from server!');
 
 			fclose($handle);
 
 			return true;
 		} else {
 			throw new \Exception('Error: ' . $errstr . ' (' . $errno . ')');
-
-			return false;
 		}
 	}
 
 	/**
-	 * handleReply
+	 * @param resource     $handle
+	 * @param false|int    $status_code
+	 * @param false|string $error_text
+	 * @param int          $counter
 	 *
-	 * @param	array	$handle
-	 * @param	bool	$status_code
-	 * @param	bool	$error_text
-	 * @param	int		$counter
-	 *
-	 * @return      string
+	 * @return string
 	 */
-	private function handleReply($handle, $status_code = false, $error_text = false, $counter = 0) {
+	private function handleReply($handle, $status_code = false, $error_text = false, int $counter = 0): string {
 		$reply = '';
 
 		while (($line = fgets($handle, 515)) !== false) {

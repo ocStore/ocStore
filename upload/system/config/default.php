@@ -16,6 +16,9 @@ $_['db_username']          = 'root';
 $_['db_password']          = '';
 $_['db_database']          = '';
 $_['db_port']              = 3306;
+//$_['db_ssl_key']         = '';
+//$_['db_ssl_cert']        = '';
+//$_['db_ssl_ca']          = '';
 
 // Mail
 $_['mail_engine']          = 'mail'; // mail or smtp
@@ -63,5 +66,4 @@ $_['response_compression'] = 0;
 $_['action_default']       = 'common/home';
 $_['action_error']         = 'error/not_found';
 $_['action_pre_action']    = [];
-$_['action_post_action']   = [];
 $_['action_event']         = [];

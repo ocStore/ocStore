@@ -3,11 +3,13 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Module;
 /**
  * Class Featured
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Module
  */
 class Featured extends \Opencart\System\Engine\Controller {
 	/**
-	 * @param array $setting
+	 * Index
+	 *
+	 * @param array<string, mixed> $setting array of data
 	 *
 	 * @return string
 	 */
@@ -18,7 +20,10 @@ class Featured extends \Opencart\System\Engine\Controller {
 
 		$data['products'] = [];
 
+		// Product
 		$this->load->model('catalog/product');
+
+		// Image
 		$this->load->model('tool/image');
 
 		if (!empty($setting['product'])) {

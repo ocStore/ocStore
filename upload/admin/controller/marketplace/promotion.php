@@ -3,10 +3,14 @@ namespace Opencart\Admin\Controller\Marketplace;
 /**
  * Class Promotion
  *
+ * Can be loaded using $this->load->controller('marketplace/promotion');
+ *
  * @package Opencart\Admin\Controller\Marketplace
  */
 class Promotion extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
@@ -41,12 +45,14 @@ class Promotion extends \Opencart\System\Engine\Controller {
 
 			$response = curl_exec($curl);
 
+			$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
 			curl_close($curl);
 
-			if ($response) {
+			if ($status == 200) {
 				$promotion = json_decode($response, true);
 			} else {
-				$promotion = '';
+				$promotion = [];
 			}
 
 			$this->cache->set('promotion.' . $type, $promotion, 3600 * 24);
@@ -61,6 +67,7 @@ class Promotion extends \Opencart\System\Engine\Controller {
 		$data['extensions'] = [];
 
 		if (isset($promotion['extensions'])) {
+			// Extension
 			$this->load->model('setting/extension');
 
 			foreach ($promotion['extensions'] as $result) {

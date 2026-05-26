@@ -7,6 +7,8 @@ namespace Opencart\Catalog\Controller\Cron;
  */
 class Gdpr extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @param int    $cron_id
 	 * @param string $code
 	 * @param string $cycle
@@ -16,7 +18,10 @@ class Gdpr extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function index(int $cron_id, string $code, string $cycle, string $date_added, string $date_modified): void {
+		// GDPR
 		$this->load->model('account/gdpr');
+
+		// Customer
 		$this->load->model('account/customer');
 
 		$results = $this->model_account_gdpr->getExpires();

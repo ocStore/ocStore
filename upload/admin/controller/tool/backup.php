@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Tool;
  */
 class Backup extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -62,6 +64,8 @@ class Backup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * History
+	 *
 	 * @return void
 	 */
 	public function history(): void {
@@ -71,6 +75,8 @@ class Backup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get History
+	 *
 	 * @return string
 	 */
 	public function getHistory(): string {
@@ -98,7 +104,7 @@ class Backup extends \Opencart\System\Engine\Controller {
 			];
 
 			while (($size / 1024) > 1) {
-				$size = $size / 1024;
+				$size /= 1024;
 
 				$i++;
 			}
@@ -115,6 +121,8 @@ class Backup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Backup
+	 *
 	 * @return void
 	 */
 	public function backup(): void {
@@ -165,8 +173,6 @@ class Backup extends \Opencart\System\Engine\Controller {
 				$output .= 'TRUNCATE TABLE `' . $this->db->escape($table) . '`;' . "\n\n";
 			}
 
-			$record_total = $this->model_tool_backup->getTotalRecords($table);
-
 			$results = $this->model_tool_backup->getRecords($table, ($page - 1) * 200, 200);
 
 			foreach ($results as $result) {
@@ -198,6 +204,8 @@ class Backup extends \Opencart\System\Engine\Controller {
 			}
 
 			$position = array_search($table, $backup);
+
+			$record_total = $this->model_tool_backup->getTotalRecords($table);
 
 			if (($page * 200) >= $record_total) {
 				$output .= "\n";
@@ -239,6 +247,8 @@ class Backup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Restore
+	 *
 	 * @return void
 	 */
 	public function restore(): void {
@@ -271,7 +281,6 @@ class Backup extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			// We set $i so we can batch execute the queries rather than do them all at once.
 			$i = 0;
-			$start = false;
 
 			$handle = fopen($file, 'r');
 
@@ -282,26 +291,14 @@ class Backup extends \Opencart\System\Engine\Controller {
 
 				$line = fgets($handle, 1000000);
 
-				if (substr($line, 0, 14) == 'TRUNCATE TABLE' || substr($line, 0, 11) == 'INSERT INTO') {
-					$sql = '';
-
-					$start = true;
-				}
-
 				if ($i > 0 && (substr($line, 0, strlen('TRUNCATE TABLE `' . DB_PREFIX . 'user`')) == 'TRUNCATE TABLE `' . DB_PREFIX . 'user`' || substr($line, 0, strlen('TRUNCATE TABLE `' . DB_PREFIX . 'user_group`')) == 'TRUNCATE TABLE `' . DB_PREFIX . 'user_group`')) {
 					fseek($handle, $position, SEEK_SET);
 
 					break;
 				}
 
-				if ($start) {
-					$sql .= $line;
-				}
-
-				if ($start && substr($line, -2) == ";\n") {
-					$this->db->query(substr($sql, 0, strlen($sql) -2));
-
-					$start = false;
+				if ((substr($line, 0, 14) == 'TRUNCATE TABLE' || substr($line, 0, 11) == 'INSERT INTO') && substr($line, -2) == ";\n") {
+					$this->db->query(substr($line, 0, strlen($line) - 2));
 				}
 
 				$i++;
@@ -335,6 +332,8 @@ class Backup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Upload
+	 *
 	 * @return void
 	 */
 	public function upload(): void {
@@ -355,7 +354,7 @@ class Backup extends \Opencart\System\Engine\Controller {
 			// Sanitize the filename
 			$filename = basename(html_entity_decode($this->request->files['upload']['name'], ENT_QUOTES, 'UTF-8'));
 
-			if ((oc_strlen($filename) < 3) || (oc_strlen($filename) > 128)) {
+			if (!oc_validate_length($filename, 3, 128)) {
 				$json['error'] = $this->language->get('error_filename');
 			}
 
@@ -376,6 +375,8 @@ class Backup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Download
+	 *
 	 * @return void
 	 */
 	public function download(): void {
@@ -412,7 +413,7 @@ class Backup extends \Opencart\System\Engine\Controller {
 				ob_end_clean();
 			}
 
-			readfile($file, 'rb');
+			readfile($file);
 
 			exit();
 		} else {
@@ -421,6 +422,8 @@ class Backup extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {

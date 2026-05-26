@@ -7,13 +7,17 @@ namespace Opencart\Catalog\Controller\Startup;
  */
 class Session extends \Opencart\System\Engine\Controller {
 	/**
-	 * @return void
+	 * Index
+	 *
 	 * @throws \Exception
+	 *
+	 * @return void
 	 */
 	public function index(): void {
 		$session = new \Opencart\System\Library\Session($this->config->get('session_engine'), $this->registry);
 		$this->registry->set('session', $session);
 
+		// API
 		if (isset($this->request->get['route']) && substr((string)$this->request->get['route'], 0, 4) == 'api/' && isset($this->request->get['api_token'])) {
 			$this->load->model('setting/api');
 

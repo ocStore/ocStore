@@ -46,6 +46,8 @@ $('#button-shipping-methods').on('click', function() {
                     html += '        <form id="form-shipping-method">';
                     html += '          <p>{{ text_shipping|escape('js') }}</p>';
 
+                    var first = true;
+
                     for (i in json['shipping_methods']) {
                         html += '<p><strong>' + json['shipping_methods'][i]['name'] + '</strong></p>';
 
@@ -57,8 +59,12 @@ $('#button-shipping-methods').on('click', function() {
 
                                 html += '<input type="radio" name="shipping_method" value="' + json['shipping_methods'][i]['quote'][j]['code'] + '" id="input-shipping-method-' + code + '"';
 
-                                if (json['shipping_methods'][i]['quote'][j]['code'] == $('#input-shipping-code').val()) {
+                                var method = $('#input-shipping-code').val();
+
+                                if ((json['shipping_methods'][i]['quote'][j]['code'] == method) || (!method && first)) {
                                     html += ' checked';
+
+                                    first = false;
                                 }
 
                                 html += '/>';
@@ -130,6 +136,7 @@ $(document).on('submit', '#form-shipping-method', function(e) {
 
                     $('#input-payment-method').val('');
 
+                    $('#cart').load('index.php?route=common/cart.info&language={{ language }}');
                     $('#checkout-confirm').load('index.php?route=checkout/confirm.confirm&language={{ language }}');
                 }
             },

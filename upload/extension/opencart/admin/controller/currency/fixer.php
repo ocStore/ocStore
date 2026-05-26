@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Currency;
  */
 class Fixer extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -45,6 +47,8 @@ class Fixer extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -61,6 +65,7 @@ class Fixer extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('currency_fixer', $this->request->post);
@@ -73,6 +78,8 @@ class Fixer extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Currency
+	 *
 	 * @param string $default
 	 *
 	 * @return void
@@ -90,11 +97,17 @@ class Fixer extends \Opencart\System\Engine\Controller {
 
 			$response = curl_exec($curl);
 
+			$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
 			curl_close($curl);
 
-			$response_info = json_decode($response, true);
+			if ($status == 200) {
+				$response_info = json_decode($response, true);
+			} else {
+				$response_info = [];
+			}
 
-			if (is_array($response_info) && isset($response_info['rates'])) {
+			if (isset($response_info['rates'])) {
 				// Compile all the rates into an array
 				$currencies = [];
 
@@ -104,6 +117,7 @@ class Fixer extends \Opencart\System\Engine\Controller {
 					$currencies[$key] = $value;
 				}
 
+				// Currency
 				$this->load->model('localisation/currency');
 
 				$results = $this->model_localisation_currency->getCurrencies();

@@ -3,10 +3,14 @@ namespace Opencart\Catalog\Controller\Common;
 /**
  * Class Maintenance
  *
+ * Can be called from $this->load->controller('common/maintenance');
+ *
  * @package Opencart\Catalog\Controller\Common
  */
 class Maintenance extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {

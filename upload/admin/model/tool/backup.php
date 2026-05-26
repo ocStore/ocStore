@@ -3,11 +3,21 @@ namespace Opencart\Admin\Model\Tool;
 /**
  * Class Backup
  *
+ * Can be loaded using $this->load->model('tool/backup');
+ *
  * @package Opencart\Admin\Model\Tool
  */
 class Backup extends \Opencart\System\Engine\Model {
 	/**
-	 * @return array
+	 * Get Tables
+	 *
+	 * @return array<int, string>
+	 *
+	 * @example
+	 *
+	 * $this->load->model('tool/backup');
+	 *
+	 * $tables = $this->model_tool_backup->getTables();
 	 */
 	public function getTables(): array {
 		$table_data = [];
@@ -24,11 +34,21 @@ class Backup extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * Get Records
+	 *
+	 * Get the record of the database table records in the database.
+	 *
 	 * @param string $table
 	 * @param int    $start
 	 * @param int    $limit
 	 *
-	 * @return array
+	 * @return array<int, array<string, mixed>>
+	 *
+	 * @example
+	 *
+	 * $this->load->model('tool/backup');
+	 *
+	 * $records = $this->model_tool_backup->getRecords($table, $start, $limit);
 	 */
 	public function getRecords(string $table, int $start = 0, int $limit = 100): array {
 		if ($start < 0) {
@@ -49,9 +69,19 @@ class Backup extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * Get Total Records
+	 *
+	 * Get the total number of total database table records in the database.
+	 *
 	 * @param string $table
 	 *
 	 * @return int
+	 *
+	 * @example
+	 *
+	 * $this->load->model('tool/backup');
+	 *
+	 * $record_total = $this->model_tool_backup->getTotalRecords($table);
 	 */
 	public function getTotalRecords(string $table): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . $table . "`");

@@ -3,13 +3,30 @@ namespace Opencart\Admin\Model\Setting;
 /**
  * Class Store
  *
+ * Can be loaded using $this->load->model('setting/store');
+ *
  * @package Opencart\Admin\Model\Setting
  */
 class Store extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $data
+	 * Add Store
 	 *
-	 * @return int
+	 * Create a new store record in the database.
+	 *
+	 * @param array<string, mixed> $data array of data
+	 *
+	 * @return int returns the primary key of the new store record
+	 *
+	 * @example
+	 *
+	 * $store_data = [
+	 *     'name' => 'Store Name',
+	 *     'url'  => ''
+	 * ];
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_id = $this->model_setting_store->addStore($store_data);
 	 */
 	public function addStore(array $data): int {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "store` SET `name` = '" . $this->db->escape((string)$data['config_name']) . "', `url` = '" . $this->db->escape((string)$data['config_url']) . "'");
@@ -17,10 +34,20 @@ class Store extends \Opencart\System\Engine\Model {
 		$store_id = $this->db->getLastId();
 
 		// Layout Route
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "layout_route` WHERE `store_id` = '0'");
+		$this->load->model('design/layout');
+		$results = $this->model_design_layout->getRoutesByStoreId(0);
 
-		foreach ($query->rows as $layout_route) {
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "layout_route` SET `layout_id` = '" . (int)$layout_route['layout_id'] . "', `route` = '" . $this->db->escape($layout_route['route']) . "', `store_id` = '" . (int)$store_id . "'");
+		foreach ($results as $result) {
+			$this->model_design_layout->addRoute($result['layout_id'], ['store_id' => $store_id] + $result);
+		}
+
+		// SEO
+		$this->load->model('design/seo_url');
+
+		$results = $this->model_design_seo_url->getSeoUrlsByStoreId(0);
+
+		foreach ($results as $result) {
+			$this->model_design_seo_url->addSeoUrl($result['key'], $result['value'], $result['keyword'], $store_id, $result['language_id'], $result['sort_order']);
 		}
 
 		$this->cache->delete('store');
@@ -29,10 +56,25 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param int   $store_id
-	 * @param array $data
+	 * Edit Store
+	 *
+	 * Edit store record in the database.
+	 *
+	 * @param int                  $store_id primary key of the store record
+	 * @param array<string, mixed> $data     array of data
 	 *
 	 * @return void
+	 *
+	 * @example
+	 *
+	 * $store_data = [
+	 *     'name' => 'Store Name',
+	 *     'url'  => ''
+	 * ];
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $this->model_setting_store->editStore($store_id, $store_data);
 	 */
 	public function editStore(int $store_id, array $data): void {
 		$this->db->query("UPDATE `" . DB_PREFIX . "store` SET `name` = '" . $this->db->escape((string)$data['config_name']) . "', `url` = '" . $this->db->escape((string)$data['config_url']) . "' WHERE `store_id` = '" . (int)$store_id . "'");
@@ -41,44 +83,89 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param int $store_id
+	 * Delete Store
+	 *
+	 * Delete store record in the database.
+	 *
+	 * @param int $store_id primary key of the store record
 	 *
 	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $this->model_setting_store->deleteStore($store_id);
 	 */
 	public function deleteStore(int $store_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "store` WHERE `store_id` = '" . (int)$store_id . "'");
 
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "category_to_layout` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "category_to_store` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer_affiliate_report` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer_ip` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer_search` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "download_report` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "gdpr` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "information_to_layout` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "information_to_store` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "layout_route` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "manufacturer_to_layout` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "manufacturer_to_store` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "marketing_report` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "order` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_report` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_to_layout` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_to_store` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "subscription` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "theme` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "translation` WHERE `store_id` = '" . (int)$store_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE `store_id` = '" . (int)$store_id . "'");
+		// Category
+		$this->load->model('catalog/category');
+
+		$this->model_catalog_category->deleteLayoutsByStoreId($store_id);
+		$this->model_catalog_category->deleteStoresByStoreId($store_id);
+
+		// Information
+		$this->load->model('catalog/information');
+
+		$this->model_catalog_information->deleteLayoutsByStoreId($store_id);
+		$this->model_catalog_information->deleteStoresByStoreId($store_id);
+
+		// Manufacturer
+		$this->load->model('catalog/manufacturer');
+
+		$this->model_catalog_manufacturer->deleteLayoutsByStoreId($store_id);
+		$this->model_catalog_manufacturer->deleteStoresByStoreId($store_id);
+
+		// Product
+		$this->load->model('catalog/product');
+
+		$this->model_catalog_product->deleteLayoutsByStoreId($store_id);
+		$this->model_catalog_product->deleteStoresByStoreId($store_id);
+
+		// GDPR
+		$this->load->model('customer/gdpr');
+
+		$this->model_customer_gdpr->deleteGdprsByStoreId($store_id);
+
+		// Theme
+		$this->load->model('design/theme');
+
+		$this->model_design_theme->deleteThemesByStoreId($store_id);
+
+		// Translation
+		$this->load->model('design/translation');
+
+		$this->model_design_translation->deleteTranslationsByStoreId($store_id);
+
+		// SEO
+		$this->load->model('design/seo_url');
+
+		$this->model_design_seo_url->deleteSeoUrlsByStoreId($store_id);
+
+		// Setting
+		$this->load->model('setting/setting');
+
+		$this->model_setting_setting->deleteSettingsByStoreId($store_id);
 
 		$this->cache->delete('store');
 	}
 
 	/**
-	 * @param int $store_id
+	 * Get Store
 	 *
-	 * @return array
+	 * Get the record of the store record in the database.
+	 *
+	 * @param int $store_id primary key of the store record
+	 *
+	 * @return array<string, mixed> store record that has store ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_info = $this->model_setting_store->getStore($store_id);
 	 */
 	public function getStore(int $store_id): array {
 		$query = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "store` WHERE `store_id` = '" . (int)$store_id . "'");
@@ -87,35 +174,56 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param array $data
+	 * Get Stores
 	 *
-	 * @return array
+	 * Get the record of the store records in the database.
+	 *
+	 * @param array<string, mixed> $data array of filters
+	 *
+	 * @return array<int, array<string, mixed>> store records
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $results = $this->model_setting_store->getStores();
 	 */
 	public function getStores(array $data = []): array {
 		$sql = "SELECT * FROM `" . DB_PREFIX . "store` ORDER BY `url`";
 
-		$store_data = $this->cache->get('store.' . md5($sql));
+		$key = md5($sql);
+
+		$store_data = $this->cache->get('store.' . $key);
 
 		if (!$store_data) {
 			$query = $this->db->query($sql);
 
 			$store_data = $query->rows;
 
-			$this->cache->set('store.' . md5($sql), $store_data);
+			$this->cache->set('store.' . $key, $store_data);
 		}
 
 		return $store_data;
 	}
 
 	/**
-	 * @param int    $store_id
+	 * Create Store Instance
+	 *
+	 * @param int    $store_id primary key of the store record
 	 * @param string $language
-	 * @param string $session_id
+	 * @param string $currency
+	 *
+	 * @throws \Exception
 	 *
 	 * @return \Opencart\System\Engine\Registry
-	 * @throws \Exception
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $this->model_setting_store->createStoreInstance($store_id, $language, $currency);
 	 */
-	public function createStoreInstance(int $store_id = 0, string $language = '', string $session_id = ''): object {
+	public function createStoreInstance(int $store_id = 0, string $language = '', string $currency = ''): \Opencart\System\Engine\Registry {
 		// Autoloader
 		$this->autoloader->register('Opencart\Catalog', DIR_CATALOG);
 
@@ -123,7 +231,6 @@ class Store extends \Opencart\System\Engine\Model {
 		$registry = new \Opencart\System\Engine\Registry();
 		$registry->set('autoloader', $this->autoloader);
 
-		// Config
 		$config = new \Opencart\System\Engine\Config();
 		$registry->set('config', $config);
 
@@ -152,6 +259,9 @@ class Store extends \Opencart\System\Engine\Model {
 			}
 		}
 
+		// Factory
+		$registry->set('factory', new \Opencart\System\Engine\Factory($registry));
+
 		// Loader
 		$loader = new \Opencart\System\Engine\Loader($registry);
 		$registry->set('load', $loader);
@@ -178,10 +288,8 @@ class Store extends \Opencart\System\Engine\Model {
 
 		// Session
 		$session = new \Opencart\System\Library\Session($config->get('session_engine'), $registry);
+		$session->start();
 		$registry->set('session', $session);
-
-		// Start session
-		$session->start($session_id);
 
 		// Template
 		$template = new \Opencart\System\Library\Template($config->get('template_engine'));
@@ -189,10 +297,14 @@ class Store extends \Opencart\System\Engine\Model {
 		$registry->set('template', $template);
 
 		// Adding language var to the GET variable so there is a default language
-		$registry->request->get['language'] = $language;
+		if ($language) {
+			$request->get['language'] = $language;
+		} else {
+			$request->get['language'] = $config->get('language_code');
+		}
 
 		// Language
-		$language = new \Opencart\System\Library\Language($config->get('language_code'));
+		$language = new \Opencart\System\Library\Language($request->get['language']);
 		$language->addPath(DIR_CATALOG . 'language/');
 		$language->load('default');
 		$registry->set('language', $language);
@@ -225,7 +337,17 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @return int
+	 * Get Total Stores
+	 *
+	 * Get the total number of total store records in the database.
+	 *
+	 * @return int total number of store records
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_total = $this->model_setting_store->getTotalStores();
 	 */
 	public function getTotalStores(): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "store`");
@@ -234,9 +356,19 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param int $layout_id
+	 * Get Total Stores By Layout ID
 	 *
-	 * @return int
+	 * Get the total number of total stores by layout records in the database.
+	 *
+	 * @param int $layout_id primary key of the layout record
+	 *
+	 * @return int total number of store records that have layout ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_total = $this->model_setting_store->getTotalStoresByLayoutId($layout_id);
 	 */
 	public function getTotalStoresByLayoutId(int $layout_id): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "setting` WHERE `key` = 'config_layout_id' AND `value` = '" . (int)$layout_id . "' AND `store_id` != '0'");
@@ -245,9 +377,17 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * Get Total Stores By Language
+	 *
 	 * @param string $language
 	 *
 	 * @return int
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_total = $this->model_setting_store->getTotalStoresByLanguage($language);
 	 */
 	public function getTotalStoresByLanguage(string $language): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "setting` WHERE `key` = 'config_language' AND `value` = '" . $this->db->escape($language) . "' AND `store_id` != '0'");
@@ -256,9 +396,17 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * Get Total Stores By Currency
+	 *
 	 * @param string $currency
 	 *
 	 * @return int
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_total = $this->model_setting_store->getTotalStoresByCurrency($currency);
 	 */
 	public function getTotalStoresByCurrency(string $currency): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "setting` WHERE `key` = 'config_currency' AND `value` = '" . $this->db->escape($currency) . "' AND `store_id` != '0'");
@@ -267,9 +415,19 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param int $country_id
+	 * Get Total Stores By Country ID
 	 *
-	 * @return int
+	 * Get the total number of total stores by country records in the database.
+	 *
+	 * @param int $country_id primary key of the country record
+	 *
+	 * @return int total number of store records that have country ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_total = $this->model_setting_store->getTotalStoresByCountryId($country_id);
 	 */
 	public function getTotalStoresByCountryId(int $country_id): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "setting` WHERE `key` = 'config_country_id' AND `value` = '" . (int)$country_id . "' AND `store_id` != '0'");
@@ -278,9 +436,19 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param int $zone_id
+	 * Get Total Stores By Zone ID
 	 *
-	 * @return int
+	 * Get the total number of total stores by zone records in the database.
+	 *
+	 * @param int $zone_id primary key of the zone record
+	 *
+	 * @return int total number of store records that have zone ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_total = $this->model_setting_store->getTotalStoresByZoneId($zone_id);
 	 */
 	public function getTotalStoresByZoneId(int $zone_id): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "setting` WHERE `key` = 'config_zone_id' AND `value` = '" . (int)$zone_id . "' AND `store_id` != '0'");
@@ -289,9 +457,19 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param int $customer_group_id
+	 * Get Total Stores By Customer Group ID
 	 *
-	 * @return int
+	 * Get the total number of total stores by customer group records in the database.
+	 *
+	 * @param int $customer_group_id primary key of the customer group record
+	 *
+	 * @return int total number of store records that have customer group ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_total = $this->model_setting_store->getTotalStoresByCustomerGroupId($customer_group_id);
 	 */
 	public function getTotalStoresByCustomerGroupId(int $customer_group_id): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "setting` WHERE `key` = 'config_customer_group_id' AND `value` = '" . (int)$customer_group_id . "' AND `store_id` != '0'");
@@ -300,22 +478,42 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param int $information_id
+	 * Get Total Stores By Information ID
 	 *
-	 * @return int
+	 * Get the total number of total stores by information records in the database.
+	 *
+	 * @param int $information_id primary key of the information record
+	 *
+	 * @return int total number of store records that have information ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_total = $this->model_setting_store->getTotalStoresByInformationId($information_id);
 	 */
 	public function getTotalStoresByInformationId(int $information_id): int {
 		$account_query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "setting` WHERE `key` = 'config_account_id' AND `value` = '" . (int)$information_id . "' AND `store_id` != '0'");
 
 		$checkout_query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "setting` WHERE `key` = 'config_checkout_id' AND `value` = '" . (int)$information_id . "' AND `store_id` != '0'");
 
-		return ($account_query->row['total'] + $checkout_query->row['total']);
+		return $account_query->row['total'] + $checkout_query->row['total'];
 	}
 
 	/**
-	 * @param int $order_status_id
+	 * Get Total Stores By Order Status ID
 	 *
-	 * @return int
+	 * Get the total number of total stores by order status records in the database.
+	 *
+	 * @param int $order_status_id primary key of the order status record
+	 *
+	 * @return int total number of store records that have order status ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_total = $this->model_setting_store->getTotalStoresByOrderStatusId($order_status_id);
 	 */
 	public function getTotalStoresByOrderStatusId(int $order_status_id): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "setting` WHERE `key` = 'config_order_status_id' AND `value` = '" . (int)$order_status_id . "' AND `store_id` != '0'");

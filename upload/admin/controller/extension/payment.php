@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension;
  */
 class Payment extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -14,6 +16,8 @@ class Payment extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
 	public function getList(): string {
@@ -21,15 +25,16 @@ class Payment extends \Opencart\System\Engine\Controller {
 
 		$available = [];
 
-		$this->load->model('setting/extension');
-
-		$results = $this->model_setting_extension->getPaths('%/admin/controller/payment/%.php');
+		$results = glob(DIR_EXTENSION . '*/admin/controller/payment/*.php');
 
 		foreach ($results as $result) {
-			$available[] = basename($result['path'], '.php');
+			$available[] = basename($result, '.php');
 		}
 
 		$installed = [];
+
+		// Extension
+		$this->load->model('setting/extension');
 
 		$extensions = $this->model_setting_extension->getExtensionsByType('payment');
 
@@ -45,9 +50,11 @@ class Payment extends \Opencart\System\Engine\Controller {
 
 		if ($results) {
 			foreach ($results as $result) {
-				$extension = substr($result['path'], 0, strpos($result['path'], '/'));
+				$path = substr($result, strlen(DIR_EXTENSION));
 
-				$code = basename($result['path'], '.php');
+				$extension = substr($path, 0, strpos($path, '/'));
+
+				$code = basename($result, '.php');
 
 				$this->load->language('extension/' . $extension . '/payment/' . $code, $code);
 
@@ -62,7 +69,7 @@ class Payment extends \Opencart\System\Engine\Controller {
 				$data['extensions'][] = [
 					'name'       => $this->language->get($code . '_heading_title'),
 					'link'       => $link,
-					'status'     => $this->config->get('payment_' . $code . '_status') ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
+					'status'     => $this->config->get('payment_' . $code . '_status'),
 					'sort_order' => $this->config->get('payment_' . $code . '_sort_order'),
 					'install'    => $this->url->link('extension/payment.install', 'user_token=' . $this->session->data['user_token'] . '&extension=' . $extension . '&code=' . $code),
 					'uninstall'  => $this->url->link('extension/payment.uninstall', 'user_token=' . $this->session->data['user_token'] . '&extension=' . $extension . '&code=' . $code),
@@ -78,6 +85,8 @@ class Payment extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Install
+	 *
 	 * @return void
 	 */
 	public function install(): void {
@@ -106,6 +115,7 @@ class Payment extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Extension
 			$this->load->model('setting/extension');
 
 			$this->model_setting_extension->install('payment', $extension, $code);
@@ -142,6 +152,8 @@ class Payment extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Uninstall
+	 *
 	 * @return void
 	 */
 	public function uninstall(): void {
@@ -154,6 +166,7 @@ class Payment extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Extension
 			$this->load->model('setting/extension');
 
 			$this->model_setting_extension->uninstall('payment', $this->request->get['code']);

@@ -1,10 +1,12 @@
 <?php
 /**
  * @package        OpenCart
- * @author        Daniel Kerr
- * @copyright    Copyright (c) 2005 - 2022, OpenCart, Ltd. (https://www.opencart.com/)
+ *
+ * @author         Daniel Kerr
+ * @copyright      Copyright (c) 2005 - 2022, OpenCart, Ltd. (https://www.opencart.com/)
  * @license        https://opensource.org/licenses/GPL-3.0
- * @link        https://www.opencart.com
+ *
+ * @see           https://www.opencart.com
  */
 namespace Opencart\System\Library;
 /**
@@ -16,31 +18,30 @@ class Image {
 	 */
 	private string $file;
 	/**
-	 * @var object|false|\GdImage|resource
+	 * @var mixed
 	 */
-	private object $image;
+	private $image;
 	/**
-	 * @var int|mixed
+	 * @var int
 	 */
 	private int $width;
 	/**
-	 * @var int|mixed
+	 * @var int
 	 */
 	private int $height;
 	/**
-	 * @var string|mixed
+	 * @var string
 	 */
 	private string $bits;
 	/**
-	 * @var string|mixed
+	 * @var string
 	 */
 	private string $mime;
 
 	/**
 	 * Constructor
 	 *
-	 * @param	string  $file
-	 *
+	 * @param string $file
 	 */
 	public function __construct(string $file) {
 		if (!extension_loaded('gd')) {
@@ -54,8 +55,8 @@ class Image {
 
 			$this->width = $info[0];
 			$this->height = $info[1];
-			$this->bits = isset($info['bits']) ? $info['bits'] : '';
-			$this->mime = isset($info['mime']) ? $info['mime'] : '';
+			$this->bits = $info['bits'] ?? '';
+			$this->mime = $info['mime'] ?? '';
 
 			if ($this->mime == 'image/gif') {
 				$this->image = imagecreatefromgif($file);
@@ -74,54 +75,54 @@ class Image {
 	}
 
 	/**
-	 * getFile
+	 * Get File
 	 *
-	 * @return    string
+	 * @return string
 	 */
 	public function getFile(): string {
 		return $this->file;
 	}
 
 	/**
-	 * getImage
+	 * Get Image
 	 *
-	 * @return    object
+	 * @return mixed
 	 */
-	public function getImage(): object {
-		return $this->image;
+	public function getImage() {
+		return $this->image ?: null;
 	}
 
 	/**
-	 * getWidth
+	 * Get Width
 	 *
-	 * @return    int
+	 * @return int
 	 */
 	public function getWidth(): int {
 		return $this->width;
 	}
 
 	/**
-	 * getHeight
+	 * Get Height
 	 *
-	 * @return    int
+	 * @return int
 	 */
 	public function getHeight(): int {
 		return $this->height;
 	}
 
 	/**
-	 * getBits
+	 * Get Bits
 	 *
-	 * @return    string
+	 * @return string
 	 */
 	public function getBits(): string {
 		return $this->bits;
 	}
 
 	/**
-	 * getMime
+	 * Get Mime
 	 *
-	 * @return    string
+	 * @return string
 	 */
 	public function getMime(): string {
 		return $this->mime;
@@ -130,10 +131,10 @@ class Image {
 	/**
 	 * Save
 	 *
-	 * @param	  string  $file
-	 * @param     int  $quality
+	 * @param string $file
+	 * @param int    $quality
 	 *
-	 * @return 	  void
+	 * @return void
 	 */
 	public function save(string $file, int $quality = 90): void {
 		$info = pathinfo($file);
@@ -158,11 +159,11 @@ class Image {
 	/**
 	 * Resize
 	 *
-	 * @param    int  $width
-	 * @param 	 int  $height
-	 * @param 	 string  $default
+	 * @param int    $width
+	 * @param int    $height
+	 * @param string $default
 	 *
-	 * @return   void
+	 * @return void
 	 */
 	public function resize(int $width = 0, int $height = 0, string $default = ''): void {
 		if (!$this->width || !$this->height) {
@@ -184,7 +185,7 @@ class Image {
 			$scale = min($scale_w, $scale_h);
 		}
 
-		if ($scale == 1 && $scale_h == $scale_w && ($this->mime != 'image/png' || $this->mime != 'image/webp')) {
+		if ($scale == 1 && $scale_h == $scale_w && ($this->mime != 'image/png' && $this->mime != 'image/webp')) {
 			return;
 		}
 
@@ -203,7 +204,6 @@ class Image {
 			$background = imagecolorallocatealpha($this->image, 255, 255, 255, 127);
 
 			imagecolortransparent($this->image, $background);
-
 		} elseif ($this->mime == 'image/webp') {
 			imagealphablending($this->image, false);
 			imagesavealpha($this->image, true);
@@ -227,12 +227,12 @@ class Image {
 	/**
 	 * Watermark
 	 *
-	 * @param    object  $watermark
-	 * @param	 string  $position
+	 * @param self   $watermark
+	 * @param string $position
 	 *
-	 * @return   void
+	 * @return void
 	 */
-	public function watermark(\Opencart\System\Library\Image $watermark, string $position = 'bottomright'): void {
+	public function watermark(self $watermark, string $position = 'bottomright'): void {
 		switch ($position) {
 			case 'topleft':
 				$watermark_pos_x = 0;
@@ -270,6 +270,10 @@ class Image {
 				$watermark_pos_x = ($this->width - $watermark->getWidth());
 				$watermark_pos_y = ($this->height - $watermark->getHeight());
 				break;
+			default:
+				$watermark_pos_x = 0;
+				$watermark_pos_y = 0;
+				break;
 		}
 
 		imagealphablending($this->image, true);
@@ -282,12 +286,12 @@ class Image {
 	/**
 	 * Crop
 	 *
-	 * @param    int  $top_x
-	 * @param	 int  $top_y
-	 * @param	 int  $bottom_x
-	 * @param	 int  $bottom_y
+	 * @param int $top_x
+	 * @param int $top_y
+	 * @param int $bottom_x
+	 * @param int $bottom_y
 	 *
-	 * @return   void
+	 * @return void
 	 */
 	public function crop(int $top_x, int $top_y, int $bottom_x, int $bottom_y): void {
 		$image_old = $this->image;
@@ -303,10 +307,10 @@ class Image {
 	/**
 	 * Rotate
 	 *
-	 * @param    int  $degree
-	 * @param	 string  $color
+	 * @param int    $degree
+	 * @param string $color
 	 *
-	 * @return   void
+	 * @return void
 	 */
 	public function rotate(int $degree, string $color = 'FFFFFF'): void {
 		$rgb = $this->html2rgb($color);
@@ -320,24 +324,24 @@ class Image {
 	/**
 	 * Filter
 	 *
-	 * @return   void
+	 * @return void
 	 */
 	private function filter(): void {
 		$args = func_get_args();
 
-		call_user_func_array('imagefilter', $args);
+		imagefilter(...$args);
 	}
 
 	/**
 	 * Text
 	 *
-	 * @param    string  $text
-	 * @param	 int  $x
-	 * @param	 int  $y
-	 * @param	 int  $size
-	 * @param	 string  $color
+	 * @param string $text
+	 * @param int    $x
+	 * @param int    $y
+	 * @param int    $size
+	 * @param string $color
 	 *
-	 * @return   void
+	 * @return void
 	 */
 	private function text(string $text, int $x = 0, int $y = 0, int $size = 5, string $color = '000000'): void {
 		$rgb = $this->html2rgb($color);
@@ -348,23 +352,23 @@ class Image {
 	/**
 	 * Merge
 	 *
-	 * @param    object  $merge
-	 * @param 	 int  $x
-	 * @param 	 int  $y
-	 * @param 	 int  $opacity
+	 * @param self $merge
+	 * @param int  $x
+	 * @param int  $y
+	 * @param int  $opacity
 	 *
-	 * @return 	 void
+	 * @return void
 	 */
-	private function merge(object $merge, int $x = 0, int $y = 0, int $opacity = 100): void {
+	private function merge(self $merge, int $x = 0, int $y = 0, int $opacity = 100): void {
 		imagecopymerge($this->image, $merge->getImage(), $x, $y, 0, 0, $merge->getWidth(), $merge->getHeight(), $opacity);
 	}
 
 	/**
 	 * HTML2RGB
 	 *
-	 * @param    string  $color
+	 * @param string $color
 	 *
-	 * @return 	 array
+	 * @return array<int, int>
 	 */
 	private function html2rgb(string $color): array {
 		if ($color[0] == '#') {
@@ -372,9 +376,25 @@ class Image {
 		}
 
 		if (strlen($color) == 6) {
-			[$r, $g, $b] = [$color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]];
+			[
+				$r,
+				$g,
+				$b
+			] = [
+				$color[0] . $color[1],
+				$color[2] . $color[3],
+				$color[4] . $color[5]
+			];
 		} elseif (strlen($color) == 3) {
-			[$r, $g, $b] = [$color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]];
+			[
+				$r,
+				$g,
+				$b
+			] = [
+				$color[0] . $color[0],
+				$color[1] . $color[1],
+				$color[2] . $color[2]
+			];
 		} else {
 			return [];
 		}
@@ -383,6 +403,10 @@ class Image {
 		$g = hexdec($g);
 		$b = hexdec($b);
 
-		return [$r, $g, $b];
+		return [
+			$r,
+			$g,
+			$b
+		];
 	}
 }

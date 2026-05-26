@@ -3,13 +3,17 @@ namespace Opencart\Catalog\Model\Extension\Opencart\Total;
 /**
  * Class Shipping
  *
- * @package
+ * Can be called from $this->load->model('extension/opencart/total/shipping');
+ *
+ * @package Opencart\Catalog\Model\Extension\Opencart\Total
  */
 class Shipping extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $totals
-	 * @param array $taxes
-	 * @param float $total
+	 * Get Total
+	 *
+	 * @param array<int, array<string, mixed>> $totals
+	 * @param array<int, float>                $taxes
+	 * @param float                            $total
 	 *
 	 * @return void
 	 */
@@ -23,7 +27,7 @@ class Shipping extends \Opencart\System\Engine\Model {
 				'sort_order' => (int)$this->config->get('total_shipping_sort_order')
 			];
 
-			if (isset($this->session->data['shipping_method']['tax_class_id'])) {
+			if (isset($this->session->data['shipping_method']) && isset($this->session->data['shipping_method']['tax_class_id'])) {
 				$tax_rates = $this->tax->getRates($this->session->data['shipping_method']['cost'], $this->session->data['shipping_method']['tax_class_id']);
 
 				foreach ($tax_rates as $tax_rate) {

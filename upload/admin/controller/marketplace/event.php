@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Marketplace;
  */
 class Event extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -54,6 +56,8 @@ class Event extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -63,6 +67,8 @@ class Event extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
 	public function getList(): string {
@@ -100,6 +106,7 @@ class Event extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('marketplace/event.list', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		// Event
 		$data['events'] = [];
 
 		$filter_data = [
@@ -111,22 +118,13 @@ class Event extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('setting/event');
 
-		$event_total = $this->model_setting_event->getTotalEvents();
-
 		$results = $this->model_setting_event->getEvents($filter_data);
 
 		foreach ($results as $result) {
 			$data['events'][] = [
-				'event_id'    => $result['event_id'],
-				'code'        => $result['code'],
-				'description' => $result['description'],
-				'trigger'     => $result['trigger'],
-				'action'      => $result['action'],
-				'status'      => $result['status'],
-				'sort_order'  => $result['sort_order'],
-				'enable'      => $this->url->link('marketplace/event.enable', 'user_token=' . $this->session->data['user_token'] . '&event_id=' . $result['event_id']),
-				'disable'     => $this->url->link('marketplace/event.disable', 'user_token=' . $this->session->data['user_token'] . '&event_id=' . $result['event_id'])
-			];
+				'enable'  => $this->url->link('marketplace/event.enable', 'user_token=' . $this->session->data['user_token'] . '&event_id=' . $result['event_id']),
+				'disable' => $this->url->link('marketplace/event.disable', 'user_token=' . $this->session->data['user_token'] . '&event_id=' . $result['event_id'])
+			] + $result;
 		}
 
 		$url = '';
@@ -150,6 +148,8 @@ class Event extends \Opencart\System\Engine\Controller {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 
+		$event_total = $this->model_setting_event->getTotalEvents();
+
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $event_total,
 			'page'  => $page,
@@ -166,6 +166,8 @@ class Event extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Enable
+	 *
 	 * @return void
 	 */
 	public function enable(): void {
@@ -186,7 +188,7 @@ class Event extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			$this->load->model('setting/event');
 
-			$this->model_setting_event->editStatus($event_id, 1);
+			$this->model_setting_event->editStatus($event_id, true);
 
 			$json['success'] = $this->language->get('text_success');
 		}
@@ -196,6 +198,8 @@ class Event extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Disable
+	 *
 	 * @return void
 	 */
 	public function disable(): void {
@@ -216,7 +220,7 @@ class Event extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			$this->load->model('setting/event');
 
-			$this->model_setting_event->editStatus($event_id, 0);
+			$this->model_setting_event->editStatus($event_id, false);
 
 			$json['success'] = $this->language->get('text_success');
 		}
@@ -226,6 +230,8 @@ class Event extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {

@@ -1,10 +1,12 @@
 <?php
 /**
  * @package        OpenCart
+ *
  * @author         Daniel Kerr
  * @copyright      Copyright (c) 2005 - 2017, OpenCart, Ltd. (https://www.opencart.com/)
  * @license        https://opensource.org/licenses/GPL-3.0
- * @link           https://www.opencart.com
+ *
+ * @see           https://www.opencart.com
  */
 namespace Opencart\System\Engine;
 /**
@@ -16,16 +18,16 @@ class Config {
 	 */
 	protected string $directory;
 	/**
-	 * @var array
+	 * @var array<string, string>
 	 */
 	private array $path = [];
 	/**
-	 * @var array
+	 * @var array<string, string>
 	 */
 	private array $data = [];
 
 	/**
-	 * addPath
+	 * Add Path
 	 *
 	 * @param string $namespace
 	 * @param string $directory
@@ -43,19 +45,19 @@ class Config {
 	 *
 	 * @param string $key
 	 *
-	 * @return    mixed
+	 * @return mixed
 	 */
-	public function get(string $key): mixed {
-		return isset($this->data[$key]) ? $this->data[$key] : '';
+	public function get(string $key) {
+		return $this->data[$key] ?? '';
 	}
 
 	/**
 	 * Set
 	 *
 	 * @param string $key
-	 * @param string $value
+	 * @param mixed  $value
 	 */
-	public function set(string $key, mixed $value): void {
+	public function set(string $key, $value): void {
 		$this->data[$key] = $value;
 	}
 
@@ -64,7 +66,7 @@ class Config {
 	 *
 	 * @param string $key
 	 *
-	 * @return    mixed
+	 * @return bool
 	 */
 	public function has(string $key): bool {
 		return isset($this->data[$key]);
@@ -74,6 +76,8 @@ class Config {
 	 * Load
 	 *
 	 * @param string $filename
+	 *
+	 * @return array<string, string>
 	 */
 	public function load(string $filename): array {
 		$file = $this->directory . $filename . '.php';

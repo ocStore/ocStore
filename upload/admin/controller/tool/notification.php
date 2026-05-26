@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Tool;
  */
 class Notification extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -38,6 +40,8 @@ class Notification extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -47,6 +51,8 @@ class Notification extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
 	public function getList(): string {
@@ -62,48 +68,49 @@ class Notification extends \Opencart\System\Engine\Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
+		// Notification
 		$data['notifications'] = [];
-
-		$this->load->model('tool/notification');
-
-		$notification_total = $this->model_tool_notification->getTotalNotifications();
 
 		$filter_data = [
 			'start' => ($page - 1) * $this->config->get('config_pagination_admin'),
 			'limit' => $this->config->get('config_pagination_admin')
 		];
 
+		$this->load->model('tool/notification');
+
 		$results = $this->model_tool_notification->getNotifications($filter_data);
 
 		foreach ($results as $result) {
 			$second = time() - strtotime($result['date_added']);
-			
+
 			$ranges = [
-				'second'	=> $second,
-				'minute'	=> floor($second / 60),
-				'hour'		=> floor($second / 3600),
-				'day'		=> floor($second / 86400),
-				'week'		=> floor($second / 604800),
-				'month'		=> floor($second / 2629743),
-				'year'		=> floor($second / 31556926)
+				'second' => $second,
+				'minute' => floor($second / 60),
+				'hour'   => floor($second / 3600),
+				'day'    => floor($second / 86400),
+				'week'   => floor($second / 604800),
+				'month'  => floor($second / 2629743),
+				'year'   => floor($second / 31556926)
 			];
+
+			$date_added = 0;
+			$code = 'seconds';
 
 			foreach ($ranges as $range => $value) {
 				if ($value) {
 					$date_added = $value;
-					$code = $range . ($value > 1) ? 's' : '';
+					$code = ($value > 1) ? $range . 's' : $range;
 				}
 			}
 
 			$data['notifications'][] = [
-				'notification_id' => $result['notification_id'],
-				'title'           => $result['title'],
-				'status'          => $result['status'],
-				'date_added'      => sprintf($this->language->get('text_' . $code . '_ago'), $date_added),
-				'view'            => $this->url->link('tool/notification.info', 'user_token=' . $this->session->data['user_token'] . '&notification_id=' . $result['notification_id'] . $url),
-				'delete'          => $this->url->link('tool/notification.delete', 'user_token=' . $this->session->data['user_token'] . '&notification_id=' . $result['notification_id'] . $url)
-			];
+				'date_added' => sprintf($this->language->get('text_' . $code . '_ago'), $date_added),
+				'view'       => $this->url->link('tool/notification.info', 'user_token=' . $this->session->data['user_token'] . '&notification_id=' . $result['notification_id'] . $url),
+				'delete'     => $this->url->link('tool/notification.delete', 'user_token=' . $this->session->data['user_token'] . '&notification_id=' . $result['notification_id'] . $url)
+			] + $result;
 		}
+
+		$notification_total = $this->model_tool_notification->getTotalNotifications();
 
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $notification_total,
@@ -118,6 +125,8 @@ class Notification extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Info
+	 *
 	 * @return void
 	 */
 	public function info(): void {
@@ -136,15 +145,17 @@ class Notification extends \Opencart\System\Engine\Controller {
 
 			$data['title'] = $notification_info['title'];
 
-			$data['text'] = oc_bbcode_decode($notification_info['text']);
+			$data['text'] = html_entity_decode($notification_info['text'], ENT_QUOTES, 'UTF-8');
 
-			$this->model_tool_notification->editStatus($notification_id, 1);
+			$this->model_tool_notification->editStatus($notification_id, true);
 
 			$this->response->setOutput($this->load->view('tool/notification_info', $data));
 		}
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {
@@ -153,7 +164,7 @@ class Notification extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['selected'])) {
-			$selected = $this->request->post['selected'];
+			$selected = (array)$this->request->post['selected'];
 		} else {
 			$selected = [];
 		}

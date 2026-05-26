@@ -1,18 +1,22 @@
 <?php
 /**
  * @package        OpenCart
+ *
  * @author         Daniel Kerr
  * @copyright      Copyright (c) 2005 - 2022, OpenCart, Ltd. (https://www.opencart.com/)
  * @license        https://opensource.org/licenses/GPL-3.0
- * @link           https://www.opencart.com
+ *
+ * @see           https://www.opencart.com
  */
 namespace Opencart\System\Library;
 /**
- * Class DB Adapter
+ * Class DB Adaptor
+ *
+ * @package Opencart\System\Library
  */
 class DB {
 	/**
-	 * @var object|mixed
+	 * @var object
 	 */
 	private object $adaptor;
 
@@ -24,14 +28,16 @@ class DB {
 	 * @param string $username
 	 * @param string $password
 	 * @param string $database
-	 * @param int    $port
-	 *
+	 * @param string $port
+	 * @param string $ssl_key
+	 * @param string $ssl_cert
+	 * @param string $ssl_ca
 	 */
-	public function __construct(string $adaptor, string $hostname, string $username, string $password, string $database, string $port = '') {
+	public function __construct(string $adaptor, string $hostname, string $username, string $password, string $database, string $port = '', string $ssl_key = '', string $ssl_cert = '', string $ssl_ca = '') {
 		$class = 'Opencart\System\Library\DB\\' . $adaptor;
 
 		if (class_exists($class)) {
-			$this->adaptor = new $class($hostname, $username, $password, $database, $port);
+			$this->adaptor = new $class($hostname, $username, $password, $database, $port, $ssl_key, $ssl_cert, $ssl_ca);
 		} else {
 			throw new \Exception('Error: Could not load database adaptor ' . $adaptor . '!');
 		}
@@ -42,9 +48,9 @@ class DB {
 	 *
 	 * @param string $sql SQL statement to be executed
 	 *
-	 * @return    array
+	 * @return mixed
 	 */
-	public function query(string $sql): bool|object {
+	public function query(string $sql) {
 		return $this->adaptor->query($sql);
 	}
 
@@ -53,7 +59,7 @@ class DB {
 	 *
 	 * @param string $value Value to be protected against SQL injections
 	 *
-	 * @return    string    returns escaped value
+	 * @return string Returns escaped value
 	 */
 	public function escape(string $value): string {
 		return $this->adaptor->escape($value);
@@ -64,18 +70,18 @@ class DB {
 	 *
 	 * Gets the total number of affected rows from the last query
 	 *
-	 * @return    int    returns the total number of affected rows.
+	 * @return int returns the total number of affected rows
 	 */
 	public function countAffected(): int {
 		return $this->adaptor->countAffected();
 	}
 
 	/**
-	 * Get Last ID
+	 * Get Last Id
 	 *
 	 * Get the last ID gets the primary key that was returned after creating a row in a table.
 	 *
-	 * @return    int returns last ID
+	 * @return int Returns last ID
 	 */
 	public function getLastId(): int {
 		return $this->adaptor->getLastId();
@@ -86,7 +92,7 @@ class DB {
 	 *
 	 * Checks if a DB connection is active.
 	 *
-	 * @return    bool
+	 * @return bool
 	 */
 	public function isConnected(): bool {
 		return $this->adaptor->isConnected();

@@ -7,6 +7,8 @@ namespace Opencart\Install\Controller\Upgrade;
  */
 class Upgrade6 extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -82,7 +84,7 @@ class Upgrade6 extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$json['text'] = sprintf($this->language->get('text_progress'), 6, 6, 9);
+			$json['text'] = sprintf($this->language->get('text_patch'), 6, 6, 11);
 
 			$url = '';
 

@@ -3,10 +3,12 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Module;
 /**
  * Class Account
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Module
  */
 class Account extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
@@ -29,6 +31,7 @@ class Account extends \Opencart\System\Engine\Controller {
 		$data['transaction'] = $this->url->link('account/transaction', 'language=' . $this->config->get('config_language') . (isset($this->session->data['customer_token']) ? '&customer_token=' . $this->session->data['customer_token'] : ''));
 		$data['newsletter'] = $this->url->link('account/newsletter', 'language=' . $this->config->get('config_language') . (isset($this->session->data['customer_token']) ? '&customer_token=' . $this->session->data['customer_token'] : ''));
 		$data['subscription'] = $this->url->link('account/subscription', 'language=' . $this->config->get('config_language') . (isset($this->session->data['customer_token']) ? '&customer_token=' . $this->session->data['customer_token'] : ''));
+		$data['payment_method'] = $this->url->link('account/payment_method', 'language=' . $this->config->get('config_language') . (isset($this->session->data['customer_token']) ? '&customer_token=' . $this->session->data['customer_token'] : ''));
 
 		return $this->load->view('extension/opencart/module/account', $data);
 	}

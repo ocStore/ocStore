@@ -19,10 +19,15 @@
       <div class="card-body">
         <form id="form-zone" action="{{ save }}" method="post" data-oc-toggle="ajax">
           <div class="row mb-3 required">
-            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <label class="col-sm-2 col-form-label">{{ entry_name }}</label>
             <div class="col-sm-10">
-              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
-              <div id="error-name" class="invalid-feedback"></div>
+              {% for language in languages %}
+                <div class="input-group">
+                  <div class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></div>
+                  <input type="text" name="zone_description[{{ language.language_id }}][name]" value="{{ zone_description[language.language_id] ? zone_description[language.language_id].name }}" placeholder="{{ entry_name }}" id="input-name-{{ language.language_id }}" class="form-control"/>
+                </div>
+                <div id="error-name-{{ language.language_id }}" class="invalid-feedback"></div>
+              {% endfor %}
             </div>
           </div>
           <div class="row mb-3">
@@ -50,6 +55,7 @@
               </div>
             </div>
           </div>
+
           <input type="hidden" name="zone_id" value="{{ zone_id }}" id="input-zone-id"/>
         </form>
       </div>

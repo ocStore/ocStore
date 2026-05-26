@@ -3,10 +3,14 @@ namespace Opencart\Install\Controller\Install;
 /**
  * Class Promotion
  *
+ * Can be loaded using $this->load->controller('install/promotion');
+ *
  * @package Opencart\Install\Controller\Install
  */
 class Promotion extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
@@ -26,7 +30,9 @@ class Promotion extends \Opencart\System\Engine\Controller {
 
 		$output = curl_exec($curl);
 
-		if (curl_getinfo($curl, CURLINFO_HTTP_CODE) == 200) {
+		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+		if ($status == 200) {
 			$response = $output;
 		} else {
 			$response = '';

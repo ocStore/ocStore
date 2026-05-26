@@ -1,15 +1,27 @@
 <?php
 namespace Opencart\Catalog\Model\Setting;
 /**
- * Class StoreStore
+ * Class Store
+ *
+ * Can be called using $this->load->model('setting/store');
  *
  * @package Opencart\Catalog\Model\Setting
  */
 class Store extends \Opencart\System\Engine\Model {
 	/**
-	 * @param int $store_id
+	 * Get Store
 	 *
-	 * @return array
+	 * Get the record of the store record in the database.
+	 *
+	 * @param int $store_id primary key of the store record
+	 *
+	 * @return array<string, mixed> store record that has store ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_info = $this->model_setting_store->getStore($store_id);
 	 */
 	public function getStore(int $store_id): array {
 		$query = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "store` WHERE `store_id` = '" . (int)$store_id . "'");
@@ -18,9 +30,17 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * Get Store By Hostname
+	 *
 	 * @param string $url
 	 *
-	 * @return array
+	 * @return array<string, mixed>
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $store_info = $this->model_setting_store->getStoreByHostname($url);
 	 */
 	public function getStoreByHostname(string $url): array {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "store` WHERE REPLACE(`url`, 'www.', '') = '" . $this->db->escape($url) . "'");
@@ -29,35 +49,50 @@ class Store extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @return array
+	 * Get Stores
+	 *
+	 * Get the record of the store records in the database.
+	 *
+	 * @return array<int, array<string, mixed>> store records
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/store');
+	 *
+	 * $stores = $this->model_setting_store->getStores();
 	 */
 	public function getStores(): array {
 		$sql = "SELECT * FROM `" . DB_PREFIX . "store` ORDER BY `url`";
 
-		$store_data = $this->cache->get('store.' . md5($sql));
+		$key = md5($sql);
+
+		$store_data = $this->cache->get('store.' . $key);
 
 		if (!$store_data) {
 			$query = $this->db->query($sql);
 
 			$store_data = $query->rows;
 
-			$this->cache->set('store.' . md5($sql), $store_data);
+			$this->cache->set('store.' . $key, $store_data);
 		}
 
 		return $store_data;
 	}
 
 	/**
+	 * Create Store Instance
+	 *
 	 * @param int    $store_id
 	 * @param string $language
 	 * @param string $session_id
 	 *
-	 * @return \Opencart\System\Engine\Registry
 	 * @throws \Exception
+	 *
+	 * @return \Opencart\System\Engine\Registry
 	 */
-	public function createStoreInstance(int $store_id = 0, string $language = '', string $session_id = ''): object {
+	public function createStoreInstance(int $store_id = 0, string $language = '', string $session_id = ''): \Opencart\System\Engine\Registry {
 		// Autoloader
-		$this->autoloader->register('Opencart\Catalog', DIR_CATALOG);
+		$this->autoloader->register('Opencart\Catalog', DIR_APPLICATION);
 
 		// Registry
 		$registry = new \Opencart\System\Engine\Registry();
@@ -91,6 +126,9 @@ class Store extends \Opencart\System\Engine\Model {
 			}
 		}
 
+		// Factory
+		$registry->set('factory', new \Opencart\System\Engine\Factory($registry));
+
 		// Loader
 		$loader = new \Opencart\System\Engine\Loader($registry);
 		$registry->set('load', $loader);
@@ -117,40 +155,26 @@ class Store extends \Opencart\System\Engine\Model {
 
 		// Session
 		$session = new \Opencart\System\Library\Session($config->get('session_engine'), $registry);
+		$session->start();
 		$registry->set('session', $session);
-
-		// Start session
-		$session->start($session_id);
 
 		// Template
 		$template = new \Opencart\System\Library\Template($config->get('template_engine'));
 		$template->addPath(DIR_TEMPLATE);
 		$registry->set('template', $template);
 
+		// Adding language var to the GET variable so there is a default language
+		if ($language) {
+			$request->get['language'] = $language;
+		} else {
+			$request->get['language'] = $config->get('language_code');
+		}
+
 		// Language
-		$this->load->model('localisation/language');
-
-		$language_info = $this->model_localisation_language->getLanguageByCode($language);
-
-		if ($language_info) {
-			$config->set('config_language_id', $language_info['language_id']);
-			$config->set('config_language', $language_info['code']);
-		} else {
-			$config->set('config_language_id', $this->config->get('config_language_id'));
-			$config->set('config_language', $this->config->get('config_language'));
-		}
-
-		$language = new \Opencart\System\Library\Language($this->config->get('config_language'));
-		$registry->set('language', $language);
-
-		if (!$language_info['extension']) {
-			$language->addPath(DIR_LANGUAGE);
-		} else {
-			$language->addPath(DIR_EXTENSION . $language_info['extension'] . '/catalog/language/');
-		}
-
-		// Load default language file
+		$language = new \Opencart\System\Library\Language($request->get['language']);
+		$language->addPath(DIR_APPLICATION . 'language/');
 		$language->load('default');
+		$registry->set('language', $language);
 
 		// Url
 		$registry->set('url', new \Opencart\System\Library\Url($config->get('site_url')));

@@ -31,7 +31,7 @@ a {
     width: 100%;
     position: relative;
     background: #f6f6f6;
-    overflow: hidden;
+    overflow: clip;
 }
 
 .container-fluid {
@@ -40,11 +40,68 @@ a {
 
 #alert {
     z-index: 9999;
-    pointer-events: all;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    width: 400px;
+    margin-left: -200px;
+}
+
+@media (min-width: 960px) {
+    #alert {
+        width: 600px;
+        margin-left: -300px;
+    }
+}
+
+@media (min-width: 1140px) {
+    #alert {
+        width: 600px;
+        margin-left: -300px;
+    }
+}
+
+@media (min-width: 1320px) {
+    #alert {
+        width: 600px;
+        margin-left: -300px;
+    }
 }
 
 #alert .alert {
     margin-bottom: 15px;
+}
+
+#alert .alert-primary {
+    box-shadow: 0 0 0 5px rgb(var(--bs-primary-rgb), 0.1);
+}
+
+#alert .alert-secondary {
+    box-shadow: 0 0 0 5px rgb(var(--bs-secondary-rgb), 0.1);
+}
+
+#alert .alert-success {
+    box-shadow: 0 0 0 5px rgb(var(--bs-success-rgb), 0.1);
+}
+
+#alert .alert-warning {
+    box-shadow: 0 0 0 5px rgb(var(--bs-warning-rgb), 0.1);
+}
+
+#alert .alert-danger {
+    box-shadow: 0 0 0 5px rgb(var(--bs-danger-rgb), 0.1);
+}
+
+#alert .alert-info {
+    box-shadow: 0 0 0 5px rgb(var(--bs-info-rgb), 0.1);
+}
+
+#alert .alert-light {
+    box-shadow: 0 0 0 5px rgb(var(--bs-light-rgb), 0.1);
+}
+
+#alert .alert-dark {
+    box-shadow: 0 0 0 5px rgb(var(--bs-dark-rgb), 0.1);
 }
 
 #header {
@@ -171,16 +228,6 @@ a {
     padding-top: 60px;
 }
 
-#column-left::-webkit-scrollbar {
-    width: 10px;
-    background-color: rgba(200, 200, 200, 0);
-}
-
-#column-left::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(128, 139, 156, 0.2);
-}
-
 #content {
     padding-bottom: 40px;
 }
@@ -222,7 +269,7 @@ a {
 /* Navigation */
 #navigation {
     text-transform: uppercase;
-    padding: 15px 15px 15px 15px;
+    padding: 22px 15px 15px 15px;
     color: #FFFFFF;
     background: #19222E;
     display: block;
@@ -448,14 +495,7 @@ a {
     border-bottom: 1px solid #ededed;
 }
 
-.form-control:hover {
-    border: 1px solid #b9b9b9;
-    border-top-color: #a0a0a0;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
-}
-
-div.required .col-form-label:not(span):before, td.required:before {
+div.required .col-form-label:not(span):before, div.required .form-label:before, td.required:before {
     content: '* ';
     color: #F00;
     font-weight: bold;
@@ -471,14 +511,6 @@ div.required .col-form-label:not(span):before, td.required:before {
     content: "\f059";
     color: #1E91CF;
     margin-left: 4px;
-}
-
-.table thead td {
-    font-weight: bold;
-}
-
-.table thead > tr > td, .table tbody > tr > td {
-    vertical-align: middle;
 }
 
 .table a.asc:after {
@@ -505,10 +537,6 @@ div.required .col-form-label:not(span):before, td.required:before {
 .card-header > i {
     margin-right: 5px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-.card-body {
-
 }
 
 .bootstrap-datetimepicker-widget {
@@ -852,6 +880,7 @@ div.required .col-form-label:not(span):before, td.required:before {
 
 td {
     position: relative;
+	vertical-align: middle;
 }
 
 

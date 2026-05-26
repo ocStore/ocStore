@@ -3,17 +3,22 @@ namespace Opencart\Catalog\Controller\Common;
 /**
  * Class Cookie
  *
+ * Can be called from $this->load->controller('common/cookie');
+ *
  * @package Opencart\Catalog\Controller\Common
  */
 class Cookie extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
 		if ($this->config->get('config_cookie_id') && !isset($this->request->cookie['policy'])) {
+			// Information
 			$this->load->model('catalog/information');
 
-			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_cookie_id'));
+			$information_info = $this->model_catalog_information->getInformation((int)$this->config->get('config_cookie_id'));
 
 			if ($information_info) {
 				$this->load->language('common/cookie');
@@ -31,23 +36,26 @@ class Cookie extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Confirm
+	 *
 	 * @return void
 	 */
 	public function confirm(): void {
 		$json = [];
 
+		if (isset($this->request->get['agree'])) {
+			$agree = $this->request->get['agree'];
+		} else {
+			$agree = '0';
+		}
+
 		if ($this->config->get('config_cookie_id') && !isset($this->request->cookie['policy'])) {
 			$this->load->language('common/cookie');
-
-			if (isset($this->request->get['agree'])) {
-				$agree = (int)$this->request->get['agree'];
-			} else {
-				$agree = 0;
-			}
 
 			$option = [
 				'expires'  => time() + 60 * 60 * 24 * 365,
 				'path'     => $this->config->get('session_path'),
+				'secure'   => $this->request->server['HTTPS'],
 				'SameSite' => $this->config->get('config_session_samesite')
 			];
 

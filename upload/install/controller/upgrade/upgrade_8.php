@@ -7,6 +7,8 @@ namespace Opencart\Install\Controller\Upgrade;
  */
 class Upgrade8 extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -68,7 +70,7 @@ class Upgrade8 extends \Opencart\System\Engine\Controller {
 					$customer_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "customer_affiliate` WHERE `customer_id` = '" . (int)$customer_id . "'");
 
 					if (!$customer_query->num_rows) {
-						$this->db->query("INSERT INTO `" . DB_PREFIX . "customer_affiliate` SET `customer_id` = '" . (int)$customer_id . "', `company` = '" . $this->db->escape($affiliate['company']) . "', `tracking` = '" . $this->db->escape($affiliate['code']) . "', `commission` = '" . (float)$affiliate['commission'] . "', `tax` = '" . $this->db->escape($affiliate['tax']) . "', `payment_method` = '" . $this->db->escape($affiliate['payment_method']) . "', `cheque` = '" . $this->db->escape($affiliate['cheque']) . "', `paypal` = '" . $this->db->escape($affiliate['paypal']) . "', `bank_name` = '" . $this->db->escape($affiliate['bank_name']) . "', `bank_branch_number` = '" . $this->db->escape($affiliate['bank_branch_number']) . "', `bank_account_name` = '" . $this->db->escape($affiliate['bank_account_name']) . "', `bank_account_number` = '" . $this->db->escape($affiliate['bank_account_number']) . "', `status` = '" . (int)(isset($affiliate['approved']) ? $affiliate['approved'] : $affiliate['status']) . "', `date_added` = '" . $this->db->escape($affiliate['date_added']) . "'");
+						$this->db->query("INSERT INTO `" . DB_PREFIX . "customer_affiliate` SET `customer_id` = '" . (int)$customer_id . "', `company` = '" . $this->db->escape($affiliate['company']) . "', `tracking` = '" . $this->db->escape($affiliate['code']) . "', `commission` = '" . (float)$affiliate['commission'] . "', `tax` = '" . $this->db->escape($affiliate['tax']) . "', `payment_method` = '" . $this->db->escape($affiliate['payment_method']) . "', `cheque` = '" . $this->db->escape($affiliate['cheque']) . "', `paypal` = '" . $this->db->escape($affiliate['paypal']) . "', `bank_name` = '" . $this->db->escape($affiliate['bank_name']) . "', `bank_branch_number` = '" . $this->db->escape($affiliate['bank_branch_number']) . "', `bank_account_name` = '" . $this->db->escape($affiliate['bank_account_name']) . "', `bank_account_number` = '" . $this->db->escape($affiliate['bank_account_number']) . "', `status` = '" . (int)($affiliate['approved'] ?? $affiliate['status']) . "', `date_added` = '" . $this->db->escape($affiliate['date_added']) . "'");
 					}
 
 					$affiliate_transaction_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "affiliate_transaction` WHERE `affiliate_id` = '" . (int)$affiliate['affiliate_id'] . "'");
@@ -98,7 +100,7 @@ class Upgrade8 extends \Opencart\System\Engine\Controller {
 			if (!$query->num_rows) {
 				$this->db->query("ALTER TABLE `" . DB_PREFIX . "country` ADD COLUMN `address_format_id` int(11) NOT NULL AFTER `address_format`");
 				$this->db->query("ALTER TABLE `" . DB_PREFIX . "country` DROP COLUMN `address_format`");
-			}		
+			}
 
 			$query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = '" . DB_PREFIX . "address_format'");
 
@@ -119,7 +121,7 @@ class Upgrade8 extends \Opencart\System\Engine\Controller {
 			if ($query->num_rows) {
 				$this->db->query("UPDATE `" . DB_PREFIX . "api` SET `name` = `username` WHERE `username` IS NULL or `username` = ''");
 			}
-			
+
 			// Cart - Subscriptions
 			$query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = '" . DB_PREFIX . "cart' AND COLUMN_NAME = 'subscription_plan_id'");
 
@@ -129,13 +131,13 @@ class Upgrade8 extends \Opencart\System\Engine\Controller {
 				$this->db->query("ALTER TABLE `" . DB_PREFIX . "cart` DROP COLUMN `recurring_id`");
 				$this->db->query("ALTER TABLE `" . DB_PREFIX . "cart` ADD COLUMN `subscription_plan_id` int(11) NOT NULL AFTER `product_id`");
 			}
-			
-			// Addresses
-            $query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = '" . DB_PREFIX . "address' AND COLUMN_NAME = 'default'");
 
-            if (!$query->num_rows) {
-                $this->db->query("ALTER TABLE `" . DB_PREFIX . "address` ADD COLUMN `default` tinyint(1) NOT NULL AFTER `custom_field`");
-            }
+			// Addresses
+			$query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = '" . DB_PREFIX . "address' AND COLUMN_NAME = 'default'");
+
+			if (!$query->num_rows) {
+				$this->db->query("ALTER TABLE `" . DB_PREFIX . "address` ADD COLUMN `default` tinyint(1) NOT NULL AFTER `custom_field`");
+			}
 
 			// Drop Fields
 			$remove = [];
@@ -177,12 +179,17 @@ class Upgrade8 extends \Opencart\System\Engine\Controller {
 
 			$remove[] = [
 				'table' => 'customer',
-				'field' => 'salt'
+				'field' => 'approved'
 			];
 
 			$remove[] = [
 				'table' => 'customer',
-				'field' => 'approved'
+				'field' => 'code'
+			];
+
+			$remove[] = [
+				'table' => 'customer',
+				'field' => 'token'
 			];
 
 			$remove[] = [
@@ -216,11 +223,6 @@ class Upgrade8 extends \Opencart\System\Engine\Controller {
 			];
 
 			$remove[] = [
-				'table' => 'user',
-				'field' => 'salt'
-			];
-
-			$remove[] = [
 				'table' => 'user_login',
 				'field' => 'token'
 			];
@@ -235,12 +237,10 @@ class Upgrade8 extends \Opencart\System\Engine\Controller {
 				'field' => 'status'
 			];
 
-			foreach ($remove as $result) {
-				$query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = '" . DB_PREFIX . $result['table'] . "' AND COLUMN_NAME = '" . $result['field'] . "'");
+			$this->load->model('upgrade/upgrade');
 
-				if ($query->num_rows) {
-					$this->db->query("ALTER TABLE `" . DB_PREFIX . $result['table'] . "` DROP `" . $result['field'] . "`");
-				}
+			foreach ($remove as $result) {
+				$this->model_upgrade_upgrade->dropField($result['table'], $result['field']);
 			}
 
 			// Drop Tables
@@ -253,25 +253,20 @@ class Upgrade8 extends \Opencart\System\Engine\Controller {
 				'customer_ban_ip',
 				'customer_field',
 				'customer_payment',
-				'modification',
 				'order_field',
 				'order_custom_field',
 				'url_alias'
 			];
 
 			foreach ($remove as $table) {
-				$query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = '" . DB_PREFIX . $table . "'");
-
-				if ($query->num_rows) {
-					$this->db->query("DROP TABLE `" . DB_PREFIX . $table . "`");
-				}
+				$this->model_upgrade_upgrade->dropTable($table);
 			}
 		} catch (\ErrorException $exception) {
 			$json['error'] = sprintf($this->language->get('error_exception'), $exception->getCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine());
 		}
 
 		if (!$json) {
-			$json['text'] = sprintf($this->language->get('text_progress'), 8, 8, 9);
+			$json['text'] = sprintf($this->language->get('text_patch'), 8, 8, 11);
 
 			$url = '';
 

@@ -18,6 +18,8 @@ namespace Opencart\Admin\Controller\Tool;
  */
 class Upgrade extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -49,9 +51,15 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 
 		$response = curl_exec($curl);
 
+		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
 		curl_close($curl);
 
-		$response_info = json_decode($response, true);
+		if ($status == 200) {
+			$response_info = json_decode($response, true);
+		} else {
+			$response_info = [];
+		}
 
 		if ($response_info) {
 			$data['latest_version'] = $response_info['version'];
@@ -80,6 +88,8 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Download
+	 *
 	 * @return void
 	 */
 	public function download(): void {
@@ -97,36 +107,38 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
-		if (version_compare($version, VERSION, '<')) {
+		if (version_compare($version, VERSION, '<') || !preg_match('/^(\d+\.\d+\.\d+\.\d+)$/', $version)) {
 			$json['error'] = $this->language->get('error_version');
 		}
 
-		$file = DIR_DOWNLOAD . 'opencart-' . $version . '.zip';
+		if (!$json) {
+			$file = DIR_DOWNLOAD . 'opencart-' . $version . '.zip';
 
-		$handle = fopen($file, 'w');
+			$handle = fopen($file, 'w');
 
-		set_time_limit(0);
+			set_time_limit(0);
 
-		$curl = curl_init('https://github.com/opencart/opencart/archive/' . $version . '.zip');
+			$curl = curl_init('https://github.com/opencart/opencart/archive/' . $version . '.zip');
 
-		curl_setopt($curl, CURLOPT_USERAGENT, 'OpenCart ' . VERSION);
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-		curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
-		curl_setopt($curl, CURLOPT_TIMEOUT, 300);
-		curl_setopt($curl, CURLOPT_FILE, $handle);
+			curl_setopt($curl, CURLOPT_USERAGENT, 'OpenCart ' . VERSION);
+			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+			curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
+			curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 300);
+			curl_setopt($curl, CURLOPT_FILE, $handle);
 
-		curl_exec($curl);
+			curl_exec($curl);
 
-		fclose($handle);
+			fclose($handle);
 
-		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+			$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-		if ($status != 200) {
-			$json['error'] = $this->language->get('error_download');
+			if ($status != 200) {
+				$json['error'] = $this->language->get('error_download');
+			}
+
+			curl_close($curl);
 		}
-
-		curl_close($curl);
 
 		if (!$json) {
 			$json['text'] = $this->language->get('text_install');
@@ -139,6 +151,8 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Install
+	 *
 	 * @return void
 	 */
 	public function install(): void {
@@ -156,10 +170,14 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
-		$file = DIR_DOWNLOAD . 'opencart-' . $version . '.zip';
+		if (version_compare($version, VERSION, '>') && preg_match('/^(\d+\.\d+\.\d+\.\d+)$/', $version)) {
+			$file = DIR_DOWNLOAD . 'opencart-' . $version . '.zip';
 
-		if (!is_file($file)) {
-			$json['error'] = $this->language->get('error_file');
+			if (!is_file($file)) {
+				$json['error'] = $this->language->get('error_file');
+			}
+		} else {
+			$json['error'] = $this->language->get('error_version');
 		}
 
 		if (!$json) {
@@ -202,7 +220,7 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 									unlink(DIR_OPENCART . $destination);
 								}
 
-								if (!copy('zip://' . $file . '#' . $source, DIR_OPENCART . $destination)) {
+								if (file_put_contents(DIR_OPENCART . $destination, $zip->getFromIndex($i)) === false) {
 									$json['error'] = sprintf($this->language->get('error_copy'), $source, $destination);
 								}
 							}

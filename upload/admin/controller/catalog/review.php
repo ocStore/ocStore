@@ -3,16 +3,18 @@ namespace Opencart\Admin\Controller\Catalog;
 /**
  * Class Review
  *
+ * Can be loaded using $this->load->controller('catalog/review');
+ *
  * @package Opencart\Admin\Controller\Catalog
  */
 class Review extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
 		$this->load->language('catalog/review');
-
-		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (isset($this->request->get['filter_product'])) {
 			$filter_product = $this->request->get['filter_product'];
@@ -43,6 +45,8 @@ class Review extends \Opencart\System\Engine\Controller {
 		} else {
 			$filter_date_to = '';
 		}
+
+		$this->document->setTitle($this->language->get('heading_title'));
 
 		$url = '';
 
@@ -95,6 +99,12 @@ class Review extends \Opencart\System\Engine\Controller {
 
 		$data['list'] = $this->getList();
 
+		$data['filter_product'] = $filter_product;
+		$data['filter_author'] = $filter_author;
+		$data['filter_status'] = $filter_status;
+		$data['filter_date_from'] = $filter_date_from;
+		$data['filter_date_to'] = $filter_date_to;
+
 		$data['user_token'] = $this->session->data['user_token'];
 
 		$data['header'] = $this->load->controller('common/header');
@@ -105,6 +115,8 @@ class Review extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -114,9 +126,11 @@ class Review extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
-	protected function getList(): string {
+	public function getList(): string {
 		if (isset($this->request->get['filter_product'])) {
 			$filter_product = $this->request->get['filter_product'];
 		} else {
@@ -201,6 +215,7 @@ class Review extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('catalog/review.list', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		// Review
 		$data['reviews'] = [];
 
 		$filter_data = [
@@ -217,20 +232,13 @@ class Review extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('catalog/review');
 
-		$review_total = $this->model_catalog_review->getTotalReviews($filter_data);
-
 		$results = $this->model_catalog_review->getReviews($filter_data);
 
 		foreach ($results as $result) {
 			$data['reviews'][] = [
-				'review_id'  => $result['review_id'],
-				'name'       => $result['name'],
-				'author'     => $result['author'],
-				'rating'     => $result['rating'],
-				'status'     => $result['status'],
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
 				'edit'       => $this->url->link('catalog/review.form', 'user_token=' . $this->session->data['user_token'] . '&review_id=' . $result['review_id'] . $url)
-			];
+			] + $result;
 		}
 
 		$url = '';
@@ -296,6 +304,8 @@ class Review extends \Opencart\System\Engine\Controller {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 
+		$review_total = $this->model_catalog_review->getTotalReviews($filter_data);
+
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $review_total,
 			'page'  => $page,
@@ -318,6 +328,8 @@ class Review extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Form
+	 *
 	 * @return void
 	 */
 	public function form(): void {
@@ -379,11 +391,11 @@ class Review extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['review_id'])) {
 			$this->load->model('catalog/review');
 
-			$review_info = $this->model_catalog_review->getReview($this->request->get['review_id']);
+			$review_info = $this->model_catalog_review->getReview((int)$this->request->get['review_id']);
 		}
 
-		if (isset($this->request->get['review_id'])) {
-			$data['review_id'] = (int)$this->request->get['review_id'];
+		if (!empty($review_info)) {
+			$data['review_id'] = $review_info['review_id'];
 		} else {
 			$data['review_id'] = 0;
 		}
@@ -419,9 +431,9 @@ class Review extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!empty($review_info)) {
-			$data['date_added'] = ($review_info['date_added'] != '0000-00-00 00:00' ? $review_info['date_added'] : date('Y-m-d'));
+			$data['date_added'] = ($review_info['date_added'] != '0000-00-00 00:00:00' ? $review_info['date_added'] : date('Y-m-d H:i:s'));
 		} else {
-			$data['date_added'] = date('Y-m-d');
+			$data['date_added'] = date('Y-m-d H:i:s');
 		}
 
 		if (!empty($review_info)) {
@@ -440,6 +452,8 @@ class Review extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -451,19 +465,30 @@ class Review extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
-		if ((oc_strlen($this->request->post['author']) < 3) || (oc_strlen($this->request->post['author']) > 64)) {
+		$required = [
+			'review_id'  => 0,
+			'author'     => '',
+			'product_id' => 0,
+			'text'       => '',
+			'rating'     => 0,
+			'status'     => 0
+		];
+
+		$post_info = $this->request->post + $required;
+
+		if (!oc_validate_length($post_info['author'], 3, 64)) {
 			$json['error']['author'] = $this->language->get('error_author');
 		}
 
-		if (!$this->request->post['product_id']) {
+		if (!$post_info['product_id']) {
 			$json['error']['product'] = $this->language->get('error_product');
 		}
 
-		if (oc_strlen($this->request->post['text']) < 1) {
+		if (oc_strlen($post_info['text']) < 1) {
 			$json['error']['text'] = $this->language->get('error_text');
 		}
 
-		if (!isset($this->request->post['rating']) || $this->request->post['rating'] < 0 || $this->request->post['rating'] > 5) {
+		if (!isset($post_info['rating']) || $post_info['rating'] < 0 || $post_info['rating'] > 5) {
 			$json['error']['rating'] = $this->language->get('error_rating');
 		}
 
@@ -474,10 +499,10 @@ class Review extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			$this->load->model('catalog/review');
 
-			if (!$this->request->post['review_id']) {
-				$json['review_id'] = $this->model_catalog_review->addReview($this->request->post);
+			if (!$post_info['review_id']) {
+				$json['review_id'] = $this->model_catalog_review->addReview($post_info);
 			} else {
-				$this->model_catalog_review->editReview($this->request->post['review_id'], $this->request->post);
+				$this->model_catalog_review->editReview($post_info['review_id'], $post_info);
 			}
 
 			$json['success'] = $this->language->get('text_success');
@@ -488,6 +513,8 @@ class Review extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {
@@ -496,7 +523,7 @@ class Review extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['selected'])) {
-			$selected = $this->request->post['selected'];
+			$selected = (array)$this->request->post['selected'];
 		} else {
 			$selected = [];
 		}
@@ -520,6 +547,8 @@ class Review extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Sync
+	 *
 	 * @return void
 	 */
 	public function sync(): void {
@@ -538,14 +567,13 @@ class Review extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Product
 			$this->load->model('catalog/product');
+
+			// Review
 			$this->load->model('catalog/review');
 
-			$total = $this->model_catalog_product->getTotalProducts();
 			$limit = 10;
-
-			$start = ($page - 1) * $limit;
-			$end = $start > ($total - $limit) ? $total : ($start + $limit);
 
 			$product_data = [
 				'start' => ($page - 1) * $limit,
@@ -558,12 +586,17 @@ class Review extends \Opencart\System\Engine\Controller {
 				$this->model_catalog_product->editRating($result['product_id'], $this->model_catalog_review->getRating($result['product_id']));
 			}
 
-			if ($total && $end < $total) {
-				$json['text'] = sprintf($this->language->get('text_next'), $end, $total);
+			$product_total = $this->model_catalog_product->getTotalProducts();
+
+			$start = ($page - 1) * $limit;
+			$end = $start > ($product_total - $limit) ? $product_total : ($start + $limit);
+
+			if ($end < $product_total) {
+				$json['text'] = sprintf($this->language->get('text_next'), $start, $end, $product_total);
 
 				$json['next'] = $this->url->link('catalog/review.sync', 'user_token=' . $this->session->data['user_token'] . '&page=' . ($page + 1), true);
 			} else {
-				$json['success'] = sprintf($this->language->get('text_next'), $end, $total);
+				$json['success'] = $this->language->get('text_success');
 
 				$json['next'] = '';
 			}

@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Report;
  */
 class Online extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -27,7 +29,7 @@ class Online extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['page'])) {
 			$url .= '&page=' . $this->request->get['page'];
 		}
-			
+
 		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = [
@@ -47,11 +49,13 @@ class Online extends \Opencart\System\Engine\Controller {
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
-		
+
 		$this->response->setOutput($this->load->view('report/online', $data));
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -61,9 +65,11 @@ class Online extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
-	protected function getList(): string {
+	public function getList(): string {
 		if (isset($this->request->get['filter_customer'])) {
 			$filter_customer = $this->request->get['filter_customer'];
 		} else {
@@ -82,6 +88,7 @@ class Online extends \Opencart\System\Engine\Controller {
 			$page = 1;
 		}
 
+		// Customer
 		$data['customers'] = [];
 
 		$filter_data = [
@@ -91,10 +98,10 @@ class Online extends \Opencart\System\Engine\Controller {
 			'limit'           => $this->config->get('config_pagination_admin')
 		];
 
+		// Online
 		$this->load->model('report/online');
-		$this->load->model('customer/customer');
 
-		$customer_total = $this->model_report_online->getTotalOnline($filter_data);
+		$this->load->model('customer/customer');
 
 		$results = $this->model_report_online->getOnline($filter_data);
 
@@ -108,14 +115,10 @@ class Online extends \Opencart\System\Engine\Controller {
 			}
 
 			$data['customers'][] = [
-				'customer_id' => $result['customer_id'],
-				'ip'          => $result['ip'],
-				'customer'    => $customer,
-				'url'         => $result['url'],
-				'referer'     => $result['referer'],
-				'date_added'  => date($this->language->get('datetime_format'), strtotime($result['date_added'])),
-				'edit'        => $this->url->link('customer/customer.form', 'user_token=' . $this->session->data['user_token'] . '&customer_id=' . $result['customer_id'])
-			];
+				'customer'   => $customer,
+				'date_added' => date($this->language->get('datetime_format'), strtotime($result['date_added'])),
+				'edit'       => $this->url->link('customer/customer.form', 'user_token=' . $this->session->data['user_token'] . '&customer_id=' . $result['customer_id'])
+			] + $result;
 		}
 
 		$url = '';
@@ -127,6 +130,8 @@ class Online extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['filter_ip'])) {
 			$url .= '&filter_ip=' . $this->request->get['filter_ip'];
 		}
+
+		$customer_total = $this->model_report_online->getTotalOnline($filter_data);
 
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $customer_total,

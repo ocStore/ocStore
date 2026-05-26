@@ -1,24 +1,32 @@
 <?php
 /**
  * @package     OpenCart
+ *
  * @author      Daniel Kerr
  * @copyright   Copyright (c) 2005 - 2017, OpenCart, Ltd. (https://www.opencart.com/)
  * @license     https://opensource.org/licenses/GPL-3.0
- * @link        https://www.opencart.com
+ *
+ * @see        https://www.opencart.com
  */
 namespace Opencart\System\Engine;
 /**
  * Class Action
+ *
+ * Allows the stored action to be passed around and be executed by the framework and events.
+ *
+ * @package Opencart\System\Engine
  */
 class Action {
 	/**
-	 * @var string|array|string[]|null
+	 * @var string
 	 */
 	private string $route;
+
 	/**
 	 * @var string
 	 */
-	private string $class;
+	private string $controller;
+
 	/**
 	 * @var string
 	 */
@@ -32,56 +40,62 @@ class Action {
 	public function __construct(string $route) {
 		$this->route = preg_replace('/[^a-zA-Z0-9_|\/\.]/', '', $route);
 
-		$pos = strrpos($this->route, '.');
+		$pos = strrpos($route, '.');
 
-		if ($pos === false) {
-			$this->class = 'Controller\\' . str_replace(['_', '/'], ['', '\\'], ucwords($this->route, '_/'));
-			$this->method = 'index';
+		if ($pos !== false) {
+			$this->controller = substr($route, 0, $pos);
+			$this->method = substr($route, $pos + 1);
 		} else {
-			$this->class = 'Controller\\' . str_replace(['_', '/'], ['', '\\'], ucwords(substr($this->route, 0, $pos), '_/'));
-			$this->method = substr($this->route, $pos + 1);
+			$this->controller = $route;
+			$this->method = 'index';
 		}
 	}
 
 	/**
-	 * getId
+	 * Get Id
 	 *
-	 * @return    string
-	 *
+	 * @return string
 	 */
 	public function getId(): string {
 		return $this->route;
 	}
 
 	/**
-	 *
 	 * Execute
 	 *
-	 * @param object $registry
-	 * @param array  $args
+	 * @param \Opencart\System\Engine\Registry $registry
+	 * @param array<mixed>                     $args
 	 *
-	 * @return    mixed
+	 * @return mixed
 	 */
-	public function execute(\Opencart\System\Engine\Registry $registry, array &$args = []): mixed {
+	public function execute(\Opencart\System\Engine\Registry $registry, array &$args = []) {
 		// Stop any magical methods being called
 		if (substr($this->method, 0, 2) == '__') {
 			return new \Exception('Error: Calls to magic methods are not allowed!');
 		}
 
-		// Get the current namespace being used by the config
-		$class = 'Opencart\\' . $registry->get('config')->get('application') . '\\' . $this->class;
+		// Create a new key to store the model object
+		$key = 'fallback_controller_' . str_replace('/', '_', $this->controller);
 
-		// Initialize the class
-		if (class_exists($class)) {
-			$controller = new $class($registry);
+		if (!$registry->has($key)) {
+			$object = $registry->get('factory')->controller($this->controller);
 		} else {
-			return new \Exception('Error: Could not call route ' . $this->route . '!');
+			$object = $registry->get($key);
 		}
 
-		if (is_callable([$controller, $this->method])) {
-			return call_user_func_array([$controller, $this->method], $args);
+		if ($object instanceof \Opencart\System\Engine\Controller) {
+			$registry->set($key, $object);
 		} else {
-			return new \Exception('Error: Could not call route ' . $this->route . '!');
+			// If action cannot be executed, we return an error object.
+			return new \Exception('Error: Could not load controller ' . $this->route . '!');
+		}
+
+		$callable = [$object, $this->method];
+
+		if (is_callable($callable)) {
+			return $callable(...$args);
+		} else {
+			return new \Exception('Error: Could not call controller ' . $this->route . '!');
 		}
 	}
 }

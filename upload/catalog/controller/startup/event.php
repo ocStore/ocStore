@@ -7,14 +7,16 @@ namespace Opencart\Catalog\Controller\Startup;
  */
 class Event extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
 		// Add events from the DB
 		$this->load->model('setting/event');
-		
+
 		$results = $this->model_setting_event->getEvents();
-		
+
 		foreach ($results as $result) {
 			$part = explode('/', $result['trigger']);
 

@@ -35,25 +35,38 @@
   </div>
 </div>
 <script type="text/javascript"><!--
-$('#cron').on('click', 'thead a, .pagination a', function (e) {
+$('#cron').on('click', 'thead a, .pagination a', function(e) {
     e.preventDefault();
 
     $('#cron').load(this.href);
 });
 
-$('#cron').on('click', '.btn-success, .btn-warning, .btn-danger', function () {
+$('#button-copy').on('click', function() {
+    var copyText = document.getElementById('input-cron');
+
+    // Select the text field
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText.value);
+});
+
+$('#cron').on('click', '.btn-success, .btn-warning, .btn-danger', function() {
     var element = this;
 
     $.ajax({
         url: $(element).val(),
         dataType: 'json',
-        beforeSend: function () {
+        beforeSend: function() {
             $(element).button('loading');
         },
-        complete: function () {
+        complete: function() {
             $(element).button('reset');
         },
-        success: function (json) {
+        success: function(json) {
+            $('.alert-dismissible').remove();
+
             if (json['error']) {
                 $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
             }
@@ -64,40 +77,10 @@ $('#cron').on('click', '.btn-success, .btn-warning, .btn-danger', function () {
                 $('#cron').load($('#form-cron').attr('data-oc-load'));
             }
         },
-        error: function (xhr, ajaxOptions, thrownError) {
+        error: function(xhr, ajaxOptions, thrownError) {
             console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
         }
     });
-});
-
-$('#cron').on('click', '.btn-info', function () {
-    var element = this;
-
-    $('#modal-cron').remove();
-
-    html = '<div id="modal-cron" class="modal">';
-    html += '  <div class="modal-dialog">';
-    html += '    <div class="modal-content">';
-    html += '      <div class="modal-header">';
-    html += '        <h5 class="modal-title">{{ text_info|escape('js') }}</h5>';
-    html += '        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>';
-    html += '      </div>';
-    html += '      <div class="modal-body">';
-    html += '        <div class="mb-3">';
-    html += '          <label for="input-description" class="form-label">{{ entry_description|escape('js') }}</label>';
-    html += '          <textarea placeholder="{{ entry_description|escape('js') }}" id="input-description" rows="5" class="form-control" disabled>' + $(element).attr('data-oc-description') + '</textarea>';
-    html += '        </div>';
-    html += '      </div>';
-    html += '      </div>';
-    html += '    </div>';
-    html += '  </div>';
-    html += '</div>';
-
-    $('body').append(html);
-
-    var modal = new bootstrap.Modal(document.querySelector('#modal-cron'));
-
-    modal.show();
 });
 //--></script>
 {{ footer }}

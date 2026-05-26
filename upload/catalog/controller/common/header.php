@@ -3,10 +3,14 @@ namespace Opencart\Catalog\Controller\Common;
 /**
  * Class Header
  *
+ * Can be called from $this->load->controller('common/header');
+ *
  * @package Opencart\Catalog\Controller\Common
  */
 class Header extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
@@ -14,6 +18,7 @@ class Header extends \Opencart\System\Engine\Controller {
 		$data['analytics'] = [];
 
 		if (!$this->config->get('config_cookie_id') || (isset($this->request->cookie['policy']) && $this->request->cookie['policy'])) {
+			// Extension
 			$this->load->model('setting/extension');
 
 			$analytics = $this->model_setting_extension->getExtensionsByType('analytics');
@@ -33,12 +38,12 @@ class Header extends \Opencart\System\Engine\Controller {
 		$data['description'] = $this->document->getDescription();
 		$data['keywords'] = $this->document->getKeywords();
 
-		// Hard coding css so they can be replaced via the event's system.
+		// Hard coding css, so they can be replaced via the event's system.
 		$data['bootstrap'] = 'catalog/view/stylesheet/bootstrap.css';
 		$data['icons'] = 'catalog/view/stylesheet/fonts/fontawesome/css/all.min.css';
 		$data['stylesheet'] = 'catalog/view/stylesheet/stylesheet.css';
 
-		// Hard coding scripts so they can be replaced via the event's system.
+		// Hard coding scripts, so they can be replaced via the event's system.
 		$data['jquery'] = 'catalog/view/javascript/jquery/jquery-3.7.1.min.js';
 
 		$data['links'] = $this->document->getLinks();
@@ -46,6 +51,13 @@ class Header extends \Opencart\System\Engine\Controller {
 		$data['scripts'] = $this->document->getScripts('header');
 
 		$data['name'] = $this->config->get('config_name');
+
+		// Fav icon
+		if (is_file(DIR_IMAGE . $this->config->get('config_icon'))) {
+			$data['icon'] = $this->config->get('config_url') . 'image/' . $this->config->get('config_icon');
+		} else {
+			$data['icon'] = '';
+		}
 
 		if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
 			$data['logo'] = $this->config->get('config_url') . 'image/' . $this->config->get('config_logo');
@@ -59,7 +71,7 @@ class Header extends \Opencart\System\Engine\Controller {
 		if ($this->customer->isLogged()) {
 			$this->load->model('account/wishlist');
 
-			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), $this->model_account_wishlist->getTotalWishlist());
+			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), $this->model_account_wishlist->getTotalWishlist($this->customer->getId()));
 		} else {
 			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
 		}

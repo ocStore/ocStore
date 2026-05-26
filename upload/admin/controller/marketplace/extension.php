@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Marketplace;
  */
 class Extension extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -34,6 +36,7 @@ class Extension extends \Opencart\System\Engine\Controller {
 
 		$data['categories'] = [];
 
+		// Extension
 		$this->load->model('setting/extension');
 
 		$files = glob(DIR_APPLICATION . 'controller/extension/*.php');
@@ -44,11 +47,9 @@ class Extension extends \Opencart\System\Engine\Controller {
 			$this->load->language('extension/' . $extension, $extension);
 
 			if ($this->user->hasPermission('access', 'extension/' . $extension)) {
-				$extensions = $this->model_setting_extension->getPaths('%/admin/controller/' . $extension . '/%.php');
-
 				$data['categories'][] = [
 					'code' => $extension,
-					'text' => $this->language->get($extension . '_heading_title') . ' (' . count($extensions) . ')',
+					'text' => $this->language->get($extension . '_heading_title') . ' (' . count(glob(DIR_EXTENSION . '*/admin/controller/' . $extension . '/*.php')) . ')',
 					'href' => $this->url->link('extension/' . $extension, 'user_token=' . $this->session->data['user_token'])
 				];
 			}

@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Dashboard;
  */
 class Activity extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -53,6 +55,8 @@ class Activity extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -65,6 +69,7 @@ class Activity extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('dashboard_activity', $this->request->post);
@@ -77,6 +82,8 @@ class Activity extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Dashboard
+	 *
 	 * @return string
 	 */
 	public function dashboard(): string {
@@ -84,6 +91,7 @@ class Activity extends \Opencart\System\Engine\Controller {
 
 		$data['activities'] = [];
 
+		// Activity
 		$this->load->model('extension/opencart/report/activity');
 
 		$results = $this->model_extension_opencart_report_activity->getActivities();

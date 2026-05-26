@@ -13,22 +13,20 @@
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
-                <td class="text-end">{{ column_return_id }}</td>
-                <td class="text-start">{{ column_status }}</td>
-                <td class="text-start">{{ column_date_added }}</td>
-                <td class="text-end">{{ column_order_id }}</td>
-                <td class="text-start">{{ column_customer }}</td>
-                <td></td>
+                <th class="text-end">{{ column_return_id }}</th>
+                <th>{{ column_status }}</th>
+                <th>{{ column_date_added }}</th>
+                <th class="text-end">{{ column_order_id }}</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {% for return in returns %}
                 <tr>
                   <td class="text-end">#{{ return.return_id }}</td>
-                  <td class="text-start">{{ return.status }}</td>
-                  <td class="text-start">{{ return.date_added }}</td>
+                  <td>{{ return.status }}</td>
+                  <td>{{ return.date_added }}</td>
                   <td class="text-end">{{ return.order_id }}</td>
-                  <td class="text-start">{{ return.name }}</td>
                   <td class="text-end"><a href="{{ return.href }}" data-bs-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa-solid fa-eye"></i></a></td>
                 </tr>
               {% endfor %}

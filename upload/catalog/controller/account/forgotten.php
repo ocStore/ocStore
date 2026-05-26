@@ -7,13 +7,15 @@ namespace Opencart\Catalog\Controller\Account;
  */
 class Forgotten extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
 		$this->load->language('account/forgotten');
 
 		if ($this->customer->isLogged()) {
-			$this->response->redirect($this->url->link('account/account', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token']));
+			$this->response->redirect($this->url->link('account/account', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token'], true));
 		}
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -36,7 +38,6 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 		];
 
 		$data['confirm'] = $this->url->link('account/forgotten.confirm', 'language=' . $this->config->get('config_language'));
-
 		$data['back'] = $this->url->link('account/login', 'language=' . $this->config->get('config_language'));
 
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -50,6 +51,8 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Confirm
+	 *
 	 * @return void
 	 */
 	public function confirm(): void {
@@ -62,17 +65,12 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$keys = ['email'];
+			$post_info = $this->request->post + ['email' => ''];
 
-			foreach ($keys as $key) {
-				if (!isset($this->request->post[$key])) {
-					$this->request->post[$key] = '';
-				}
-			}
-
+			// Customer
 			$this->load->model('account/customer');
 
-			$customer_info = $this->model_account_customer->getCustomerByEmail($this->request->post['email']);
+			$customer_info = $this->model_account_customer->getCustomerByEmail($post_info['email']);
 
 			if (!$customer_info) {
 				$json['error'] = $this->language->get('error_not_found');
@@ -80,9 +78,9 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$this->model_account_customer->editCode($this->request->post['email'], oc_token(40));
-
 			$this->session->data['success'] = $this->language->get('text_success');
+
+			$this->model_account_customer->addToken($customer_info['customer_id'], 'password', oc_token(40));
 
 			$json['redirect'] = $this->url->link('account/login', 'language=' . $this->config->get('config_language'), true);
 		}
@@ -92,6 +90,8 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Reset
+	 *
 	 * @return void
 	 */
 	public function reset(): void {
@@ -110,19 +110,20 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 		}
 
 		if ($this->customer->isLogged()) {
-			$this->response->redirect($this->url->link('account/account', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token']));
+			$this->response->redirect($this->url->link('account/account', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token'], true));
 		}
 
+		// Customer
 		$this->load->model('account/customer');
 
-		$customer_info = $this->model_account_customer->getCustomerByEmail($email);
+		$customer_info = $this->model_account_customer->getTokenByCode($code);
 
-		if (!$customer_info || !$customer_info['code'] || $customer_info['code'] !== $code) {
-			$this->model_account_customer->editCode($email, '');
-
+		if (!$customer_info || !$customer_info['email'] || $customer_info['email'] != $email || $customer_info['type'] != 'password') {
 			$this->session->data['error'] = $this->language->get('error_code');
 
-			$this->response->redirect($this->url->link('account/login', 'language=' . $this->config->get('config_language')));
+			$this->model_account_customer->deleteTokenByCode($code);
+
+			$this->response->redirect($this->url->link('account/login', 'language=' . $this->config->get('config_language'), true));
 		}
 
 		$this->document->setTitle($this->language->get('heading_reset'));
@@ -144,7 +145,7 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 			'href' => $this->url->link('account/forgotten.reset', 'language=' . $this->config->get('config_language'))
 		];
 
-		$this->session->data['reset_token'] = substr(bin2hex(openssl_random_pseudo_bytes(26)), 0, 26);
+		$this->session->data['reset_token'] = oc_token(26);
 
 		$data['save'] = $this->url->link('account/forgotten.password', 'language=' . $this->config->get('config_language') . '&email=' . urlencode($email) . '&code=' . $code . '&reset_token=' . $this->session->data['reset_token']);
 		$data['back'] = $this->url->link('account/login', 'language=' . $this->config->get('config_language'));
@@ -160,6 +161,8 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Password
+	 *
 	 * @return void
 	 */
 	public function password(): void {
@@ -168,7 +171,7 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->get['email'])) {
-			$email = (string)$this->request->get['email'];
+			$email = urldecode((string)$this->request->get['email']);
 		} else {
 			$email = '';
 		}
@@ -189,46 +192,73 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 			$json['redirect'] = $this->url->link('account/forgotten', 'language=' . $this->config->get('config_language'), true);
 		}
 
-		$this->load->model('account/customer');
+		if (!$json) {
+			// Customer
+			$this->load->model('account/customer');
 
-		$customer_info = $this->model_account_customer->getCustomerByEmail($email);
+			$customer_info = $this->model_account_customer->getTokenByCode($code);
 
-		if (!$customer_info || !$customer_info['code'] || $customer_info['code'] !== $code) {
-			// Reset token
-			$this->model_account_customer->editCode($email, '');
+			if (!$customer_info || !$customer_info['email'] || $customer_info['email'] !== $email || $customer_info['type'] != 'password') {
+				$this->session->data['error'] = $this->language->get('error_code');
 
-			$this->session->data['error'] = $this->language->get('error_code');
+				// Reset token
+				$this->model_account_customer->deleteTokenByCode($code);
 
-			$json['redirect'] = $this->url->link('account/forgotten', 'language=' . $this->config->get('config_language'), true);
+				$json['redirect'] = $this->url->link('account/forgotten', 'language=' . $this->config->get('config_language'), true);
+			}
 		}
 
 		if (!$json) {
-			$keys = [
-				'password',
-				'confirm'
+			$required = [
+				'password' => '',
+				'confirm'  => ''
 			];
 
-			foreach ($keys as $key) {
-				if (!isset($this->request->post[$key])) {
-					$this->request->post[$key] = '';
-				}
+			$post_info = $this->request->post + $required;
+
+			$password = html_entity_decode($post_info['password'], ENT_QUOTES, 'UTF-8');
+
+			if (!oc_validate_length($password, (int)$this->config->get('config_password_length'), 40)) {
+				$json['error']['password'] = sprintf($this->language->get('error_password_length'), $this->config->get('config_password_length'));
 			}
 
-			if ((oc_strlen(html_entity_decode($this->request->post['password'], ENT_QUOTES, 'UTF-8')) < 4) || (oc_strlen(html_entity_decode($this->request->post['password'], ENT_QUOTES, 'UTF-8')) > 40)) {
-				$json['error']['password'] = $this->language->get('error_password');
+			$required = [];
+
+			if ($this->config->get('config_password_uppercase') && !preg_match('/[A-Z]/', $password)) {
+				$required[] = $this->language->get('error_password_uppercase');
 			}
 
-			if ($this->request->post['confirm'] != $this->request->post['password']) {
+			if ($this->config->get('config_password_lowercase') && !preg_match('/[a-z]/', $password)) {
+				$required[] = $this->language->get('error_password_lowercase');
+			}
+
+			if ($this->config->get('config_password_number') && !preg_match('/[0-9]/', $password)) {
+				$required[] = $this->language->get('error_password_number');
+			}
+
+			if ($this->config->get('config_password_symbol') && !preg_match('/[^a-zA-Z0-9]/', $password)) {
+				$required[] = $this->language->get('error_password_symbol');
+			}
+
+			if ($required) {
+				$json['error']['password'] = sprintf($this->language->get('error_password'), implode(', ', $required), $this->config->get('config_password_length'));
+			}
+
+			if ($post_info['confirm'] != $post_info['password']) {
 				$json['error']['confirm'] = $this->language->get('error_confirm');
 			}
 		}
 
 		if (!$json) {
-			$this->model_account_customer->editPassword($customer_info['email'], $this->request->post['password']);
+			$this->session->data['success'] = $this->language->get('text_reset');
 
-			$this->session->data['success'] = $this->language->get('text_success');
+			$this->model_account_customer->editPassword($customer_info['email'], $post_info['password']);
 
+			// Remove for token
 			unset($this->session->data['reset_token']);
+
+			// Reset token
+			$this->model_account_customer->deleteTokenByCode($code);
 
 			$json['redirect'] = $this->url->link('account/login', 'language=' . $this->config->get('config_language'), true);
 		}

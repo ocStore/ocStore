@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Payment;
  */
 class Cod extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -34,12 +36,14 @@ class Cod extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('extension/opencart/payment/cod.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment');
 
-		$data['payment_cod_order_status_id'] = $this->config->get('payment_cod_order_status_id');
+		// Order Status
+		$data['payment_cod_order_status_id'] = (int)$this->config->get('payment_cod_order_status_id');
 
 		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
+		// Geo Zone
 		$data['payment_cod_geo_zone_id'] = $this->config->get('payment_cod_geo_zone_id');
 
 		$this->load->model('localisation/geo_zone');
@@ -57,6 +61,8 @@ class Cod extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -69,6 +75,7 @@ class Cod extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('payment_cod', $this->request->post);

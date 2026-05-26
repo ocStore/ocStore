@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Total;
  */
 class LowOrderFee extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -36,7 +38,9 @@ class LowOrderFee extends \Opencart\System\Engine\Controller {
 
 		$data['total_low_order_fee_total'] = $this->config->get('total_low_order_fee_total');
 		$data['total_low_order_fee_fee'] = $this->config->get('total_low_order_fee_fee');
-		$data['total_low_order_fee_tax_class_id'] = $this->config->get('total_low_order_fee_tax_class_id');
+
+		// Tax Class
+		$data['total_low_order_fee_tax_class_id'] = (int)$this->config->get('total_low_order_fee_tax_class_id');
 
 		$this->load->model('localisation/tax_class');
 
@@ -53,6 +57,8 @@ class LowOrderFee extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -65,6 +71,7 @@ class LowOrderFee extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('total_low_order_fee', $this->request->post);

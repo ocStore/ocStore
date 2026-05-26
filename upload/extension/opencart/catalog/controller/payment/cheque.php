@@ -3,10 +3,12 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Payment;
 /**
  * Class Cheque
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Payment
  */
 class Cheque extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
@@ -21,6 +23,8 @@ class Cheque extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Confirm
+	 *
 	 * @return void
 	 */
 	public function confirm(): void {
@@ -28,7 +32,18 @@ class Cheque extends \Opencart\System\Engine\Controller {
 
 		$json = [];
 
-		if (!isset($this->session->data['order_id'])) {
+		// Order
+		if (isset($this->session->data['order_id'])) {
+			$this->load->model('checkout/order');
+
+			$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+
+			if (!$order_info) {
+				$json['redirect'] = $this->url->link('checkout/failure', 'language=' . $this->config->get('config_language'), true);
+
+				unset($this->session->data['order_id']);
+			}
+		} else {
 			$json['error'] = $this->language->get('error_order');
 		}
 
@@ -43,6 +58,7 @@ class Cheque extends \Opencart\System\Engine\Controller {
 			$comment .= $this->config->get('config_address') . "\n\n";
 			$comment .= $this->language->get('text_payment') . "\n";
 
+			// Order
 			$this->load->model('checkout/order');
 
 			$this->model_checkout_order->addHistory($this->session->data['order_id'], $this->config->get('payment_cheque_order_status_id'), $comment, true);

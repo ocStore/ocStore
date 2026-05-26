@@ -3,46 +3,54 @@ namespace Opencart\System\Library\Cart;
 /**
  * Class User
  *
- * @package
+ * @package Opencart\System\Library\Cart
  */
 class User {
 	/**
-	 * @var object|mixed|null
+	 * @var object
 	 */
 	private object $db;
 	/**
-	 * @var object|mixed|null
+	 * @var object
 	 */
 	private object $request;
 	/**
-	 * @var object|mixed|null
+	 * @var object
 	 */
 	private object $session;
 	/**
-	 * @var int|mixed
+	 * @var int
 	 */
 	private int $user_id = 0;
 	/**
-	 * @var string|mixed
+	 * @var string
 	 */
 	private string $username = '';
 	/**
-	 * @var int|mixed
+	 * @var string
 	 */
-	private int $user_group_id = 0;
+	private string $firstname = '';
 	/**
-	 * @var string|mixed
+	 * @var string
+	 */
+	private string $lastname = '';
+	/**
+	 * @var string
 	 */
 	private string $email = '';
 	/**
-	 * @var array
+	 * @var int
+	 */
+	private int $user_group_id = 0;
+	/**
+	 * @var array<string, array<int, string>>
 	 */
 	private array $permission = [];
 
 	/**
 	 * Constructor
 	 *
-	 * @param    object  $registry
+	 * @param \Opencart\System\Engine\Registry $registry
 	 */
 	public function __construct(\Opencart\System\Engine\Registry $registry) {
 		$this->db = $registry->get('db');
@@ -55,10 +63,12 @@ class User {
 			if ($user_query->num_rows) {
 				$this->user_id = $user_query->row['user_id'];
 				$this->username = $user_query->row['username'];
-				$this->user_group_id = $user_query->row['user_group_id'];
+				$this->firstname = $user_query->row['firstname'];
+				$this->lastname = $user_query->row['lastname'];
 				$this->email = $user_query->row['email'];
+				$this->user_group_id = $user_query->row['user_group_id'];
 
-				$this->db->query("UPDATE `" . DB_PREFIX . "user` SET `ip` = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "' WHERE `user_id` = '" . (int)$this->session->data['user_id'] . "'");
+				$this->db->query("UPDATE `" . DB_PREFIX . "user` SET `ip` = '" . $this->db->escape(oc_get_ip()) . "' WHERE `user_id` = '" . (int)$this->session->data['user_id'] . "'");
 
 				$user_group_query = $this->db->query("SELECT `permission` FROM `" . DB_PREFIX . "user_group` WHERE `user_group_id` = '" . (int)$user_query->row['user_group_id'] . "'");
 
@@ -74,14 +84,18 @@ class User {
 			}
 		}
 	}
-	
+
 	/**
 	 * Login
 	 *
-	 * @param    string  $username
-	 * @param    string  $password
+	 * @param string $username
+	 * @param string $password
 	 *
-	 * @return   bool
+	 * @return bool
+	 *
+	 * @example
+	 *
+	 * $login = $this->user->login($username, $password);
 	 */
 	public function login(string $username, string $password): bool {
 		$user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE `username` = '" . $this->db->escape($username) . "' AND `status` = '1'");
@@ -105,8 +119,10 @@ class User {
 
 			$this->user_id = $user_query->row['user_id'];
 			$this->username = $user_query->row['username'];
-			$this->user_group_id = $user_query->row['user_group_id'];
+			$this->firstname = $user_query->row['firstname'];
+			$this->lastname = $user_query->row['lastname'];
 			$this->email = $user_query->row['email'];
+			$this->user_group_id = $user_query->row['user_group_id'];
 
 			$user_group_query = $this->db->query("SELECT `permission` FROM `" . DB_PREFIX . "user_group` WHERE `user_group_id` = '" . (int)$user_query->row['user_group_id'] . "'");
 
@@ -123,79 +139,135 @@ class User {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Logout
 	 *
-	  * @return   void
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->user->logout();
 	 */
 	public function logout(): void {
 		unset($this->session->data['user_id']);
 
 		$this->user_id = 0;
 		$this->username = '';
-		$this->user_group_id = 0;
+		$this->firstname = '';
+		$this->lastname = '';
 		$this->email = '';
+		$this->user_group_id = 0;
 	}
-	
+
 	/**
-	 * hasPermission
+	 * Has Permission
 	 *
-	 * @param    string  $key
-	 * @param    mixed  $value
+	 * @param string $key
+	 * @param string $value
 	 *
-	 * @return   bool
+	 * @return bool
+	 *
+	 * @example
+	 *
+	 * $permission = $this->user->hasPermission();
 	 */
-	public function hasPermission(string $key, mixed $value): bool {
+	public function hasPermission(string $key, string $value): bool {
 		if (isset($this->permission[$key])) {
 			return in_array($value, $this->permission[$key]);
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * isLogged
+	 * Is Logged
 	 *
-	 * @return   bool
+	 * @return bool
+	 *
+	 * @example
+	 *
+	 * $logged = $this->user->isLogged();
 	 */
 	public function isLogged(): bool {
 		return $this->user_id ? true : false;
 	}
-	
+
 	/**
-	 * getId
+	 * Get Id
 	 *
-	 * @return   int
+	 * @return int
+	 *
+	 * @example
+	 *
+	 * $user_id = $this->user->getId();
 	 */
 	public function getId(): int {
 		return $this->user_id;
 	}
 
 	/**
-	 * getUserName
+	 * Get User Name
 	 *
-	 * @return   string
+	 * @return string
+	 *
+	 * @example
+	 *
+	 * $username = $this->user->getUserName();
 	 */
 	public function getUserName(): string {
 		return $this->username;
 	}
-	
+
 	/**
-	 * getGroupId
+	 * Get First Name
 	 *
-	 * @return   int
+	 * @return string
+	 *
+	 * @example
+	 *
+	 * $firstname = $this->user->getFirstName();
 	 */
-	public function getGroupId(): int {
-		return $this->user_group_id;
+	public function getFirstName(): string {
+		return $this->firstname;
 	}
-	
+
 	/**
-	 * getEmail
+	 * Get Last Name
 	 *
-	 * @return   string
+	 * @return string
+	 *
+	 * @example
+	 *
+	 * $lastname = $this->user->getLastName();
+	 */
+	public function getLastName(): string {
+		return $this->lastname;
+	}
+
+	/**
+	 * Get Email
+	 *
+	 * @return string
+	 *
+	 * @example
+	 *
+	 * $user = $this->user->getEmail();
 	 */
 	public function getEmail(): string {
 		return $this->email;
+	}
+
+	/**
+	 * Get Group Id
+	 *
+	 * @return int
+	 *
+	 * @example
+	 *
+	 * $group_id = $this->user->getGroupId();
+	 */
+	public function getGroupId(): int {
+		return $this->user_group_id;
 	}
 }

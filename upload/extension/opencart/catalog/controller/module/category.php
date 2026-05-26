@@ -3,10 +3,12 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Module;
 /**
  * Class Category
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Module
  */
 class Category extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
@@ -30,8 +32,10 @@ class Category extends \Opencart\System\Engine\Controller {
 			$data['child_id'] = 0;
 		}
 
+		// Category
 		$this->load->model('catalog/category');
-		
+
+		// Product
 		$this->load->model('catalog/product');
 
 		$data['categories'] = [];
@@ -46,7 +50,7 @@ class Category extends \Opencart\System\Engine\Controller {
 
 				foreach ($children as $child) {
 					$filter_data = [
-						'filter_category_id'  => $child['category_id'], 
+						'filter_category_id'  => $child['category_id'],
 						'filter_sub_category' => true
 					];
 

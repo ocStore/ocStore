@@ -3,18 +3,23 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Module;
 /**
  * Class Banner
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Module
  */
 class Banner extends \Opencart\System\Engine\Controller {
 	/**
-	 * @param array $setting
+	 * Index
+	 *
+	 * @param array<string, mixed> $setting array of filters
 	 *
 	 * @return string
 	 */
 	public function index(array $setting): string {
 		static $module = 0;
 
+		// Banner
 		$this->load->model('design/banner');
+
+		// Image
 		$this->load->model('tool/image');
 
 		$data['banners'] = [];

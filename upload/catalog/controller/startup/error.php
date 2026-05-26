@@ -7,6 +7,8 @@ namespace Opencart\Catalog\Controller\Startup;
  */
 class Error extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -17,14 +19,16 @@ class Error extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
-	 * @param string $code
+	 * Error
+	 *
+	 * @param int    $code
 	 * @param string $message
 	 * @param string $file
-	 * @param string $line
+	 * @param int    $line
 	 *
 	 * @return bool
 	 */
-	public function error(string $code, string $message, string $file, string $line): bool {
+	public function error(int $code, string $message, string $file, int $line): bool {
 		switch ($code) {
 			case E_NOTICE:
 			case E_USER_NOTICE:
@@ -53,25 +57,43 @@ class Error extends \Opencart\System\Engine\Controller {
 			header('Location: ' . $this->config->get('error_page'));
 			exit();
 		}
-	
+
 		return true;
 	}
 
 	/**
+	 * Exception
+	 *
 	 * @param \Throwable $e
 	 *
 	 * @return void
 	 */
 	public function exception(\Throwable $e): void {
+		$output  = 'Error: ' . $e->getMessage() . "\n";
+		$output .= 'File: ' . $e->getFile() . "\n";
+		$output .= 'Line: ' . $e->getLine() . "\n\n";
+
+		foreach ($e->getTrace() as $key => $trace) {
+			$output .= 'Backtrace: ' . $key . "\n";
+			$output .= 'File: ' . $trace['file'] . "\n";
+			$output .= 'Line: ' . $trace['line'] . "\n";
+
+			if (isset($trace['class'])) {
+				$output .= 'Class: ' . $trace['class'] . "\n";
+			}
+
+			$output .= 'Function: ' . $trace['function'] . "\n\n";
+		}
+
 		if ($this->config->get('config_error_log')) {
-			$this->log->write($e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
+			$this->log->write(trim($output));
 		}
 
 		if ($this->config->get('config_error_display')) {
-			echo '<b>' . $e->getMessage() . '</b>: in <b>' . $e->getFile() . '</b> on line <b>' . $e->getLine() . '</b>';
+			echo $output;
 		} else {
 			header('Location: ' . $this->config->get('error_page'));
 			exit();
 		}
 	}
-} 
+}

@@ -56,10 +56,17 @@
                 </select>
               </div>
             </div>
+            <div class="row mb-3" id="display-validation">
+              <label for="input-validation" class="col-sm-2 col-form-label">{{ entry_validation }}</label>
+              <div class="col-sm-10">
+                <input type="text" name="validation" id="input-validation" value="{{ validation }}" placeholder="{{ text_regex }}" class="form-control"/>
+                <div class="form-text">{{ help_regex }}</div>
+              </div>
+            </div>
             <div class="row mb-3">
               <label for="input-sort-order" class="col-sm-2 col-form-label">{{ entry_sort_order }}</label>
               <div class="col-sm-10">
-                <input type="text" name="sort_order" value="{{ sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
+                <input type="number" name="sort_order" value="{{ sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
               </div>
             </div>
           </fieldset>
@@ -68,10 +75,10 @@
             <table id="option-value" class="table table-bordered table-hover">
               <thead>
                 <tr>
-                  <td class="text-start required">{{ entry_option_value }}</td>
-                  <td class="text-center">{{ entry_image }}</td>
-                  <td class="text-end">{{ entry_sort_order }}</td>
-                  <td></td>
+                  <th class="required">{{ entry_option_value }}</th>
+                  <th class="text-center">{{ entry_image }}</th>
+                  <th class="text-end">{{ entry_sort_order }}</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -87,14 +94,14 @@
                         <div id="error-option-value-{{ option_value_row }}-{{ language.language_id }}" class="invalid-feedback"></div>
                       {% endfor %}</td>
                     <td class="text-center">
-                      <div class="card image">
-                        <img src="{{ option_value.thumb }}" alt="" title="" id="thumb-image-{{ option_value_row }}" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/> <input type="hidden" name="option_value[{{ option_value_row }}][image]" value="{{ option_value.image }}" id="input-image-{{ option_value_row }}"/>
-                        <div class="card-body">
-                          <button type="button" data-oc-toggle="image" data-oc-target="#input-image-{{ option_value_row }}" data-oc-thumb="#thumb-image-{{ option_value_row }}" class="btn btn-primary btn-sm btn-block"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
-                          <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-{{ option_value_row }}" data-oc-thumb="#thumb-image-{{ option_value_row }}" class="btn btn-warning btn-sm btn-block"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
+                      <div class="border rounded d-block" style="max-width: 300px;">
+                        <img src="{{ option_value.thumb }}" alt="" title="" id="thumb-image-{{ option_value_row }}" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                        <input type="hidden" name="option_value[{{ option_value_row }}][image]" value="{{ option_value.image }}" id="input-image-{{ option_value_row }}"/>
+                        <div class="d-grid">
+                          <button type="button" data-oc-toggle="image" data-oc-target="#input-image-{{ option_value_row }}" data-oc-thumb="#thumb-image-{{ option_value_row }}" class="btn btn-primary rounded-0"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
+                          <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-{{ option_value_row }}" data-oc-thumb="#thumb-image-{{ option_value_row }}" class="btn btn-warning rounded-0"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
                         </div>
-                      </div>
-                    </td>
+                      </div></td>
                     <td class="text-end"><input type="text" name="option_value[{{ option_value_row }}][sort_order]" value="{{ option_value.sort_order }}" placeholder="{{ entry_sort_order }}" class="form-control"/></td>
                     <td class="text-end"><button type="button" onclick="$('#option-value-row-{{ option_value_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>
                   </tr>
@@ -122,6 +129,13 @@ $('#input-type').on('change', function() {
     } else {
         $('#option-value').parent().hide();
     }
+
+    if (this.value == 'text' || this.value == 'textarea') {
+        $('#display-validation').show();
+    } else {
+        $('#display-validation').hide();
+        $('#input-validation').val('');
+    }
 });
 
 $('#input-type').trigger('change');
@@ -130,7 +144,7 @@ var option_value_row = {{ option_value_row }};
 
 function addOptionValue() {
     html = '<tr id="option-value-row-' + option_value_row + '">';
-    html += '  <td class="text-start"><input type="hidden" name="option_value[' + option_value_row + '][option_value_id]" value="" />';
+    html += '  <td><input type="hidden" name="option_value[' + option_value_row + '][option_value_id]" value="" />';
   {% for language in languages %}
     html += '    <div class="input-group">';
     html += '      <div class="input-group-text"><img src="{{ language.image|escape('js') }}" title="{{ language.name|escape('js') }}" /></div>';
@@ -139,16 +153,14 @@ function addOptionValue() {
     html += '    <div id="error-option-value-' + option_value_row + '-{{ language.language_id }}" class="invalid-feedback"></div>';
   {% endfor %}
     html += '  </td>';
-    html += '  <td class="text-center">';
-    html += '    <div class="card image">';
-    html += '      <img src="{{ placeholder|escape('js') }}" alt="" title="" id="thumb-image-' + option_value_row + '" data-oc-placeholder="{{ placeholder|escape('js') }}" class="card-img-top"/>';
-    html += '      <input type="hidden" name="option_value[' + option_value_row + '][image]" value="" id="input-image-' + option_value_row + '"/>';
-    html += '      <div class="card-body">';
-    html += '        <button type="button" data-oc-toggle="image" data-oc-target="#input-image-' + option_value_row + '" data-oc-thumb="#thumb-image-' + option_value_row + '" class="btn btn-primary btn-sm btn-block"><i class="fa-solid fa-pencil"></i> {{ button_edit|escape('js') }}</button>';
-    html += '        <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-' + option_value_row + '" data-oc-thumb="#thumb-image-' + option_value_row + '" class="btn btn-warning btn-sm btn-block"><i class="fa-regular fa-trash-can"></i> {{ button_clear|escape('js') }}</button>';
-    html += '      </div>';
+    html += '  <td class="text-center"><div class="border rounded d-block" style="max-width: 300px;">';
+    html += '    <img src="{{ placeholder|escape('js') }}" alt="" title="" id="thumb-image-' + option_value_row + '" data-oc-placeholder="{{ placeholder|escape('js') }}" class="img-fluid"/>';
+    html += '    <input type="hidden" name="option_value[' + option_value_row + '][image]" value="" id="input-image-' + option_value_row + '"/>';
+    html += '    <div class="d-grid">';
+    html += '      <button type="button" data-oc-toggle="image" data-oc-target="#input-image-' + option_value_row + '" data-oc-thumb="#thumb-image-' + option_value_row + '" class="btn btn-primary rounded-0"><i class="fa-solid fa-pencil"></i> {{ button_edit|escape('js') }}</button>';
+    html += '      <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-' + option_value_row + '" data-oc-thumb="#thumb-image-' + option_value_row + '" class="btn btn-warning rounded-0"><i class="fa-regular fa-trash-can"></i> {{ button_clear|escape('js') }}</button>';
     html += '    </div>';
-    html += '  </td>';
+    html += '  </div></td>';
     html += '  <td class="text-end"><input type="text" name="option_value[' + option_value_row + '][sort_order]" value="" placeholder="{{ entry_sort_order|escape('js') }}" class="form-control"/></td>';
     html += '  <td class="text-end"><button type="button" onclick="$(\'#option-value-row-' + option_value_row + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove|escape('js') }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
     html += '</tr>';
@@ -158,4 +170,4 @@ function addOptionValue() {
     option_value_row++;
 }
 //--></script>
-{{ footer }} 
+{{ footer }}

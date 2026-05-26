@@ -3,11 +3,13 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Module;
 /**
  * Class Special
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Module
  */
 class Special extends \Opencart\System\Engine\Controller {
 	/**
-	 * @param array $setting
+	 * Index
+	 *
+	 * @param array<string, mixed> $setting array of filters
 	 *
 	 * @return string
 	 */
@@ -16,6 +18,7 @@ class Special extends \Opencart\System\Engine\Controller {
 
 		$data['axis'] = $setting['axis'];
 
+		// Product
 		$data['products'] = [];
 
 		$filter_data = [
@@ -26,6 +29,8 @@ class Special extends \Opencart\System\Engine\Controller {
 		];
 
 		$this->load->model('catalog/product');
+
+		// Image
 		$this->load->model('tool/image');
 
 		$results = $this->model_catalog_product->getSpecials($filter_data);

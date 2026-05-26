@@ -7,6 +7,8 @@ namespace Opencart\Install\Controller\Upgrade;
  */
 class Upgrade3 extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -119,7 +121,7 @@ class Upgrade3 extends \Opencart\System\Engine\Controller {
 					}
 
 					foreach ($keys as $key) {
-						if ($result['Key_name'] == 'PRIMARY') {
+						if ($key == 'PRIMARY') {
 							$this->db->query("ALTER TABLE `" . DB_PREFIX . $table['name'] . "` DROP PRIMARY KEY");
 						} else {
 							$this->db->query("ALTER TABLE `" . DB_PREFIX . $table['name'] . "` DROP INDEX `" . $key . "`");
@@ -189,7 +191,7 @@ class Upgrade3 extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$json['text'] = sprintf($this->language->get('text_progress'), 3, 3, 9);
+			$json['text'] = sprintf($this->language->get('text_patch'), 3, 3, 11);
 
 			$url = '';
 

@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Shipping;
  */
 class Free extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -35,9 +37,11 @@ class Free extends \Opencart\System\Engine\Controller {
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping');
 
 		$data['shipping_free_total'] = $this->config->get('shipping_free_total');
-		$data['shipping_free_geo_zone_id'] = $this->config->get('shipping_free_geo_zone_id');
 
+		// Geo Zone
 		$this->load->model('localisation/geo_zone');
+
+		$data['shipping_free_geo_zone_id'] = $this->config->get('shipping_free_geo_zone_id');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -52,6 +56,8 @@ class Free extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -64,6 +70,7 @@ class Free extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('shipping_free', $this->request->post);

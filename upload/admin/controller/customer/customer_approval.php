@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Customer;
  */
 class CustomerApproval extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -29,6 +31,7 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 		$data['approve'] = $this->url->link('customer/customer_approval.approve', 'user_token=' . $this->session->data['user_token'], true);
 		$data['deny'] = $this->url->link('customer/customer_approval.deny', 'user_token=' . $this->session->data['user_token'], true);
 
+		// Customer Group
 		$this->load->model('customer/customer_group');
 
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
@@ -41,10 +44,12 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('customer/customer_approval', $data));	
+		$this->response->setOutput($this->load->view('customer/customer_approval', $data));
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -54,6 +59,8 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
 	public function getList(): string {
@@ -68,7 +75,7 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 		} else {
 			$filter_email = '';
 		}
-		
+
 		if (isset($this->request->get['filter_customer_group_id'])) {
 			$filter_customer_group_id = (int)$this->request->get['filter_customer_group_id'];
 		} else {
@@ -92,7 +99,7 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 		} else {
 			$filter_date_to = '';
 		}
-						
+
 		if (isset($this->request->get['page'])) {
 			$page = (int)$this->request->get['page'];
 		} else {
@@ -131,6 +138,7 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('customer/customer_approval.list', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
+		// Customer Approval
 		$data['customer_approvals'] = [];
 
 		$filter_data = [
@@ -144,25 +152,18 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 			'limit'                    => $this->config->get('config_pagination_admin')
 		];
 
-		$this->load->model('customer/customer_approval');	
-
-		$customer_approval_total = $this->model_customer_customer_approval->getTotalCustomerApprovals($filter_data);
+		$this->load->model('customer/customer_approval');
 
 		$results = $this->model_customer_customer_approval->getCustomerApprovals($filter_data);
 
 		foreach ($results as $result) {
 			$data['customer_approvals'][] = [
-				'customer_approval_id' => $result['customer_approval_id'],
-				'customer_id'          => $result['customer_id'],
-				'customer'             => $result['customer'],
-				'email'                => $result['email'],
-				'customer_group'       => $result['customer_group'],
-				'type'                 => $this->language->get('text_' . $result['type']),
-				'date_added'           => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
-				'approve'              => $this->url->link('customer/customer_approval.approve', 'user_token=' . $this->session->data['user_token'] . '&customer_approval_id=' . $result['customer_approval_id'], true),
-				'deny'                 => $this->url->link('customer/customer_approval.deny', 'user_token=' . $this->session->data['user_token'] . '&customer_approval_id=' . $result['customer_approval_id'], true),
-				'edit'                 => $this->url->link('customer/customer.form', 'user_token=' . $this->session->data['user_token'] . '&customer_id=' . $result['customer_id'], true)
-			];
+				'type'       => $this->language->get('text_' . $result['type']),
+				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+				'approve'    => $this->url->link('customer/customer_approval.approve', 'user_token=' . $this->session->data['user_token'] . '&customer_approval_id=' . $result['customer_approval_id'], true),
+				'deny'       => $this->url->link('customer/customer_approval.deny', 'user_token=' . $this->session->data['user_token'] . '&customer_approval_id=' . $result['customer_approval_id'], true),
+				'edit'       => $this->url->link('customer/customer.form', 'user_token=' . $this->session->data['user_token'] . '&customer_id=' . $result['customer_id'], true)
+			] + $result;
 		}
 
 		$url = '';
@@ -174,11 +175,11 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['filter_email'])) {
 			$url .= '&filter_email=' . urlencode(html_entity_decode($this->request->get['filter_email'], ENT_QUOTES, 'UTF-8'));
 		}
-			
+
 		if (isset($this->request->get['filter_customer_group_id'])) {
 			$url .= '&filter_customer_group_id=' . $this->request->get['filter_customer_group_id'];
 		}
-		
+
 		if (isset($this->request->get['filter_type'])) {
 			$url .= '&filter_type=' . $this->request->get['filter_type'];
 		}
@@ -190,6 +191,8 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['filter_date_to'])) {
 			$url .= '&filter_date_to=' . $this->request->get['filter_date_to'];
 		}
+
+		$customer_approval_total = $this->model_customer_customer_approval->getTotalCustomerApprovals($filter_data);
 
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $customer_approval_total,
@@ -204,6 +207,8 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Approve
+	 *
 	 * @return void
 	 */
 	public function approve(): void {
@@ -221,7 +226,7 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 			$approvals = [];
 
 			if (isset($this->request->post['selected'])) {
-				$approvals = $this->request->post['selected'];
+				$approvals = (array)$this->request->post['selected'];
 			}
 
 			if (isset($this->request->get['customer_approval_id'])) {
@@ -250,13 +255,15 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Deny
+	 *
 	 * @return void
 	 */
 	public function deny(): void {
 		$this->load->language('customer/customer_approval');
 
 		$json = [];
-				
+
 		if (!$this->user->hasPermission('modify', 'customer/customer_approval')) {
 			$json['error'] = $this->language->get('error_permission');
 		}
@@ -267,7 +274,7 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 			$denials = [];
 
 			if (isset($this->request->post['selected'])) {
-				$denials = $this->request->post['selected'];
+				$denials = (array)$this->request->post['selected'];
 			}
 
 			if (isset($this->request->get['customer_approval_id'])) {
@@ -290,7 +297,7 @@ class CustomerApproval extends \Opencart\System\Engine\Controller {
 
 			$json['success'] = $this->language->get('text_success');
 		}
-		
+
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
 	}

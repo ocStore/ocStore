@@ -7,9 +7,11 @@ namespace Opencart\Catalog\Controller\Information;
  */
 class Information extends \Opencart\System\Engine\Controller {
 	/**
-	 * @return void
+	 * Index
+	 *
+	 * @return ?\Opencart\System\Engine\Action
 	 */
-	public function index(): object|null {
+	public function index(): ?\Opencart\System\Engine\Action {
 		$this->load->language('information/information');
 
 		if (isset($this->request->get['information_id'])) {
@@ -36,7 +38,7 @@ class Information extends \Opencart\System\Engine\Controller {
 
 			$data['breadcrumbs'][] = [
 				'text' => $information_info['title'],
-				'href' => $this->url->link('information/information', 'language=' . $this->config->get('config_language') . '&information_id=' .  $information_id)
+				'href' => $this->url->link('information/information', 'language=' . $this->config->get('config_language') . '&information_id=' . $information_id)
 			];
 
 			$data['heading_title'] = $information_info['title'];
@@ -61,6 +63,8 @@ class Information extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Info
+	 *
 	 * @return void
 	 */
 	public function info(): void {

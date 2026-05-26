@@ -7,12 +7,15 @@ namespace Opencart\Catalog\Controller\Event;
  */
 class Translation extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @param string $route
 	 * @param string $prefix
 	 *
 	 * @return void
 	 */
 	public function index(string &$route, string &$prefix): void {
+		// Translation
 		$this->load->model('design/translation');
 
 		$results = $this->model_design_translation->getTranslations($route);
@@ -23,6 +26,6 @@ class Translation extends \Opencart\System\Engine\Controller {
 			} else {
 				$this->language->set($prefix . '_' . $result['key'], html_entity_decode($result['value'], ENT_QUOTES, 'UTF-8'));
 			}
-		}	
+		}
 	}
 }

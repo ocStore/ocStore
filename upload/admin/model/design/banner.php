@@ -1,25 +1,43 @@
 <?php
 namespace Opencart\Admin\Model\Design;
 /**
- *  Class Banner
+ * Class Banner
+ *
+ * Can be loaded using $this->load->model('design/banner');
  *
  * @package Opencart\Admin\Model\Design
  */
 class Banner extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $data
+	 * Add Banner
 	 *
-	 * @return int
+	 * Create a new banner record in the database.
+	 *
+	 * @param array<string, mixed> $data array of data
+	 *
+	 * @return int returns the primary key of the new banner record
+	 *
+	 * @example
+	 *
+	 * $banner_data = [
+	 *     'banner_image_description' => [],
+	 *     'name'                     => 'Banner Name',
+	 *     'status'                   => 0
+	 * ];
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $banner_id = $this->model_design_banner->addBanner($banner_data);
 	 */
 	public function addBanner(array $data): int {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "banner` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `status` = '" . (bool)(isset($data['status']) ? $data['status'] : 0) . "'");
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "banner` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `status` = '" . (bool)($data['status'] ?? 0) . "'");
 
 		$banner_id = $this->db->getLastId();
 
 		if (isset($data['banner_image'])) {
 			foreach ($data['banner_image'] as $language_id => $value) {
 				foreach ($value as $banner_image) {
-					$this->db->query("INSERT INTO `" . DB_PREFIX . "banner_image` SET `banner_id` = '" . (int)$banner_id . "', `language_id` = '" . (int)$language_id . "', `title` = '" .  $this->db->escape($banner_image['title']) . "', `link` = '" .  $this->db->escape($banner_image['link']) . "', `image` = '" .  $this->db->escape($banner_image['image']) . "', `sort_order` = '" .  (int)$banner_image['sort_order'] . "'");
+					$this->addImage($banner_id, $language_id, $banner_image);
 				}
 			}
 		}
@@ -28,39 +46,76 @@ class Banner extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param int   $banner_id
-	 * @param array $data
+	 * Edit Banner
+	 *
+	 * Edit banner record in the database.
+	 *
+	 * @param int                  $banner_id primary key of the banner record
+	 * @param array<string, mixed> $data      array of data
 	 *
 	 * @return void
+	 *
+	 * @example
+	 *
+	 * $banner_data = [
+	 *     'banner_image_description' => [],
+	 *     'name'                     => 'Banner Name',
+	 *     'status'                   => 1
+	 * ];
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $this->model_design_banner->editBanner($banner_id, $banner_data);
 	 */
 	public function editBanner(int $banner_id, array $data): void {
-		$this->db->query("UPDATE `" . DB_PREFIX . "banner` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `status` = '" . (bool)(isset($data['status']) ? $data['status'] : 0) . "' WHERE `banner_id` = '" . (int)$banner_id . "'");
+		$this->db->query("UPDATE `" . DB_PREFIX . "banner` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `status` = '" . (bool)($data['status'] ?? 0) . "' WHERE `banner_id` = '" . (int)$banner_id . "'");
 
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "banner_image` WHERE `banner_id` = '" . (int)$banner_id . "'");
+		$this->deleteImages($banner_id);
 
 		if (isset($data['banner_image'])) {
 			foreach ($data['banner_image'] as $language_id => $value) {
 				foreach ($value as $banner_image) {
-					$this->db->query("INSERT INTO `" . DB_PREFIX . "banner_image` SET `banner_id` = '" . (int)$banner_id . "', `language_id` = '" . (int)$language_id . "', `title` = '" .  $this->db->escape($banner_image['title']) . "', `link` = '" .  $this->db->escape($banner_image['link']) . "', `image` = '" .  $this->db->escape($banner_image['image']) . "', `sort_order` = '" . (int)$banner_image['sort_order'] . "'");
+					$this->addImage($banner_id, $language_id, $banner_image);
 				}
 			}
 		}
 	}
 
 	/**
-	 * @param int $banner_id
+	 * Delete Banner
+	 *
+	 * Delete banner record in the database.
+	 *
+	 * @param int $banner_id primary key of the banner record
 	 *
 	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $this->model_design_banner->deleteBanner($banner_id);
 	 */
 	public function deleteBanner(int $banner_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "banner` WHERE `banner_id` = '" . (int)$banner_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "banner_image` WHERE `banner_id` = '" . (int)$banner_id . "'");
+
+		$this->deleteImages($banner_id);
 	}
 
 	/**
-	 * @param int $banner_id
+	 * Get Banner
 	 *
-	 * @return array
+	 * Get the record of the banner record in the database.
+	 *
+	 * @param int $banner_id primary key of the banner record
+	 *
+	 * @return array<string, mixed> banner record that has banner ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $banner_info = $this->model_design_banner->getBanner($banner_id);
 	 */
 	public function getBanner(int $banner_id): array {
 		$query = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "banner` WHERE `banner_id` = '" . (int)$banner_id . "'");
@@ -69,9 +124,26 @@ class Banner extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param array $data
+	 * Get Banners
 	 *
-	 * @return array
+	 * Get the record of the banner records in the database.
+	 *
+	 * @param array<string, mixed> $data array of filters
+	 *
+	 * @return array<int, array<string, mixed>> banner records
+	 *
+	 * @example
+	 *
+	 * $filter_data = [
+	 *     'sort'  => 'name',
+	 *     'order' => 'DESC',
+	 *     'start' => 0,
+	 *     'limit' => 10
+	 * ];
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $results = $this->model_design_banner->getBanners($filter_data);
 	 */
 	public function getBanners(array $data = []): array {
 		$sql = "SELECT * FROM `" . DB_PREFIX . "banner`";
@@ -111,9 +183,104 @@ class Banner extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param int $banner_id
+	 * Get Total Banners
 	 *
-	 * @return array
+	 * Get the total number of banner records in the database.
+	 *
+	 * @return int total number of banner records
+	 *
+	 * @example
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $banner_total = $this->model_design_banner->getTotalBanners();
+	 */
+	public function getTotalBanners(): int {
+		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "banner`");
+
+		return (int)$query->row['total'];
+	}
+
+	/**
+	 * Add Image
+	 *
+	 * Create a new banner image record in the database.
+	 *
+	 * @param int                  $banner_id   primary key of the banner record
+	 * @param int                  $language_id primary key of the language record
+	 * @param array<string, mixed> $data        array of filters
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $banner_image_data = [
+	 *     'title'      => 'Banner Title',
+	 *     'link'       => 'Banner Link',
+	 *     'image'      => 'Banner Image',
+	 *     'sort_order' => 0
+	 * ];
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $this->model_design_banner->addImage($banner_id, $language_id, $banner_image_data);
+	 */
+	public function addImage(int $banner_id, int $language_id, array $data): void {
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "banner_image` SET `banner_id` = '" . (int)$banner_id . "', `language_id` = '" . (int)$language_id . "', `title` = '" . $this->db->escape($data['title']) . "', `link` = '" . $this->db->escape($data['link']) . "', `image` = '" . $this->db->escape($data['image']) . "', `sort_order` = '" . (int)$data['sort_order'] . "'");
+	}
+
+	/**
+	 * Delete Images
+	 *
+	 * Delete banner image records in the database.
+	 *
+	 * @param int $banner_id primary key of the banner record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $this->model_design_banner->deleteImages($banner_id);
+	 */
+	public function deleteImages(int $banner_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "banner_image` WHERE `banner_id` = '" . (int)$banner_id . "'");
+	}
+
+	/**
+	 * Delete Images By Language ID
+	 *
+	 * Delete banner images by language records in the database.
+	 *
+	 * @param int $language_id primary key of the language record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $this->model_design_banner->deleteImagesByLanguageId($language_id);
+	 */
+	public function deleteImagesByLanguageId(int $language_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "banner_image` WHERE `language_id` = '" . (int)$language_id . "'");
+	}
+
+	/**
+	 * Get Images
+	 *
+	 * Get the record of the banner image records in the database.
+	 *
+	 * @param int $banner_id primary key of the banner record
+	 *
+	 * @return array<int, array<int, array<string, mixed>>> image records that have banner ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $banner_images = $this->model_design_banner->getImages($banner_id);
 	 */
 	public function getImages(int $banner_id): array {
 		$banner_image_data = [];
@@ -121,23 +288,30 @@ class Banner extends \Opencart\System\Engine\Model {
 		$banner_image_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "banner_image` WHERE `banner_id` = '" . (int)$banner_id . "' ORDER BY `sort_order` ASC");
 
 		foreach ($banner_image_query->rows as $banner_image) {
-			$banner_image_data[$banner_image['language_id']][] = [
-				'title'      => $banner_image['title'],
-				'link'       => $banner_image['link'],
-				'image'      => $banner_image['image'],
-				'sort_order' => $banner_image['sort_order']
-			];
+			$banner_image_data[$banner_image['language_id']][] = $banner_image;
 		}
 
 		return $banner_image_data;
 	}
 
 	/**
-	 * @return int
+	 * Get Images By Language ID
+	 *
+	 * Get the record of the banner images by language records in the database.
+	 *
+	 * @param int $language_id primary key of the language record
+	 *
+	 * @return array<int, array<string, mixed>> image records that have language ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('design/banner');
+	 *
+	 * $results = $this->model_design_banner->getImagesByLanguageId($language_id);
 	 */
-	public function getTotalBanners(): int {
-		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "banner`");
+	public function getImagesByLanguageId(int $language_id): array {
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "banner_image` WHERE `language_id` = '" . (int)$language_id . "'");
 
-		return (int)$query->row['total'];
+		return $query->rows;
 	}
 }

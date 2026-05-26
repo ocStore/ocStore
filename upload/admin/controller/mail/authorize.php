@@ -6,36 +6,37 @@ namespace Opencart\Admin\Controller\Mail;
  * @package Opencart\Admin\Controller\Mail
  */
 class Authorize extends \Opencart\System\Engine\Controller {
-	// admin/model/user/user/editCode/after
 	/**
-	 * @param $route
-	 * @param $args
-	 * @param $output
+	 * Index
+	 *
+	 * admin/controller/common/authorize.send/after
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param array<mixed>      $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function index(&$route, &$args, &$output) {
-		if (isset($this->request->get['route'])) {
-			$route = (string)$this->request->get['route'];
-		} else {
-			$route = '';
-		}
-
-		$email = $this->user->getEmail();
-
+	public function index(string &$route, array &$args, mixed &$output): void {
 		if (isset($this->session->data['code'])) {
-			$code = $this->session->data['code'];
+			$code = (string)$this->session->data['code'];
 		} else {
 			$code = '';
 		}
 
-		if ($email && $code && ($route == 'common/authorize.send') && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		// User
+		$this->load->model('user/user');
+
+		$user_info = $this->model_user_user->getUser($this->user->getId());
+
+		if ($code && $user_info) {
 			$this->load->language('mail/authorize');
 
 			$data['username'] = $this->user->getUsername();
 			$data['code'] = $code;
-			$data['ip'] = $this->request->server['REMOTE_ADDR'];
+			$data['ip'] = oc_get_ip();
 			$data['store'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
 			if ($this->config->get('config_mail_engine')) {
@@ -49,51 +50,59 @@ class Authorize extends \Opencart\System\Engine\Controller {
 				];
 
 				$mail = new \Opencart\System\Library\Mail($this->config->get('config_mail_engine'), $mail_option);
-				$mail->setTo($email);
+				$mail->setTo($this->user->getEmail());
 				$mail->setFrom($this->config->get('config_email'));
 				$mail->setSender($this->config->get('config_name'));
 				$mail->setSubject($this->language->get('text_subject'));
-				$mail->setText($this->load->view('mail/authorize', $data));
+				$mail->setHtml($this->load->view('mail/authorize', $data));
 				$mail->send();
 			}
 		}
 	}
 
-	// admin/model/user/user/editCode/after
-
 	/**
-	 * @param $route
-	 * @param $args
-	 * @param $output
+	 * Reset
+	 *
+	 * admin/model/user/user.addToken/after
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param array<mixed>      $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function reset(&$route, &$args, &$output) {
-		if (isset($this->request->get['route'])) {
-			$route = $this->request->get['route'];
-		} else {
-			$route = '';
-		}
-
+	public function reset(&$route, &$args, &$output): void {
 		if (isset($args[0])) {
-			$email = (string)$args[0];
+			$user_id = (int)$args[0];
 		} else {
-			$email = '';
+			$user_id = 0;
 		}
 
 		if (isset($args[1])) {
-			$code = (string)$args[1];
+			$type = (string)$args[1];
+		} else {
+			$type = '';
+		}
+
+		if (isset($args[2])) {
+			$code = (string)$args[2];
 		} else {
 			$code = '';
 		}
 
-		if ($email && $code && ($route == 'common/authorize.confirm') && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		// User
+		$this->load->model('user/user');
+
+		$user_info = $this->model_user_user->getUser($user_id);
+
+		if ($type == 'authorize' && $user_info) {
 			$this->load->language('mail/authorize_reset');
 
 			$data['username'] = $this->user->getUsername();
-			$data['reset'] = $this->url->link('common/authorize.reset', 'email=' . $email . '&code=' . $code, true);
-			$data['ip'] = $this->request->server['REMOTE_ADDR'];
+			$data['reset'] = $this->url->link('common/authorize.unlock', 'email=' . $user_info['email'] . '&code=' . $code, true);
+			$data['ip'] = oc_get_ip();
 			$data['store'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
 			if ($this->config->get('config_mail_engine')) {
@@ -107,11 +116,11 @@ class Authorize extends \Opencart\System\Engine\Controller {
 				];
 
 				$mail = new \Opencart\System\Library\Mail($this->config->get('config_mail_engine'), $mail_option);
-				$mail->setTo($email);
+				$mail->setTo($user_info['email']);
 				$mail->setFrom($this->config->get('config_email'));
 				$mail->setSender($this->config->get('config_name'));
 				$mail->setSubject($this->language->get('text_subject'));
-				$mail->setText($this->load->view('mail/authorize_reset', $data));
+				$mail->setHtml($this->load->view('mail/authorize_reset', $data));
 				$mail->send();
 			}
 		}

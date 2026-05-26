@@ -7,6 +7,8 @@ namespace Opencart\Catalog\Controller\Checkout;
  */
 class ShippingAddress extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
@@ -16,8 +18,11 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 		$data['config_file_max_size'] = ((int)$this->config->get('config_file_max_size') * 1024 * 1024);
 		$data['payment_address_required'] = $this->config->get('config_checkout_payment_address');
 
-		$data['upload'] = $this->url->link('tool/upload', 'language=' . $this->config->get('config_language'));
+		$this->session->data['upload_token'] = oc_token(32);
 
+		$data['upload'] = $this->url->link('tool/upload', 'language=' . $this->config->get('config_language') . '&upload_token=' . $this->session->data['upload_token']);
+
+		// Address
 		$this->load->model('account/address');
 
 		$data['addresses'] = $this->model_account_address->getAddresses($this->customer->getId());
@@ -28,10 +33,6 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 			$data['address_id'] = 0;
 		}
 
-		$this->load->model('localisation/country');
-
-		$data['countries'] = $this->model_localisation_country->getCountries();
-
 		if (isset($this->session->data['shipping_address'])) {
 			$data['postcode'] = $this->session->data['shipping_address']['postcode'];
 			$data['country_id'] = $this->session->data['shipping_address']['country_id'];
@@ -41,6 +42,16 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 			$data['country_id'] = (int)$this->config->get('config_country_id');
 			$data['zone_id'] = '';
 		}
+
+		// Country
+		$this->load->model('localisation/country');
+
+		$data['countries'] = $this->model_localisation_country->getCountries();
+
+		// Zone
+		$this->load->model('localisation/zone');
+
+		$data['zones'] = $this->model_localisation_zone->getZonesByCountryId($data['country_id']);
 
 		// Custom Fields
 		$data['custom_fields'] = [];
@@ -61,6 +72,8 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -68,20 +81,24 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 
 		$json = [];
 
+		$required = [
+			'firstname'    => '',
+			'lastname'     => '',
+			'company'      => '',
+			'address_1'    => '',
+			'address_2'    => '',
+			'city'         => '',
+			'postcode'     => '',
+			'country_id'   => 0,
+			'zone_id'      => 0,
+			'custom_field' => []
+		];
+
+		$post_info = $this->request->post + $required;
+
 		// Validate cart has products and has stock.
-		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
+		if (!$this->cart->hasProducts() || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout')) || !$this->cart->hasMinimum()) {
 			$json['redirect'] = $this->url->link('checkout/cart', 'language=' . $this->config->get('config_language'), true);
-		}
-
-		// Validate minimum quantity requirements.
-		$products = $this->cart->getProducts();
-
-		foreach ($products as $product) {
-			if (!$product['minimum']) {
-				$json['redirect'] = $this->url->link('checkout/cart', 'language=' . $this->config->get('config_language'), true);
-
-				break;
-			}
 		}
 
 		// Validate if customer is logged in or customer session data is not set
@@ -95,54 +112,41 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$keys = [
-				'firstname',
-				'lastname',
-				'company',
-				'address_1',
-				'address_2',
-				'city',
-				'postcode',
-				'country_id',
-				'zone_id',
-				'custom_field'
-			];
-
-			foreach ($keys as $key) {
-				if (!isset($this->request->post[$key])) {
-					$this->request->post[$key] = '';
-				}
-			}
-
-			if ((oc_strlen($this->request->post['firstname']) < 1) || (oc_strlen($this->request->post['firstname']) > 32)) {
+			if (!oc_validate_length($post_info['firstname'], 1, 32)) {
 				$json['error']['firstname'] = $this->language->get('error_firstname');
 			}
 
-			if ((oc_strlen($this->request->post['lastname']) < 1) || (oc_strlen($this->request->post['lastname']) > 32)) {
+			if (!oc_validate_length($post_info['lastname'], 1, 32)) {
 				$json['error']['lastname'] = $this->language->get('error_lastname');
 			}
 
-			if ((oc_strlen($this->request->post['address_1']) < 3) || (oc_strlen($this->request->post['address_1']) > 128)) {
+			if (!oc_validate_length($post_info['address_1'], 3, 128)) {
 				$json['error']['address_1'] = $this->language->get('error_address_1');
 			}
 
-			if ((oc_strlen($this->request->post['city']) < 2) || (oc_strlen($this->request->post['city']) > 128)) {
+			if (!oc_validate_length($post_info['city'], 2, 128)) {
 				$json['error']['city'] = $this->language->get('error_city');
 			}
 
+			// Country
 			$this->load->model('localisation/country');
 
-			$country_info = $this->model_localisation_country->getCountry((int)$this->request->post['country_id']);
+			$country_info = $this->model_localisation_country->getCountry((int)$post_info['country_id']);
 
-			if ($country_info && $country_info['postcode_required'] && (oc_strlen($this->request->post['postcode']) < 2 || oc_strlen($this->request->post['postcode']) > 10)) {
+			if ($country_info && $country_info['postcode_required'] && !oc_validate_length($post_info['postcode'], 2, 10)) {
 				$json['error']['postcode'] = $this->language->get('error_postcode');
 			}
 
-			if ($this->request->post['country_id'] == '') {
+			if (!$country_info) {
 				$json['error']['country'] = $this->language->get('error_country');
 			}
 
-			if ($this->request->post['zone_id'] == '') {
+			// Zone
+			$this->load->model('localisation/zone');
+
+			$zone_total = $this->model_localisation_zone->getTotalZonesByCountryId((int)$post_info['country_id']);
+
+			if ($zone_total && !$post_info['zone_id']) {
 				$json['error']['zone'] = $this->language->get('error_zone');
 			}
 
@@ -153,9 +157,9 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 
 			foreach ($custom_fields as $custom_field) {
 				if ($custom_field['location'] == 'address') {
-					if ($custom_field['required'] && empty($this->request->post['custom_field'][$custom_field['custom_field_id']])) {
+					if ($custom_field['required'] && empty($post_info['custom_field'][$custom_field['custom_field_id']])) {
 						$json['error']['custom_field_' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
-					} elseif (($custom_field['type'] == 'text') && !empty($custom_field['validation']) && !preg_match(html_entity_decode($custom_field['validation'], ENT_QUOTES, 'UTF-8'), $this->request->post['custom_field'][$custom_field['custom_field_id']])) {
+					} elseif (($custom_field['type'] == 'text') && !empty($custom_field['validation']) && !oc_validate_regex($post_info['custom_field'][$custom_field['custom_field_id']], $custom_field['validation'])) {
 						$json['error']['custom_field_' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_regex'), $custom_field['name']);
 					}
 				}
@@ -163,16 +167,16 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			// If no default address add it
+			// If no default address has been found, add it
 			$address_id = $this->customer->getAddressId();
 
 			if (!$address_id) {
-				$this->request->post['default'] = 1;
+				$post_info['default'] = 1;
 			}
 
 			$this->load->model('account/address');
 
-			$json['address_id'] = $this->model_account_address->addAddress($this->customer->getId(), $this->request->post);
+			$json['address_id'] = $this->model_account_address->addAddress($this->customer->getId(), $post_info);
 
 			$json['addresses'] = $this->model_account_address->getAddresses($this->customer->getId());
 
@@ -192,6 +196,8 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Address
+	 *
 	 * @return void
 	 */
 	public function address(): void {
@@ -206,19 +212,8 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 		}
 
 		// Validate cart has products and has stock.
-		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
+		if (!$this->cart->hasProducts() || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout')) || !$this->cart->hasMinimum()) {
 			$json['redirect'] = $this->url->link('checkout/cart', 'language=' . $this->config->get('config_language'), true);
-		}
-
-		// Validate minimum quantity requirements.
-		$products = $this->cart->getProducts();
-
-		foreach ($products as $product) {
-			if (!$product['minimum']) {
-				$json['redirect'] = $this->url->link('checkout/cart', 'language=' . $this->config->get('config_language'), true);
-
-				break;
-			}
 		}
 
 		// Validate if customer is logged in or customer session data is not set
@@ -232,6 +227,7 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Shipping Address
 			$this->load->model('account/address');
 
 			$address_info = $this->model_account_address->getAddress($this->customer->getId(), $address_id);

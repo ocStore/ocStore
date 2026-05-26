@@ -7,6 +7,8 @@ namespace Opencart\Catalog\Controller\Startup;
  */
 class Marketing extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -27,16 +29,17 @@ class Marketing extends \Opencart\System\Engine\Controller {
 			$marketing_info = $this->model_marketing_marketing->getMarketingByCode($tracking);
 
 			if ($marketing_info) {
-				$this->model_marketing_marketing->addReport($marketing_info['marketing_id'], $this->request->server['REMOTE_ADDR']);
+				$this->model_marketing_marketing->addReport($marketing_info['marketing_id'], oc_get_ip());
 			}
 
+			// Affiliate
 			if ($this->config->get('config_affiliate_status')) {
 				$this->load->model('account/affiliate');
 
 				$affiliate_info = $this->model_account_affiliate->getAffiliateByTracking($tracking);
 
 				if ($affiliate_info && $affiliate_info['status']) {
-					$this->model_account_affiliate->addReport($affiliate_info['customer_id'], $this->request->server['REMOTE_ADDR']);
+					$this->model_account_affiliate->addReport($affiliate_info['customer_id'], oc_get_ip());
 				}
 
 				if ($marketing_info || ($affiliate_info && $affiliate_info['status'])) {
@@ -46,6 +49,7 @@ class Marketing extends \Opencart\System\Engine\Controller {
 						$option = [
 							'expires'  => $this->config->get('config_affiliate_expire') ? time() + (int)$this->config->get('config_affiliate_expire') : 0,
 							'path'     => $this->config->get('session_path'),
+							'secure'   => $this->request->server['HTTPS'],
 							'SameSite' => $this->config->get('config_session_samesite')
 						];
 

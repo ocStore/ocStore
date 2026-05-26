@@ -7,10 +7,12 @@ $_['text_success']            = 'Success: You have modified categories!';
 $_['text_list']               = 'Category List';
 $_['text_add']                = 'Add Category';
 $_['text_edit']               = 'Edit Category';
+$_['text_filter']             = 'Filter';
 $_['text_default']            = 'Default';
 $_['text_keyword']            = 'Do not use spaces, instead replace spaces with - and make sure the SEO URL is globally unique.';
 
 // Column
+$_['column_image']            = 'Image';
 $_['column_name']             = 'Category Name';
 $_['column_sort_order']       = 'Sort Order';
 $_['column_action']           = 'Action';
@@ -26,8 +28,6 @@ $_['entry_keyword']           = 'Keyword';
 $_['entry_parent']            = 'Parent';
 $_['entry_filter']            = 'Filters';
 $_['entry_image']             = 'Image';
-$_['entry_top']               = 'Top';
-$_['entry_column']            = 'Columns';
 $_['entry_sort_order']        = 'Sort Order';
 $_['entry_status']            = 'Status';
 $_['entry_layout']            = 'Layout Override';
@@ -35,8 +35,6 @@ $_['entry_layout']            = 'Layout Override';
 // Help
 $_['help_parent']             = '(Autocomplete)';
 $_['help_filter']             = '(Autocomplete)';
-$_['help_top']                = 'Display in the top menu bar. Only works for the top parent categories.';
-$_['help_column']             = 'Number of columns to use for the bottom 3 categories. Only works for the top parent categories.';
 
 // Error
 $_['error_warning']           = 'Warning: Please check the form carefully for errors!';

@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Customer;
  */
 class CustomField extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -55,6 +57,8 @@ class CustomField extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -64,9 +68,11 @@ class CustomField extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
-	protected function getList(): string {
+	public function getList(): string {
 		if (isset($this->request->get['sort'])) {
 			$sort = (string)$this->request->get['sort'];
 		} else {
@@ -101,6 +107,7 @@ class CustomField extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('customer/custom_field.list', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		// Custom Fields
 		$data['custom_fields'] = [];
 
 		$filter_data = [
@@ -111,8 +118,6 @@ class CustomField extends \Opencart\System\Engine\Controller {
 		];
 
 		$this->load->model('customer/custom_field');
-
-		$custom_field_total = $this->model_customer_custom_field->getTotalCustomFields();
 
 		$results = $this->model_customer_custom_field->getCustomFields($filter_data);
 
@@ -153,14 +158,10 @@ class CustomField extends \Opencart\System\Engine\Controller {
 			}
 
 			$data['custom_fields'][] = [
-				'custom_field_id' => $result['custom_field_id'],
-				'name'            => $result['name'],
-				'location'        => $this->language->get('text_' . $result['location']),
-				'type'            => $type,
-				'status'          => $result['status'],
-				'sort_order'      => $result['sort_order'],
-				'edit'            => $this->url->link('customer/custom_field.form', 'user_token=' . $this->session->data['user_token'] . '&custom_field_id=' . $result['custom_field_id'] . $url)
-			];
+				'location' => $this->language->get('text_' . $result['location']),
+				'type'     => $type,
+				'edit'     => $this->url->link('customer/custom_field.form', 'user_token=' . $this->session->data['user_token'] . '&custom_field_id=' . $result['custom_field_id'] . $url)
+			] + $result;
 		}
 
 		$url = '';
@@ -187,6 +188,8 @@ class CustomField extends \Opencart\System\Engine\Controller {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 
+		$custom_field_total = $this->model_customer_custom_field->getTotalCustomFields();
+
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $custom_field_total,
 			'page'  => $page,
@@ -203,6 +206,8 @@ class CustomField extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Form
+	 *
 	 * @return void
 	 */
 	public function form(): void {
@@ -247,18 +252,19 @@ class CustomField extends \Opencart\System\Engine\Controller {
 			$custom_field_info = $this->model_customer_custom_field->getCustomField($this->request->get['custom_field_id']);
 		}
 
-		if (isset($this->request->get['custom_field_id'])) {
-			$data['custom_field_id'] = (int)$this->request->get['custom_field_id'];
+		if (!empty($custom_field_info)) {
+			$data['custom_field_id'] = $custom_field_info['custom_field_id'];
 		} else {
 			$data['custom_field_id'] = 0;
 		}
 
+		// Language
 		$this->load->model('localisation/language');
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
-		if (isset($this->request->get['custom_field_id'])) {
-			$data['custom_field_description'] = $this->model_customer_custom_field->getDescriptions($this->request->get['custom_field_id']);
+		if (!empty($custom_field_info)) {
+			$data['custom_field_description'] = $this->model_customer_custom_field->getDescriptions($custom_field_info['custom_field_id']);
 		} else {
 			$data['custom_field_description'] = [];
 		}
@@ -299,8 +305,8 @@ class CustomField extends \Opencart\System\Engine\Controller {
 			$data['sort_order'] = '';
 		}
 
-		if (isset($this->request->get['custom_field_id'])) {
-			$custom_field_values = $this->model_customer_custom_field->getValueDescriptions($this->request->get['custom_field_id']);
+		if (!empty($custom_field_info)) {
+			$custom_field_values = $this->model_customer_custom_field->getValueDescriptions($custom_field_info['custom_field_id']);
 		} else {
 			$custom_field_values = [];
 		}
@@ -308,15 +314,12 @@ class CustomField extends \Opencart\System\Engine\Controller {
 		$data['custom_field_values'] = [];
 
 		foreach ($custom_field_values as $custom_field_value) {
-			$data['custom_field_values'][] = [
-				'custom_field_value_id'          => $custom_field_value['custom_field_value_id'],
-				'custom_field_value_description' => $custom_field_value['custom_field_value_description'],
-				'sort_order'                     => $custom_field_value['sort_order']
-			];
+			$data['custom_field_values'][] = $custom_field_value;
 		}
 
-		if (isset($this->request->get['custom_field_id'])) {
-			$custom_field_customer_groups = $this->model_customer_custom_field->getCustomerGroups($this->request->get['custom_field_id']);
+		// Customer Group
+		if (!empty($custom_field_info)) {
+			$custom_field_customer_groups = $this->model_customer_custom_field->getCustomerGroups($custom_field_info['custom_field_id']);
 		} else {
 			$custom_field_customer_groups = [];
 		}
@@ -351,6 +354,8 @@ class CustomField extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -362,21 +367,32 @@ class CustomField extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
-		foreach ($this->request->post['custom_field_description'] as $language_id => $value) {
-			if ((oc_strlen($value['name']) < 1) || (oc_strlen($value['name']) > 128)) {
+		$required = [
+			'type'       => '',
+			'value'      => '',
+			'validation' => '',
+			'location'   => '',
+			'status'     => 0,
+			'sort_order' => 0
+		];
+
+		$post_info = $this->request->post + $required;
+
+		foreach ($post_info['custom_field_description'] as $language_id => $value) {
+			if (!oc_validate_length($value['name'], 1, 128)) {
 				$json['error']['name_' . $language_id] = $this->language->get('error_name');
 			}
 		}
 
-		if (($this->request->post['type'] == 'select' || $this->request->post['type'] == 'radio' || $this->request->post['type'] == 'checkbox')) {
-			if (!isset($this->request->post['custom_field_value'])) {
+		if (($post_info['type'] == 'select' || $post_info['type'] == 'radio' || $post_info['type'] == 'checkbox')) {
+			if (!isset($post_info['custom_field_value'])) {
 				$json['error']['warning'] = $this->language->get('error_type');
 			}
 
-			if (isset($this->request->post['custom_field_value'])) {
-				foreach ($this->request->post['custom_field_value'] as $custom_field_value_id => $custom_field_value) {
+			if (isset($post_info['custom_field_value'])) {
+				foreach ($post_info['custom_field_value'] as $custom_field_value_id => $custom_field_value) {
 					foreach ($custom_field_value['custom_field_value_description'] as $language_id => $custom_field_value_description) {
-						if ((oc_strlen($custom_field_value_description['name']) < 1) || (oc_strlen($custom_field_value_description['name']) > 128)) {
+						if (!oc_validate_length($custom_field_value_description['name'], 1, 128)) {
 							$json['error']['custom_field_value_' . $custom_field_value_id . '_' . $language_id] = $this->language->get('error_custom_value');
 						}
 					}
@@ -384,17 +400,13 @@ class CustomField extends \Opencart\System\Engine\Controller {
 			}
 		}
 
-		if ($this->request->post['type'] == 'text' && $this->request->post['validation'] && @preg_match(html_entity_decode($this->request->post['validation'], ENT_QUOTES, 'UTF-8'), null) === false) {
-			$json['error']['validation'] = $this->language->get('error_validation');
-		}
-
 		if (!$json) {
 			$this->load->model('customer/custom_field');
 
-			if (!$this->request->post['custom_field_id']) {
-				$json['custom_field_id'] = $this->model_customer_custom_field->addCustomField($this->request->post);
+			if (!$post_info['custom_field_id']) {
+				$json['custom_field_id'] = $this->model_customer_custom_field->addCustomField($post_info);
 			} else {
-				$this->model_customer_custom_field->editCustomField($this->request->post['custom_field_id'], $this->request->post);
+				$this->model_customer_custom_field->editCustomField($post_info['custom_field_id'], $post_info);
 			}
 
 			$json['success'] = $this->language->get('text_success');
@@ -405,6 +417,8 @@ class CustomField extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {
@@ -413,7 +427,7 @@ class CustomField extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['selected'])) {
-			$selected = $this->request->post['selected'];
+			$selected = (array)$this->request->post['selected'];
 		} else {
 			$selected = [];
 		}

@@ -7,12 +7,14 @@ namespace Opencart\Admin\Controller\Startup;
  */
 class Setting extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
+		// Setting
 		$this->load->model('setting/setting');
 
-		// Settings
 		$results = $this->model_setting_setting->getSettings(0);
 
 		foreach ($results as $result) {
@@ -28,7 +30,7 @@ class Setting extends \Opencart\System\Engine\Controller {
 			date_default_timezone_set($this->config->get('config_timezone'));
 
 			// Sync PHP and DB time zones.
-			$this->db->query("SET time_zone = '" . $this->db->escape(date('P')) . "'");
+			$this->db->query("SET `time_zone` = '" . $this->db->escape(date('P')) . "'");
 		}
 
 		// Response output compression level

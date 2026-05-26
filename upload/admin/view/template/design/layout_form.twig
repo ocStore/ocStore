@@ -4,7 +4,8 @@
     <div class="container-fluid">
       <div class="float-end">
         <button type="submit" form="form-layout" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button>
-        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a></div>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
       <h1>{{ heading_title }}</h1>
       <ol class="breadcrumb">
         {% for breadcrumb in breadcrumbs %}
@@ -31,23 +32,24 @@
             <table id="route" class="table table-bordered table-hover">
               <thead>
                 <tr>
-                  <td class="text-start">{{ entry_store }}</td>
-                  <td class="text-start">{{ entry_route }}</td>
-                  <td></td>
+                  <th{{ entry_store }}</td>
+                  <th>{{ entry_route }}</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {% set route_row = 0 %}
                 {% for layout_route in layout_routes %}
                   <tr id="route-row-{{ route_row }}">
-                    <td class="text-start"><select name="layout_route[{{ route_row }}][store_id]" class="form-select">
+                    <td>
+                      <select name="layout_route[{{ route_row }}][store_id]" class="form-select">
                         <option value="0">{{ text_default }}</option>
                         {% for store in stores %}
                           <option value="{{ store.store_id }}"{% if store.store_id == layout_route.store_id %} selected{% endif %}>{{ store.name }}</option>
                         {% endfor %}
                       </select></td>
-                    <td class="text-start"><input type="text" name="layout_route[{{ route_row }}][route]" value="{{ layout_route.route }}" placeholder="{{ entry_route|escape('js') }}" class="form-control"/></td>
-                    <td class="text-end"><button type="button" onclick="$('#route-row-{{ route_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove|escape('js') }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>
+                      <td><input type="text" name="layout_route[{{ route_row }}][route]" value="{{ layout_route.route }}" placeholder="{{ entry_route }}" class="form-control"/></td>
+                      <td class="text-end"><button type="button" onclick="$('#route-row-{{ route_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>
                   </tr>
                   {% set route_row = route_row + 1 %}
                 {% endfor %}
@@ -55,7 +57,7 @@
               <tfoot>
                 <tr>
                   <td colspan="2"></td>
-                  <td class="text-end"><button type="button" onclick="addRoute();" data-bs-toggle="tooltip" title="{{ button_route_add|escape('js') }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button></td>
+                  <td class="text-end"><button type="button" onclick="addRoute();" data-bs-toggle="tooltip" title="{{ button_route_add }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button></td>
                 </tr>
               </tfoot>
             </table>
@@ -68,14 +70,14 @@
                 <table id="module-column-left" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <td class="text-center">{{ text_column_left }}</td>
+                      <th class="text-center">{{ text_column_left }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for layout_module in layout_modules %}
                       {% if layout_module.position == 'column_left' %}
                         <tr id="module-row-{{ module_row }}">
-                          <td class="text-start">
+                          <td>
                             <div class="input-group input-group-sm">
                               <select name="layout_module[{{ module_row }}][code]" class="form-select input-sm">
                                 {% for extension in extensions %}
@@ -84,13 +86,14 @@
                                       <option value="{{ extension.code }}"{% if extension.code == layout_module.code %} selected{% endif %}>{{ extension.name }}</option>
                                     {% else %}
                                       {% for module in extension.module %}
-                                        <option value="{{ module.code }}"{% if module.code == layout_module.code %} selected{% endif %}>{{ module.name }}</option>
-                                      {% endfor %}
-                                    {% endif %}
-                                  </optgroup>
-                                {% endfor %}
-                              </select> <input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}"/> <input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}"/> <a href="{{ layout_module.edit }}" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a>
-                              <button type="button" onclick="$('#module-row-{{ module_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove|escape('js') }}" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle fa-fw"></i></button>
+                                      <option value="{{ module.code }}"{% if module.code == layout_module.code %} selected{% endif %}>{{ module.name }}</option>
+                                    {% endfor %}
+                                  {% endif %}
+                                </optgroup>
+                              {% endfor %}
+                              </select>
+                              <input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}"/><input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}"/> <a href="{{ layout_module.edit }}" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a>
+                              <button type="button" onclick="$('#module-row-{{ module_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle fa-fw"></i></button>
                             </div>
                           </td>
                         </tr>
@@ -100,7 +103,7 @@
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td class="text-end"><button type="button" onclick="addModule('column-left');" data-bs-toggle="tooltip" title="{{ button_module_add|escape('js') }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus-circle fa-fw"></i></button></td>
+                      <td class="text-end"><button type="button" onclick="addModule('column-left');" data-bs-toggle="tooltip" title="{{ button_module_add }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus-circle fa-fw"></i></button></td>
                     </tr>
                   </tfoot>
                 </table>
@@ -109,14 +112,14 @@
                 <table id="module-content-top" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <td class="text-center">{{ text_content_top }}</td>
+                      <th class="text-center">{{ text_content_top }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for layout_module in layout_modules %}
                       {% if layout_module.position == 'content_top' %}
                         <tr id="module-row-{{ module_row }}">
-                          <td class="text-start">
+                          <td>
                             <div class="input-group input-group-sm">
                               <select name="layout_module[{{ module_row }}][code]" class="form-select input-sm">
                                 {% for extension in extensions %}
@@ -130,10 +133,10 @@
                                     {% endif %}
                                   </optgroup>
                                 {% endfor %}
-                              </select><input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}"/> <input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}"/> <a href="{{ layout_module.edit }}" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a>
+                              </select>
+                              <input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}"/> <input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}"/> <a href="{{ layout_module.edit }}" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a>
                               <button type="button" onclick="$('#module-row-{{ module_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle fa-fw"></i></button>
-                            </div>
-                          </td>
+                            </div></td>
                         </tr>
                         {% set module_row = module_row + 1 %}
                       {% endif %}
@@ -148,14 +151,14 @@
                 <table id="module-content-bottom" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <td class="text-center">{{ text_content_bottom }}</td>
+                      <th class="text-center">{{ text_content_bottom }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for layout_module in layout_modules %}
                       {% if layout_module.position == 'content_bottom' %}
                         <tr id="module-row-{{ module_row }}">
-                          <td class="text-start">
+                          <td>
                             <div class="input-group input-group-sm">
                               <select name="layout_module[{{ module_row }}][code]" class="form-select input-sm">
                                 {% for extension in extensions %}
@@ -169,10 +172,10 @@
                                     {% endif %}
                                   </optgroup>
                                 {% endfor %}
-                              </select> <input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}"/> <input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}"/> <a href="{{ layout_module.edit }}" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a>
+                              </select>
+                              <input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}"/> <input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}"/> <a href="{{ layout_module.edit }}" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a>
                               <button type="button" onclick="$('#module-row-{{ module_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle fa-fw"></i></button>
-                            </div>
-                          </td>
+                            </div></td>
                         </tr>
                         {% set module_row = module_row + 1 %}
                       {% endif %}
@@ -189,7 +192,7 @@
                 <table id="module-column-right" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <td class="text-center">{{ text_column_right }}</td>
+                      <th class="text-center">{{ text_column_right }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -202,18 +205,18 @@
                                 {% for extension in extensions %}
                                   <optgroup label="{{ extension.name }}">
                                     {% if not extension.module %}
-                                    <option value="{{ extension.code }}"{% if extension.code == layout_module.code %} selected{% endif %}>{{ extension.name }}</option>
-                                  {% else %}
-                                    {% for module in extension.module %}
-                                      <option value="{{ module.code }}"{% if module.code == layout_module.code %} selected{% endif %}>{{ module.name }}</option>
-                                    {% endfor %}
+                                      <option value="{{ extension.code }}"{% if extension.code == layout_module.code %} selected{% endif %}>{{ extension.name }}</option>
+                                    {% else %}
+                                      {% for module in extension.module %}
+                                        <option value="{{ module.code }}"{% if module.code == layout_module.code %} selected{% endif %}>{{ module.name }}</option>
+                                      {% endfor %}
                                     {% endif %}
                                   </optgroup>
                                 {% endfor %}
-                              </select> <input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}"/> <input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}"/> <a href="{{ layout_module.edit }}" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a>
+                              </select>
+                              <input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}"/> <input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}"/> <a href="{{ layout_module.edit }}" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a>
                               <button type="button" onclick="$('#module-row-{{ module_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle fa-fw"></i></button>
-                            </div>
-                          </td>
+                            </div></td>
                         </tr>
                         {% set module_row = module_row + 1 %}
                       {% endif %}
@@ -239,13 +242,13 @@ var route_row = {{ route_row }};
 
 function addRoute() {
     html = '<tr id="route-row-' + route_row + '">';
-    html += '  <td class="text-start"><select name="layout_route[' + route_row + '][store_id]" class="form-select">';
+    html += '  <td><select name="layout_route[' + route_row + '][store_id]" class="form-select">';
     html += '  <option value="0">{{ text_default|escape('js') }}</option>';
   {% for store in stores %}
     html += '<option value="{{ store.store_id }}">{{ store.name|escape('js') }}</option>';
   {% endfor %}
     html += '  </select></td>';
-    html += '  <td class="text-start"><input type="text" name="layout_route[' + route_row + '][route]" value="" placeholder="{{ entry_route|escape('js') }}" class="form-control"/></td>';
+    html += '  <td><input type="text" name="layout_route[' + route_row + '][route]" value="" placeholder="{{ entry_route|escape('js') }}" class="form-control"/></td>';
     html += '  <td class="text-end"><button type="button" onclick="$(\'#route-row-' + route_row + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove|escape('js') }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
     html += '</tr>';
 
@@ -258,7 +261,7 @@ var module_row = {{ module_row }};
 
 function addModule(type) {
     html = '<tr id="module-row-' + module_row + '">';
-    html += '  <td class="text-start"><div class="input-group input-group-sm">';
+    html += '  <td><div class="input-group input-group-sm">';
     html += '    <select name="layout_module[' + module_row + '][code]" class="form-select input-sm">';
   {% for extension in extensions %}
     html += '    <optgroup label="{{ extension.name|escape('js') }}">';
@@ -274,13 +277,13 @@ function addModule(type) {
     html += '  </select>';
     html += '  <input type="hidden" name="layout_module[' + module_row + '][position]" value="' + type.replaceAll('-', '_') + '" />';
     html += '  <input type="hidden" name="layout_module[' + module_row + '][sort_order]" value="" />';
-    html += '  <a href=" data-bs-toggle="tooltip" title="{{ button_edit|escape('js') }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a><button type="button" onclick="$(\'#module-row-' + module_row + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove|escape('js') }}" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle fa-fw"></i></button>';
+    html += '  <a href="" data-bs-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil fa-fw"></i></a><button type="button" onclick="$(\'#module-row-' + module_row + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle fa-fw"></i></button>';
     html += '  </div></td>';
     html += '</tr>';
 
     $('#module-' + type + ' tbody').append(html);
 
-    $('#module-' + type + ' tbody input[name*=\'sort_order\']').each(function (i, element) {
+    $('#module-' + type + ' tbody input[name*=\'sort_order\']').each(function(i, element) {
         $(element).val(i);
     });
 
@@ -289,7 +292,7 @@ function addModule(type) {
     module_row++;
 }
 
-$('#module-column-left, #module-column-right, #module-content-top, #module-content-bottom').on('change', 'select[name*=\'code\']', function () {
+$('#module-column-left, #module-column-right, #module-content-top, #module-content-bottom').on('change', 'select[name*=\'code\']', function() {
     var part = this.value.split('.');
 
     if (typeof part[2] == 'undefined') {

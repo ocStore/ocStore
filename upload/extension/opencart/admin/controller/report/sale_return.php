@@ -3,10 +3,12 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Report;
 /**
  * Class Sale Return
  *
- * @package  Opencart\Admin\Controller\Extension\Opencart\Report
+ * @package Opencart\Admin\Controller\Extension\Opencart\Report
  */
 class SaleReturn extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -45,6 +47,8 @@ class SaleReturn extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -57,6 +61,7 @@ class SaleReturn extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('report_sale_return', $this->request->post);
@@ -69,6 +74,8 @@ class SaleReturn extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Report
+	 *
 	 * @return void
 	 */
 	public function report(): void {
@@ -76,6 +83,7 @@ class SaleReturn extends \Opencart\System\Engine\Controller {
 
 		$data['list'] = $this->getReport();
 
+		// Return Status
 		$this->load->model('localisation/return_status');
 
 		$data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
@@ -108,6 +116,8 @@ class SaleReturn extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -117,6 +127,8 @@ class SaleReturn extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get Report
+	 *
 	 * @return string
 	 */
 	public function getReport(): string {
@@ -150,11 +162,12 @@ class SaleReturn extends \Opencart\System\Engine\Controller {
 			$page = 1;
 		}
 
+		// Returns
 		$data['returns'] = [];
 
 		$filter_data = [
-			'filter_date_start'	      => $filter_date_start,
-			'filter_date_end'	      => $filter_date_end,
+			'filter_date_start'       => $filter_date_start,
+			'filter_date_end'         => $filter_date_end,
 			'filter_group'            => $filter_group,
 			'filter_return_status_id' => $filter_return_status_id,
 			'start'                   => ($page - 1) * $this->config->get('config_pagination'),

@@ -3,27 +3,49 @@ namespace Opencart\Catalog\Model\Catalog;
 /**
  * Class Manufacturer
  *
+ * Can be called using $this->load->model('catalog/manufacturer');
+ *
  * @package Opencart\Catalog\Model\Catalog
  */
 class Manufacturer extends \Opencart\System\Engine\Model {
 	/**
-	 * @param int $manufacturer_id
+	 * Get Manufacturer
 	 *
-	 * @return array
+	 * Get the record of the manufacturer record in the database.
+	 *
+	 * @param int $manufacturer_id primary key of the manufacturer record
+	 *
+	 * @return array<string, mixed> manufacturer record that has manufacturer ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($manufacturer_id);
 	 */
 	public function getManufacturer(int $manufacturer_id): array {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "manufacturer` m LEFT JOIN `" . DB_PREFIX . "manufacturer_to_store` m2s ON (m.`manufacturer_id` = m2s.`manufacturer_id`) WHERE m.`manufacturer_id` = '" . (int)$manufacturer_id . "' AND m2s.`store_id` = '" . (int)$this->config->get('config_store_id') . "'");
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "manufacturer` `m` LEFT JOIN `" . DB_PREFIX . "manufacturer_to_store` `m2s` ON (`m`.`manufacturer_id` = `m2s`.`manufacturer_id`) WHERE `m`.`manufacturer_id` = '" . (int)$manufacturer_id . "' AND `m2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "'");
 
 		return $query->row;
 	}
 
 	/**
-	 * @param array $data
+	 * Get Manufacturer(s)
 	 *
-	 * @return array
+	 * Get the record of the manufacturer records in the database.
+	 *
+	 * @param array<string, mixed> $data array of filters
+	 *
+	 * @return array<int, array<string, mixed>> manufacturer records
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $results = $this->model_catalog_manufacturer->getManufacturers();
 	 */
 	public function getManufacturers(array $data = []): array {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "manufacturer` m LEFT JOIN `" . DB_PREFIX . "manufacturer_to_store` m2s ON (m.`manufacturer_id` = m2s.`manufacturer_id`) WHERE m2s.`store_id` = '" . (int)$this->config->get('config_store_id') . "'";
+		$sql = "SELECT * FROM `" . DB_PREFIX . "manufacturer` `m` LEFT JOIN `" . DB_PREFIX . "manufacturer_to_store` `m2s` ON (`m`.`manufacturer_id` = `m2s`.`manufacturer_id`) WHERE `m2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "'";
 
 		$sort_data = [
 			'name',
@@ -54,23 +76,35 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$manufacturer_data = $this->cache->get('manufacturer.' . md5($sql));
+		$key = md5($sql);
+
+		$manufacturer_data = $this->cache->get('manufacturer.' . $key);
 
 		if (!$manufacturer_data) {
 			$query = $this->db->query($sql);
 
 			$manufacturer_data = $query->rows;
 
-			$this->cache->set('manufacturer.' . md5($sql), $manufacturer_data);
+			$this->cache->set('manufacturer.' . $key, $manufacturer_data);
 		}
 
 		return $manufacturer_data;
 	}
 
 	/**
-	 * @param int $manufacturer_id
+	 * Get Layout ID
 	 *
-	 * @return int
+	 * Get the record of the manufacturer layout record in the database.
+	 *
+	 * @param int $manufacturer_id primary key of the manufacturer record
+	 *
+	 * @return int layout record that has manufacturer ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $layout_id = $this->model_catalog_manufacturer->getLayoutId($manufacturer_id);
 	 */
 	public function getLayoutId(int $manufacturer_id): int {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "manufacturer_to_layout` WHERE `manufacturer_id` = '" . (int)$manufacturer_id . "' AND `store_id` = '" . (int)$this->config->get('config_store_id') . "'");

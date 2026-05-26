@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\User;
  */
 class Api extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -55,6 +57,8 @@ class Api extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -64,9 +68,11 @@ class Api extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get List
+	 *
 	 * @return string
 	 */
-	protected function getList(): string {
+	public function getList(): string {
 		if (isset($this->request->get['sort'])) {
 			$sort = (string)$this->request->get['sort'];
 		} else {
@@ -101,6 +107,7 @@ class Api extends \Opencart\System\Engine\Controller {
 
 		$data['action'] = $this->url->link('user/api.list', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		// API
 		$data['apis'] = [];
 
 		$filter_data = [
@@ -112,19 +119,14 @@ class Api extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('user/api');
 
-		$user_total = $this->model_user_api->getTotalApis();
-
 		$results = $this->model_user_api->getApis($filter_data);
 
 		foreach ($results as $result) {
 			$data['apis'][] = [
-				'api_id'        => $result['api_id'],
-				'username'      => $result['username'],
-				'status'        => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
 				'date_added'    => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
 				'date_modified' => date($this->language->get('date_format_short'), strtotime($result['date_modified'])),
 				'edit'          => $this->url->link('user/api.form', 'user_token=' . $this->session->data['user_token'] . '&api_id=' . $result['api_id'] . $url)
-			];
+			] + $result;
 		}
 
 		$url = '';
@@ -150,6 +152,8 @@ class Api extends \Opencart\System\Engine\Controller {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 
+		$user_total = $this->model_user_api->getTotalApis();
+
 		$data['pagination'] = $this->load->controller('common/pagination', [
 			'total' => $user_total,
 			'page'  => $page,
@@ -166,6 +170,8 @@ class Api extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Form
+	 *
 	 * @return void
 	 */
 	public function form(): void {
@@ -174,7 +180,7 @@ class Api extends \Opencart\System\Engine\Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$data['text_form'] = !isset($this->request->get['api_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
-		$data['text_ip'] = sprintf($this->language->get('text_ip'), $this->request->server['REMOTE_ADDR']);
+		$data['text_ip'] = sprintf($this->language->get('text_ip'), oc_get_ip());
 
 		if (isset($this->request->get['api_id'])) {
 			$data['api_id'] = $this->request->get['api_id'];
@@ -217,8 +223,8 @@ class Api extends \Opencart\System\Engine\Controller {
 			$api_info = $this->model_user_api->getApi($this->request->get['api_id']);
 		}
 
-		if (isset($this->request->get['api_id'])) {
-			$data['api_id'] = (int)$this->request->get['api_id'];
+		if (!empty($api_info)) {
+			$data['api_id'] = $api_info['api_id'];
 		} else {
 			$data['api_id'] = 0;
 		}
@@ -248,22 +254,7 @@ class Api extends \Opencart\System\Engine\Controller {
 			$data['api_ips'] = [];
 		}
 
-		// Session
-		$data['api_sessions'] = [];
-
-		if (!empty($api_info)) {
-			$results = $this->model_user_api->getSessions($this->request->get['api_id']);
-
-			foreach ($results as $result) {
-				$data['api_sessions'][] = [
-					'api_session_id' => $result['api_session_id'],
-					'session_id'     => $result['session_id'],
-					'ip'             => $result['ip'],
-					'date_added'     => date($this->language->get('datetime_format'), strtotime($result['date_added'])),
-					'date_modified'  => date($this->language->get('datetime_format'), strtotime($result['date_modified']))
-				];
-			}
-		}
+		$data['history'] = $this->getHistory();
 
 		$data['user_token'] = $this->session->data['user_token'];
 
@@ -275,6 +266,8 @@ class Api extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -286,25 +279,34 @@ class Api extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_permission');
 		}
 
-		if ((oc_strlen($this->request->post['username']) < 3) || (oc_strlen($this->request->post['username']) > 64)) {
+		$required = [
+			'api_id'   => 0,
+			'username' => '',
+			'key'      => '',
+			'status'   => 0
+		];
+
+		$post_info = $this->request->post + $required;
+
+		if (!oc_validate_length($post_info['username'], 3, 64)) {
 			$json['error']['username'] = $this->language->get('error_username');
 		}
 
-		if ((oc_strlen($this->request->post['key']) < 64) || (oc_strlen($this->request->post['key']) > 256)) {
+		if (!oc_validate_length($post_info['key'], 64, 256)) {
 			$json['error']['key'] = $this->language->get('error_key');
 		}
 
-		if (!isset($json['error']['warning']) && !isset($this->request->post['api_ip'])) {
+		if (!isset($json['error']['warning']) && !isset($post_info['api_ip'])) {
 			$json['error']['warning'] = $this->language->get('error_ip');
 		}
 
 		if (!$json) {
 			$this->load->model('user/api');
 
-			if (!$this->request->post['api_id']) {
+			if (!$post_info['api_id']) {
 				$json['api_id'] = $this->model_user_api->addApi($this->request->post);
 			} else {
-				$this->model_user_api->editApi($this->request->post['api_id'], $this->request->post);
+				$this->model_user_api->editApi($post_info['api_id'], $this->request->post);
 			}
 
 			$json['success'] = $this->language->get('text_success');
@@ -315,6 +317,8 @@ class Api extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Delete
+	 *
 	 * @return void
 	 */
 	public function delete(): void {
@@ -323,7 +327,7 @@ class Api extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->post['selected'])) {
-			$selected = $this->request->post['selected'];
+			$selected = (array)$this->request->post['selected'];
 		} else {
 			$selected = [];
 		}
@@ -347,26 +351,61 @@ class Api extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * History
+	 *
 	 * @return void
 	 */
-	public function deleteSession(): void {
+	public function history(): void {
 		$this->load->language('user/api');
 
-		$json = [];
+		$this->response->setOutput($this->getHistory());
+	}
 
-		if (!$this->user->hasPermission('modify', 'user/api')) {
-			$json['error'] = $this->language->get('error_permission');
+	/**
+	 * Get History
+	 *
+	 * @return string
+	 */
+	public function getHistory(): string {
+		if (isset($this->request->get['api_id'])) {
+			$api_id = (int)$this->request->get['api_id'];
+		} else {
+			$api_id = 0;
 		}
 
-		if (!$json) {
-			$this->load->model('user/api');
-
-			$this->model_user_api->deleteSession($this->request->get['api_session_id']);
-
-			$json['success'] = $this->language->get('text_success');
+		if (isset($this->request->get['page']) && $this->request->get['route'] == 'user/api.history') {
+			$page = (int)$this->request->get['page'];
+		} else {
+			$page = 1;
 		}
 
-		$this->response->addHeader('Content-Type: application/json');
-		$this->response->setOutput(json_encode($json));
+		$limit = 10;
+
+		$data['histories'] = [];
+
+		$this->load->model('user/api');
+
+		$results = $this->model_user_api->getHistories($api_id, ($page - 1) * $limit, $limit);
+
+		foreach ($results as $result) {
+			$data['histories'][] = [
+				'ip'         => $result['ip'],
+				'call'       => $result['call'],
+				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added']))
+			];
+		}
+
+		$history_total = $this->model_user_api->getTotalHistories($api_id);
+
+		$data['pagination'] = $this->load->controller('common/pagination', [
+			'total' => $history_total,
+			'page'  => $page,
+			'limit' => $limit,
+			'url'   => $this->url->link('user/api.history', 'user_token=' . $this->session->data['user_token'] . '&api_id=' . $api_id . '&page={page}')
+		]);
+
+		$data['results'] = sprintf($this->language->get('text_pagination'), ($history_total) ? (($page - 1) * $limit) + 1 : 0, ((($page - 1) * $limit) > ($history_total - $limit)) ? $history_total : ((($page - 1) * $limit) + $limit), $history_total, ceil($history_total / $limit));
+
+		return $this->load->view('user/api_history', $data);
 	}
 }

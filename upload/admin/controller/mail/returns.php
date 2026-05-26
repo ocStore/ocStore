@@ -7,14 +7,19 @@ namespace Opencart\Admin\Controller\Mail;
  */
 class Returns extends \Opencart\System\Engine\Controller {
 	/**
-	 * @param string $route
-	 * @param array  $args
-	 * @param mixed  $output
+	 * Index
+	 *
+	 * admin/model/sale/returns.addHistory/after
+	 *
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param mixed             $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function index(string &$route, array &$args, mixed &$output): void {
+	public function index(string &$route, array &$args, &$output): void {
 		if (isset($args[0])) {
 			$return_id = $args[0];
 		} else {
@@ -45,6 +50,7 @@ class Returns extends \Opencart\System\Engine\Controller {
 			$return_info = $this->model_sale_returns->getReturn($return_id);
 
 			if ($return_info) {
+				// Order
 				$this->load->model('sale/order');
 
 				$order_info = $this->model_sale_order->getOrder($return_info['order_id']);
@@ -57,8 +63,9 @@ class Returns extends \Opencart\System\Engine\Controller {
 					$store_url = HTTP_CATALOG;
 				}
 
+				// Send the email in the correct language
 				$this->load->model('localisation/language');
-				
+
 				$language_info = $this->model_localisation_language->getLanguage($return_info['language_id']);
 
 				if ($language_info) {

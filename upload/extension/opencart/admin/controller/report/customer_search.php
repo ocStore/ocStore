@@ -1,12 +1,14 @@
 <?php
 namespace Opencart\Admin\Controller\Extension\Opencart\Report;
 /**
- * Class CustomerSearch
+ * Class Customer Search
  *
  * @package Opencart\Admin\Controller\Extension\Opencart\Report
  */
 class CustomerSearch extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -45,6 +47,8 @@ class CustomerSearch extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -57,6 +61,7 @@ class CustomerSearch extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('report_customer_search', $this->request->post);
@@ -69,6 +74,8 @@ class CustomerSearch extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Report
+	 *
 	 * @return void
 	 */
 	public function report(): void {
@@ -82,6 +89,8 @@ class CustomerSearch extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * List
+	 *
 	 * @return void
 	 */
 	public function list(): void {
@@ -91,6 +100,8 @@ class CustomerSearch extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Get Report
+	 *
 	 * @return string
 	 */
 	public function getReport(): string {
@@ -130,6 +141,7 @@ class CustomerSearch extends \Opencart\System\Engine\Controller {
 			$page = 1;
 		}
 
+		// Search
 		$data['searches'] = [];
 
 		$filter_data = [
@@ -143,6 +155,8 @@ class CustomerSearch extends \Opencart\System\Engine\Controller {
 		];
 
 		$this->load->model('extension/opencart/report/customer');
+
+		// Category
 		$this->load->model('catalog/category');
 
 		$search_total = $this->model_extension_opencart_report_customer->getTotalCustomerSearches($filter_data);

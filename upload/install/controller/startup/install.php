@@ -7,11 +7,13 @@ namespace Opencart\Install\Controller\Startup;
  */
 class Install extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
 		// Document
-		$this->registry->set('document', new \Opencart\System\Library\Document(HTTP_SERVER));
+		$this->registry->set('document', new \Opencart\System\Library\Document());
 
 		// URL
 		$this->registry->set('url', new \Opencart\System\Library\Url(HTTP_SERVER));
@@ -35,7 +37,8 @@ class Install extends \Opencart\System\Engine\Controller {
 
 		$language = new \Opencart\System\Library\Language($this->config->get('language_code'));
 		$language->addPath(DIR_LANGUAGE);
-		$language->load($this->config->get('language_code'));
+		$language->load('default');
+
 		$this->registry->set('language', $language);
 	}
 }

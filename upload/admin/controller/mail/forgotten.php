@@ -7,36 +7,42 @@ namespace Opencart\Admin\Controller\Mail;
  */
 class Forgotten extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
 	 *
-	 * admin/model/user/user/editCode/after
+	 * admin/model/user/user.addToken/after
 	 *
-	 * @param string $route
-	 * @param array  $args
-	 * @param mixed  $output
+	 * @param string            $route
+	 * @param array<int, mixed> $args
+	 * @param mixed             $output
+	 *
+	 * @throws \Exception
 	 *
 	 * @return void
-	 * @throws \Exception
 	 */
-	public function index(string &$route, array &$args, mixed &$output): void {
-		if (isset($this->request->get['route'])) {
-			$route = (string)$this->request->get['route'];
-		} else {
-			$route = '';
-		}
-
+	public function index(string &$route, array &$args, &$output): void {
 		if (isset($args[0])) {
-			$email = urldecode((string)$args[0]);
+			$user_id = (int)$args[0];
 		} else {
-			$email = '';
+			$user_id = 0;
 		}
 
 		if (isset($args[1])) {
-			$code = (string)$args[1];
+			$type = (string)$args[1];
+		} else {
+			$type = '';
+		}
+
+		if (isset($args[2])) {
+			$code = (string)$args[2];
 		} else {
 			$code = '';
 		}
 
-		if ($email && $code && ($route == 'common/forgotten.confirm') && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		$this->load->model('user/user');
+
+		$user_info = $this->model_user_user->getUser($user_id);
+
+		if ($type == 'password' && $user_info) {
 			$this->load->language('mail/forgotten');
 
 			$store_name = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
@@ -45,8 +51,8 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 
 			$data['text_greeting'] = sprintf($this->language->get('text_greeting'), $store_name);
 
-			$data['reset'] = $this->url->link('common/forgotten.reset', 'email=' . $email . '&code=' . $code, true);
-			$data['ip'] = $this->request->server['REMOTE_ADDR'];
+			$data['reset'] = $this->url->link('common/forgotten.reset', 'email=' . $user_info['email'] . '&code=' . $code, true);
+			$data['ip'] = oc_get_ip();
 
 			$data['store'] = $store_name;
 			$data['store_url'] = $this->config->get('config_store_url');
@@ -62,7 +68,7 @@ class Forgotten extends \Opencart\System\Engine\Controller {
 				];
 
 				$mail = new \Opencart\System\Library\Mail($this->config->get('config_mail_engine'), $mail_option);
-				$mail->setTo($email);
+				$mail->setTo($user_info['email']);
 				$mail->setFrom($this->config->get('config_email'));
 				$mail->setSender($store_name);
 				$mail->setSubject($subject);

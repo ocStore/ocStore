@@ -8,22 +8,27 @@ $autoloader->register('AWS/CRT/Internal', DIR_STORAGE . 'vendor/aws/aws-crt-php/
 
 // aws/aws-sdk-php
 $autoloader->register('Aws', DIR_STORAGE . 'vendor/aws/aws-sdk-php/src/', true);
-require_once(DIR_STORAGE . 'vendor/aws/aws-sdk-php/src/functions.php');
+if (is_file(DIR_STORAGE . 'vendor/aws/aws-sdk-php/src/functions.php')) {
+	require_once(DIR_STORAGE . 'vendor/aws/aws-sdk-php/src/functions.php');
+}
 
 // guzzlehttp/guzzle
 $autoloader->register('GuzzleHttp', DIR_STORAGE . 'vendor/guzzlehttp/guzzle/src/', true);
-require_once(DIR_STORAGE . 'vendor/guzzlehttp/guzzle/src/functions_include.php');
+if (is_file(DIR_STORAGE . 'vendor/guzzlehttp/guzzle/src/functions_include.php')) {
+	require_once(DIR_STORAGE . 'vendor/guzzlehttp/guzzle/src/functions_include.php');
+}
 
 // guzzlehttp/promises
 $autoloader->register('GuzzleHttp\Promise', DIR_STORAGE . 'vendor/guzzlehttp/promises/src/', true);
-require_once(DIR_STORAGE . 'vendor/guzzlehttp/promises/src/functions_include.php');
 
 // guzzlehttp/psr7
 $autoloader->register('GuzzleHttp\Psr7', DIR_STORAGE . 'vendor/guzzlehttp/psr7/src/', true);
 
 // mtdowling/jmespath.php
 $autoloader->register('JmesPath', DIR_STORAGE . 'vendor/mtdowling/jmespath.php/src/', true);
-require_once(DIR_STORAGE . 'vendor/mtdowling/jmespath.php/src/JmesPath.php');
+if (is_file(DIR_STORAGE . 'vendor/mtdowling/jmespath.php/src/JmesPath.php')) {
+	require_once(DIR_STORAGE . 'vendor/mtdowling/jmespath.php/src/JmesPath.php');
+}
 
 // psr/http-client
 $autoloader->register('Psr\Http\Client', DIR_STORAGE . 'vendor/psr/http-client/src/', true);
@@ -34,25 +39,48 @@ $autoloader->register('Psr\Http\Message', DIR_STORAGE . 'vendor/psr/http-factory
 // psr/http-message
 $autoloader->register('Psr\Http\Message', DIR_STORAGE . 'vendor/psr/http-message/src/', true);
 
-// psr/log
-$autoloader->register('Psr\Log', DIR_STORAGE . 'vendor/psr/log/src/', true);
-
 // ralouphie/getallheaders
-require_once(DIR_STORAGE . 'vendor/ralouphie/getallheaders/src/getallheaders.php');
+if (is_file(DIR_STORAGE . 'vendor/ralouphie/getallheaders/src/getallheaders.php')) {
+	require_once(DIR_STORAGE . 'vendor/ralouphie/getallheaders/src/getallheaders.php');
+}
 
 // scssphp/scssphp
 $autoloader->register('ScssPhp\ScssPhp', DIR_STORAGE . 'vendor/scssphp/scssphp/src/', true);
 
 // symfony/deprecation-contracts
-require_once(DIR_STORAGE . 'vendor/symfony/deprecation-contracts/function.php');
+if (is_file(DIR_STORAGE . 'vendor/symfony/deprecation-contracts/function.php')) {
+	require_once(DIR_STORAGE . 'vendor/symfony/deprecation-contracts/function.php');
+}
 
 // symfony/polyfill-ctype
 $autoloader->register('Symfony\Polyfill\Ctype', DIR_STORAGE . 'vendor/symfony/polyfill-ctype//', true);
-require_once(DIR_STORAGE . 'vendor/symfony/polyfill-ctype/bootstrap.php');
+if (is_file(DIR_STORAGE . 'vendor/symfony/polyfill-ctype/bootstrap.php')) {
+	require_once(DIR_STORAGE . 'vendor/symfony/polyfill-ctype/bootstrap.php');
+}
 
 // symfony/polyfill-mbstring
 $autoloader->register('Symfony\Polyfill\Mbstring', DIR_STORAGE . 'vendor/symfony/polyfill-mbstring//', true);
-require_once(DIR_STORAGE . 'vendor/symfony/polyfill-mbstring/bootstrap.php');
+if (is_file(DIR_STORAGE . 'vendor/symfony/polyfill-mbstring/bootstrap.php')) {
+	require_once(DIR_STORAGE . 'vendor/symfony/polyfill-mbstring/bootstrap.php');
+}
+
+// symfony/polyfill-php81
+$autoloader->register('Symfony\Polyfill\Php81', DIR_STORAGE . 'vendor/symfony/polyfill-php81//', true);
+if (is_file(DIR_STORAGE . 'vendor/symfony/polyfill-php81/bootstrap.php')) {
+	require_once(DIR_STORAGE . 'vendor/symfony/polyfill-php81/bootstrap.php');
+}
 
 // twig/twig
 $autoloader->register('Twig', DIR_STORAGE . 'vendor/twig/twig/src/', true);
+if (is_file(DIR_STORAGE . 'vendor/twig/twig/src/Resources/core.php')) {
+	require_once(DIR_STORAGE . 'vendor/twig/twig/src/Resources/core.php');
+}
+if (is_file(DIR_STORAGE . 'vendor/twig/twig/src/Resources/debug.php')) {
+	require_once(DIR_STORAGE . 'vendor/twig/twig/src/Resources/debug.php');
+}
+if (is_file(DIR_STORAGE . 'vendor/twig/twig/src/Resources/escaper.php')) {
+	require_once(DIR_STORAGE . 'vendor/twig/twig/src/Resources/escaper.php');
+}
+if (is_file(DIR_STORAGE . 'vendor/twig/twig/src/Resources/string_loader.php')) {
+	require_once(DIR_STORAGE . 'vendor/twig/twig/src/Resources/string_loader.php');
+}

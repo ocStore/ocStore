@@ -3,20 +3,23 @@ namespace Opencart\Catalog\Controller\Extension\Opencart\Module;
 /**
  * Class Filter
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Module
  */
 class Filter extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
+		// Category
 		if (isset($this->request->get['path'])) {
 			$parts = explode('_', (string)$this->request->get['path']);
 		} else {
 			$parts = [];
 		}
 
-		$category_id = end($parts);
+		$category_id = (int)end($parts);
 
 		$this->load->model('catalog/category');
 

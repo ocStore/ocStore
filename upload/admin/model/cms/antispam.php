@@ -1,15 +1,31 @@
 <?php
 namespace Opencart\Admin\Model\Cms;
 /**
- * Class Country
+ * Class Anti-Spam
+ *
+ * Can be loaded using $this->load->model('cms/antispam');
  *
  * @package Opencart\Admin\Model\Cms
  */
 class Antispam extends \Opencart\System\Engine\Model {
 	/**
-	 * @param array $data
+	 * Add Antispam
+	 *
+	 * Create a new antispam record in the database.
+	 *
+	 * @param array<string, mixed> $data array of data
 	 *
 	 * @return int
+	 *
+	 * @example
+	 *
+	 * $antispam_data = [
+	 *     'keyword' => 'Keyword'
+	 * ];
+	 *
+	 * $this->load->model('cms/antispam');
+	 *
+	 * $antispam_id = $this->model_cms_antispam->addAntispam($antispam_data);
 	 */
 	public function addAntispam(array $data = []): int {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "antispam` SET `keyword` = '" . $this->db->escape((string)$data['keyword']) . "'");
@@ -18,27 +34,62 @@ class Antispam extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param array $data
+	 * Edit Antispam
 	 *
-	 * @return int
+	 * Edit antispam record in the database.
+	 *
+	 * @param int                  $antispam_id primary key of the antispam record
+	 * @param array<string, mixed> $data        array of data
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $antispam_data = [
+	 *     'keyword' => 'Keyword'
+	 * ];
+	 *
+	 * $this->load->model('cms/antispam');
+	 *
+	 * $this->model_cms_antispam->editAntispam($antispam_id, $antispam_data);
 	 */
 	public function editAntispam(int $antispam_id, array $data = []): void {
 		$this->db->query("UPDATE `" . DB_PREFIX . "antispam` SET `keyword` = '" . $this->db->escape((string)$data['keyword']) . "' WHERE `antispam_id` = '" . (int)$antispam_id . "'");
 	}
 
 	/**
-	 * @param int $antispam_id
+	 * Delete Antispam
+	 *
+	 * Delete antispam record in the database.
+	 *
+	 * @param int $antispam_id primary key of the antispam record
 	 *
 	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('cms/antispam');
+	 *
+	 * $this->model_cms_antispam->deleteAntispam($antispam_id);
 	 */
 	public function deleteAntispam(int $antispam_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "antispam` WHERE `antispam_id` = '" . (int)$antispam_id . "'");
 	}
 
 	/**
-	 * @param int $antispam_id
+	 * Get Antispam
 	 *
-	 * @return array
+	 * Get the record of the antispam record in the database.
+	 *
+	 * @param int $antispam_id primary key of the antispam record
+	 *
+	 * @return array<string, mixed> antispam record that has antispam ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('cms/antispam');
+	 *
+	 * $antispam_info = $this->model_cms_antispam->getAntispam($antispam_id);
 	 */
 	public function getAntispam(int $antispam_id): array {
 		$query = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "antispam` WHERE `antispam_id` = '" . (int)$antispam_id . "'");
@@ -47,9 +98,27 @@ class Antispam extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param array $data
+	 * Get Antispam(s)
 	 *
-	 * @return array
+	 * Get the record of the antispam records in the database.
+	 *
+	 * @param array<string, mixed> $data array of filters
+	 *
+	 * @return array<int, array<string, mixed>> antispam records
+	 *
+	 * @example
+	 *
+	 * $filter_data = [
+	 *     'filter_keyword' => 'Keyword',
+	 *     'sort'           => 'keyword',
+	 *     'order'          => 'DESC',
+	 *     'start'          => 0,
+	 *     'limit'          => 10
+	 * ];
+	 *
+	 * $this->load->model('cms/antispam');
+	 *
+	 * $results = $this->model_cms_antispam->getAntispams($filter_data);
 	 */
 	public function getAntispams(array $data = []): array {
 		$sql = "SELECT * FROM `" . DB_PREFIX . "antispam`";
@@ -57,7 +126,7 @@ class Antispam extends \Opencart\System\Engine\Model {
 		$implode = [];
 
 		if (!empty($data['filter_keyword'])) {
-			$implode[] = "`keyword` LIKE '" . $this->db->escape((string)$data['filter_keyword']) . "'";
+			$implode[] = "LCASE(`keyword`) LIKE '" . $this->db->escape(oc_strtolower($data['filter_keyword'])) . "'";
 		}
 
 		if ($implode) {
@@ -96,9 +165,27 @@ class Antispam extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * @param array $data
+	 * Get Total Antispam(s)
 	 *
-	 * @return int
+	 * Get the total number of antispam records in the database.
+	 *
+	 * @param array<string, mixed> $data array of filters
+	 *
+	 * @return int total number of antispam records
+	 *
+	 * @example
+	 *
+	 * $filter_data = [
+	 *     'filter_keyword' => 'Keyword',
+	 *     'sort'           => 'keyword',
+	 *     'order'          => 'DESC',
+	 *     'start'          => 0,
+	 *     'limit'          => 10
+	 * ];
+	 *
+	 * $this->load->model('cms/antispam');
+	 *
+	 * $antispam_total = $this->model_cms_antispam->getTotalAntispams($filter_data);
 	 */
 	public function getTotalAntispams(array $data = []): int {
 		$sql = "SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "antispam`";
@@ -106,7 +193,7 @@ class Antispam extends \Opencart\System\Engine\Model {
 		$implode = [];
 
 		if (!empty($data['filter_keyword'])) {
-			$implode[] = "`keyword` LIKE '" . $this->db->escape((string)$data['filter_keyword']) . "'";
+			$implode[] = "LCASE(`keyword`) LIKE '" . $this->db->escape(oc_strtolower($data['filter_keyword'])) . "'";
 		}
 
 		if ($implode) {

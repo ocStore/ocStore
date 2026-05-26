@@ -7,6 +7,8 @@ namespace Opencart\Install\Controller\Upgrade;
  */
 class Upgrade2 extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -101,13 +103,13 @@ class Upgrade2 extends \Opencart\System\Engine\Controller {
 								}
 							}
 
-							// Check if the path is not directory and check there is no existing file
+							// Check if the path is not directory, and check there is no existing file
 							if (substr($destination, -1) != '/' && !is_dir($base . $destination)) {
 								if (is_file($base . $destination)) {
 									unlink($base . $destination);
 								}
 
-								if (!copy('zip://' . $file . '#' . $source, $base . $destination)) {
+								if (file_put_contents($base . $destination, $zip->getFromIndex($i)) === false) {
 									$json['error'] = sprintf($this->language->get('error_copy'), $source, $path);
 								}
 							}
@@ -122,7 +124,7 @@ class Upgrade2 extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$json['text'] = sprintf($this->language->get('text_progress'), 2, 2, 9);
+			$json['text'] = sprintf($this->language->get('text_patch'), 2, 2, 11);
 
 			$url = '';
 

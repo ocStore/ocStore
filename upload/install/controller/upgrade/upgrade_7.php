@@ -7,6 +7,8 @@ namespace Opencart\Install\Controller\Upgrade;
  */
 class Upgrade7 extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -16,8 +18,8 @@ class Upgrade7 extends \Opencart\System\Engine\Controller {
 
 		try {
 			// Set Product Meta Title default to product name if empty
-			$this->db->query("UPDATE `" . DB_PREFIX . "product_description` SET `meta_title` = `name` WHERE `meta_title` = ''");
 			$this->db->query("UPDATE `" . DB_PREFIX . "category_description` SET `meta_title` = `name` WHERE `meta_title` = ''");
+			$this->db->query("UPDATE `" . DB_PREFIX . "product_description` SET `meta_title` = `name` WHERE `meta_title` = ''");
 			$this->db->query("UPDATE `" . DB_PREFIX . "information_description` SET `meta_title` = `title` WHERE `meta_title` = ''");
 
 			//  Option
@@ -69,10 +71,10 @@ class Upgrade7 extends \Opencart\System\Engine\Controller {
 			// Drop Fields
 			$remove = [];
 
-			// product_option
+			// banner_image_description
 			$remove[] = [
-				'table' => 'product_option',
-				'field' => 'option_value'
+				'table' => 'banner_image_description',
+				'field' => 'title'
 			];
 
 			// custom_field
@@ -86,39 +88,71 @@ class Upgrade7 extends \Opencart\System\Engine\Controller {
 				'field' => 'position'
 			];
 
-			// download
 			$remove[] = [
 				'table' => 'custom_field',
 				'field' => 'required'
 			];
 
+			$remove[] = [
+				'table' => 'custom_field',
+				'field' => 'required'
+			];
+
+			// download
 			$remove[] = [
 				'table' => 'download',
 				'field' => 'remaining'
 			];
 
-			$remove[] = [
-				'table' => 'custom_field',
-				'field' => 'required'
-			];
-
-			$remove[] = [
-				'table' => 'banner_image_description',
-				'field' => 'title'
-			];
-
-			// Drop date_added field from extension_path
+			// extension_path
 			$remove[] = [
 				'table' => 'extension_path',
 				'field' => 'date_added'
 			];
 
-			foreach ($remove as $result) {
-				$query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = '" . DB_PREFIX . $result['table'] . "' AND COLUMN_NAME = '" . $result['field'] . "'");
+			// geo_zone
+			$remove[] = [
+				'table' => 'geo_zone',
+				'field' => 'date_added'
+			];
 
-				if ($query->num_rows) {
-					$this->db->query("ALTER TABLE `" . DB_PREFIX . $result['table'] . "` DROP `" . $result['field'] . "`");
-				}
+			$remove[] = [
+				'table' => 'geo_zone',
+				'field' => 'date_modified'
+			];
+
+			// product_option
+			$remove[] = [
+				'table' => 'product_option',
+				'field' => 'option_value'
+			];
+
+			// tax_class
+			$remove[] = [
+				'table' => 'tax_class',
+				'field' => 'date_added'
+			];
+
+			$remove[] = [
+				'table' => 'tax_class',
+				'field' => 'date_modified'
+			];
+
+			// tax_rate
+			$remove[] = [
+				'table' => 'tax_rate',
+				'field' => 'date_added'
+			];
+
+			$remove[] = [
+				'table' => 'tax_rate',
+				'field' => 'date_modified'
+			];
+
+			$this->load->model('upgrade/upgrade');
+
+			foreach ($remove as $result) {
+				$this->model_upgrade_upgrade->dropField($result['table'], $result['field']);
 			}
 
 			// Drop Tables
@@ -128,11 +162,7 @@ class Upgrade7 extends \Opencart\System\Engine\Controller {
 			];
 
 			foreach ($remove as $table) {
-				$query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = '" . DB_PREFIX . $table . "'");
-
-				if ($query->num_rows) {
-					$this->db->query("DROP TABLE `" . DB_PREFIX . $table . "`");
-				}
+				$this->model_upgrade_upgrade->dropTable($table);
 			}
 
 			// Sort the categories to take advantage of the nested set model
@@ -142,7 +172,7 @@ class Upgrade7 extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$json['text'] = sprintf($this->language->get('text_progress'), 7, 7, 9);
+			$json['text'] = sprintf($this->language->get('text_patch'), 7, 7, 11);
 
 			$url = '';
 
@@ -161,10 +191,12 @@ class Upgrade7 extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 
-	// Function to repair any erroneous categories that are not in the category path table.
-
 	/**
-	 * @param int $parent_id
+	 * Repair Categories
+	 *
+	 * Repair any erroneous categories that are not in the category path table.
+	 *
+	 * @param int $parent_id primary key of the parent category record
 	 *
 	 * @return void
 	 */

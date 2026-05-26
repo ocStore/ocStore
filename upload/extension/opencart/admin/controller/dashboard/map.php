@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Dashboard;
  */
 class Map extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -53,6 +55,8 @@ class Map extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -61,10 +65,11 @@ class Map extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (!$this->user->hasPermission('modify', 'extension/opencart/dashboard/map')) {
-			$json['error']  = $this->language->get('error_permission');
+			$json['error'] = $this->language->get('error_permission');
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('dashboard_map', $this->request->post);
@@ -77,6 +82,8 @@ class Map extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Dashboard
+	 *
 	 * @return string
 	 */
 	public function dashboard(): string {
@@ -88,11 +95,14 @@ class Map extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Map
+	 *
 	 * @return void
 	 */
 	public function map(): void {
 		$json = [];
 
+		// Extension
 		$this->load->model('extension/opencart/dashboard/map');
 
 		$results = $this->model_extension_opencart_dashboard_map->getTotalOrdersByCountry();

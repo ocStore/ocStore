@@ -7,19 +7,17 @@ namespace Opencart\Install\Controller\Install;
  */
 class Step2 extends \Opencart\System\Engine\Controller {
 	/**
-	 * @var array
+	 * @var array<string, string>
 	 */
 	private array $error = [];
 
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
 		$this->load->language('install/step_2');
-
-		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->response->redirect($this->url->link('install/step_3', 'language=' . $this->config->get('language_code')));
-		}
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -37,6 +35,7 @@ class Step2 extends \Opencart\System\Engine\Controller {
 		$data['text_on'] = $this->language->get('text_on');
 		$data['text_off'] = $this->language->get('text_off');
 		$data['text_version'] = $this->language->get('text_version');
+		$data['text_open_basedir'] = $this->language->get('text_open_basedir');
 		$data['text_global'] = $this->language->get('text_global');
 		$data['text_magic'] = $this->language->get('text_magic');
 		$data['text_file_upload'] = $this->language->get('text_file_upload');
@@ -58,21 +57,31 @@ class Step2 extends \Opencart\System\Engine\Controller {
 		$data['button_continue'] = $this->language->get('button_continue');
 		$data['button_back'] = $this->language->get('button_back');
 
-		if (isset($this->error['warning'])) {
-			$data['error_warning'] = $this->error['warning'];
+		$data['php_version'] = PHP_VERSION;
+		$data['version'] = version_compare(PHP_VERSION, '8.0', '>=');
+
+		$open_basedir = str_replace('\\', '/', ini_get('open_basedir')) . '/';
+
+		$directory = rtrim(DIR_OPENCART, '/');
+
+		$required = substr($directory, 0, strrpos($directory, '/')) . '/';
+
+		if ($open_basedir) {
+			$data['open_basedir'] = false;
+
+			$directories = explode(',', $open_basedir, 1);
+
+			foreach ($directories as $directory) {
+				if (str_starts_with($directory, $required)) {
+					$data['open_basedir'] = true;
+				}
+			}
 		} else {
-			$data['error_warning'] = '';
+			$data['open_basedir'] = true;
 		}
 
-		$data['action'] = $this->url->link('install/step_2', 'language=' . $this->config->get('language_code'));
-
-		$data['php_version'] = phpversion();
-
-		if (version_compare(phpversion(), '8.0.0', '<')) {
-			$data['version'] = false;
-		} else {
-			$data['version'] = true;
-		}
+		$data['open_basedir_current'] = $open_basedir;
+		$data['open_basedir_required'] = $required;
 
 		$data['register_globals'] = ini_get('register_globals');
 		$data['magic_quotes_gpc'] = ini_get('magic_quotes_gpc');
@@ -81,7 +90,6 @@ class Step2 extends \Opencart\System\Engine\Controller {
 
 		$db = [
 			'mysqli',
-			'pgsql',
 			'pdo'
 		];
 
@@ -125,27 +133,54 @@ class Step2 extends \Opencart\System\Engine\Controller {
 
 		$data['back'] = $this->url->link('install/step_1', 'language=' . $this->config->get('language_code'));
 
+		$data['language'] = $this->config->get('language_code');
+
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
-		$data['language'] = $this->load->controller('common/language');
 
 		$this->response->setOutput($this->load->view('install/step_2', $data));
 	}
 
 	/**
-	 * @return bool
+	 * Save
+	 *
+	 * @return void
 	 */
-	private function validate(): bool {
-		if (version_compare(phpversion(), '8.0.0', '<')) {
-			$this->error['warning'] = $this->language->get('error_version');
+	public function save(): void {
+		$this->load->language('install/step_2');
+
+		$json = [];
+
+		if (version_compare(PHP_VERSION, '8.0', '<')) {
+			$json['error'] = $this->language->get('error_version');
+		}
+
+		$open_basedir = str_replace('\\', '/', ini_get('open_basedir'));
+
+		$directory = rtrim(DIR_OPENCART, '/');
+
+		$required = substr($directory, 0, strrpos($directory, '/')) . '/';
+
+		if ($open_basedir) {
+			$data['open_basedir'] = false;
+
+			$directories = explode(',', $open_basedir);
+
+			foreach ($directories as $directory) {
+				if (str_starts_with($directory, $required)) {
+					$data['open_basedir'] = true;
+				}
+			}
+
+			$json['error'] = sprintf($this->language->get('error_open_basedir'), $required);
 		}
 
 		if (!ini_get('file_uploads')) {
-			$this->error['warning'] = $this->language->get('error_file_upload');
+			$json['error'] = $this->language->get('error_file_upload');
 		}
 
 		if (ini_get('session.auto_start')) {
-			$this->error['warning'] = $this->language->get('error_session');
+			$json['error'] = $this->language->get('error_session');
 		}
 
 		$db = [
@@ -155,43 +190,48 @@ class Step2 extends \Opencart\System\Engine\Controller {
 		];
 
 		if (!array_filter($db, 'extension_loaded')) {
-			$this->error['warning'] = $this->language->get('error_db');
+			$json['error'] = $this->language->get('error_db');
 		}
 
 		if (!extension_loaded('gd')) {
-			$this->error['warning'] = $this->language->get('error_gd');
+			$json['error'] = $this->language->get('error_gd');
 		}
 
 		if (!extension_loaded('curl')) {
-			$this->error['warning'] = $this->language->get('error_curl');
+			$json['error'] = $this->language->get('error_curl');
 		}
 
 		if (!function_exists('openssl_encrypt')) {
-			$this->error['warning'] = $this->language->get('error_openssl');
+			$json['error'] = $this->language->get('error_openssl');
 		}
 
 		if (!extension_loaded('zlib')) {
-			$this->error['warning'] = $this->language->get('error_zlib');
+			$json['error'] = $this->language->get('error_zlib');
 		}
 
 		if (!extension_loaded('zip')) {
-			$this->error['warning'] = $this->language->get('error_zip');
+			$json['error'] = $this->language->get('error_zip');
 		}
 
 		if (!function_exists('iconv') && !extension_loaded('mbstring')) {
-			$this->error['warning'] = $this->language->get('error_mbstring');
+			$json['error'] = $this->language->get('error_mbstring');
 		}
 
 		if (!is_file(DIR_OPENCART . 'config.php')) {
-			$this->error['warning'] = $this->language->get('error_catalog_exist');
+			$json['error'] = $this->language->get('error_catalog_exist');
 		} elseif (!is_writable(DIR_OPENCART . 'config.php')) {
-			$this->error['warning'] = $this->language->get('error_catalog_writable');
+			$json['error'] = $this->language->get('error_catalog_writable');
 		} elseif (!is_file(DIR_OPENCART . 'admin/config.php')) {
-			$this->error['warning'] = $this->language->get('error_admin_exist');
+			$json['error'] = $this->language->get('error_admin_exist');
 		} elseif (!is_writable(DIR_OPENCART . 'admin/config.php')) {
-			$this->error['warning'] = $this->language->get('error_admin_writable');
+			$json['error'] = $this->language->get('error_admin_writable');
 		}
 
-		return !$this->error;
+		if (!$json) {
+			$json['redirect'] = $this->url->link('install/step_3', 'language=' . $this->config->get('language_code'), true);
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
 	}
 }

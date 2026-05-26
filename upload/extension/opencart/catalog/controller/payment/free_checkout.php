@@ -1,12 +1,14 @@
 <?php
 namespace Opencart\Catalog\Controller\Extension\Opencart\Payment;
 /**
- * Class FreeCheckout
+ * Class Free Checkout
  *
- * @package
+ * @package Opencart\Catalog\Controller\Extension\Opencart\Payment
  */
 class FreeCheckout extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return string
 	 */
 	public function index(): string {
@@ -18,6 +20,8 @@ class FreeCheckout extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Confirm
+	 *
 	 * @return void
 	 */
 	public function confirm(): void {
@@ -25,7 +29,18 @@ class FreeCheckout extends \Opencart\System\Engine\Controller {
 
 		$json = [];
 
-		if (!isset($this->session->data['order_id'])) {
+		// Order
+		if (isset($this->session->data['order_id'])) {
+			$this->load->model('checkout/order');
+
+			$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+
+			if (!$order_info) {
+				$json['redirect'] = $this->url->link('checkout/failure', 'language=' . $this->config->get('config_language'), true);
+
+				unset($this->session->data['order_id']);
+			}
+		} else {
 			$json['error'] = $this->language->get('error_order');
 		}
 
@@ -34,6 +49,7 @@ class FreeCheckout extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Order
 			$this->load->model('checkout/order');
 
 			$this->model_checkout_order->addHistory($this->session->data['order_id'], $this->config->get('payment_free_checkout_order_status_id'));

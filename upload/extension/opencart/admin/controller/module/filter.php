@@ -7,6 +7,8 @@ namespace Opencart\Admin\Controller\Extension\Opencart\Module;
  */
 class Filter extends \Opencart\System\Engine\Controller {
 	/**
+	 * Index
+	 *
 	 * @return void
 	 */
 	public function index(): void {
@@ -44,6 +46,8 @@ class Filter extends \Opencart\System\Engine\Controller {
 	}
 
 	/**
+	 * Save
+	 *
 	 * @return void
 	 */
 	public function save(): void {
@@ -56,6 +60,7 @@ class Filter extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
+			// Setting
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('module_filter', $this->request->post);

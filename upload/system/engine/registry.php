@@ -1,18 +1,20 @@
 <?php
 /**
  * @package		OpenCart
+ *
  * @author		Daniel Kerr
  * @copyright	Copyright (c) 2005 - 2022, OpenCart, Ltd. (https://www.opencart.com/)
  * @license		https://opensource.org/licenses/GPL-3.0
- * @link		https://www.opencart.com
-*/
+ *
+ * @see		https://www.opencart.com
+ */
 namespace Opencart\System\Engine;
 /**
  * Class Registry
  */
 class Registry {
 	/**
-	 * @var array
+	 * @var array<string, object>
 	 */
 	private array $data = [];
 
@@ -21,11 +23,11 @@ class Registry {
 	 *
 	 * https://www.php.net/manual/en/language.oop5.overloading.php#object.get
 	 *
-	 * @param    string  $key
+	 * @param string $key
 	 *
-	 * @return   object
+	 * @return ?object
 	 */
-	public function __get(string $key): object|null {
+	public function __get(string $key): ?object {
 		return $this->get($key);
 	}
 
@@ -34,45 +36,58 @@ class Registry {
 	 *
 	 * https://www.php.net/manual/en/language.oop5.overloading.php#object.set
 	 *
-	 * @param    string  $key
-	 * @param    object  $value
+	 * @param string $key
+	 * @param object $value
 	 *
-	 * @return   null
+	 * @return void
 	 */
 	public function __set(string $key, object $value): void {
 		$this->set($key, $value);
 	}
-	
+
 	/**
-     * Get
-     *
-     * @param	string	$key
-	 * 
-	 * @return	object
-     */
-	public function get(string $key): object|null {
-		return isset($this->data[$key]) ? $this->data[$key] : null;
+	 * __isset
+	 *
+	 * https://www.php.net/manual/en/language.oop5.overloading.php#object.set
+	 *
+	 * @param string $key
+	 *
+	 * @return bool
+	 */
+	public function __isset(string $key): bool {
+		return $this->has($key);
 	}
 
-    /**
-     * Set
-     *
-     * @param	string	$key
-	 * @param	object	$value
+	/**
+	 * Get
+	 *
+	 * @param string $key
+	 *
+	 * @return ?object
+	 */
+	public function get(string $key): ?object {
+		return $this->data[$key] ?? null;
+	}
+
+	/**
+	 * Set
+	 *
+	 * @param string $key
+	 * @param object $value
 	 *
 	 * @return void
-     */	
+	 */
 	public function set(string $key, object $value): void {
 		$this->data[$key] = $value;
 	}
-	
-    /**
-     * Has
-     *
-     * @param	string	$key
+
+	/**
+	 * Has
 	 *
-	 * @return	bool
-     */
+	 * @param string $key
+	 *
+	 * @return bool
+	 */
 	public function has(string $key): bool {
 		return isset($this->data[$key]);
 	}
@@ -82,13 +97,11 @@ class Registry {
 	 *
 	 * Unsets registry value by key.
 	 *
-	 * @param	string	$key
+	 * @param string $key
 	 *
-	 * @return	null
+	 * @return void
 	 */
 	public function unset(string $key): void {
-		if (isset($this->data[$key])) {
-			unset($this->data[$key]);
-		}
+		unset($this->data[$key]);
 	}
 }

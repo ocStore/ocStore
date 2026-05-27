@@ -297,6 +297,158 @@ $result = $client->call($method);
 $void = $result[0];
 ```
 
+### Create Payment Link
+To create a payment link you have to create a new payment link object. You can retrieve individual payment links and update payment link parameters. Payment links are identified by a UUID.
+
+```php
+use Cardinity\Method\PaymentLink;
+
+$client = Client::create([
+    'consumerKey' => 'YOUR_CONSUMER_KEY',
+    'consumerSecret' => 'YOUR_CONSUMER_SECRET',
+]);
+
+$method = new PaymentLink\Create([
+    'amount' => 50.00,
+    'currency' => "USD",
+    'description' => "Short description for the payment link",
+]);
+
+
+//with optional parameters
+$method = new PaymentLink\Create([
+    'amount' => 50.00,
+    'currency' => "USD",
+    'description' => "Short description for the payment link",
+
+    'country' => "LT", // ISO 3166-1 alpha-2 country code.
+    'expiration_date' => "2023-01-06T15:26:03.702Z", //ISO 8601 datetime in UTC 
+    'multiple_use' => true, //bool
+]);
+
+// again use same try ... catch block
+try {
+    $paymentLink = $client->call($method);
+}
+// same catch blocks ...
+// ...
+
+```
+
+### Get Payment Link
+```php
+use Cardinity\Method\PaymentLink;
+
+$client = Client::create([
+    'consumerKey' => 'YOUR_CONSUMER_KEY',
+    'consumerSecret' => 'YOUR_CONSUMER_SECRET',
+]);
+
+$method = new PaymentLink\Get($linkid);
+
+// again use same try ... catch block
+try {
+    $paymentLink = $client->call($method);
+}
+// same catch blocks ...
+// ...
+
+```
+
+### Update Payment Link
+You can update the expiration date, and status (enabled or disabled) of an existing payment link. You need to provide the unique UUID to update.
+
+```php
+use Cardinity\Method\PaymentLink;
+
+$client = Client::create([
+    'consumerKey' => 'YOUR_CONSUMER_KEY',
+    'consumerSecret' => 'YOUR_CONSUMER_SECRET',
+]);
+
+$method = new PaymentLink\Update(
+    $payment_link_id,
+    [
+        'expiration_date' => "2023-01-06T15:26:03.702Z", //ISO 8601 datetime in UTC 
+        'enabled' => true,  // true or false
+    ]
+);
+
+// again use same try ... catch block
+try {
+    $updatedPaymentLink = $client->call($method);
+}
+// same catch blocks ...
+// ...
+
+```
+
+### Get All Chargebacks
+Retreive all chargebacks.
+
+```php
+use Cardinity\Method\Chargeback;
+
+$client = Client::create([
+    'consumerKey' => 'YOUR_CONSUMER_KEY',
+    'consumerSecret' => 'YOUR_CONSUMER_SECRET',
+]);
+
+$method = new Chargeback\GetAll();
+
+// again use same try ... catch block
+try {
+    $results = $client->call($method);
+}
+// same catch blocks ...
+// ...
+
+```
+
+### Get All Chargebacks under PaymentID
+Retreive all chargebacks issued for a provided payment ID.
+
+```php
+use Cardinity\Method\Chargeback;
+
+$client = Client::create([
+    'consumerKey' => 'YOUR_CONSUMER_KEY',
+    'consumerSecret' => 'YOUR_CONSUMER_SECRET',
+]);
+
+$method = new Chargeback\GetAll(10, "existing_payment_id");
+
+// again use same try ... catch block
+try {
+    $results = $client->call($method);
+}
+// same catch blocks ...
+// ...
+
+```
+
+### Get Single Chargeback
+Retreive specific chargeback
+
+```php
+use Cardinity\Method\Chargeback;
+
+$client = Client::create([
+    'consumerKey' => 'YOUR_CONSUMER_KEY',
+    'consumerSecret' => 'YOUR_CONSUMER_SECRET',
+]);
+
+$method = new Chargeback\Get("Parent payment id", "Chargeback ID");
+
+// again use same try ... catch block
+try {
+    $results = $client->call($method);
+}
+// same catch blocks ...
+// ...
+
+```
+
 ## Exceptions
 ### Exceptions representing API error response
 

@@ -39,10 +39,13 @@ class UniqueValidator extends ConstraintValidator
         }
 
         $collectionElements = [];
+        $normalizer = $this->getNormalizer($constraint);
         foreach ($value as $element) {
+            $element = $normalizer($element);
+
             if (\in_array($element, $collectionElements, true)) {
                 $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{ value }}', $this->formatValue($value))
+                    ->setParameter('{{ value }}', $this->formatValue($element))
                     ->setCode(Unique::IS_NOT_UNIQUE)
                     ->addViolation();
 
@@ -50,5 +53,16 @@ class UniqueValidator extends ConstraintValidator
             }
             $collectionElements[] = $element;
         }
+    }
+
+    private function getNormalizer(Unique $unique): callable
+    {
+        if (null === $unique->normalizer) {
+            return static function ($value) {
+                return $value;
+            };
+        }
+
+        return $unique->normalizer;
     }
 }

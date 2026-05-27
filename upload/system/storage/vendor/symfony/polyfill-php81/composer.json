@@ -1,0 +1,51 @@
+{
+<<<<<<<< HEAD:upload/system/storage/vendor/symfony/deprecation-contracts/composer.json
+    "name": "symfony/deprecation-contracts",
+    "type": "library",
+    "description": "A generic function and convention to trigger deprecation notices",
+========
+    "name": "symfony/polyfill-php81",
+    "type": "library",
+    "description": "Symfony polyfill backporting some PHP 8.1+ features to lower PHP versions",
+    "keywords": ["polyfill", "shim", "compatibility", "portable"],
+>>>>>>>> 3.0.5.0:upload/system/storage/vendor/symfony/polyfill-php81/composer.json
+    "homepage": "https://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nicolas Grekas",
+            "email": "p@tchwork.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://symfony.com/contributors"
+        }
+    ],
+    "require": {
+<<<<<<<< HEAD:upload/system/storage/vendor/symfony/deprecation-contracts/composer.json
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "files": [
+            "function.php"
+        ]
+========
+        "php": ">=7.2"
+    },
+    "autoload": {
+        "psr-4": { "Symfony\\Polyfill\\Php81\\": "" },
+        "files": [ "bootstrap.php" ],
+        "classmap": [ "Resources/stubs" ]
+>>>>>>>> 3.0.5.0:upload/system/storage/vendor/symfony/polyfill-php81/composer.json
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-main": "3.6-dev"
+        },
+        "thanks": {
+            "name": "symfony/contracts",
+            "url": "https://github.com/symfony/contracts"
+        }
+    }
+}

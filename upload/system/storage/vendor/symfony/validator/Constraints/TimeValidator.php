@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
  */
 class TimeValidator extends ConstraintValidator
 {
-    public const PATTERN = '/^(\d{2}):(\d{2}):(\d{2})$/';
+    public const PATTERN = '/^(\d{2}):(\d{2}):(\d{2})$/D';
 
     /**
      * Checks whether a time is valid.
@@ -43,12 +43,6 @@ class TimeValidator extends ConstraintValidator
         }
 
         if (null === $value || '' === $value) {
-            return;
-        }
-
-        if ($value instanceof \DateTimeInterface) {
-            @trigger_error(sprintf('Validating a \\DateTimeInterface with "%s" is deprecated since version 4.2. Use "%s" instead or remove the constraint if the underlying model is already type hinted to \\DateTimeInterface.', Time::class, Type::class), \E_USER_DEPRECATED);
-
             return;
         }
 

@@ -15,7 +15,6 @@ class Settlement extends ResultObject
 
     /** @type string Three-letter ISO currency code representing the currency in
         which the settlement was made.
-        Supported currencies: EUR, USD.
         Value assigned by Cardinity. */
     private $currency;
 

@@ -150,17 +150,16 @@ class ControllerMarketplaceMarketplace extends Controller {
 
 		$curl = curl_init(OPENCART_SERVER . 'index.php?route=marketplace/api' . $url);
 
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-		curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
-		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+		curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+		curl_setopt($curl, CURLOPT_POST, true);
 
 		$response = curl_exec($curl);
 
 		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-		curl_close($curl);
 
 		$response_info = json_decode($response, true);
 
@@ -546,8 +545,6 @@ class ControllerMarketplaceMarketplace extends Controller {
 
 		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-		curl_close($curl);
-
 		$response_info = json_decode($response, true);
 
 		if ($response_info) {
@@ -730,8 +727,6 @@ class ControllerMarketplaceMarketplace extends Controller {
 
 			$response = curl_exec($curl);
 
-			curl_close($curl);
-
 			$response_info = json_decode($response, true);
 
 			if (isset($response_info['success'])) {
@@ -862,8 +857,6 @@ class ControllerMarketplaceMarketplace extends Controller {
 
 			$response_info = json_decode($response, true);
 
-			curl_close($curl);
-
 			if (isset($response_info['download'])) {
 				if (substr($response_info['filename'], -10) == '.ocmod.zip') {
 					$this->session->data['install'] = token(10);
@@ -957,8 +950,6 @@ class ControllerMarketplaceMarketplace extends Controller {
 
 			$response = curl_exec($curl);
 
-			curl_close($curl);
-
 			$response_info = json_decode($response, true);
 
 			if (isset($response_info['success'])) {
@@ -1001,8 +992,6 @@ class ControllerMarketplaceMarketplace extends Controller {
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
 
 		$response = curl_exec($curl);
-
-		curl_close($curl);
 
 		$json = json_decode($response, true);
 

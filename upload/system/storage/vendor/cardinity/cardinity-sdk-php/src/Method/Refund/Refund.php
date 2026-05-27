@@ -15,7 +15,6 @@ class Refund extends ResultObject
 
     /** @type string Three-letter ISO currency code representing the currency in
         which the refund was made.
-        Supported currencies: EUR, USD.
         Value assigned by Cardinity. */
     private $currency;
 
@@ -273,6 +272,15 @@ class Refund extends ResultObject
     public function isApproved()
     {
         return $this->getStatus() === 'approved';
+    }
+
+    /**
+     * Check if refund is processing
+     * @return boolean
+     */
+    public function isProcessing()
+    {
+        return $this->getStatus() === 'processing';
     }
 
     /**

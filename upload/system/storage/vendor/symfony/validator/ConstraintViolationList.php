@@ -15,30 +15,40 @@ namespace Symfony\Component\Validator;
  * Default implementation of {@ConstraintViolationListInterface}.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
+ *
+ * @implements \IteratorAggregate<int, ConstraintViolationInterface>
  */
 class ConstraintViolationList implements \IteratorAggregate, ConstraintViolationListInterface
 {
     /**
-     * @var ConstraintViolationInterface[]
+     * @var list<ConstraintViolationInterface>
      */
     private $violations = [];
 
     /**
      * Creates a new constraint violation list.
      *
-     * @param ConstraintViolationInterface[] $violations The constraint violations to add to the list
+     * @param iterable<mixed, ConstraintViolationInterface> $violations The constraint violations to add to the list
      */
-    public function __construct(array $violations = [])
+    public function __construct(iterable $violations = [])
     {
         foreach ($violations as $violation) {
             $this->add($violation);
         }
     }
 
+    public static function createFromMessage(string $message): self
+    {
+        $self = new self();
+        $self->add(new ConstraintViolation($message, '', [], null, '', null));
+
+        return $self;
+    }
+
     /**
      * Converts the violation into a string for debugging purposes.
      *
-     * @return string The violation as string
+     * @return string
      */
     public function __toString()
     {
@@ -72,7 +82,7 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     /**
      * {@inheritdoc}
      */
-    public function get($offset)
+    public function get(int $offset)
     {
         if (!isset($this->violations[$offset])) {
             throw new \OutOfBoundsException(sprintf('The offset "%s" does not exist.', $offset));
@@ -84,7 +94,7 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     /**
      * {@inheritdoc}
      */
-    public function has($offset)
+    public function has(int $offset)
     {
         return isset($this->violations[$offset]);
     }
@@ -92,7 +102,7 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     /**
      * {@inheritdoc}
      */
-    public function set($offset, ConstraintViolationInterface $violation)
+    public function set(int $offset, ConstraintViolationInterface $violation)
     {
         $this->violations[$offset] = $violation;
     }
@@ -100,7 +110,7 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     /**
      * {@inheritdoc}
      */
-    public function remove($offset)
+    public function remove(int $offset)
     {
         unset($this->violations[$offset]);
     }
@@ -108,7 +118,7 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     /**
      * {@inheritdoc}
      *
-     * @return \ArrayIterator|ConstraintViolationInterface[]
+     * @return \ArrayIterator<int, ConstraintViolationInterface>
      */
     #[\ReturnTypeWillChange]
     public function getIterator()
@@ -137,7 +147,7 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
     /**
      * {@inheritdoc}
      *
-     * @return mixed
+     * @return ConstraintViolationInterface
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
@@ -176,7 +186,7 @@ class ConstraintViolationList implements \IteratorAggregate, ConstraintViolation
      *
      * @param string|string[] $codes The codes to find
      *
-     * @return static new instance which contains only specific errors
+     * @return static
      */
     public function findByCodes($codes)
     {

@@ -5,16 +5,18 @@
     "license": "MIT",
     "homepage": "https://cardinity.com",
     "require": {
-        "php"                       : ">=5.5.9",
-        "guzzlehttp/guzzle"         : "^6.2.1",
-        "guzzlehttp/oauth-subscriber": "0.3.*",
-        "symfony/validator"         : "~3.0 || ~4.0"
+        "php"                       : ">=7.2.5",
+        "guzzlehttp/guzzle"         : "^6.5.6||^7.4.3",
+        "guzzlehttp/oauth-subscriber": "~0.3",
+        "symfony/validator"         : "4.0||^5.4.43||^7.1.4"
     },
     "require-dev": {
         "monolog/monolog"           : "~1.0",
-        "phpspec/phpspec"           : "~2.1",
-        "phpunit/phpunit"           : "~4.3"
+        "phpspec/phpspec"           : "~6.2||7.*||dev-main",
+        "phpunit/phpunit"           : "^8.5",
+        "symfony/yaml"              : ">=4.4"
     },
+    "prefer-stable": true,
     "config": {
         "bin-dir": "bin"
     },
@@ -25,5 +27,8 @@
         "psr-4": {
             "Cardinity\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }

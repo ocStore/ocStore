@@ -4,16 +4,28 @@ namespace Cardinity\Tests;
 
 use Cardinity\Client;
 use Cardinity\Method\Payment;
+use Cardinity\Exception\InvalidAttributeValue;
 
 class ErrorTest extends ClientTestCase
 {
-    public function testErrorResultObjectForErrorResponse()
+    /**
+     * @return object
+     */
+    private function getPaymentMethodMock()
     {
-        $method = $this
+        return $this
             ->getMockBuilder('Cardinity\Method\Payment\Get')
             ->disableOriginalConstructor()
             ->getMock()
         ;
+    }
+
+    /**
+     * @return void
+     */
+    public function testErrorResultObjectForErrorResponse()
+    {
+        $method = $this->getPaymentMethodMock();
         $method->method('getAction')->willReturn('payments');
         $method->method('getAttributes')->willReturn([]);
         $method->method('getMethod')->willReturn(Payment\Get::POST);
@@ -25,14 +37,14 @@ class ErrorTest extends ClientTestCase
             $this->assertInstanceOf('Cardinity\Method\Error', $result);
             $this->assertSame('https://developers.cardinity.com/api/v1/#400', $result->getType());
             $this->assertSame('Validation Failed', $result->getTitle());
-            $this->assertContains('validation errors', $result->getDetail());
+            $this->assertStringContainsString('validation errors', $result->getDetail());
             $this->assertTrue(is_array($result->getErrors()));
             $this->assertNotEmpty($result->getErrors());
         }
     }
 
     /**
-     * @expectedException Cardinity\Exception\Unauthorized
+     * @return void
      */
     public function testUnauthorizedResponse()
     {
@@ -40,60 +52,51 @@ class ErrorTest extends ClientTestCase
             'consumerKey' => 'no',
             'consumerSecret' => 'yes',
         ]);
-
         $method = new Payment\Get('xxxyyy');
+        $this->expectException(\Cardinity\Exception\Unauthorized::class);
 
         $client->call($method);
     }
 
     /**
-     * @expectedException Cardinity\Exception\ValidationFailed
+     * @return void
      */
     public function testBadRequest()
     {
-        $method = $this
-            ->getMockBuilder('Cardinity\Method\Payment\Get')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $method = $this->getPaymentMethodMock();
         $method->method('getAction')->willReturn('payments');
         $method->method('getAttributes')->willReturn([]);
         $method->method('getMethod')->willReturn(Payment\Get::POST);
 
+        $this->expectException(\Cardinity\Exception\ValidationFailed::class);
         $this->client->call($method);
     }
 
     /**
-     * @expectedException Cardinity\Exception\NotFound
+     * @return void
      */
     public function testNotFound()
     {
-        $method = $this
-            ->getMockBuilder('Cardinity\Method\Payment\Get')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $method = $this->getPaymentMethodMock();
         $method->method('getAction')->willReturn('my_dreamy_action');
         $method->method('getAttributes')->willReturn([]);
         $method->method('getMethod')->willReturn(Payment\Get::POST);
 
+        $this->expectException(\Cardinity\Exception\NotFound::class);
         $this->client->call($method);
     }
 
     /**
-     * @expectedException Cardinity\Exception\MethodNotAllowed
+     * @return void
      */
     public function testMethodNotAllowed()
     {
-        $method = $this
-            ->getMockBuilder('Cardinity\Method\Payment\Get')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $method = $this->getPaymentMethodMock();;
         $method->method('getAction')->willReturn('payments');
         $method->method('getAttributes')->willReturn([]);
         $method->method('getMethod')->willReturn('DELETE');
 
+        $this->expectException(\Cardinity\Exception\MethodNotAllowed::class);
         $this->client->call($method);
     }
 }

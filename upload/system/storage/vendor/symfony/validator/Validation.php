@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Validator;
 
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -20,6 +21,53 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 final class Validation
 {
+    /**
+     * Creates a callable chain of constraints.
+     *
+     * @param Constraint|ValidatorInterface|null $constraintOrValidator
+     *
+     * @return callable($value)
+     */
+    public static function createCallable($constraintOrValidator = null, Constraint ...$constraints): callable
+    {
+        $validator = self::createIsValidCallable($constraintOrValidator, ...$constraints);
+
+        return static function ($value) use ($validator) {
+            if (!$validator($value, $violations)) {
+                throw new ValidationFailedException($value, $violations);
+            }
+
+            return $value;
+        };
+    }
+
+    /**
+     * Creates a callable that returns true/false instead of throwing validation exceptions.
+     *
+     * @param Constraint|ValidatorInterface|null $constraintOrValidator
+     *
+     * @return callable($value, &$violations = null): bool
+     */
+    public static function createIsValidCallable($constraintOrValidator = null, Constraint ...$constraints): callable
+    {
+        $validator = $constraintOrValidator;
+
+        if ($constraintOrValidator instanceof Constraint) {
+            $constraints = \func_get_args();
+            $validator = null;
+        } elseif (null !== $constraintOrValidator && !$constraintOrValidator instanceof ValidatorInterface) {
+            throw new \TypeError(sprintf('Argument 1 passed to "%s()" must be a "%s" or a "%s" object, "%s" given.', __METHOD__, Constraint::class, ValidatorInterface::class, get_debug_type($constraintOrValidator)));
+        }
+
+        $validator = $validator ?? self::createValidator();
+
+        return static function ($value, &$violations = null) use ($constraints, $validator) {
+            $violations = $validator->validate($value, $constraints);
+
+            return 0 === $violations->count();
+        };
+    }
+
     /**
      * Creates a new validator.
      *

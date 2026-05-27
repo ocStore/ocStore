@@ -6,6 +6,9 @@ use Cardinity\Method\Payment;
 
 class RefundTest extends ClientTestCase
 {
+    /**
+     * @return void
+     */
     public function testResultObjectSerialization()
     {
         $refund = new Refund\Refund();
@@ -20,6 +23,9 @@ class RefundTest extends ClientTestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testResultObjectUnserialization()
     {
         $json = '{"id":"foo","amount":"55.00","type":"bar"}';
@@ -34,7 +40,7 @@ class RefundTest extends ClientTestCase
     }
 
     /**
-     * @return Payment\Payment
+     * @return Cardinity\Method\ResultObject $result
      */
     public function testCreatePayment()
     {
@@ -49,7 +55,8 @@ class RefundTest extends ClientTestCase
 
     /**
      * @depends testCreatePayment
-     * @expectedException Cardinity\Exception\Declined
+     * @param Payment\Payment
+     * @return void
      */
     public function testCreateFail(Payment\Payment $payment)
     {
@@ -58,12 +65,14 @@ class RefundTest extends ClientTestCase
             10.00,
             'fail'
         );
+        $this->expectException(\Cardinity\Exception\Declined::class);
         $this->client->call($method);
     }
 
     /**
      * @depends testCreatePayment
-     * @return Refund\Refund
+     * @param Payment\Payment
+     * @return Cardinity\Method\ResultObject $result
      */
     public function testCreate(Payment\Payment $payment)
     {
@@ -83,6 +92,8 @@ class RefundTest extends ClientTestCase
 
     /**
      * @depends testCreate
+     * @param Refund\Refund
+     * @return void
      */
     public function testGet(Refund\Refund $refund)
     {
@@ -101,6 +112,8 @@ class RefundTest extends ClientTestCase
 
     /**
      * @depends testCreate
+     * @param Refund\Refund
+     * @return void
      */
     public function testGetAll(Refund\Refund $refund)
     {
@@ -109,8 +122,17 @@ class RefundTest extends ClientTestCase
         );
         $result = $this->client->call($method);
 
+        $this->assertIsArray($result);
         $this->assertInstanceOf('Cardinity\Method\Refund\Refund', $result[0]);
-        $this->assertSame($refund->getId(), $result[0]->getId());
-        $this->assertSame($refund->getParentId(), $result[0]->getParentId());
+
+        $itemFound = false;
+        foreach($result as $aRefund){
+            $this->assertSame($refund->getParentId(), $aRefund->getParentId());
+            if($aRefund->getId() == $refund->getId()){
+                $itemFound = true;
+            }
+        }
+
+        $this->assertTrue($itemFound);
     }
 }

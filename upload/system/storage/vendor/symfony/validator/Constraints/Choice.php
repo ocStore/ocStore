@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraint;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Choice extends Constraint
 {
     public const NO_SUCH_CHOICE_ERROR = '8e179f1b-97aa-4560-a02f-2a8b42e49df7';
@@ -48,5 +49,41 @@ class Choice extends Constraint
     public function getDefaultOption()
     {
         return 'choices';
+    }
+
+    public function __construct(
+        $options = [],
+        ?array $choices = null,
+        $callback = null,
+        ?bool $multiple = null,
+        ?bool $strict = null,
+        ?int $min = null,
+        ?int $max = null,
+        ?string $message = null,
+        ?string $multipleMessage = null,
+        ?string $minMessage = null,
+        ?string $maxMessage = null,
+        $groups = null,
+        $payload = null
+    ) {
+        if (\is_array($options) && $options && array_is_list($options)) {
+            $choices = $choices ?? $options;
+            $options = [];
+        }
+        if (null !== $choices) {
+            $options['value'] = $choices;
+        }
+
+        parent::__construct($options, $groups, $payload);
+
+        $this->callback = $callback ?? $this->callback;
+        $this->multiple = $multiple ?? $this->multiple;
+        $this->strict = $strict ?? $this->strict;
+        $this->min = $min ?? $this->min;
+        $this->max = $max ?? $this->max;
+        $this->message = $message ?? $this->message;
+        $this->multipleMessage = $multipleMessage ?? $this->multipleMessage;
+        $this->minMessage = $minMessage ?? $this->minMessage;
+        $this->maxMessage = $maxMessage ?? $this->maxMessage;
     }
 }

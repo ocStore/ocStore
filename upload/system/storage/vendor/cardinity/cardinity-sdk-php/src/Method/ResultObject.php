@@ -6,6 +6,7 @@ use Cardinity\Exception;
 use Cardinity\Method\Payment\AuthorizationInformation;
 use Cardinity\Method\Payment\PaymentInstrumentCard;
 use Cardinity\Method\Payment\PaymentInstrumentRecurring;
+use Cardinity\Method\Payment\ThreeDS2AuthorizationInformation;
 
 abstract class ResultObject implements ResultObjectInterface
 {
@@ -46,7 +47,7 @@ abstract class ResultObject implements ResultObjectInterface
             $value = $this->$method();
 
             if (is_float($value)) {
-                $value = sprintf("%01.2f", $value);
+                $value = number_format($value, 2, '.', '');
             } elseif (is_object($value)) {
                 $value = $value->serialize(false);
             }
@@ -81,6 +82,10 @@ abstract class ResultObject implements ResultObjectInterface
                     $object = new AuthorizationInformation();
                     $object->unserialize(json_encode($value));
                     $value = $object;
+                } elseif ($property == 'threeds2_data') {
+                    $object = new ThreeDS2AuthorizationInformation();
+                    $object->unserialize(json_encode($value));
+                    $value = $object;
                 } elseif ($property == 'payment_instrument') {
                     if (!isset($data->payment_method)) {
                         throw new Exception\Runtime('Property "payment_method" is missing');
@@ -105,6 +110,10 @@ abstract class ResultObject implements ResultObjectInterface
             $this->$method($value);
         }
     }
+
+
+    public function __serialize(): array {return[];}
+    public function __unserialize(array $data): void {}
 
     /**
      * @param string $class
@@ -135,7 +144,7 @@ abstract class ResultObject implements ResultObjectInterface
     private function propertyName($method)
     {
         $method = lcfirst(substr($method, 3));
-        $method = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $method));
+        $method = strtolower(preg_replace('/([a-z0-9])([A-Z])/', '$1_$2', $method));
 
         return $method;
     }

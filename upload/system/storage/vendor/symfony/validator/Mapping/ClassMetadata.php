@@ -12,9 +12,11 @@
 namespace Symfony\Component\Validator\Mapping;
 
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\Cascade;
 use Symfony\Component\Validator\Constraints\Composite;
 use Symfony\Component\Validator\Constraints\GroupSequence;
 use Symfony\Component\Validator\Constraints\Traverse;
+use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Exception\GroupDefinitionException;
 
@@ -162,7 +164,7 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
      * will validate the group sequence. The constraints assigned to "Default"
      * can still be validated by validating the class in "<ClassName>".
      *
-     * @return string The name of the default group
+     * @return string
      */
     public function getDefaultGroup()
     {
@@ -171,6 +173,17 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * If the constraint {@link Cascade} is added, the cascading strategy will be
+     * changed to {@link CascadingStrategy::CASCADE}.
+     *
+     * If the constraint {@link Traverse} is added, the traversal strategy will be
+     * changed. Depending on the $traverse property of that constraint,
+     * the traversal strategy will be set to one of the following:
+     *
+     *  - {@link TraversalStrategy::IMPLICIT} by default
+     *  - {@link TraversalStrategy::NONE} if $traverse is disabled
+     *  - {@link TraversalStrategy::TRAVERSE} if $traverse is enabled
      */
     public function addConstraint(Constraint $constraint)
     {
@@ -189,6 +202,23 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
             return $this;
         }
 
+        if ($constraint instanceof Cascade) {
+            if (\PHP_VERSION_ID < 70400) {
+                throw new ConstraintDefinitionException(sprintf('The constraint "%s" requires PHP 7.4.', Cascade::class));
+            }
+
+            $this->cascadingStrategy = CascadingStrategy::CASCADE;
+
+            foreach ($this->getReflectionClass()->getProperties() as $property) {
+                if ($this->canCascade($property->getType())) {
+                    $this->addPropertyConstraint($property->getName(), new Valid());
+                }
+            }
+
+            // The constraint is not added
+            return $this;
+        }
+
         $constraint->addImplicitGroupName($this->getDefaultGroup());
 
         parent::addConstraint($constraint);
@@ -199,11 +229,9 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     /**
      * Adds a constraint to the given property.
      *
-     * @param string $property The name of the property
-     *
      * @return $this
      */
-    public function addPropertyConstraint($property, Constraint $constraint)
+    public function addPropertyConstraint(string $property, Constraint $constraint)
     {
         if (!isset($this->properties[$property])) {
             $this->properties[$property] = new PropertyMetadata($this->getClassName(), $property);
@@ -219,12 +247,11 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     }
 
     /**
-     * @param string       $property
      * @param Constraint[] $constraints
      *
      * @return $this
      */
-    public function addPropertyConstraints($property, array $constraints)
+    public function addPropertyConstraints(string $property, array $constraints)
     {
         foreach ($constraints as $constraint) {
             $this->addPropertyConstraint($property, $constraint);
@@ -239,11 +266,9 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
      * The name of the getter is assumed to be the name of the property with an
      * uppercased first letter and the prefix "get", "is" or "has".
      *
-     * @param string $property The name of the property
-     *
      * @return $this
      */
-    public function addGetterConstraint($property, Constraint $constraint)
+    public function addGetterConstraint(string $property, Constraint $constraint)
     {
         if (!isset($this->getters[$property])) {
             $this->getters[$property] = new GetterMetadata($this->getClassName(), $property);
@@ -261,12 +286,9 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     /**
      * Adds a constraint to the getter of the given property.
      *
-     * @param string $property The name of the property
-     * @param string $method   The name of the getter method
-     *
      * @return $this
      */
-    public function addGetterMethodConstraint($property, $method, Constraint $constraint)
+    public function addGetterMethodConstraint(string $property, string $method, Constraint $constraint)
     {
         if (!isset($this->getters[$property])) {
             $this->getters[$property] = new GetterMetadata($this->getClassName(), $property, $method);
@@ -282,12 +304,11 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     }
 
     /**
-     * @param string       $property
      * @param Constraint[] $constraints
      *
      * @return $this
      */
-    public function addGetterConstraints($property, array $constraints)
+    public function addGetterConstraints(string $property, array $constraints)
     {
         foreach ($constraints as $constraint) {
             $this->addGetterConstraint($property, $constraint);
@@ -297,13 +318,11 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     }
 
     /**
-     * @param string       $property
-     * @param string       $method
      * @param Constraint[] $constraints
      *
      * @return $this
      */
-    public function addGetterMethodConstraints($property, $method, array $constraints)
+    public function addGetterMethodConstraints(string $property, string $method, array $constraints)
     {
         foreach ($constraints as $constraint) {
             $this->addGetterMethodConstraint($property, $method, $constraint);
@@ -337,16 +356,17 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
                     $constraint->addImplicitGroupName($this->getDefaultGroup());
                 }
 
-                $this->addPropertyMetadata($member);
-
                 if ($member instanceof MemberMetadata && !$member->isPrivate($this->name)) {
                     $property = $member->getPropertyName();
+                    $this->members[$property][] = $member;
 
                     if ($member instanceof PropertyMetadata && !isset($this->properties[$property])) {
                         $this->properties[$property] = $member;
                     } elseif ($member instanceof GetterMetadata && !isset($this->getters[$property])) {
                         $this->getters[$property] = $member;
                     }
+                } else {
+                    $this->addPropertyMetadata($member);
                 }
             }
         }
@@ -355,7 +375,7 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     /**
      * {@inheritdoc}
      */
-    public function hasPropertyMetadata($property)
+    public function hasPropertyMetadata(string $property)
     {
         return \array_key_exists($property, $this->members);
     }
@@ -363,7 +383,7 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     /**
      * {@inheritdoc}
      */
-    public function getPropertyMetadata($property)
+    public function getPropertyMetadata(string $property)
     {
         return $this->members[$property] ?? [];
     }
@@ -441,11 +461,9 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     /**
      * Sets whether a group sequence provider should be used.
      *
-     * @param bool $active
-     *
      * @throws GroupDefinitionException
      */
-    public function setGroupSequenceProvider($active)
+    public function setGroupSequenceProvider(bool $active)
     {
         if ($this->hasGroupSequence()) {
             throw new GroupDefinitionException('Defining a group sequence provider is not allowed with a static group sequence.');
@@ -467,13 +485,11 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     }
 
     /**
-     * Class nodes are never cascaded.
-     *
      * {@inheritdoc}
      */
     public function getCascadingStrategy()
     {
-        return CascadingStrategy::NONE;
+        return $this->cascadingStrategy;
     }
 
     private function addPropertyMetadata(PropertyMetadataInterface $metadata)
@@ -486,7 +502,7 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     private function checkConstraint(Constraint $constraint)
     {
         if (!\in_array(Constraint::CLASS_CONSTRAINT, (array) $constraint->getTargets(), true)) {
-            throw new ConstraintDefinitionException(sprintf('The constraint "%s" cannot be put on classes.', \get_class($constraint)));
+            throw new ConstraintDefinitionException(sprintf('The constraint "%s" cannot be put on classes.', get_debug_type($constraint)));
         }
 
         if ($constraint instanceof Composite) {
@@ -494,5 +510,34 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
                 $this->checkConstraint($nestedConstraint);
             }
         }
+    }
+
+    private function canCascade(?\ReflectionType $type = null): bool
+    {
+        if (null === $type) {
+            return false;
+        }
+
+        if ($type instanceof \ReflectionIntersectionType) {
+            foreach ($type->getTypes() as $nestedType) {
+                if ($this->canCascade($nestedType)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        if ($type instanceof \ReflectionUnionType) {
+            foreach ($type->getTypes() as $nestedType) {
+                if (!$this->canCascade($nestedType)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return $type instanceof \ReflectionNamedType && (\in_array($type->getName(), ['array', 'null'], true) || class_exists($type->getName()));
     }
 }

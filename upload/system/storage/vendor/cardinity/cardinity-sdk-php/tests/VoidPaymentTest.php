@@ -7,6 +7,9 @@ use Cardinity\Method\Payment;
 
 class VoidPaymentTest extends ClientTestCase
 {
+    /**
+     * @return void
+     */
     public function testResultObjectSerialization()
     {
         $refund = new VoidPayment\VoidPayment();
@@ -20,6 +23,9 @@ class VoidPaymentTest extends ClientTestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testResultObjectUnserialization()
     {
         $json = '{"id":"foo","type":"bar"}';
@@ -33,7 +39,7 @@ class VoidPaymentTest extends ClientTestCase
     }
 
     /**
-     * @return Payment\Payment
+     * @return Cardinity\Method\ResultObject $payment
      */
     public function testCreatePayment()
     {
@@ -45,7 +51,8 @@ class VoidPaymentTest extends ClientTestCase
 
     /**
      * @depends testCreatePayment
-     * @expectedException Cardinity\Exception\Declined
+     * @param Payment\Payment $payment
+     * @return void
      */
     public function testCreateFail(Payment\Payment $payment)
     {
@@ -53,11 +60,14 @@ class VoidPaymentTest extends ClientTestCase
             $payment->getId(),
             'fail'
         );
+        $this->expectException(\Cardinity\Exception\Declined::class);
         $this->client->call($method);
     }
 
     /**
      * @depends testCreatePayment
+     * @param Payment\Payment $payment
+     * @return Cardinity\Method\ResultObject $result
      */
     public function testCreate(Payment\Payment $payment)
     {
@@ -75,6 +85,8 @@ class VoidPaymentTest extends ClientTestCase
 
     /**
      * @depends testCreate
+     * @param VoidPayment\VoidPayment $void
+     * @return void
      */
     public function testGet(VoidPayment\VoidPayment $void)
     {
@@ -92,6 +104,8 @@ class VoidPaymentTest extends ClientTestCase
 
     /**
      * @depends testCreate
+     * @param VoidPayment\VoidPayment $void
+     * @return void
      */
     public function testGetAll(VoidPayment\VoidPayment $void)
     {
@@ -101,7 +115,16 @@ class VoidPaymentTest extends ClientTestCase
         $result = $this->client->call($method);
 
         $this->assertInstanceOf('Cardinity\Method\VoidPayment\VoidPayment', $result[0]);
-        $this->assertSame($void->getId(), $result[0]->getId());
-        $this->assertSame($void->getParentId(), $result[0]->getParentId());
+
+        $itemFound = false;
+        foreach($result as $aVoid){
+            $this->assertSame($void->getParentId(), $aVoid->getParentId());
+
+            if($void->getId() == $aVoid->getId()){
+                $itemFound = true;
+            }
+        }
+
+        $this->assertTrue($itemFound);
     }
 }

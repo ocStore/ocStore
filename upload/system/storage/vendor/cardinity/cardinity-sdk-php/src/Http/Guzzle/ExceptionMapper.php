@@ -6,6 +6,7 @@ use Cardinity\Method\Error;
 use Cardinity\Method\MethodInterface;
 use Cardinity\Method\ResultObjectMapperInterface;
 use GuzzleHttp\Exception\ClientException;
+use Cardinity\Exception\UnexpectedError;
 
 class ExceptionMapper
 {
@@ -78,6 +79,10 @@ class ExceptionMapper
             $resultObject = $method->createResultObject();
         } else {
             $resultObject = new Error();
+        }
+
+        if(!is_array($response)){
+            throw new UnexpectedError('Unexpected error : "'.$exception->getMessage().'"', $exception->getCode());
         }
 
         $response = $this->resultMapper->map(

@@ -1,0 +1,137 @@
+<?php
+// Heading
+$_['heading_title']              = 'Өнімдер';
+
+// Text
+$_['text_success']               = 'Сәтті: Сіз өнімдерді өзгердіңіз!';
+$_['text_variant']               = 'Назар аударыңыз, бұл нұсқа өнім болғандықтан, сіз <a href="%s" target="_blank" class="alert-link">басты өнім</a> деректерін өзгертуіңіз керек. Әйтпесе, сақтағанда деректер <a href="%s" target="_blank" class="alert-link">басты өнім</a> деректерімен ауыстырылады.';
+$_['text_list']                  = 'Өнімдер тізімі';
+$_['text_add']                   = 'Өнім қосу';
+$_['text_edit']                  = 'Өнімді өңдеу';
+$_['text_variant_add']           = 'Нұсқа қосу';
+$_['text_model']                 = 'Модель';
+$_['text_price']                 = 'Баға';
+$_['text_stock']                 = 'Қойма';
+$_['text_specification']         = 'Сипаттама';
+$_['text_filter']                = 'Сүзгі';
+$_['text_default']               = 'Әдепкі';
+$_['text_keyword']               = 'Бос орындарды қолданбаңыз, орнына бос орындарды -мен ауыстырыңыз және SEO URL әлемдік түрде бірегей екеніне көз жеткізіңіз.';
+$_['text_option_add']            = 'Опция қосу';
+$_['text_option_value']          = 'Опция мәні';
+$_['text_select']                = 'Таңдауыш';
+$_['text_radio']                 = 'Радио';
+$_['text_checkbox']              = 'Бұршақ жәшігі';
+$_['text_input']                 = 'Енгізу';
+$_['text_text']                  = 'Мәтін';
+$_['text_textarea']              = 'Мәтін аймағы';
+$_['text_file']                  = 'Файл';
+$_['text_date']                  = 'Күні';
+$_['text_datetime']              = 'Күні &amp; Уақыты';
+$_['text_time']                  = 'Уақыт';
+$_['text_fixed']                 = 'Бекітілген сома';
+$_['text_subtract']              = 'Азайту';
+$_['text_percentage']            = 'Пайыз';
+$_['text_image']                 = 'Сурет';
+$_['text_image_additional']      = 'Қосымша суреттер';
+$_['text_reward']                = 'Сатып алу ұпайлары';
+$_['text_points']                = 'Сыйлық ұпайлары';
+$_['text_from']                  = 'Бастап';
+$_['text_to']                    = 'Дейін';
+$_['text_subscription_trial']    = 'Әр %d %s(s) сайын %s, %d төлем(дер) үшін, одан кейін ';
+$_['text_subscription_duration'] = 'Әр %d %s(s) сайын %s, %d төлем(дер) үшін';
+$_['text_subscription_cancel']   = 'Болғанша әр %d %s(s) сайын %s';
+$_['text_day']                   = 'күн';
+$_['text_week']                  = 'апта';
+$_['text_semi_month']            = 'жарты ай';
+$_['text_month']                 = 'ай';
+$_['text_year']                  = 'жыл';
+$_['text_report']                = 'Есептер';
+
+// Column
+$_['column_name']                = 'Өнім атауы';
+$_['column_model']               = 'Модель';
+$_['column_image']               = 'Сурет';
+$_['column_price']               = 'Баға';
+$_['column_quantity']            = 'Саны';
+$_['column_status']              = 'Мәртебе';
+$_['column_ip']                  = 'IP';
+$_['column_store']               = 'Дүкен';
+$_['column_country']             = 'Ел';
+$_['column_date_added']          = 'Қосылған күні';
+$_['column_action']              = 'Әрекет';
+
+// Entry
+$_['entry_name']                 = 'Өнім атауы';
+$_['entry_description']          = 'Сипаттама';
+$_['entry_meta_title']           = 'Мета тег атауы';
+$_['entry_meta_keyword']         = 'Мета тег кілт сөздері';
+$_['entry_meta_description']     = 'Мета тег сипаттамасы';
+$_['entry_store']                = 'Дүкендер';
+$_['entry_keyword']              = 'Кілт сөз';
+$_['entry_model']                = 'Модель';
+$_['entry_product_code']         = 'Өнім кодтары';
+$_['entry_location']             = 'Орналасқан жері';
+$_['entry_shipping']             = 'Жеткізу қажет';
+$_['entry_manufacturer']         = 'Өндіруші';
+$_['entry_date_available']       = 'Қолжетімділік күні';
+$_['entry_quantity']             = 'Саны';
+$_['entry_minimum']              = 'Ең аз саны';
+$_['entry_stock_status']         = 'Қоймада жоқ мәртебесі';
+$_['entry_price']                = 'Баға';
+$_['entry_trial_price']          = 'Сынақ бағасы';
+$_['entry_tax_class']            = 'Салық сыныбы';
+$_['entry_points']               = 'Ұпайлар';
+$_['entry_subtract']             = 'Қоймадан азайту';
+$_['entry_weight_class']         = 'Салмақ сыныбы';
+$_['entry_weight']               = 'Салмақ';
+$_['entry_dimension']            = 'Өлшемдер (Ұ x Е x Б)';
+$_['entry_length_class']         = 'Ұзындық сыныбы';
+$_['entry_length']               = 'Ұзындық';
+$_['entry_width']                = 'Ені';
+$_['entry_height']               = 'Биіктігі';
+$_['entry_option']               = 'Опция';
+$_['entry_option_value']         = 'Опция мәні';
+$_['entry_customer_group']       = 'Тұтынушы тобы';
+$_['entry_special']              = 'Арнайы';
+$_['entry_type']                 = 'Түрі';
+$_['entry_date_start']           = 'Басталу күні';
+$_['entry_date_end']             = 'Аяқталу күні';
+$_['entry_priority']             = 'Басымдылық';
+$_['entry_attribute']            = 'Атрибут';
+$_['entry_attribute_group']      = 'Атрибут тобы';
+$_['entry_image']                = 'Сурет';
+$_['entry_text']                 = 'Мәтін';
+$_['entry_required']             = 'Міндетті';
+$_['entry_status']               = 'Мәртебе';
+$_['entry_sort_order']           = 'Реттілік';
+$_['entry_category']             = 'Санаттар';
+$_['entry_filter']               = 'Сүзгілер';
+$_['entry_download']             = 'Жүктеп алулар';
+$_['entry_related']              = 'Байланысты өнімдер';
+$_['entry_tag']                  = 'Өнім белгілері';
+$_['entry_reward']               = 'Сыйлық ұпайлары';
+$_['entry_layout']               = 'Жобаны ауыстыру';
+$_['entry_subscription']         = 'Жазылу жоспары';
+
+// Help
+$_['help_tag']                   = 'Үтірмен ажыратылған';
+$_['help_minimum']               = 'Ең аз тапсырыс санын мәжбүрлеу';
+$_['help_stock_status']          = 'Өнім қоймада жоқ кезде көрсетілетін мәртебе';
+$_['help_manufacturer']          = '(Автотолтыру)';
+$_['help_category']              = '(Автотолтыру)';
+$_['help_filter']                = '(Автотолтыру)';
+$_['help_download']              = '(Автотолтыру)';
+$_['help_related']               = '(Автотолтыру)';
+$_['help_option']                = '(Автотолтыру)';
+$_['help_points']                = 'Бұл затты сатып алу үшін қажетті ұпайлар саны. Бұл өнімді ұпайлармен сатып алғыңыз келмесе, 0 деп қалдырыңыз.';
+
+// Error
+$_['error_warning']              = 'Ескерту: Форманы қателерге тексеріңіз!';
+$_['error_permission']           = 'Ескерту: Сіздің өнімдерді өзгертуге рұқсатыңыз жоқ!';
+$_['error_name']                 = 'Өнім атауы 1-ден асқан және 255-тен кем таңба болуы керек!';
+$_['error_meta_title']           = 'Мета атауы 1-ден асқан және 255-тен кем таңба болуы керек!';
+$_['error_model']                = 'Өнім моделі 1-ден асқан және 64-тен кем таңба болуы керек!';
+$_['error_keyword']              = 'SEO URL 1 және 64 таңба арасында болуы керек!';
+$_['error_keyword_exists']       = 'SEO URL бірегей болуы керек!';
+$_['error_keyword_character']    = 'Кілт сөз тек a-z, 0-9, - және _ таңбаларын қолдана алады!';
+$_['error_required']             = '%s міндетті!';

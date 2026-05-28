@@ -1,0 +1,136 @@
+<?php
+// Heading
+$_['heading_title']              = 'Тапсырыстар';
+
+// Text
+$_['text_success']               = 'Сәтті: Сіз тапсырыстарды өзгерттіңіз!';
+$_['text_list']                  = 'Тапсырыстар тізімі';
+$_['text_add']                   = 'Тапсырыс қосу';
+$_['text_edit']                  = 'Тапсырыс (#%s)';
+$_['text_filter']                = 'Сүзгі';
+$_['text_store']                 = 'Дүкен';
+$_['text_date_added']            = 'Қосылған күні';
+$_['text_customer']              = 'Тұтынушы';
+$_['text_product_add']           = 'Өнім қосу';
+$_['text_model'] 			     = 'Модель';
+$_['text_reward']                = 'Сыйлық ұпайлары';
+$_['text_points']                = 'Ұпайлар';
+$_['text_reward_add']            = 'Сәтті: Сыйлық ұпайлары қосылды!';
+$_['text_reward_remove']         = 'Сәтті: Сыйлық ұпайлары алынды!';
+$_['text_affiliate']             = 'Серіктес';
+$_['text_commission']            = 'Комиссия';
+$_['text_commission_add']        = 'Сәтті: Комиссия қосылды!';
+$_['text_commission_remove']     = 'Сәтті: Комиссия алынды!';
+$_['text_upload']                = 'Файлыңыз сәтті жүктелді!';
+$_['text_subscription']          = 'Жазылу';
+$_['text_subscription_trial']    = '%s әр %d %s(s) үшін %d төлем(дер) сосын ';
+$_['text_subscription_duration'] = '%s әр %d %s(s) үшін %d төлем(дер)';
+$_['text_subscription_cancel']   = '%s әр %d %s(s) бас тартылғанға дейін';
+$_['text_day']                   = 'күн';
+$_['text_week']                  = 'апта';
+$_['text_semi_month']            = 'жарты ай';
+$_['text_month']                 = 'ай';
+$_['text_year']                  = 'жыл';
+$_['text_more']                  = 'Көбірек..';
+$_['text_less']                  = 'Азырақ..';
+$_['text_payment_address']       = 'Төлем мекенжайы';
+$_['text_payment_method']        = 'Төлем әдісі';
+$_['text_payment']               = 'Осы тапсырыс үшін қолданғыңыз келетін төлем әдісін таңдаңыз.';
+$_['text_shipping_address']      = 'Жеткізу мекенжайы';
+$_['text_shipping_method']       = 'Жеткізу әдісі';
+$_['text_shipping']              = 'Осы тапсырыс үшін қолданғыңыз келетін жеткізу әдісін таңдаңыз.';
+$_['text_comment']               = 'Пікір';
+$_['text_history']               = 'Тарих';
+$_['text_history_add']           = 'Тарих қосу';
+$_['text_browser']               = 'Браузер';
+$_['text_ip']                    = 'IP мекенжайы';
+$_['text_forwarded_ip']          = 'Бұрылатын IP';
+$_['text_user_agent']            = 'Пайдаланушы агенті';
+$_['text_accept_language']       = 'Қабылданатын тіл';
+$_['text_order_id']              = 'Тапсырыс ID';
+$_['text_website']               = 'Веб-сайт';
+$_['text_invoice']               = 'Шот-фактура';
+$_['text_invoice_no']            = 'Шот-фактура №.';
+$_['text_tbc']                   = 'Тексерілуде';
+$_['text_store_address']         = 'Дүкен мекенжайы';
+$_['text_store_telephone']       = 'Дүкен телефоны';
+$_['text_store_email']           = 'Дүкен электрондық поштасы';
+$_['text_customer_email']        = 'Тұтынушы электрондық поштасы';
+$_['text_customer_telephone']    = 'Тұтынушы телефоны';
+$_['text_missing']               = 'Жоқ тапсырыстар';
+$_['text_default']               = 'Әдепкі';
+$_['text_picklist']              = 'Жіберу құжаты';
+$_['text_sku']                   = 'SKU';
+$_['text_upc']                   = 'UPC';
+$_['text_ean']                   = 'EAN';
+$_['text_jan']                   = 'JAN';
+$_['text_isbn']                  = 'ISBN';
+$_['text_mpn']                   = 'MPN';
+
+// Column
+$_['column_order_id']            = 'Тапсырыс ID';
+$_['column_customer']            = 'Тұтынушы';
+$_['column_store']               = 'Дүкен';
+$_['column_status']              = 'Мәртебе';
+$_['column_date_added']          = 'Қосылған күні';
+$_['column_date_modified']       = 'Өзгертілген күні';
+$_['column_total']               = 'Барлығы';
+$_['column_product']             = 'Өнім';
+$_['column_model']               = 'Модель';
+$_['column_quantity']            = 'Саны';
+$_['column_price']               = 'Бірлік бағасы';
+$_['column_comment']             = 'Пікір';
+$_['column_notify']              = 'Тұтынушы хабарланды';
+$_['column_location']            = 'Орналасу';
+$_['column_reference']           = 'Сілтеме';
+$_['column_weight']              = 'Өнім салмағы';
+$_['column_action']              = 'Әрекет';
+
+// Entry
+$_['entry_store']                = 'Дүкен';
+$_['entry_customer']             = 'Тұтынушы';
+$_['entry_customer_group']       = 'Тұтынушы тобы';
+$_['entry_firstname']            = 'Аты';
+$_['entry_lastname']             = 'Тегі';
+$_['entry_email']                = 'Электрондық пошта';
+$_['entry_telephone']            = 'Телефон';
+$_['entry_address']              = 'Мекенжайды таңдаңыз';
+$_['entry_company']              = 'Компания';
+$_['entry_address_1']            = 'Мекенжай 1';
+$_['entry_address_2']            = 'Мекенжай 2';
+$_['entry_city']                 = 'Қала';
+$_['entry_postcode']             = 'Пошта индексі';
+$_['entry_country']              = 'Ел';
+$_['entry_zone']                 = 'Аймақ / Облыс';
+$_['entry_product']              = 'Өнімді таңдаңыз';
+$_['entry_option']               = 'Опцияларды таңдаңыз';
+$_['entry_subscription']         = 'Жазылуды таңдаңыз';
+$_['entry_quantity']             = 'Саны';
+$_['entry_order_status']         = 'Тапсырыс мәртебесі';
+$_['entry_notify']               = 'Тұтынушыны хабардар ету';
+$_['entry_shipping_method']      = 'Жеткізу әдісі';
+$_['entry_payment_method']       = 'Төлем әдісі';
+$_['entry_override']             = 'Басып жазу';
+$_['entry_comment']              = 'Пікір';
+$_['entry_language']             = 'Тіл';
+$_['entry_currency']             = 'Валюта';
+$_['entry_affiliate']            = 'Серіктес';
+$_['entry_order_id']             = 'Тапсырыс ID';
+$_['entry_total']                = 'Барлығы';
+$_['entry_date_from']            = 'Басталу күні';
+$_['entry_date_to']              = 'Аяқталу күні';
+$_['entry_date_modified_from']   = 'Өзгертілген күнінен';
+$_['entry_date_modified_to']     = 'Өзгертілген күніне';
+
+// Help
+$_['help_override']              = 'Егер тұтынушының тапсырысы алаяқтыққа қарсы кеңейтімнің тапсырыс мәртебесін өзгертуіне бұғатталған болса, басып жазуды қосыңыз.';
+
+// Error
+$_['error_warning']              = 'Ескерту: Форманы қателерге мұқият тексеріңіз!';
+$_['error_permission']           = 'Ескерту: Сізде тапсырыстарды өзгертуге рұқсатыңыз жоқ!';
+$_['error_invoice_no']           = 'Ескерту: Шот-фактура №. бұрыннан жасалған!';
+$_['error_order']                = 'Ескерту: Тапсырыс жоқ!';
+$_['error_affiliate']            = 'Ескерту: Серіктес жоқ!';
+$_['error_reward_add']           = 'Ескерту: Осы тапсырыстың сыйлық ұпайлары бұрыннан қосылған!';
+$_['error_reward_guest']         = 'Ескерту: Қонақтар сыйлық ұпайларын пайдалана алмайды!';
+$_['error_commission_add']       = 'Ескерту: Осы тапсырыстың серіктес комиссиясы бұрыннан қосылған!';

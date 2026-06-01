@@ -32,10 +32,19 @@ class ControllerExtensionFeedGoogleBase extends Controller {
 						
 						$product_data[] = $product['product_id'];
 						
+						$name = strip_tags(html_entity_decode($product['name'], ENT_QUOTES, 'UTF-8'));
+						if (mb_strlen($name, 'UTF-8') > 150) {
+						    $name = mb_substr($name, 0, 147, 'UTF-8') . '...';
+						}
+						$description = strip_tags(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8')); 
+						if (mb_strlen($description, 'UTF-8') > 5000) {
+						    $description = mb_substr($description, 0, 4997, 'UTF-8') . '...';
+						}
+
 						$output .= '<item>';
-						$output .= '<title><![CDATA[' . $product['name'] . ']]></title>';
+						$output .= '<title><![CDATA[' . $name . ']]></title>';
 						$output .= '<link>' . $this->url->link('product/product', 'product_id=' . $product['product_id']) . '</link>';
-						$output .= '<description><![CDATA[' . strip_tags(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8')) . ']]></description>';
+						$output .= '<description><![CDATA[' . $description . ']]></description>';
 						$output .= '<g:brand><![CDATA[' . html_entity_decode((string)$product['manufacturer'], ENT_QUOTES, 'UTF-8') . ']]></g:brand>';
 						$output .= '<g:condition>new</g:condition>';
 						$output .= '<g:id>' . $product['product_id'] . '</g:id>';

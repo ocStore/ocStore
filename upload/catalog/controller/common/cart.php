@@ -26,6 +26,9 @@ class Cart extends \Opencart\System\Engine\Controller {
 		// Image
 		$this->load->model('tool/image');
 
+		// Upload
+		$this->load->model('tool/upload');
+
 		// Display prices
 		if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
 			($this->model_checkout_cart->getTotals)($totals, $taxes, $total);
@@ -63,11 +66,11 @@ class Cart extends \Opencart\System\Engine\Controller {
 
 			$subscription = '';
 
-			if ($product['subscription']) {
+			if ($product['subscription'] && $price_status) {
 				if ($product['subscription']['duration']) {
-					$subscription .= sprintf($this->language->get('text_subscription_duration'), $price_status ?? $product['subscription']['price_text'], $product['subscription']['cycle'], $product['subscription']['frequency'], $product['subscription']['duration']);
+					$subscription .= sprintf($this->language->get('text_subscription_duration'), $product['subscription']['price_text'], $product['subscription']['cycle'], $product['subscription']['frequency'], $product['subscription']['duration']);
 				} else {
-					$subscription .= sprintf($this->language->get('text_subscription_cancel'), $price_status ?? $product['subscription']['price_text'], $product['subscription']['cycle'], $product['subscription']['frequency']);
+					$subscription .= sprintf($this->language->get('text_subscription_cancel'), $product['subscription']['price_text'], $product['subscription']['cycle'], $product['subscription']['frequency']);
 				}
 			}
 
@@ -130,6 +133,7 @@ class Cart extends \Opencart\System\Engine\Controller {
 
 			$json['success'] = $this->language->get('text_remove');
 
+			unset($this->session->data['order_id']);
 			unset($this->session->data['shipping_method']);
 			unset($this->session->data['shipping_methods']);
 			unset($this->session->data['payment_method']);

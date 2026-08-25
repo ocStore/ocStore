@@ -38,7 +38,7 @@ class Debug extends \Opencart\System\Engine\Controller {
 
 			$this->log->write($log_data);
 
-			unset($this->session->data['debug']);
+			unset($this->session->data['debug'][$route]);
 		}
 	}
 }

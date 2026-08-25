@@ -7,9 +7,14 @@ namespace Opencart\System\Library\DB;
  */
 class PgSQL {
 	/**
-	 * @var mixed
+	 * @var bool|\PgSql\Connection
 	 */
-	private $connection;
+	private $connection = false;
+
+	/**
+	 * @var bool|\PgSql\Result
+	 */
+	private $last_result = false;
 
 	/**
 	 * Constructor
@@ -18,26 +23,30 @@ class PgSQL {
 	 * @param string $username
 	 * @param string $password
 	 * @param string $database
-	 * @param string $port
+	 * @param int    $port
 	 */
-	public function __construct(string $hostname, string $username, string $password, string $database, string $port = '') {
+	public function __construct(string $hostname, string $username, string $password, string $database, int $port = 0) {
 		if (!$port) {
-			$port = '5432';
+			$port = 5432;
 		}
 
 		try {
-			$pg = @pg_connect('host=' . $hostname . ' port=' . $port . ' user=' . $username . ' password=' . $password . ' dbname=' . $database . ' options=\'--client_encoding=UTF8\' ');
+			$pg = pg_connect('host=' . $hostname . ' port=' . $port . ' user=' . $username . ' password=' . $password . ' dbname=' . $database . ' options=\'--client_encoding=UTF8\' ');
 		} catch (\Exception $e) {
 			throw new \Exception('Error: Could not make a database link using ' . $username . '@' . $hostname);
 		}
 
-		if ($pg) {
-			$this->connection = $pg;
-			pg_query($this->connection, "SET CLIENT_ENCODING TO 'UTF8'");
-
-			// Sync PHP and DB time zones
-			pg_query($this->connection, "SET TIMEZONE = '" . $this->escape(date('P')) . "'");
+		if (!$pg) {
+			throw new \Exception('Error: Could not make a database link using ' . $username . '@' . $hostname);
 		}
+
+		$this->connection = $pg;
+
+		$this->query("SET CLIENT_ENCODING TO 'UTF8'");
+		$this->query("SET client_min_messages TO WARNING");
+
+		// Sync PHP and DB time zones
+		$this->query("SET timezone TO '" . $this->escape(date('P')) . "'");
 	}
 
 	/**
@@ -45,29 +54,38 @@ class PgSQL {
 	 *
 	 * @param string $sql
 	 *
-	 * @return \stdClass
+	 * @return bool|\stdClass
 	 */
-	public function query(string $sql): \stdClass {
+	public function query(string $sql): bool|\stdClass {
+		// Free the previous result if it exists to save memory
+		if ($this->last_result instanceof \PgSql\Result) {
+			pg_free_result($this->last_result);
+		}
+
 		$resource = pg_query($this->connection, $sql);
 
-		if ($resource === false) {
-			throw new \Exception('Error: ' . pg_last_error($this->connection) . '<br/>' . $sql);
+		if ($resource) {
+			$this->last_result = $resource;
+
+			if (pg_num_fields($resource) > 0) {
+				$data = [];
+
+				while ($row = pg_fetch_assoc($resource)) {
+					$data[] = $row;
+				}
+
+				$result = new \stdClass();
+				$result->num_rows = pg_num_rows($resource);
+				$result->row = $data[0] ?? [];
+				$result->rows = $data;
+
+				return $result;
+			}
+
+			return true;
+		} else {
+			throw new \Exception('Error: ' . pg_last_error($this->connection) . '<br />' . $sql);
 		}
-
-		$data = [];
-
-		while ($result = pg_fetch_assoc($resource)) {
-			$data[] = $result;
-		}
-
-		pg_free_result($resource);
-
-		$query = new \stdClass();
-		$query->row = $data[0] ?? [];
-		$query->rows = $data;
-		$query->num_rows = count($data);
-
-		return $query;
 	}
 
 	/**
@@ -87,7 +105,11 @@ class PgSQL {
 	 * @return int
 	 */
 	public function countAffected(): int {
-		return pg_affected_rows($this->connection);
+		if ($this->last_result !== false) {
+			return pg_affected_rows($this->last_result);
+		}
+
+		return 0;
 	}
 
 	/**
@@ -96,9 +118,9 @@ class PgSQL {
 	 * @return int
 	 */
 	public function getLastId(): int {
-		$query = $this->query("SELECT LASTVAL() AS `id`");
+		$query = $this->query("SELECT LASTVAL() AS id");
 
-		return $query->row['id'];
+		return (int)$query->row['id'];
 	}
 
 	/**
@@ -107,7 +129,7 @@ class PgSQL {
 	 * @return bool
 	 */
 	public function isConnected(): bool {
-		return pg_connection_status($this->connection) == PGSQL_CONNECTION_OK;
+		return $this->connection instanceof \PgSql\Connection && pg_connection_status($this->connection) === PGSQL_CONNECTION_OK;
 	}
 
 	/**
@@ -116,10 +138,10 @@ class PgSQL {
 	 * Closes the DB connection when this object is destroyed.
 	 */
 	public function __destruct() {
-		if ($this->connection) {
+		if ($this->connection instanceof \PgSql\Connection) {
 			pg_close($this->connection);
-
-			$this->connection = null;
 		}
+
+		$this->connection = false;
 	}
 }

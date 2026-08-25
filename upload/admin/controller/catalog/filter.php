@@ -211,13 +211,15 @@ class Filter extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('catalog/filter.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('catalog/filter', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		$filter_info = [];
+
 		if (isset($this->request->get['filter_id'])) {
 			$this->load->model('catalog/filter');
 
 			$filter_info = $this->model_catalog_filter->getFilter((int)$this->request->get['filter_id']);
 		}
 
-		if (isset($filter_info)) {
+		if (!empty($filter_info)) {
 			$data['filter_id'] = $filter_info['filter_id'];
 		} else {
 			$data['filter_id'] = 0;

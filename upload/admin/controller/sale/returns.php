@@ -498,10 +498,12 @@ class Returns extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('sale/returns.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('sale/returns', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		$return_info = [];
+
 		if (isset($this->request->get['return_id'])) {
 			$this->load->model('sale/returns');
 
-			$return_info = $this->model_sale_returns->getReturn($this->request->get['return_id']);
+			$return_info = $this->model_sale_returns->getReturn((int)$this->request->get['return_id']);
 		}
 
 		if (!empty($return_info)) {
@@ -617,6 +619,7 @@ class Returns extends \Opencart\System\Engine\Controller {
 		}
 
 		$required = [
+			'return_id'        => 0,
 			'order_id'         => 0,
 			'product_id'       => 0,
 			'customer_id'      => 0,
@@ -630,6 +633,7 @@ class Returns extends \Opencart\System\Engine\Controller {
 			'opened'           => 0,
 			'return_reason_id' => 0,
 			'return_action_id' => 0,
+			'return_status_id' => 0,
 			'comment'          => '',
 			'date_ordered'     => ''
 		];
@@ -642,7 +646,7 @@ class Returns extends \Opencart\System\Engine\Controller {
 		$order_info = $this->model_sale_order->getOrder($post_info['order_id']);
 
 		if (!$order_info) {
-			$json['error']['order'] = $this->language->get('error_order_id');
+			$json['error']['order'] = $this->language->get('error_order');
 		}
 
 		if ($post_info['customer_id']) {

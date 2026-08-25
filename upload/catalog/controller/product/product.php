@@ -230,11 +230,6 @@ class Product extends \Opencart\System\Engine\Controller {
 				'href' => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . $url . '&product_id=' . $product_id)
 			];
 
-			$this->document->setTitle($product_info['meta_title']);
-			$this->document->setDescription($product_info['meta_description']);
-			$this->document->setKeywords($product_info['meta_keyword']);
-			$this->document->addLink($this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product_id), 'canonical');
-
 			$this->document->addScript('catalog/view/javascript/jquery/magnific/jquery.magnific-popup.min.js');
 			$this->document->addStyle('catalog/view/javascript/jquery/magnific/magnific-popup.css');
 
@@ -282,7 +277,7 @@ class Product extends \Opencart\System\Engine\Controller {
 			$data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');
 
 			// Stock Status
-			if ($product_info['quantity'] <= 0) {
+			if ($product_info['quantity'] <= 0 || $this->hasRequiredOptionsWithoutStock($product_info)) {
 				$stock_status_id = $product_info['stock_status_id'];
 			} elseif (!$this->config->get('config_stock_display')) {
 				$stock_status_id = (int)$this->config->get('config_stock_status_id');
@@ -301,7 +296,7 @@ class Product extends \Opencart\System\Engine\Controller {
 				$data['stock'] = $product_info['quantity'];
 			}
 
-			$data['rating'] = (int)$product_info['rating'];
+			$data['rating'] = $product_info['rating'];
 			$data['review_status'] = (int)$this->config->get('config_review_status');
 			$data['review'] = $this->load->controller('product/review');
 
@@ -366,13 +361,13 @@ class Product extends \Opencart\System\Engine\Controller {
 			if ($product_info['master_id']) {
 				$master_id = (int)$product_info['master_id'];
 			} else {
-				$master_id = (int)$this->request->get['product_id'];
+				$master_id = (int)$product_id;
 			}
 
 			$product_options = $this->model_catalog_product->getOptions($master_id);
 
 			foreach ($product_options as $option) {
-				if ((int)$this->request->get['product_id'] && !isset($product_info['override']['variant'][$option['product_option_id']])) {
+				if ($product_id && !isset($product_info['override']['variant'][$option['product_option_id']])) {
 					$product_option_value_data = [];
 
 					foreach ($option['product_option_value'] as $option_value) {
@@ -436,7 +431,7 @@ class Product extends \Opencart\System\Engine\Controller {
 				$data['minimum'] = 1;
 			}
 
-			$data['share'] = $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . (int)$this->request->get['product_id']);
+			$data['share'] = $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product_id);
 
 			$data['attribute_groups'] = $this->model_catalog_product->getAttributes($product_id);
 
@@ -456,7 +451,7 @@ class Product extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($this->config->get('config_product_report_status')) {
-				$this->model_catalog_product->addReport($this->request->get['product_id'], oc_get_ip());
+				$this->model_catalog_product->addReport($product_id, oc_get_ip());
 			}
 
 			$data['language'] = $this->config->get('config_language');
@@ -474,5 +469,73 @@ class Product extends \Opencart\System\Engine\Controller {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Check to make sure that none of the required product options is without stock
+	 *
+	 * @param array<string, mixed> $product_info
+	 *
+	 * @return bool
+	 */
+	protected function hasRequiredOptionsWithoutStock(array $product_info): bool {
+		if ($product_info['master_id']) {
+			$master_id = (int)$product_info['master_id'];
+		} else {
+			$master_id = (int)$product_info['product_id'];
+		}
+
+		$product_options = $this->model_catalog_product->getOptions($master_id);
+
+		foreach ($product_options as $product_option) {
+			if (!$product_option['required']) {
+				continue;
+			}
+			$product_option_id = $product_option['product_option_id'];
+
+			$has_stock = false;
+
+			$type = $product_option['type'];
+			if ($type == 'select' || $type == 'radio' || $type == 'checkbox') {
+				foreach ($product_option['product_option_value'] as $product_option_value) {
+					$product_option_value_id = $product_option_value['product_option_value_id'];
+					if (!empty($product_info['override']['variant'][$product_option_id])) {
+						if (!isset($product_info['variant'][$product_option_id])) {
+							// option value is not used in variant product
+							continue;
+						}
+						$value = $product_info['variant'][$product_option_id];
+						if (!is_array($value)) {
+							$value = [$value];
+						}
+						if (!in_array($product_option_value_id, $value)) {
+							// option value is not used in variant product
+							continue;
+						}
+					}
+					if (!$product_option_value['subtract']) {
+						// at least one required product option value can still be chosen
+						$has_stock = true;
+						break;
+					}
+					if ($product_option_value['quantity'] > 0) {
+						// at least one required product option value still has some stock
+						$has_stock = true;
+						break;
+					}
+				}
+				if (!$has_stock) {
+					return true;
+				}
+			} else {
+				$has_stock = true;
+			}
+
+			if (!$has_stock) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

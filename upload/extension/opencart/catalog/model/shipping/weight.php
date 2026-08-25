@@ -23,19 +23,15 @@ class Weight extends \Opencart\System\Engine\Model {
 		// Geo Zone
 		$this->load->model('localisation/geo_zone');
 
-		$results = $this->model_localisation_geo_zone->getGeoZones();
+		$geo_zones = $this->model_localisation_geo_zone->getGeoZones();
 
 		$weight = $this->cart->getWeight();
 
-		foreach ($results as $result) {
+		foreach ($geo_zones as $result) {
 			if ($this->config->get('shipping_weight_' . $result['geo_zone_id'] . '_status')) {
-				$results = $this->model_localisation_geo_zone->getGeoZone($result['geo_zone_id'], $address['country_id'], $address['zone_id']);
+				$match = $this->model_localisation_geo_zone->getGeoZone($result['geo_zone_id'], $address['country_id'], $address['zone_id']);
 
-				if ($results) {
-					$status = true;
-				} else {
-					$status = false;
-				}
+				$status = (bool)$match;
 			} else {
 				$status = false;
 			}

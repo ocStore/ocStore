@@ -115,9 +115,19 @@ class Smtp {
 		if (!empty($this->option['attachments'])) {
 			foreach ($this->option['attachments'] as $attachment) {
 				if (is_file($attachment)) {
+					$size = filesize($attachment);
+
+					if ($size === false || $size === 0) {
+						continue;
+					}
+
 					$handle = fopen($attachment, 'r');
 
-					$content = fread($handle, filesize($attachment));
+					if (!$handle) {
+						continue;
+					}
+
+					$content = fread($handle, $size);
 
 					fclose($handle);
 

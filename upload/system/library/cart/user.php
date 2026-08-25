@@ -13,10 +13,6 @@ class User {
 	/**
 	 * @var object
 	 */
-	private object $request;
-	/**
-	 * @var object
-	 */
 	private object $session;
 	/**
 	 * @var int
@@ -54,7 +50,6 @@ class User {
 	 */
 	public function __construct(\Opencart\System\Engine\Registry $registry) {
 		$this->db = $registry->get('db');
-		$this->request = $registry->get('request');
 		$this->session = $registry->get('session');
 
 		if (isset($this->session->data['user_id'])) {

@@ -215,6 +215,8 @@ class Download extends \Opencart\System\Engine\Controller {
 		$data['back'] = $this->url->link('catalog/download', 'user_token=' . $this->session->data['user_token'] . $url);
 		$data['upload'] = $this->url->link('catalog/download.upload', 'user_token=' . $this->session->data['user_token']);
 
+		$download_info = [];
+
 		if (isset($this->request->get['download_id'])) {
 			$this->load->model('catalog/download');
 
@@ -294,12 +296,10 @@ class Download extends \Opencart\System\Engine\Controller {
 			$json['error']['filename'] = $this->language->get('error_filename');
 		}
 
-		if (substr(str_replace('\\', '/', realpath(DIR_DOWNLOAD . $post_info['filename'])), 0, strlen(DIR_DOWNLOAD)) != DIR_DOWNLOAD) {
-			$json['error']['filename'] = $this->language->get('error_directory');
-		}
-
 		if (!is_file(DIR_DOWNLOAD . $post_info['filename'])) {
 			$json['error']['filename'] = $this->language->get('error_exists');
+		} elseif (substr(str_replace('\\', '/', realpath(DIR_DOWNLOAD . $post_info['filename'])), 0, strlen(DIR_DOWNLOAD)) != DIR_DOWNLOAD) {
+			$json['error']['filename'] = $this->language->get('error_directory');
 		}
 
 		if (!oc_validate_filename($post_info['filename'])) {

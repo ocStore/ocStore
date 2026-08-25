@@ -22,6 +22,8 @@ class PaymentMethod extends \Opencart\System\Engine\Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
+		$data['breadcrumbs'] = [];
+
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/home', 'language=' . $this->config->get('config_language'))
@@ -86,12 +88,6 @@ class PaymentMethod extends \Opencart\System\Engine\Controller {
 	 * @return string
 	 */
 	protected function getList(): string {
-		if (!$this->load->controller('account/login.validate')) {
-			$this->session->data['redirect'] = $this->url->link('account/payment_method', 'language=' . $this->config->get('config_language'));
-
-			$this->response->redirect($this->url->link('account/login', 'language=' . $this->config->get('config_language'), true));
-		}
-
 		$data['payment_methods'] = [];
 
 		// Extension

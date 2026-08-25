@@ -86,7 +86,7 @@ class Sale extends \Opencart\System\Engine\Model {
 	/**
 	 * Get Total Orders By Week
 	 *
-	 * @return array<int, array<string, int>> total number of order records by week
+	 * @return array<int, array<string, mixed>> total number of order records by week
 	 *
 	 * @example
 	 *
@@ -127,7 +127,7 @@ class Sale extends \Opencart\System\Engine\Model {
 	/**
 	 * Get Total Orders By Month
 	 *
-	 * @return array<int, array<string, int>> total number of order records by month
+	 * @return array<int, array<string, mixed>> total number of order records by month
 	 *
 	 * @example
 	 *
@@ -166,7 +166,7 @@ class Sale extends \Opencart\System\Engine\Model {
 	/**
 	 * Get Total Orders By Year
 	 *
-	 * @return array<int, array<string, int>> total number of order records by year
+	 * @return array<int|string, array<string, mixed>> total number of order records by year
 	 *
 	 * @example
 	 *
@@ -253,15 +253,18 @@ class Sale extends \Opencart\System\Engine\Model {
 		$sql .= " ORDER BY `o`.`date_added` DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$query = $this->db->query($sql);
@@ -373,15 +376,18 @@ class Sale extends \Opencart\System\Engine\Model {
 		}
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$query = $this->db->query($sql);
@@ -495,15 +501,18 @@ class Sale extends \Opencart\System\Engine\Model {
 		}
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$query = $this->db->query($sql);

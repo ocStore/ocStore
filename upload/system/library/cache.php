@@ -74,4 +74,15 @@ class Cache {
 	public function delete(string $key): void {
 		$this->adaptor->delete($key);
 	}
+
+	/**
+	 * Clear
+	 *
+	 * Clear all cache
+	 *
+	 * @return void
+	 */
+	public function clear(): void {
+		$this->adaptor->clear();
+	}
 }

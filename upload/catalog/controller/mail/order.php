@@ -174,6 +174,12 @@ class Order extends \Opencart\System\Engine\Controller {
 
 		$data['comment'] = nl2br($order_info['comment']);
 
+		if ($comment) {
+			$data['instruction'] = nl2br($comment);
+		} else {
+			$data['instruction'] = '';
+		}
+
 		// Payment Address
 		if ($order_info['payment_address_format']) {
 			$format = $order_info['payment_address_format'];

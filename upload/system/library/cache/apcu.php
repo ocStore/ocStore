@@ -77,17 +77,13 @@ class Apcu {
 	}
 
 	/**
-	 * Delete all cache
+	 * Clear all cache
 	 *
-	 * @return bool
+	 * @return void
 	 */
-	public function flush(): bool {
-		$status = false;
-
+	public function clear(): void {
 		if (function_exists('apcu_clear_cache')) {
-			$status = apcu_clear_cache();
+			apcu_clear_cache();
 		}
-
-		return $status;
 	}
 }

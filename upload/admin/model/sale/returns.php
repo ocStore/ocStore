@@ -191,11 +191,11 @@ class Returns extends \Opencart\System\Engine\Model {
 		}
 
 		if (!empty($data['filter_product'])) {
-			$implode[] = "LCASE(`r`.`product` = '" . $this->db->escape(oc_strtolower($data['filter_product'])) . "'";
+			$implode[] = "LCASE(`r`.`product`) LIKE '" . $this->db->escape(oc_strtolower($data['filter_product']) . '%') . "'";
 		}
 
 		if (!empty($data['filter_model'])) {
-			$implode[] = "LCASE(`r`.`model` = '" . $this->db->escape(oc_strtolower($data['filter_model'])) . "'";
+			$implode[] = "LCASE(`r`.`model`) LIKE '" . $this->db->escape(oc_strtolower($data['filter_model']) . '%') . "'";
 		}
 
 		if (!empty($data['filter_return_status_id'])) {

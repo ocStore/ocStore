@@ -388,6 +388,8 @@ class Review extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('catalog/review.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('catalog/review', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		$review_info = [];
+
 		if (isset($this->request->get['review_id'])) {
 			$this->load->model('catalog/review');
 

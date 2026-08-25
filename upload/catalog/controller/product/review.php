@@ -138,9 +138,9 @@ class Review extends \Opencart\System\Engine\Controller {
 		}
 
 		$required = [
-			'author',
-			'text',
-			'rating'
+			'author' => '',
+			'text'   => '',
+			'rating' => 0
 		];
 
 		$post_info = $this->request->post + $required;
@@ -158,15 +158,15 @@ class Review extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_product');
 		}
 
-		if (!oc_validate_length($post_info['author'], 3, 25)) {
+		if (!isset($post_info['author']) || !oc_validate_length($post_info['author'], 3, 25)) {
 			$json['error']['author'] = $this->language->get('error_author');
 		}
 
-		if (!oc_validate_length($post_info['text'], 25, 1000)) {
+		if (!isset($post_info['text']) || !oc_validate_length($post_info['text'], 25, 1000)) {
 			$json['error']['text'] = $this->language->get('error_text');
 		}
 
-		if ($post_info['rating'] < 1 || $post_info['rating'] > 5) {
+		if (!isset($post_info['rating']) || $post_info['rating'] < 1 || $post_info['rating'] > 5) {
 			$json['error']['rating'] = $this->language->get('error_rating');
 		}
 
@@ -179,7 +179,7 @@ class Review extends \Opencart\System\Engine\Controller {
 			$this->load->model('account/order');
 
 			if (!$this->model_account_order->getTotalOrdersByProductId($product_id)) {
-				$json['error']['purchased'] = $this->language->get('error_purchased');
+				$json['error']['warning'] = $this->language->get('error_purchased');
 			}
 		}
 

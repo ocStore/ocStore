@@ -194,12 +194,15 @@ class Order extends \Opencart\System\Engine\Model {
 	 * $this->model_checkout_order->editOrder($order_id, $order_data);
 	 */
 	public function editOrder(int $order_id, array $data): void {
-		// 1. Void the order first
-		$this->addHistory($order_id, (int)$this->config->get('config_void_status_id'));
-
 		$order_info = $this->getOrder($order_id);
 
 		if ($order_info) {
+
+			// 1. Void the order first if it has already been confirmed
+			if ($order_info['order_status_id']) {
+				$this->addHistory($order_id, (int)$this->config->get('config_void_status_id'), '', true);
+			}
+
 			// 2. Merge the old order data with the new data
 			foreach ($order_info as $key => $value) {
 				if (!isset($data[$key])) {
@@ -207,7 +210,7 @@ class Order extends \Opencart\System\Engine\Model {
 				}
 			}
 
-			$this->db->query("UPDATE `" . DB_PREFIX . "order` SET `subscription_id` = '" . (int)$data['subscription_id'] . "', `invoice_prefix` = '" . $this->db->escape((string)$data['invoice_prefix']) . "', `store_id` = '" . (int)$data['store_id'] . "', `store_name` = '" . $this->db->escape((string)$data['store_name']) . "', `store_url` = '" . $this->db->escape((string)$data['store_url']) . "', `customer_id` = '" . (int)$data['customer_id'] . "', `customer_group_id` = '" . (int)$data['customer_group_id'] . "', `firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `email` = '" . $this->db->escape((string)$data['email']) . "', `telephone` = '" . $this->db->escape((string)$data['telephone']) . "', `custom_field` = '" . $this->db->escape(json_encode($data['custom_field'])) . "', `payment_address_id` = '" . (int)$data['payment_address_id'] . "', `payment_firstname` = '" . $this->db->escape((string)$data['payment_firstname']) . "', `payment_lastname` = '" . $this->db->escape((string)$data['payment_lastname']) . "', `payment_company` = '" . $this->db->escape((string)$data['payment_company']) . "', `payment_address_1` = '" . $this->db->escape((string)$data['payment_address_1']) . "', `payment_address_2` = '" . $this->db->escape((string)$data['payment_address_2']) . "', `payment_city` = '" . $this->db->escape((string)$data['payment_city']) . "', `payment_postcode` = '" . $this->db->escape((string)$data['payment_postcode']) . "', `payment_country` = '" . $this->db->escape((string)$data['payment_country']) . "', `payment_country_id` = '" . (int)$data['payment_country_id'] . "', `payment_zone` = '" . $this->db->escape((string)$data['payment_zone']) . "', `payment_zone_id` = '" . (int)$data['payment_zone_id'] . "', `payment_address_format` = '" . $this->db->escape((string)$data['payment_address_format']) . "', `payment_custom_field` = '" . $this->db->escape(isset($data['payment_custom_field']) ? json_encode($data['payment_custom_field']) : '') . "', `payment_method` = '" . $this->db->escape($data['payment_method'] ? json_encode($data['payment_method']) : '') . "', `shipping_address_id` = '" . (int)$data['shipping_address_id'] . "', `shipping_firstname` = '" . $this->db->escape((string)$data['shipping_firstname']) . "', `shipping_lastname` = '" . $this->db->escape((string)$data['shipping_lastname']) . "', `shipping_company` = '" . $this->db->escape((string)$data['shipping_company']) . "', `shipping_address_1` = '" . $this->db->escape((string)$data['shipping_address_1']) . "', `shipping_address_2` = '" . $this->db->escape((string)$data['shipping_address_2']) . "', `shipping_city` = '" . $this->db->escape((string)$data['shipping_city']) . "', `shipping_postcode` = '" . $this->db->escape((string)$data['shipping_postcode']) . "', `shipping_country` = '" . $this->db->escape((string)$data['shipping_country']) . "', `shipping_country_id` = '" . (int)$data['shipping_country_id'] . "', `shipping_zone` = '" . $this->db->escape((string)$data['shipping_zone']) . "', `shipping_zone_id` = '" . (int)$data['shipping_zone_id'] . "', `shipping_address_format` = '" . $this->db->escape((string)$data['shipping_address_format']) . "', `shipping_custom_field` = '" . $this->db->escape(isset($data['shipping_custom_field']) ? json_encode($data['shipping_custom_field']) : '') . "', `shipping_method` = '" . $this->db->escape($data['shipping_method'] ? json_encode($data['shipping_method']) : '') . "', `comment` = '" . $this->db->escape((string)$data['comment']) . "', `total` = '" . (float)$data['total'] . "', `affiliate_id` = '" . (int)$data['affiliate_id'] . "', `commission` = '" . (float)$data['commission'] . "', `date_modified` = NOW() WHERE `order_id` = '" . (int)$order_id . "'");
+			$this->db->query("UPDATE `" . DB_PREFIX . "order` SET `subscription_id` = '" . (int)$data['subscription_id'] . "', `invoice_prefix` = '" . $this->db->escape((string)$data['invoice_prefix']) . "', `store_id` = '" . (int)$data['store_id'] . "', `store_name` = '" . $this->db->escape((string)$data['store_name']) . "', `store_url` = '" . $this->db->escape((string)$data['store_url']) . "', `customer_id` = '" . (int)$data['customer_id'] . "', `customer_group_id` = '" . (int)$data['customer_group_id'] . "', `firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `email` = '" . $this->db->escape((string)$data['email']) . "', `telephone` = '" . $this->db->escape((string)$data['telephone']) . "', `custom_field` = '" . $this->db->escape(json_encode($data['custom_field'])) . "', `payment_address_id` = '" . (int)$data['payment_address_id'] . "', `payment_firstname` = '" . $this->db->escape((string)$data['payment_firstname']) . "', `payment_lastname` = '" . $this->db->escape((string)$data['payment_lastname']) . "', `payment_company` = '" . $this->db->escape((string)$data['payment_company']) . "', `payment_address_1` = '" . $this->db->escape((string)$data['payment_address_1']) . "', `payment_address_2` = '" . $this->db->escape((string)$data['payment_address_2']) . "', `payment_city` = '" . $this->db->escape((string)$data['payment_city']) . "', `payment_postcode` = '" . $this->db->escape((string)$data['payment_postcode']) . "', `payment_country` = '" . $this->db->escape((string)$data['payment_country']) . "', `payment_country_id` = '" . (int)$data['payment_country_id'] . "', `payment_zone` = '" . $this->db->escape((string)$data['payment_zone']) . "', `payment_zone_id` = '" . (int)$data['payment_zone_id'] . "', `payment_address_format` = '" . $this->db->escape((string)$data['payment_address_format']) . "', `payment_custom_field` = '" . $this->db->escape(isset($data['payment_custom_field']) ? json_encode($data['payment_custom_field']) : '') . "', `payment_method` = '" . $this->db->escape($data['payment_method'] ? json_encode($data['payment_method']) : '') . "', `shipping_address_id` = '" . (int)$data['shipping_address_id'] . "', `shipping_firstname` = '" . $this->db->escape((string)$data['shipping_firstname']) . "', `shipping_lastname` = '" . $this->db->escape((string)$data['shipping_lastname']) . "', `shipping_company` = '" . $this->db->escape((string)$data['shipping_company']) . "', `shipping_address_1` = '" . $this->db->escape((string)$data['shipping_address_1']) . "', `shipping_address_2` = '" . $this->db->escape((string)$data['shipping_address_2']) . "', `shipping_city` = '" . $this->db->escape((string)$data['shipping_city']) . "', `shipping_postcode` = '" . $this->db->escape((string)$data['shipping_postcode']) . "', `shipping_country` = '" . $this->db->escape((string)$data['shipping_country']) . "', `shipping_country_id` = '" . (int)$data['shipping_country_id'] . "', `shipping_zone` = '" . $this->db->escape((string)$data['shipping_zone']) . "', `shipping_zone_id` = '" . (int)$data['shipping_zone_id'] . "', `shipping_address_format` = '" . $this->db->escape((string)$data['shipping_address_format']) . "', `shipping_custom_field` = '" . $this->db->escape(isset($data['shipping_custom_field']) ? json_encode($data['shipping_custom_field']) : '') . "', `shipping_method` = '" . $this->db->escape($data['shipping_method'] ? json_encode($data['shipping_method']) : '') . "', `comment` = '" . $this->db->escape((string)$data['comment']) . "', `total` = '" . (float)$data['total'] . "', `affiliate_id` = '" . (int)$data['affiliate_id'] . "', `commission` = '" . (float)$data['commission'] . "', `marketing_id` = '" . (int)$data['marketing_id'] . "', `tracking` = '" . $this->db->escape($data['tracking']) . "', `language_id` = '" . (int)$data['language_id'] . "', `language_code` = '" . $this->db->escape($data['language_code']) . "', `currency_id` = '" . (int)$data['currency_id'] . "', `currency_code` = '" . $this->db->escape($data['currency_code']) . "', `currency_value` = '" . (float)$data['currency_value'] . "', `date_modified` = NOW() WHERE `order_id` = '" . (int)$order_id . "'");
 
 			// Products
 			$this->model_checkout_order->deleteProducts($order_id);
@@ -314,12 +317,12 @@ class Order extends \Opencart\System\Engine\Model {
 		$this->model_checkout_order->deleteTotals($order_id);
 		$this->model_checkout_order->deleteHistories($order_id);
 
-		// Transaction
+		// Transactions
 		$this->load->model('account/transaction');
 
 		$this->model_account_transaction->deleteTransactionsByOrderId($order_id);
 
-		// Reward
+		// Rewards
 		$this->load->model('account/reward');
 
 		$this->model_account_reward->deleteRewardsByOrderId($order_id);
@@ -440,8 +443,7 @@ class Order extends \Opencart\System\Engine\Model {
 	 *
 	 * Delete order product record in the database.
 	 *
-	 * @param int $order_id         primary key of the order record
-	 * @param int $order_product_id primary key of the order product record
+	 * @param int $order_id primary key of the order record
 	 *
 	 * @return void
 	 *
@@ -510,7 +512,7 @@ class Order extends \Opencart\System\Engine\Model {
 	 * @param int                  $order_product_id primary key of the order product record
 	 * @param array<string, mixed> $data             array of data
 	 *
-	 * @return void
+	 * @return int
 	 *
 	 * @example
 	 *
@@ -526,8 +528,10 @@ class Order extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->model_checkout_order->addOption($order_id, $order_product_id, $order_option_data);
 	 */
-	public function addOption(int $order_id, int $order_product_id, array $data): void {
+	public function addOption(int $order_id, int $order_product_id, array $data): int {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "order_option` SET `order_id` = '" . (int)$order_id . "', `order_product_id` = '" . (int)$order_product_id . "', `product_option_id` = '" . (int)$data['product_option_id'] . "', `product_option_value_id` = '" . (int)$data['product_option_value_id'] . "', `name` = '" . $this->db->escape($data['name']) . "', `value` = '" . $this->db->escape($data['value']) . "', `type` = '" . $this->db->escape($data['type']) . "'");
+
+		return $this->db->getLastId();
 	}
 
 	/**
@@ -535,8 +539,7 @@ class Order extends \Opencart\System\Engine\Model {
 	 *
 	 * Delete order option records in the database.
 	 *
-	 * @param int $order_id         primary key of the order record
-	 * @param int $order_product_id primary key of the order product record
+	 * @param int $order_id primary key of the order record
 	 *
 	 * @return void
 	 *
@@ -581,7 +584,7 @@ class Order extends \Opencart\System\Engine\Model {
 	 * @param int                  $order_product_id primary key of the order product record
 	 * @param array<string, mixed> $data             array of data
 	 *
-	 * @return void
+	 * @return int
 	 *
 	 * @example
 	 *
@@ -605,8 +608,10 @@ class Order extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->model_checkout_order->addSubscription($order_id, $order_product_id, $order_subscription_data);
 	 */
-	public function addSubscription(int $order_id, int $order_product_id, array $data): void {
+	public function addSubscription(int $order_id, int $order_product_id, array $data): int {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "order_subscription` SET `order_product_id` = '" . (int)$order_product_id . "', `order_id` = '" . (int)$order_id . "', `product_id` = '" . (int)$data['product_id'] . "', `subscription_plan_id` = '" . (int)$data['subscription_plan_id'] . "', `trial_price` = '" . (float)$data['trial_price'] . "', `trial_tax` = '" . (float)$data['trial_tax'] . "', `trial_frequency` = '" . $this->db->escape($data['trial_frequency']) . "', `trial_cycle` = '" . (int)$data['trial_cycle'] . "', `trial_duration` = '" . (int)$data['trial_duration'] . "', `trial_status` = '" . (int)$data['trial_status'] . "', `price` = '" . (float)$data['price'] . "', `tax` = '" . (float)$data['tax'] . "', `frequency` = '" . $this->db->escape($data['frequency']) . "', `cycle` = '" . (int)$data['cycle'] . "', `duration` = '" . (int)$data['duration'] . "'");
+
+		return $this->db->getLastId();
 	}
 
 	/**
@@ -614,8 +619,7 @@ class Order extends \Opencart\System\Engine\Model {
 	 *
 	 * Delete order subscription record in the database.
 	 *
-	 * @param int $order_id         primary key of the order record
-	 * @param int $order_product_id primary key of the order product record
+	 * @param int $order_id primary key of the order record
 	 *
 	 * @return void
 	 *
@@ -701,7 +705,7 @@ class Order extends \Opencart\System\Engine\Model {
 	 * @param int                  $order_id primary key of the order record
 	 * @param array<string, mixed> $data     array of data
 	 *
-	 * @return void
+	 * @return int
 	 *
 	 * @example
 	 *
@@ -717,8 +721,10 @@ class Order extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->model_checkout_order->addTotal($order_id, $order_total_data);
 	 */
-	public function addTotal(int $order_id, array $data): void {
+	public function addTotal(int $order_id, array $data): int {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "order_total` SET `order_id` = '" . (int)$order_id . "', `extension` = '" . $this->db->escape($data['extension']) . "', `code` = '" . $this->db->escape($data['code']) . "', `title` = '" . $this->db->escape($data['title']) . "', `value` = '" . (float)$data['value'] . "', `sort_order` = '" . (int)$data['sort_order'] . "'");
+
+		return $this->db->getLastId();
 	}
 
 	/**
@@ -772,7 +778,7 @@ class Order extends \Opencart\System\Engine\Model {
 	 * @param bool   $notify
 	 * @param bool   $override
 	 *
-	 * @return void
+	 * @return int
 	 *
 	 * @example
 	 *
@@ -780,7 +786,9 @@ class Order extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->model_checkout_order->addHistory($order_id, $order_status_id, $comment, $notify, $override);
 	 */
-	public function addHistory(int $order_id, int $order_status_id, string $comment = '', bool $notify = false, bool $override = false): void {
+	public function addHistory(int $order_id, int $order_status_id, string $comment = '', bool $notify = false, bool $override = false): int {
+		$order_history_id = 0;
+
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 
 		if ($order_info) {
@@ -797,7 +805,7 @@ class Order extends \Opencart\System\Engine\Model {
 			}
 
 			// Only do the fraud check if the customer is not on the safe list and the order status is changing into the complete or process order status
-			if (!$safe && !$override && in_array($order_status_id, (array)$this->config->get('config_processing_status') + (array)$this->config->get('config_complete_status'))) {
+			if (!$safe && !$override && in_array($order_status_id, array_merge((array)$this->config->get('config_processing_status'), (array)$this->config->get('config_complete_status')))) {
 				// Anti-Fraud
 				$this->load->model('setting/extension');
 
@@ -830,7 +838,7 @@ class Order extends \Opencart\System\Engine\Model {
 			$order_totals = $this->model_checkout_order->getTotals($order_id);
 
 			// If current order status is not processing or complete but new status is processing or complete then commence completing the order
-			if (!in_array($order_info['order_status_id'], (array)$this->config->get('config_processing_status') + (array)$this->config->get('config_complete_status')) && in_array($order_status_id, (array)$this->config->get('config_processing_status') + (array)$this->config->get('config_complete_status'))) {
+			if (!in_array($order_info['order_status_id'], array_merge((array)$this->config->get('config_processing_status'), (array)$this->config->get('config_complete_status'))) && in_array($order_status_id, array_merge((array)$this->config->get('config_processing_status'), (array)$this->config->get('config_complete_status')))) {
 				// Redeem coupon and reward points
 				foreach ($order_totals as $order_total) {
 					$this->load->model('extension/' . $order_total['extension'] . '/total/' . $order_total['code']);
@@ -870,10 +878,10 @@ class Order extends \Opencart\System\Engine\Model {
 				// Affiliate add commission if complete status
 				if ($order_info['affiliate_id'] && $this->config->get('config_affiliate_auto')) {
 					// Add commission if sale is linked to affiliate referral.
-					$this->load->model('account/customer');
+					$this->load->model('account/transaction');
 
-					if (!$this->model_account_customer->getTotalTransactionsByOrderId($order_id)) {
-						$this->model_account_customer->addTransaction($order_info['affiliate_id'], $this->language->get('text_order_id') . ' #' . $order_id, $order_info['commission'], $order_id);
+					if (!$this->model_account_transaction->getTotalTransactionsByOrderId($order_id)) {
+						$this->model_account_transaction->addTransaction($order_info['affiliate_id'], $order_id, $this->language->get('text_order_id') . ' #' . $order_id, (float)$order_info['commission']);
 					}
 				}
 
@@ -904,7 +912,8 @@ class Order extends \Opencart\System\Engine\Model {
 						'tax'                  => array_sum(array_column($subscription_product_data, 'tax')),
 						'subscription_product' => $subscription_product_data,
 						'language'             => $order_info['language_code'],
-						'currency'             => $order_info['currency_code']
+						'currency_code'        => $order_info['currency_code'],
+						'currency_value'       => $order_info['currency_value']
 					] + $order_info + $order_subscription;
 
 					$subscription_info = $this->model_checkout_subscription->getProductByOrderProductId($order_id, $order_subscription['order_product_id']);
@@ -923,7 +932,7 @@ class Order extends \Opencart\System\Engine\Model {
 			}
 
 			// If old order status is the processing or complete status but new status is not then commence restock, and remove coupon and reward history
-			if (in_array($order_info['order_status_id'], (array)$this->config->get('config_processing_status') + (array)$this->config->get('config_complete_status')) && !in_array($order_status_id, (array)$this->config->get('config_processing_status') + (array)$this->config->get('config_complete_status'))) {
+			if (in_array($order_info['order_status_id'], array_merge((array)$this->config->get('config_processing_status'), (array)$this->config->get('config_complete_status'))) && !in_array($order_status_id, array_merge((array)$this->config->get('config_processing_status'), (array)$this->config->get('config_complete_status')))) {
 				// Restock
 				foreach ($order_products as $order_product) {
 					$this->db->query("UPDATE `" . DB_PREFIX . "product` SET `quantity` = (`quantity` + " . (int)$order_product['quantity'] . ") WHERE `product_id` = '" . (int)$order_product['product_id'] . "' AND `subtract` = '1'");
@@ -971,7 +980,7 @@ class Order extends \Opencart\System\Engine\Model {
 				if ($order_info['affiliate_id']) {
 					$this->load->model('account/transaction');
 
-					$this->model_account_transaction->deleteTransaction($order_info['customer_id'], $order_id);
+					$this->model_account_transaction->deleteTransactions($order_info['customer_id'], $order_id);
 				}
 			}
 
@@ -980,8 +989,12 @@ class Order extends \Opencart\System\Engine\Model {
 
 			$this->db->query("INSERT INTO `" . DB_PREFIX . "order_history` SET `order_id` = '" . (int)$order_id . "', `order_status_id` = '" . (int)$order_status_id . "', `notify` = '" . (int)$notify . "', `comment` = '" . $this->db->escape($comment) . "', `date_added` = NOW()");
 
+			$order_history_id = $this->db->getLastId();
+
 			$this->cache->delete('product');
 		}
+
+		return $order_history_id;
 	}
 
 	/**

@@ -34,7 +34,7 @@ $_['mail_verp']            = false;
 $_['mail_parameter']       = '';
 
 // Cache
-$_['cache_engine']         = 'file'; // apc, file, mem, memcached or redis
+$_['cache_engine']         = defined('CACHE_ENGINE') ? CACHE_ENGINE : 'file'; // apcu, file, mem, memcached or redis
 $_['cache_expire']         = 3600;
 
 // Session
@@ -42,7 +42,7 @@ $_['session_autostart']    = false;
 $_['session_engine']       = 'file'; // db or file
 $_['session_name']         = 'OCSESSID';
 $_['session_domain']       = '';
-$_['session_path']         = !empty($_SERVER['PHP_SELF']) ? rtrim(dirname($_SERVER['PHP_SELF']), '/') . '/' : '/';
+$_['session_path']         = '/';
 $_['session_expire']       = 86400;
 $_['session_probability']  = 1;
 $_['session_divisor']      = 5;

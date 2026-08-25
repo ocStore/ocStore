@@ -17,15 +17,11 @@ class Modification extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function controller(string &$route, array &$args): void {
-		if (substr($route, 0, 16) == 'extension/ocmod/') {
+		if (str_starts_with($route, 'extension/ocmod/')) {
 			return;
 		}
 
-		if (substr($route, 0, 10) !== 'extension/') {
-			$class = 'Opencart\Admin\Controller\Extension\Ocmod\\' . str_replace(['_', '/'], ['', '\\'], ucwords($route, '_/'));
-		} else {
-			$class = 'Opencart\Admin\Controller\Extension\Ocmod\Extension\\' . str_replace(['_', '/'], ['', '\\'], ucwords(substr($route, 10), '_/'));
-		}
+		$class = $this->prepareClassName($route, 'Opencart\Admin\Controller\Extension\Ocmod\\');
 
 		if (class_exists($class)) {
 			$route = 'extension/ocmod/' . $route;
@@ -41,15 +37,11 @@ class Modification extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function model(string &$route, array &$args): void {
-		if (substr($route, 0, 16) == 'extension/ocmod/') {
+		if (str_starts_with($route, 'extension/ocmod/')) {
 			return;
 		}
 
-		if (substr($route, 0, 10) !== 'extension/') {
-			$class = 'Opencart\Admin\Model\Extension\Ocmod\\' . str_replace(['_', '/'], ['', '\\'], ucwords($route, '_/'));
-		} else {
-			$class = 'Opencart\Admin\Model\Extension\Ocmod\Extension\\' . str_replace(['_', '/'], ['', '\\'], ucwords(substr($route, 10), '_/'));
-		}
+		$class = $this->prepareClassName($route, 'Opencart\Admin\Model\Extension\Ocmod\\');
 
 		if (class_exists($class)) {
 			$route = 'extension/ocmod/' . $route;
@@ -65,11 +57,11 @@ class Modification extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function view(string &$route, array &$args): void {
-		if (substr($route, 0, 16) == 'extension/ocmod/') {
+		if (str_starts_with($route, 'extension/ocmod/')) {
 			return;
 		}
 
-		if (substr($route, 0, 10) !== 'extension/') {
+		if (!str_starts_with($route, 'extension/')) {
 			$file = DIR_EXTENSION . 'ocmod/admin/view/template/' . $route . '.twig';
 		} else {
 			$file = DIR_EXTENSION . 'ocmod/extension/' . substr($route, 10, strpos($route, '/', 10) - 10) . '/admin/view/template/' . substr($route, strpos($route, '/', 10) + 1) . '.twig';
@@ -89,18 +81,27 @@ class Modification extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function library(string &$route, array &$args): void {
-		if (substr($route, 0, 16) == 'extension/ocmod/') {
+		if (str_starts_with($route, 'extension/ocmod/')) {
 			return;
 		}
 
-		if (substr($route, 0, 10) !== 'extension/') {
-			$class = 'Opencart\System\Library\Extension\Ocmod\\' . str_replace(['_', '/'], ['', '\\'], ucwords($route, '_/'));
-		} else {
-			$class = 'Opencart\System\Library\Extension\Ocmod\Extension\\' . str_replace(['_', '/'], ['', '\\'], ucwords(substr($route, 10), '_/'));
-		}
+		$class = $this->prepareClassName($route, 'Opencart\System\Library\Extension\Ocmod\\');
 
 		if (class_exists($class)) {
 			$route = 'extension/ocmod/' . $route;
 		}
+	}
+
+	protected function prepareClassName(string $route, string $classPrefix): string {
+		$pos = strrpos($route, '.');
+		$route = $pos ? substr($route, 0, $pos) : $route;
+
+		$classPart = str_replace(['_', '/'], ['', '\\'], ucwords($route, '_/'));
+
+		if (str_starts_with($route, 'extension/')) {
+			$classPrefix .= 'Extension\\';
+		}
+
+		return $classPrefix . $classPart;
 	}
 }

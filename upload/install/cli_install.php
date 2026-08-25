@@ -81,8 +81,9 @@ $response->addHeader('Content-Type: text/plain; charset=utf-8');
 $registry->set('response', $response);
 
 set_error_handler(function(int $code, string $message, string $file, int $line) {
-	// error was suppressed with the @-operator
-	if (error_reporting() === 0) {
+	// PHP 8 compatible check for the @ suppression operator
+	if (!(error_reporting() & $code)) {
+		// Return false to let the standard PHP internal error handler take over (or do nothing)
 		return false;
 	}
 
@@ -198,8 +199,8 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		// Pre-installation check
 		$error = '';
 
-		if (version_compare(PHP_VERSION, '8.0', '<')) {
-			$error .= 'ERROR: You need to use PHP8.0+ or above for OpenCart to work!' . "\n";
+		if (version_compare(PHP_VERSION, '8.1', '<')) {
+			$error .= 'ERROR: You need to use PHP8.1+ or above for OpenCart to work!' . "\n";
 		}
 
 		if (!ini_get('file_uploads')) {
@@ -433,8 +434,15 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		}
 
 		if ($option['db_ssl_ca']) {
-			$output .= 'define(\'DB_SSL_CA\', \'' . addslashes($option['db_ssl_ca']) . '\');' . "\n";
+			$output .= 'define(\'DB_SSL_CA\', \'' . addslashes($option['db_ssl_ca']) . '\');' . PHP_EOL . PHP_EOL;
 		}
+
+		$output .= "// Cache" . PHP_EOL;
+		$output .= "define('CACHE_ENGINE', 'file'); // apc, file, mem, memcached or redis" . PHP_EOL;
+		$output .= "//define('CACHE_HOSTNAME', 'unix:///home/user/.system/redis.sock');" . PHP_EOL;
+		$output .= "//define('CACHE_PORT', 6379);" . PHP_EOL;
+		$output .= "//define('CACHE_PREFIX', 'oc_cache_');" . PHP_EOL;
+		$output .= "//define('CACHE_PASSWORD', 'secret');" . PHP_EOL;
 
 		$file = fopen(DIR_OPENCART . 'config.php', 'w');
 
@@ -486,8 +494,15 @@ class CliInstall extends \Opencart\System\Engine\Controller {
 		}
 
 		if ($option['db_ssl_ca']) {
-			$output .= 'define(\'DB_SSL_CA\', \'' . addslashes($option['db_ssl_ca']) . '\');' . "\n";
+			$output .= 'define(\'DB_SSL_CA\', \'' . addslashes($option['db_ssl_ca']) . '\');' . PHP_EOL . PHP_EOL;
 		}
+
+		$output .= "// Cache" . PHP_EOL;
+		$output .= "define('CACHE_ENGINE', 'file'); // apc, file, mem, memcached or redis" . PHP_EOL;
+		$output .= "//define('CACHE_HOSTNAME', 'unix:///home/user/.system/redis.sock');" . PHP_EOL;
+		$output .= "//define('CACHE_PORT', 6379);" . PHP_EOL;
+		$output .= "//define('CACHE_PREFIX', 'oc_cache_');" . PHP_EOL;
+		$output .= "//define('CACHE_PASSWORD', 'secret');" . PHP_EOL . PHP_EOL;
 
 		$output .= '// OpenCart API' . "\n";
 		$output .= 'define(\'OPENCART_SERVER\', \'https://www.opencart.com/\');';

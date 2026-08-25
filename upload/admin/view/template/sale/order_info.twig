@@ -259,12 +259,12 @@
         <div class="row">
           <div id="shipping-method" class="col-md mb-3{% if not shipping_method_code %} d-none{% endif %}" style="min-height: 64px;">
             <div class="input-group">
-              <section id="section-shipping-method" class="form-control rounded-start" style="min-height: 64px;">
+              <div id="input-shipping-method-info" class="form-control rounded-start" style="min-height: 64px;">
                 <div class="lead"><strong>{{ text_shipping_method }}</strong>
                   <br/>
                   <div id="output-shipping-method">{{ shipping_method_name }}</div>
                 </div>
-              </section>
+              </div>
               <button type="button" id="button-shipping-methods" class="btn btn-outline-primary"><i class="fa-solid fa-cog"></i></button>
             </div>
           </div>
@@ -1204,8 +1204,6 @@ $('#form-customer').on('submit', function(e) {
             $('#button-customer').button('reset');
         },
         success: function(json) {
-            console.log(json);
-
             $('.alert-dismissible').remove();
             $('.is-invalid').removeClass('is-invalid');
             $('.invalid-feedback').removeClass('d-block');
@@ -1279,13 +1277,13 @@ $('#input-product').autocomplete({
                 if (option['type'] == 'select') {
                     html += '<div class="mb-3' + (option['required'] == 1 ? ' required' : '') + '">';
                     html += '  <label for="input-option-' + option['product_option_id'] + '" class="form-label">' + option['name'] + '</label>';
-                    html += '  <select name="option[' + option['product_option_id'] + ']" id="input-option-' + option['product_option_id'] + '" class="form-select">';
+                    html += '  <select ' + (option['disabled'] ? 'disabled' : '') + ' name="option[' + option['product_option_id'] + ']" id="input-option-' + option['product_option_id'] + '" class="form-select">';
                     html += '    <option value="">{{ text_select|escape('js') }}</option>';
 
                     for (j = 0; j < option['product_option_value'].length; j++) {
                         option_value = option['product_option_value'][j];
 
-                        html += '<option value="' + option_value['product_option_value_id'] + '">' + option_value['name'];
+                        html += '<option ' + (option['value'] == option_value['product_option_value_id'] ? 'selected="selected"' : '') + ' value="' + option_value['product_option_value_id'] + '">' + option_value['name'];
 
                         if (option_value['price']) {
                             html += ' (' + option_value['price_prefix'] + option_value['price'] + ')';
@@ -1302,13 +1300,13 @@ $('#input-product').autocomplete({
                 if (option['type'] == 'radio') {
                     html += '<div class="mb-3' + (option['required'] == 1 ? ' required' : '') + '">';
                     html += '  <label for="input-option-' + option['product_option_id'] + '" class="form-label">' + option['name'] + '</label>';
-                    html += '  <select name="option[' + option['product_option_id'] + ']" id="input-option-' + option['product_option_id'] + '" class="form-select">';
+                    html += '  <select ' + (option['disabled'] ? 'disabled' : '') + ' name="option[' + option['product_option_id'] + ']" id="input-option-' + option['product_option_id'] + '" class="form-select">';
                     html += '    <option value="">{{ text_select|escape('js') }}</option>';
 
                     for (j = 0; j < option['product_option_value'].length; j++) {
                         option_value = option['product_option_value'][j];
 
-                        html += '<option value="' + option_value['product_option_value_id'] + '">' + option_value['name'];
+                        html += '<option ' + (option['value'] == option_value['product_option_value_id'] ? 'selected="selected"' : '') + ' value="' + option_value['product_option_value_id'] + '">' + option_value['name'];
 
                         if (option_value['price']) {
                             html += ' (' + option_value['price_prefix'] + option_value['price'] + ')';
@@ -1329,9 +1327,10 @@ $('#input-product').autocomplete({
 
                     for (j = 0; j < option['product_option_value'].length; j++) {
                         option_value = option['product_option_value'][j];
+                        checked = Array.isArray(option['value']) ? option['value'].includes(option_value['product_option_value_id']) : false;
 
                         html += '<div class="form-check">';
-                        html += '  <input type="checkbox" name="option[' + option['product_option_id'] + '][]" value="' + option_value['product_option_value_id'] + '" id="input-option-value-' + option_value['product_option_value_id'] + '" class="form-check-input"/>';
+                        html += '  <input ' + (option['disabled'] ? 'disabled ' : '') + (checked ? 'checked' : '') + ' type="checkbox" name="option[' + option['product_option_id'] + '][]" value="' + option_value['product_option_value_id'] + '" id="input-option-value-' + option_value['product_option_value_id'] + '" class="form-check-input"/>';
                         html += '  <label for="input-option-value-' + option_value['product_option_value_id'] + '" class="form-check-label">' + option_value['name'];
 
                         if (option_value['price']) {
@@ -1347,34 +1346,10 @@ $('#input-product').autocomplete({
                     html += '</div>';
                 }
 
-                if (option['type'] == 'image') {
-                    html += '<div class="mb-3' + (option['required'] == 1 ? ' required' : '') + '">';
-                    html += '  <label for="input-option-' + option['product_option_id'] + '" class="form-label">' + option['name'] + '</label>';
-
-                    html += '  <select name="option[' + option['product_option_id'] + ']" id="input-option-' + option['product_option_id'] + '" class="form-select">';
-                    html += '    <option value="">{{ text_select|escape('js') }}</option>';
-
-                    for (j = 0; j < option['product_option_value'].length; j++) {
-                        option_value = option['product_option_value'][j];
-
-                        html += '<option value="' + option_value['product_option_value_id'] + '">' + option_value['name'];
-
-                        if (option_value['price']) {
-                            html += ' (' + option_value['price_prefix'] + option_value['price'] + ')';
-                        }
-
-                        html += '</option>';
-                    }
-
-                    html += '  </select>';
-                    html += '  <div id="error-option-' + option['product_option_id'] + '" class="invalid-feedback"></div>';
-                    html += '</div>';
-                }
-
                 if (option['type'] == 'text') {
                     html += '<div class="mb-3' + (option['required'] == 1 ? ' required' : '') + '">';
                     html += '  <label for="input-option-' + option['product_option_id'] + '" class="form-label">' + option['name'] + '</label>';
-                    html += '  <input type="text" name="option[' + option['product_option_id'] + ']" value="' + option['value'] + '" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control"/>';
+                    html += '  <input ' + (option['disabled'] ? 'disabled' : '') + ' type="text" name="option[' + option['product_option_id'] + ']" value="' + option['value'] + '" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control"/>';
                     html += '  <div id="error-option-' + option['product_option_id'] + '" class="invalid-feedback"></div>';
                     html += '</div>';
                 }
@@ -1382,7 +1357,7 @@ $('#input-product').autocomplete({
                 if (option['type'] == 'textarea') {
                     html += '<div class="mb-3' + (option['required'] == 1 ? ' required' : '') + '">';
                     html += '  <label for="input-option-' + option['product_option_id'] + '" class="form-label">' + option['name'] + '</label>';
-                    html += '  <textarea name="option[' + option['product_option_id'] + ']" rows="5" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control">' + option['value'] + '</textarea>';
+                    html += '  <textarea ' + (option['disabled'] ? 'disabled' : '') + ' name="option[' + option['product_option_id'] + ']" rows="5" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control">' + option['value'] + '</textarea>';
                     html += '  <div id="error-option-' + option['product_option_id'] + '" class="invalid-feedback"></div>';
                     html += '</div>';
                 }
@@ -1391,7 +1366,7 @@ $('#input-product').autocomplete({
                     html += '<div class="mb-3' + (option['required'] == 1 ? ' required' : '') + '">';
                     html += '  <label class="form-label">' + option['name'] + '</label>';
                     html += '  <div>';
-                    html += '    <button type="button" data-oc-toggle="upload" data-oc-url="{{ upload }}" data-oc-target="#input-option-' + option['product_option_id'] + '" data-oc-size-max="{{ config_file_max_size }}" data-oc-size-error="{{ error_upload_size|escape('js') }}" class="btn btn-light"><i class="fa-solid fa-upload"></i> {{ button_upload|escape('js') }}</button>';
+                    html += '    <button ' + (option['disabled'] ? 'disabled' : '') + ' type="button" data-oc-toggle="upload" data-oc-url="{{ upload }}" data-oc-target="#input-option-' + option['product_option_id'] + '" data-oc-size-max="{{ config_file_max_size }}" data-oc-size-error="{{ error_upload_size|escape('js') }}" class="btn btn-light"><i class="fa-solid fa-upload"></i> {{ button_upload|escape('js') }}</button>';
                     html += '    <a href="" class="btn btn-light"><i class="fa-solid fa-download"></i></a>';
                     html += '    <input type="hidden" name="option[' + option['product_option_id'] + ']" value="' + option['value'] + '" id="input-option-' + option['product_option_id'] + '"/>';
                     html += '  </div>';
@@ -1402,7 +1377,7 @@ $('#input-product').autocomplete({
                 if (option['type'] == 'date') {
                     html += '<div class="mb-3' + (option['required'] == 1 ? ' required' : '') + '">';
                     html += '  <label for="input-option-' + option['product_option_id'] + '" class="form-label">' + option['name'] + '</label>';
-                    html += '  <input type="date" name="option[' + option['product_option_id'] + ']" value="' + option['value'] + '" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control"/>';
+                    html += '  <input ' + (option['disabled'] ? 'disabled' : '') + ' type="date" name="option[' + option['product_option_id'] + ']" value="' + option['value'] + '" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control"/>';
                     html += '  <div id="error-option-' + option['product_option_id'] + '" class="invalid-feedback"></div>';
                     html += '</div>';
                 }
@@ -1410,7 +1385,7 @@ $('#input-product').autocomplete({
                 if (option['type'] == 'time') {
                     html += '<div class="mb-3' + (option['required'] == 1 ? ' required' : '') + '">';
                     html += '  <label for="input-option-' + option['product_option_id'] + '" class="form-label">' + option['name'] + '</label>';
-                    html += '  <input type="time" name="option[' + option['product_option_id'] + ']" value="' + option['value'] + '" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control"/>';
+                    html += '  <input ' + (option['disabled'] ? 'disabled' : '') + ' type="time" name="option[' + option['product_option_id'] + ']" value="' + option['value'] + '" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control"/>';
                     html += '  <div id="error-option-' + option['product_option_id'] + '" class="invalid-feedback"></div>';
                     html += '</div>';
                 }
@@ -1418,7 +1393,7 @@ $('#input-product').autocomplete({
                 if (option['type'] == 'datetime') {
                     html += '<div class="mb-3' + (option['required'] == 1 ? ' required' : '') + '">';
                     html += '  <label for="input-option-' + option['product_option_id'] + '" class="form-label">' + option['name'] + '</label>';
-                    html += '  <input type="datetime-local" name="option[' + option['product_option_id'] + ']" value="' + option['value'] + '" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control"/>';
+                    html += '  <input ' + (option['disabled'] ? 'disabled' : '') + ' type="datetime-local" name="option[' + option['product_option_id'] + ']" value="' + option['value'] + '" placeholder="' + option['name'] + '" id="input-option-' + option['product_option_id'] + '" class="form-control"/>';
                     html += '  <div id="error-option-' + option['product_option_id'] + '" class="invalid-feedback"></div>';
                     html += '</div>';
                 }
@@ -1498,7 +1473,7 @@ $('#form-product-add').on('submit', function(e) {
     $.ajax({
         url: 'index.php?route=sale/order.call&user_token={{ user_token }}&call=product_add&store_id=' + $('#input-store').val() + '&language=' + $('#input-language').val() + '&currency=' + $('#input-currency').val(),
         type: 'post',
-        data: $('#form-product-add, #form-customer, #form-cart, #form-shipping-address, #form-shipping-method, #form-payment-address, #form-payment-method, #collapse-order form').serialize(),
+        data: $('#form-product-add, #form-customer, #form-cart, #form-shipping-address, #form-shipping-method, #form-payment-address, #form-payment-method, #collapse-order form, #input-order-id').serialize(),
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         beforeSend: function() {
@@ -1508,8 +1483,6 @@ $('#form-product-add').on('submit', function(e) {
             $('#button-product-add').button('reset');
         },
         success: function(json) {
-            console.log(json);
-
             $('.alert-dismissible').remove();
             $('.is-invalid').removeClass('is-invalid');
             $('.invalid-feedback').removeClass('d-block');
@@ -1539,6 +1512,15 @@ $('#form-product-add').on('submit', function(e) {
             console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
         }
     });
+});
+
+$(document).on('hidden.bs.modal', '#modal-product', function () {
+    // Restores form and clears dynamic injections whenever modal closes
+    $('#form-product-add')[0].reset();
+    $('#form-product-add > .alert').remove();
+    $('#autocomplete-product').empty();
+    $('#option').empty();
+    $('#subscription').empty();
 });
 
 // Remove product
@@ -1618,8 +1600,6 @@ $('#form-payment-address').on('submit', function(e) {
             $('#button-payment-address').button('reset');
         },
         success: function(json) {
-            console.log(json);
-
             $('.alert-dismissible').remove();
             $('.is-invalid').removeClass('is-invalid');
             $('.invalid-feedback').removeClass('d-block');
@@ -1799,8 +1779,6 @@ $('#form-shipping-address').on('submit', function(e) {
             $('#button-shipping-address').button('reset');
         },
         success: function(json) {
-            console.log(json);
-
             $('#form-shipping-address .alert-dismissible').remove();
             $('#form-shipping-address .is-invalid').removeClass('is-invalid');
             $('#form-shipping-address .invalid-feedback').removeClass('d-block');
@@ -1929,8 +1907,6 @@ $('#button-shipping-methods').on('click', function() {
             $(element).button('reset');
         },
         success: function(json) {
-            console.log(json);
-
             $('.alert-dismissible').remove();
             $('.is-invalid').removeClass('is-invalid');
             $('.invalid-feedback').removeClass('d-block');
@@ -2021,8 +1997,6 @@ $('#form-shipping-method').on('submit', function(e) {
             $('#button-shipping-method').button('reset');
         },
         success: function(json) {
-            console.log(json);
-
             $('.alert-dismissible').remove();
             $('.is-invalid').removeClass('is-invalid');
             $('.invalid-feedback').removeClass('d-block');
@@ -2160,8 +2134,6 @@ $('#form-payment-method').on('submit', function(e) {
             $('#button-payment-method').button('reset');
         },
         success: function(json) {
-            console.log(json);
-
             $('.alert-dismissible').remove();
 
             if (typeof json['error'] == 'string') {
@@ -2203,7 +2175,7 @@ $('#button-refresh').on('click', function() {
     $.ajax({
         url: 'index.php?route=sale/order.call&user_token={{ user_token }}&call=cart&store_id=' + $('#input-store').val() + '&language=' + $('#input-language').val() + '&currency=' + $('#input-currency').val(),
         type: 'post',
-        data: $('#form-customer, #form-cart, #form-shipping-address, #form-shipping-method, #form-payment-address, #form-payment-method, #collapse-order form').serialize(),
+        data: $('#form-customer, #form-cart, #form-shipping-address, #form-shipping-method, #form-payment-address, #form-payment-method, #collapse-order form, #input-order-id').serialize(),
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         beforeSend: function() {
@@ -2213,8 +2185,6 @@ $('#button-refresh').on('click', function() {
             $('#button-refresh').button('reset');
         },
         success: function(json) {
-            console.log(json);
-
             if (json['error']) {
                 if (typeof json['error'] == 'string') {
                     $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
@@ -2239,8 +2209,6 @@ $('#button-refresh').on('click', function() {
 $('#button-confirm').on('click', function() {
     var element = this;
 
-    console.log($('#form-customer, #form-cart, #form-shipping-address, #form-shipping-method, #form-payment-address, #form-payment-method, #collapse-order form, #form-comment, #input-order-id').serialize());
-
     $.ajax({
         url: 'index.php?route=sale/order.call&user_token={{ user_token }}&call=confirm&store_id=' + $('#input-store').val() + '&language=' + $('#input-language').val() + '&currency=' + $('#input-currency').val(),
         type: 'post',
@@ -2254,8 +2222,6 @@ $('#button-confirm').on('click', function() {
             $(element).button('reset');
         },
         success: function(json) {
-            console.log(json);
-
             $('.alert-dismissible').remove();
             $('.is-invalid').removeClass('is-invalid');
             $('.invalid-feedback').removeClass('d-block');
@@ -2266,6 +2232,22 @@ $('#button-confirm').on('click', function() {
             }
 
             if (typeof json['error'] == 'object') {
+                if (json['error']['shipping_method']) {
+                    $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error']['shipping_method'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+
+                    $('#input-shipping-method-info').addClass('is-invalid');
+
+                    delete json['error']['shipping_method'];
+                }
+
+                if (json['error']['payment_method']) {
+                    $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error']['payment_method'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+
+                    $('#input-payment-method-info').addClass('is-invalid');
+
+                    delete json['error']['payment_method'];
+                }
+
                 for (key in json['error']) {
                     $('#input-' + key.replaceAll('_', '-')).addClass('is-invalid').find('.form-control, .form-select, .form-check-input, .form-check-label').addClass('is-invalid');
                     $('#error-' + key.replaceAll('_', '-')).html(json['error'][key]).addClass('d-block');
@@ -2379,8 +2361,8 @@ function cart_render(products, totals, shipping_required) {
             html += '    <input type="hidden" name="product[' + order_product_row + '][subscription_plan_id]" value="' + product['subscription_plan_id'] + '"/>';
             html += '  </td>';
             html += '  <td class="text-end">' + product['quantity'] + '</td>';
-            html += '  <td class="text-end">' + product['price'] + '</td>';
-            html += '  <td class="text-end">' + product['total'] + '</td>';
+            html += '  <td class="text-end">' + product['price_text'] + '</td>';
+            html += '  <td class="text-end">' + product['total_text'] + '</td>';
             html += '  <td class="text-end"><button type="button" data-bs-toggle="tooltip" title="{{ button_remove|escape('js') }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
             html += '</tr>';
 

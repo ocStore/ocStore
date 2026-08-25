@@ -132,7 +132,7 @@ class Returns extends \Opencart\System\Engine\Model {
 	 * $results = $this->model_account_returns->getHistories($return_id);
 	 */
 	public function getHistories(int $return_id): array {
-		$query = $this->db->query("SELECT `rh`.`date_added`, `rs`.`name` AS `status`, `rh`.`comment` FROM `" . DB_PREFIX . "return_history` `rh` LEFT JOIN `" . DB_PREFIX . "return_status` `rs` ON (`rh`.`return_status_id` = `rs`.`return_status_id`) WHERE `rh`.`return_id` = '" . (int)$return_id . "' AND `rs`.`language_id` = '" . (int)$this->config->get('config_language_id') . "' ORDER BY `rh`.`date_added` ASC");
+		$query = $this->db->query("SELECT `rh`.`date_added`, `rs`.`name` AS `status`, `rh`.`comment` FROM `" . DB_PREFIX . "return_history` `rh` LEFT JOIN `" . DB_PREFIX . "return_status` `rs` ON (`rh`.`return_status_id` = `rs`.`return_status_id`) INNER JOIN `" . DB_PREFIX . "return` `r` ON (`rh`.`return_id` = `r`.`return_id`) WHERE `rh`.`return_id` = '" . (int)$return_id . "' AND `r`.`customer_id` = '" . (int)$this->customer->getId() . "' AND `rs`.`language_id` = '" . (int)$this->config->get('config_language_id') . "' ORDER BY `rh`.`date_added` ASC");
 
 		return $query->rows;
 	}
@@ -153,7 +153,7 @@ class Returns extends \Opencart\System\Engine\Model {
 	 * $history_total = $this->model_account_returns->getTotalHistories($return_id);
 	 */
 	public function getTotalHistories(int $return_id): int {
-		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "return_history` WHERE `return_id` = '" . (int)$return_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "return_history` `rh` INNER JOIN `" . DB_PREFIX . "return` `r` ON (`rh`.`return_id` = `r`.`return_id`) WHERE `rh`.`return_id` = '" . (int)$return_id . "' AND `r`.`customer_id` = '" . (int)$this->customer->getId() . "'");
 
 		if ($query->num_rows) {
 			return (int)$query->row['total'];

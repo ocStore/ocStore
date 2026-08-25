@@ -33,11 +33,10 @@ class Product extends \Opencart\System\Engine\Model {
 	 *
 	 * Edit product quantity record in the database.
 	 *
-	 * @param int                  $product_id primary key of the product record
-	 * @param int                  $quantity
-	 * @param array<string, mixed> $data       array of data
+	 * @param int $product_id primary key of the product record
+	 * @param int $quantity
 	 *
-	 * @return int
+	 * @return void
 	 *
 	 * @example
 	 *
@@ -73,7 +72,7 @@ class Product extends \Opencart\System\Engine\Model {
 			$product_data['variant'] = $query->row['variant'] ? json_decode($query->row['variant'], true) : [];
 			$product_data['override'] = $query->row['override'] ? json_decode($query->row['override'], true) : [];
 			$product_data['price'] = (float)($query->row['discount'] ?: $query->row['price']);
-			$product_data['rating'] = (int)$query->row['rating'];
+			$product_data['rating'] = (float)$query->row['rating'];
 			$product_data['reviews'] = (int)$query->row['reviews'] ? $query->row['reviews'] : 0;
 
 			return $product_data;
@@ -109,10 +108,14 @@ class Product extends \Opencart\System\Engine\Model {
 				$sql .= " LEFT JOIN `" . DB_PREFIX . "product_to_category` `p2c` ON (`p2c`.`category_id` = `c2s`.`category_id` AND `c2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "')";
 			}
 
-			$sql .= " LEFT JOIN `" . DB_PREFIX . "product_to_store` `p2s` ON (`p2s`.`product_id` = `p2c`.`product_id` AND `p2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "')";
+			$sql .= " INNER JOIN `" . DB_PREFIX . "product_to_store` `p2s` ON (`p2s`.`product_id` = `p2c`.`product_id` AND `p2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "')";
 
 			if (!empty($data['filter_filter'])) {
-				$sql .= " LEFT JOIN `" . DB_PREFIX . "product_filter` `pf` ON (`pf`.`product_id` = `p2s`.`product_id`) LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`p`.`product_id` = `pf`.`product_id` AND `p`.`status` = '1' AND `p`.`date_available` <= NOW())";
+				$filters = explode(',', $data['filter_filter']);
+				$prepared_filters = array_map(fn ($f) => (int)$f, $filters);
+				$filtration_and = $this->config->get('config_product_filters') == 'and' ? 'HAVING COUNT(DISTINCT pf.filter_id) = ' . count($prepared_filters) : '';
+
+				$sql .= " INNER JOIN (SELECT `pf`.`product_id` FROM `" . DB_PREFIX . "product_filter` `pf` WHERE `pf`.`filter_id` IN (" . implode(',', $prepared_filters) . ") GROUP BY pf.product_id {$filtration_and}) `f` ON `f`.`product_id` = `p2s`.`product_id` INNER JOIN `oc_product` `p` ON (`p`.`product_id` = `f`.`product_id` AND `p`.`status` = '1' AND `p`.`date_available` <= NOW())";
 			} else {
 				$sql .= " LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`p`.`product_id` = `p2s`.`product_id` AND `p`.`status` = '1' AND `p`.`date_available` <= NOW())";
 			}
@@ -132,18 +135,6 @@ class Product extends \Opencart\System\Engine\Model {
 			} else {
 				$sql .= " AND `p2c`.`category_id` = '" . (int)$data['filter_category_id'] . "'";
 			}
-
-			if (!empty($data['filter_filter'])) {
-				$implode = [];
-
-				$filters = explode(',', $data['filter_filter']);
-
-				foreach ($filters as $filter_id) {
-					$implode[] = (int)$filter_id;
-				}
-
-				$sql .= " AND `pf`.`filter_id` IN (" . implode(',', $implode) . ")";
-			}
 		}
 
 		if (!empty($data['filter_search']) || !empty($data['filter_tag'])) {
@@ -152,7 +143,7 @@ class Product extends \Opencart\System\Engine\Model {
 			if (!empty($data['filter_search'])) {
 				$implode = [];
 
-				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_search'])));
+				$words = explode(' ', trim(preg_replace('/\s+/', ' ', (string)$data['filter_search'])));
 				$words = array_filter($words);
 
 				foreach ($words as $word) {
@@ -160,11 +151,27 @@ class Product extends \Opencart\System\Engine\Model {
 				}
 
 				if ($implode) {
-					$sql .= " (" . implode(" OR ", $implode) . ")";
+					if ($this->config->get('config_product_search') == 'and') {
+						$sql .= " (" . implode(" AND ", $implode) . ")";
+					} else {
+						$sql .= " (" . implode(" OR ", $implode) . ")";
+					}
 				}
 
 				if (!empty($data['filter_description'])) {
-					$sql .= " OR `pd`.`description` LIKE '" . $this->db->escape('%' . (string)$data['filter_search'] . '%') . "'";
+					$implode = [];
+
+					foreach ($words as $word) {
+						$implode[] = "`pd`.`description` LIKE '" . $this->db->escape('%' . $word . '%') . "'";
+					}
+
+					if ($implode) {
+						if ($this->config->get('config_product_search') == 'and') {
+							$sql .= " OR (" . implode(" AND ", $implode) . ")";
+						} else {
+							$sql .= " OR (" . implode(" OR ", $implode) . ")";
+						}
+					}
 				}
 			}
 
@@ -175,7 +182,7 @@ class Product extends \Opencart\System\Engine\Model {
 			if (!empty($data['filter_tag'])) {
 				$implode = [];
 
-				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_tag'])));
+				$words = explode(' ', trim(preg_replace('/\s+/', ' ', (string)$data['filter_tag'])));
 				$words = array_filter($words);
 
 				foreach ($words as $word) {
@@ -183,12 +190,16 @@ class Product extends \Opencart\System\Engine\Model {
 				}
 
 				if ($implode) {
-					$sql .= " (" . implode(" OR ", $implode) . ")";
+					if ($this->config->get('config_product_search') == 'and') {
+						$sql .= " (" . implode(" AND ", $implode) . ")";
+					} else {
+						$sql .= " (" . implode(" OR ", $implode) . ")";
+					}
 				}
 			}
 
 			if (!empty($data['filter_search'])) {
-				$sql .= " OR LCASE(`p`.`model`) = '" . $this->db->escape(oc_strtolower($data['filter_search'])) . "' OR pc.`value` LIKE '" . $this->db->escape((string)$data['filter_search'] . '%') . "'";
+				$sql .= " OR LCASE(`p`.`model`) = '" . $this->db->escape(oc_strtolower((string)$data['filter_search'])) . "' OR pc.`value` LIKE '" . $this->db->escape((string)$data['filter_search'] . '%') . "'";
 			}
 
 			$sql .= ")";
@@ -229,15 +240,18 @@ class Product extends \Opencart\System\Engine\Model {
 		}
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$key = md5($sql);
@@ -282,15 +296,23 @@ class Product extends \Opencart\System\Engine\Model {
 				$sql .= " LEFT JOIN `" . DB_PREFIX . "product_to_category` `p2c` ON (`p2c`.`category_id` = `c2s`.`category_id`)";
 			}
 
-			$sql .= " LEFT JOIN `" . DB_PREFIX . "product_to_store` `p2s` ON (`p2s`.`product_id` = `p2c`.`product_id`)";
+			$sql .= " INNER JOIN `" . DB_PREFIX . "product_to_store` `p2s` ON (`p2s`.`product_id` = `p2c`.`product_id`)";
 
 			if (!empty($data['filter_filter'])) {
-				$sql .= " LEFT JOIN `" . DB_PREFIX . "product_filter` `pf` ON (`pf`.`product_id` = `p2s`.`product_id`) LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`p`.`product_id` = `pf`.`product_id` AND `p`.`status` = '1' AND `p`.`date_available` <= NOW())";
+				$filters = explode(',', $data['filter_filter']);
+				$prepared_filters = array_map(fn ($f) => (int)$f, $filters);
+				$filtration_and = $this->config->get('config_product_filters') == 'and' ? 'HAVING COUNT(DISTINCT pf.filter_id) = ' . count($prepared_filters) : '';
+
+				$sql .= " INNER JOIN (SELECT `pf`.`product_id` FROM `" . DB_PREFIX . "product_filter` `pf` WHERE `pf`.`filter_id` IN (" . implode(',', $prepared_filters) . ") GROUP BY pf.product_id {$filtration_and}) `f` ON `f`.`product_id` = `p2s`.`product_id` INNER JOIN `oc_product` `p` ON (`p`.`product_id` = `f`.`product_id` AND `p`.`status` = '1' AND `p`.`date_available` <= NOW())";
 			} else {
 				$sql .= " LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`p`.`product_id` = `p2s`.`product_id` AND `p`.`status` = '1' AND `p`.`date_available` <= NOW() AND `p2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "')";
 			}
 		} else {
 			$sql .= " FROM `" . DB_PREFIX . "product_to_store` `p2s` LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`p`.`product_id` = `p2s`.`product_id` AND `p`.`status` = '1' AND `p2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "' AND `p`.`date_available` <= NOW())";
+		}
+
+		if (!empty($data['filter_search'])) {
+			$sql .= " LEFT JOIN `" . DB_PREFIX . "product_code` `pc` ON (`p`.`product_id` = `pc`.`product_id`)";
 		}
 
 		$sql .= " LEFT JOIN `" . DB_PREFIX . "product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`) WHERE `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'";
@@ -301,18 +323,6 @@ class Product extends \Opencart\System\Engine\Model {
 			} else {
 				$sql .= " AND `p2c`.`category_id` = '" . (int)$data['filter_category_id'] . "'";
 			}
-
-			if (!empty($data['filter_filter'])) {
-				$implode = [];
-
-				$filters = explode(',', $data['filter_filter']);
-
-				foreach ($filters as $filter_id) {
-					$implode[] = (int)$filter_id;
-				}
-
-				$sql .= " AND `pf`.`filter_id` IN (" . implode(',', $implode) . ")";
-			}
 		}
 
 		if (!empty($data['filter_search']) || !empty($data['filter_tag'])) {
@@ -321,7 +331,7 @@ class Product extends \Opencart\System\Engine\Model {
 			if (!empty($data['filter_search'])) {
 				$implode = [];
 
-				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_search'])));
+				$words = explode(' ', trim(preg_replace('/\s+/', ' ', (string)$data['filter_search'])));
 				$words = array_filter($words);
 
 				foreach ($words as $word) {
@@ -329,11 +339,27 @@ class Product extends \Opencart\System\Engine\Model {
 				}
 
 				if ($implode) {
-					$sql .= " (" . implode(" OR ", $implode) . ")";
+					if ($this->config->get('config_product_search') == 'and') {
+						$sql .= " (" . implode(" AND ", $implode) . ")";
+					} else {
+						$sql .= " (" . implode(" OR ", $implode) . ")";
+					}
 				}
 
 				if (!empty($data['filter_description'])) {
-					$sql .= " OR `pd`.`description` LIKE '" . $this->db->escape('%' . (string)$data['filter_search'] . '%') . "'";
+					$implode = [];
+
+					foreach ($words as $word) {
+						$implode[] = "`pd`.`description` LIKE '" . $this->db->escape('%' . $word . '%') . "'";
+					}
+
+					if ($implode) {
+						if ($this->config->get('config_product_search') == 'and') {
+							$sql .= " OR (" . implode(" AND ", $implode) . ")";
+						} else {
+							$sql .= " OR (" . implode(" OR ", $implode) . ")";
+						}
+					}
 				}
 			}
 
@@ -344,7 +370,7 @@ class Product extends \Opencart\System\Engine\Model {
 			if (!empty($data['filter_tag'])) {
 				$implode = [];
 
-				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_tag'])));
+				$words = explode(' ', trim(preg_replace('/\s+/', ' ', (string)$data['filter_tag'])));
 				$words = array_filter($words);
 
 				foreach ($words as $word) {
@@ -352,18 +378,16 @@ class Product extends \Opencart\System\Engine\Model {
 				}
 
 				if ($implode) {
-					$sql .= " (" . implode(" OR ", $implode) . ")";
+					if ($this->config->get('config_product_search') == 'and') {
+						$sql .= " (" . implode(" AND ", $implode) . ")";
+					} else {
+						$sql .= " (" . implode(" OR ", $implode) . ")";
+					}
 				}
 			}
 
 			if (!empty($data['filter_search'])) {
-				$sql .= " OR LCASE(`p`.`model`) = '" . $this->db->escape(oc_strtolower($data['filter_search'])) . "'";
-				$sql .= " OR LCASE(`p`.`sku`) = '" . $this->db->escape(oc_strtolower($data['filter_search'])) . "'";
-				$sql .= " OR LCASE(`p`.`upc`) = '" . $this->db->escape(oc_strtolower($data['filter_search'])) . "'";
-				$sql .= " OR LCASE(`p`.`ean`) = '" . $this->db->escape(oc_strtolower($data['filter_search'])) . "'";
-				$sql .= " OR LCASE(`p`.`jan`) = '" . $this->db->escape(oc_strtolower($data['filter_search'])) . "'";
-				$sql .= " OR LCASE(`p`.`isbn`) = '" . $this->db->escape(oc_strtolower($data['filter_search'])) . "'";
-				$sql .= " OR LCASE(`p`.`mpn`) = '" . $this->db->escape(oc_strtolower($data['filter_search'])) . "'";
+				$sql .= " OR LCASE(`p`.`model`) = '" . $this->db->escape(oc_strtolower((string)$data['filter_search'])) . "' OR `pc`.`value` LIKE '" . $this->db->escape((string)$data['filter_search'] . '%') . "'";
 			}
 
 			$sql .= ")";
@@ -438,7 +462,7 @@ class Product extends \Opencart\System\Engine\Model {
 	 * $category_total = $this->model_catalog_product->getTotalCategoriesByCategoryId($product_id, $category_id);
 	 */
 	public function getTotalCategoriesByCategoryId(int $product_id, int $category_id): int {
-		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "product_to_category` WHERE `category_id` = '" . (int)$category_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "product_to_category` WHERE `product_id` = '" . (int)$product_id . "' AND `category_id` = '" . (int)$category_id . "'");
 
 		return (int)$query->row['total'];
 	}
@@ -734,7 +758,7 @@ class Product extends \Opencart\System\Engine\Model {
 	 * $results = $this->model_catalog_product->getRelated($product_id);
 	 */
 	public function getRelated(int $product_id): array {
-		$sql = "SELECT DISTINCT *, `pd`.`name` AS `name`, `p`.`image`, " . $this->statement['discount'] . ", " . $this->statement['special'] . ", " . $this->statement['reward'] . ", " . $this->statement['review'] . " FROM `" . DB_PREFIX . "product_related` `pr` LEFT JOIN `" . DB_PREFIX . "product_to_store` `p2s` ON (`p2s`.`product_id` = `pr`.`product_id` AND `p2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "') LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`p`.`product_id` = `pr`.`related_id` AND `p`.`status` = '1' AND `p`.`date_available` <= NOW()) LEFT JOIN `" . DB_PREFIX . "product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`) WHERE `pr`.`product_id` = '" . (int)$product_id . "' AND `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'";
+		$sql = "SELECT DISTINCT *, `pd`.`name` AS `name`, `p`.`image`, " . $this->statement['discount'] . ", " . $this->statement['special'] . ", " . $this->statement['reward'] . ", " . $this->statement['review'] . " FROM `" . DB_PREFIX . "product_related` `pr` LEFT JOIN `" . DB_PREFIX . "product_to_store` `p2s` ON (`p2s`.`product_id` = `pr`.`related_id`) LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`p`.`product_id` = `pr`.`related_id` AND `p`.`status` = '1' AND `p`.`date_available` <= NOW()) LEFT JOIN `" . DB_PREFIX . "product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`) WHERE `pr`.`product_id` = '" . (int)$product_id . "' AND `p2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "' AND `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'";
 
 		$key = md5($sql);
 
@@ -796,15 +820,18 @@ class Product extends \Opencart\System\Engine\Model {
 		}
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$key = md5($sql);

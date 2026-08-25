@@ -75,7 +75,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Set customer
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function setCustomer(): array {
 		return $this->load->controller('api/customer');
@@ -84,7 +84,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Set Payment Address
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function setPaymentAddress(): array {
 		return $this->load->controller('api/payment_address');
@@ -93,7 +93,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Set Shipping Address
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function setShippingAddress(): array {
 		$output = $this->load->controller('api/cart');
@@ -108,7 +108,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Get Shipping Methods
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function getShippingMethods(): array {
 		$this->load->controller('api/customer');
@@ -128,7 +128,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Set Shipping Method
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function setShippingMethod(): array {
 		$this->load->controller('api/customer');
@@ -163,7 +163,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Get Payment Methods
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function getPaymentMethods(): array {
 		$this->load->controller('api/customer');
@@ -184,7 +184,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Set Payment Method
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function setPaymentMethod(): array {
 		$this->load->controller('api/customer');
@@ -220,7 +220,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Extension
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function extension(): array {
 		$this->load->controller('api/customer');
@@ -262,7 +262,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Set Affiliate
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function setAffiliate(): array {
 		return $this->load->controller('api/affiliate');
@@ -271,7 +271,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Get Cart
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function getCart(): array {
 		$this->load->controller('api/customer');
@@ -304,7 +304,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Add Product
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function addProduct(): array {
 		$this->load->controller('api/customer');
@@ -342,7 +342,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Confirm Order
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function confirm(): array {
 		$this->load->controller('api/customer');
@@ -383,8 +383,8 @@ class Order extends \Opencart\System\Engine\Controller {
 			$output['error']['product'] = $this->language->get('error_product');
 		}
 
-		// 3. Validate cart has products and has stock
-		if ((!$this->cart->hasStock() && !$this->config->get('config_stock_checkout')) || !$this->cart->hasMinimum()) {
+		// 3. Validate cart has sufficient minimum stock where required
+		if (!$this->cart->hasMinimum()) {
 			$output['error']['product'] = $this->language->get('error_stock');
 		}
 
@@ -415,7 +415,7 @@ class Order extends \Opencart\System\Engine\Controller {
 		}
 
 		// 7. Validate affiliate if set
-		if (isset($thid->request->post['affiliate_id']) && !isset($this->session->data['affiliate_id'])) {
+		if (isset($this->request->post['affiliate_id']) && !isset($this->session->data['affiliate_id'])) {
 			$output['error']['affiliate'] = $this->language->get('error_affiliate');
 		}
 
@@ -659,7 +659,7 @@ class Order extends \Opencart\System\Engine\Controller {
 
 			$output['points'] = $points;
 
-			if (isset($order_data['affiliate_id'])) {
+			if (!empty($order_data['affiliate_id'])) {
 				$output['commission'] = $this->currency->format($order_data['commission'], $this->config->get('config_currency'));
 			}
 		}
@@ -674,7 +674,7 @@ class Order extends \Opencart\System\Engine\Controller {
 	/**
 	 * Add History
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function addHistory(): array {
 		$this->load->language('api/order');

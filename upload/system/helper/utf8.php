@@ -35,7 +35,7 @@ function strrpos(string $string, string $needle, int $offset = 0) {
 
 /**
  * @param string $string
- * @param string $offset
+ * @param int    $offset
  * @param ?int   $length
  *
  * @return string

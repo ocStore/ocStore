@@ -29,7 +29,7 @@ class Installer extends \Opencart\System\Engine\Controller {
 		];
 
 		// Use the configuration option to get the max file size
-		$data['error_upload_size'] = sprintf($this->language->get('error_file_size'), ini_get('upload_max_filesize'));
+		$data['error_upload_size'] = sprintf($this->language->get('error_upload_size'), ini_get('upload_max_filesize'));
 
 		$data['config_file_max_size'] = ((int)preg_filter('/[^0-9]/', '', ini_get('upload_max_filesize')) * 1024 * 1024);
 
@@ -224,6 +224,10 @@ class Installer extends \Opencart\System\Engine\Controller {
 
 		$json = [];
 
+		if (!$this->user->hasPermission('modify', 'marketplace/installer')) {
+			$json['error'] = $this->language->get('error_permission');
+		}
+
 		// 1. Validate the file uploaded.
 		if (isset($this->request->files['file']['name'])) {
 			$filename = basename($this->request->files['file']['name']);
@@ -270,8 +274,8 @@ class Installer extends \Opencart\System\Engine\Controller {
 				$json['error'] = $this->language->get('error_filename');
 			}
 
-			// 3. Validate is ocmod file.
-			if (substr($filename, -10) != '.ocmod.zip') {
+			// 3. Validate is ocmod file and the extension code cannot escape the extension directory.
+			if (substr($filename, -10) != '.ocmod.zip' || $code == '.' || $code == '..') {
 				$json['error'] = $this->language->get('error_file_type');
 			}
 
@@ -421,6 +425,11 @@ class Installer extends \Opencart\System\Engine\Controller {
 					$source = $zip->getNameIndex($i);
 
 					$destination = str_replace('\\', '/', $source);
+
+					// Reject any entry that traverses outside the install directory
+					if (in_array('..', explode('/', $destination))) {
+						continue;
+					}
 
 					// Only extract the contents of the upload folder
 					$path = $extension_install_info['code'] . '/' . $destination;
@@ -627,36 +636,6 @@ class Installer extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$json['text'] = $this->language->get('text_vendor');
-
-			$json['next'] = str_replace('&amp;', '&', $this->url->link('marketplace/installer.vendor', 'user_token=' . $this->session->data['user_token'], true));
-		}
-
-		$this->response->addHeader('Content-Type: application/json');
-		$this->response->setOutput(json_encode($json));
-	}
-
-	/**
-	 * Vendor
-	 *
-	 * Generate new autoloader file
-	 *
-	 * @return void
-	 */
-	public function vendor(): void {
-		$this->load->language('marketplace/installer');
-
-		$json = [];
-
-		if (!$this->user->hasPermission('modify', 'marketplace/installer')) {
-			$json['error'] = $this->language->get('error_permission');
-		}
-
-		if (!$json) {
-			$this->load->helper('vendor');
-
-			oc_generate_vendor();
-
 			$json['success'] = $this->language->get('text_success');
 		}
 
@@ -715,7 +694,7 @@ class Installer extends \Opencart\System\Engine\Controller {
 				$next = array_shift($directory);
 
 				if (is_dir($next)) {
-					foreach (glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}', GLOB_BRACE) as $file) {
+					foreach (oc_glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}') as $file) {
 						// If directory add to path array
 						$directory[] = $file;
 					}
@@ -782,15 +761,7 @@ class Installer extends \Opencart\System\Engine\Controller {
 
 			$this->model_setting_modification->deleteModificationsByExtensionInstallId($extension_install_id);
 
-			$json['text'] = $this->language->get('text_vendor');
-
-			$url = '';
-
-			if (isset($this->request->get['extension_install_id'])) {
-				$url .= '&extension_install_id=' . $this->request->get['extension_install_id'];
-			}
-
-			$json['next'] = $this->url->link('marketplace/installer.vendor', 'user_token=' . $this->session->data['user_token'] . $url, true);
+			$json['success'] = $this->language->get('text_success');
 		}
 
 		$this->response->addHeader('Content-Type: application/json');

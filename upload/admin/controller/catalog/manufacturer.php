@@ -216,6 +216,8 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('catalog/manufacturer.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('catalog/manufacturer', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		$manufacturer_info = [];
+
 		if (isset($this->request->get['manufacturer_id'])) {
 			$this->load->model('catalog/manufacturer');
 

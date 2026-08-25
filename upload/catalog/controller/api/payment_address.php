@@ -1,5 +1,5 @@
 <?php
-namespace Opencart\catalog\controller\api;
+namespace Opencart\Catalog\Controller\Api;
 /**
  * Class Payment Address
  *
@@ -20,15 +20,17 @@ class PaymentAddress extends \Opencart\System\Engine\Controller {
 
 		// Add keys for missing post vars
 		$required = [
-			'payment_firstname'  => '',
-			'payment_lastname'   => '',
-			'payment_company'    => '',
-			'payment_address_1'  => '',
-			'payment_address_2'  => '',
-			'payment_postcode'   => '',
-			'payment_city'       => '',
-			'payment_zone_id'    => 0,
-			'payment_country_id' => 0
+			'payment_address_id'   => 0,
+			'payment_firstname'    => '',
+			'payment_lastname'     => '',
+			'payment_company'      => '',
+			'payment_address_1'    => '',
+			'payment_address_2'    => '',
+			'payment_postcode'     => '',
+			'payment_city'         => '',
+			'payment_zone_id'      => 0,
+			'payment_country_id'   => 0,
+			'payment_custom_field' => []
 		];
 
 		$post_info = $this->request->post + $required;

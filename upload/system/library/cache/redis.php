@@ -22,9 +22,22 @@ class Redis {
 	 */
 	public function __construct(int $expire = 3600) {
 		$this->expire = $expire;
-
 		$this->redis = new \Redis();
-		$this->redis->pconnect(CACHE_HOSTNAME, CACHE_PORT);
+
+		$host = defined('CACHE_HOSTNAME') ? CACHE_HOSTNAME : '127.0.0.1';
+		$port = defined('CACHE_PORT') ? (int)CACHE_PORT : 6379;
+		$password = defined('CACHE_PASSWORD') ? CACHE_PASSWORD : null;
+
+		if (str_contains($host, 'unix:')) {
+			$socketPath = preg_replace('#^unix:/*#', '/', $host);
+			$this->redis->pconnect($socketPath, 0);
+		} else {
+			$this->redis->pconnect($host, $port);
+		}
+
+		if (!empty($password)) {
+			$this->redis->auth($password);
+		}
 	}
 
 	/**
@@ -37,7 +50,13 @@ class Redis {
 	public function get(string $key) {
 		$data = $this->redis->get(CACHE_PREFIX . $key);
 
-		return json_decode($data, true);
+		if ($data === false) {
+			return [];
+		}
+
+		$decoded = json_decode($data, true);
+
+		return $decoded !== null ? $decoded : [];
 	}
 
 	/**
@@ -70,5 +89,16 @@ class Redis {
 	 */
 	public function delete(string $key): void {
 		$this->redis->del(CACHE_PREFIX . $key);
+	}
+
+	/**
+	 * Clear
+	 *
+	 * Clear all cache
+	 *
+	 * @return void
+	 */
+	public function clear(): void {
+		$this->redis->flushAll();
 	}
 }

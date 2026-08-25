@@ -18,9 +18,10 @@ class ECB extends \Opencart\System\Engine\Controller {
 			$curl = curl_init();
 
 			curl_setopt($curl, CURLOPT_URL, 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml');
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl, CURLOPT_HEADER, false);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
 			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
 			curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 
@@ -28,7 +29,7 @@ class ECB extends \Opencart\System\Engine\Controller {
 
 			$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-			curl_close($curl);
+			unset($curl);
 
 			if ($status == 200) {
 				$dom = new \DOMDocument('1.0', 'UTF-8');

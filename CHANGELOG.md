@@ -1,5 +1,229 @@
 # OpenCart change log
 
+## [v4.1.0.4] (Unreleased: 29.07.2026)
+
+#### Changes
+
+* Changed: Updated version to 4.1.0.4
+* Changed: Updated composer packages in https://github.com/opencart/opencart/pull/15326
+* Removed: Composer package aws/aws-sdk-php in https://github.com/opencart/opencart/pull/15326
+* Changed: Emulation of GLOB_BRACE for Alpine/musl environments in https://github.com/opencart/opencart/pull/15328
+* Removed: Developer Settings / Vendor button in https://github.com/opencart/opencart/pull/15329
+* Fixed: Various bugs with sku, upc, ean, jan, isbn, mpn in https://github.com/opencart/opencart/pull/15331
+* Changed: Update Lint.yml to run on PHP 8.1+ in https://github.com/opencart/opencart/pull/15332
+* Fixed: Viewing embedded Youtube video in https://github.com/opencart/opencart/pull/15334
+* Fixed: Renamed total function as they had an incorrect name in https://github.com/opencart/opencart/pull/15334
+* Fixed: Disabled products design same as other table lists in https://github.com/opencart/opencart/pull/15334
+* Added: Some additional form text in https://github.com/opencart/opencart/pull/15335
+* Changed: Update of some french language files in https://github.com/opencart/opencart/pull/15336
+* Fixed: After creating multiple folders, the root directory images are not displayed in https://github.com/opencart/opencart/pull/15337
+* Fixed: Product settlement in https://github.com/opencart/opencart/pull/15337
+* Fixed: In additional Stores Cookie Policy is not selectable in https://github.com/opencart/opencart/pull/15339
+* Removed: upload/system/helper/filter.php as unused in https://github.com/opencart/opencart/pull/15340
+* Changed: Retrieve more in depth files from extension directory for permission in https://github.com/opencart/opencart/pull/15342
+* Fixed: Incorrect glob path used in admin/controller/common/developer.php in https://github.com/opencart/opencart/pull/15342
+* Fixed: Fix wrong search result pagination in https://github.com/opencart/opencart/pull/15342
+* Fixed: Updated language methods in https://github.com/opencart/opencart/pull/15342
+* Fixed: Sales order Store - wrong in the order list in https://github.com/opencart/opencart/pull/15343
+* Fixed: Wrong column used in topic layout methods (article_id instead of topic_id) in https://github.com/opencart/opencart/pull/15343
+* Fixed: Fix autoloader: one namespace can contain classes from different folders in https://github.com/opencart/opencart/pull/15344
+* Fixed: Checkout cart page lists wrong item totals in https://github.com/opencart/opencart/pull/15344
+* Changed: Event list: always allow for viewing event details in https://github.com/opencart/opencart/pull/15345
+* Fixed: Fix autoloader in storeInstance to ensure proper class loading in https://github.com/opencart/opencart/pull/15345
+* Fixed: In Admin, while creating new order, Product is not being added in https://github.com/opencart/opencart/pull/15346
+* Changed: Safest one just in case the product options are empty in https://github.com/opencart/opencart/pull/15346
+* Fixed: WYSIWYG misconfiguration in ADMIN page for product edit in https://github.com/opencart/opencart/pull/15346
+* Fixed: Unnecessary filter_data parameter for getTotalIdentifiers in https://github.com/opencart/opencart/pull/15349
+* Fixed: Order files are not displaying in the admin order details page in https://github.com/opencart/opencart/pull/15355
+* Fixed: Admin login as customer not working in https://github.com/opencart/opencart/pull/15355
+* Changed: To collect cache files, do it only if the random has fallen to the cleanup in https://github.com/opencart/opencart/pull/15356
+* Fixed: Should use array_merge in https://github.com/opencart/opencart/pull/15356
+* Fixed: Error when deleting a product from Wishlist in https://github.com/opencart/opencart/pull/15357
+* Changed: Latest Orders table header highlighted in https://github.com/opencart/opencart/pull/15357
+* Changed: Improved Category and Product search for the Admin panel in https://github.com/opencart/opencart/pull/15357
+* Changed: Reduced the size of the "Delete" buttons on the 'Links' tab of the product form in https://github.com/opencart/opencart/pull/15358
+* Fixed: Missing language definition in account/forgotten.php in https://github.com/opencart/opencart/pull/15359
+* Fixed: Product::addReport(): Argument 1 must be of type int, string given in https://github.com/opencart/opencart/pull/15359
+* Fixed: Wrong total on cart page in https://github.com/opencart/opencart/pull/15359
+* Fixed: getTotals() in https://github.com/opencart/opencart/pull/15359
+* Fixed: Admin order notes are visible to the customer
+* Changed: Add OPTIMIZE TABLE to db.php
+* Fixed: The zone name was not displayed in the list
+* Changed: The password recovery link in the email was visible as plain text
+* Fixed: Undefined array key "author" in catalog/controller/product/review.php on line 161
+* Fixed: getProduct(): Argument 1 ($product_id) must be of type int
+* Fixed: PHP Warning:  Undefined array key "en-gb'nvOpzp;..." in catalog/controller/common/language.php
+* Fixed: Category Filter in https://github.com/opencart/opencart/pull/15363
+* Fixed: Fix OCMOD in https://github.com/opencart/opencart/pull/15354
+* Fixed: Some more filter fixes in https://github.com/opencart/opencart/pull/15368
+* Fixed: More filter fixes in https://github.com/opencart/opencart/pull/15369
+* Changed: Bootstrap 5.3.8 update in https://github.com/opencart/opencart/pull/15371
+* Changed: Increase description and settings field size
+* Changed: Upgrade FontAwesome to 7.2.0 and BS move OC specific vars in https://github.com/opencart/opencart/pull/15375
+* Fixed: Removal of deprecated function calls in https://github.com/opencart/opencart/pull/15376
+* Fixed: Product variant option image in https://github.com/opencart/opencart/pull/15378
+* Fixed: Extensive admin audit fixes: critical bugs in https://github.com/opencart/opencart/pull/15380
+* Fixed: Fix category filter and autocomplete in https://github.com/opencart/opencart/pull/15381
+* Fixed: Extensive admin audit fixes: high severity bugs in https://github.com/opencart/opencart/pull/15382
+* Changed: Extensive admin audit fixes: https://github.com/opencart/opencart/pull/15384
+* Changed: Extensive admin audit fixes: removal of obsolete language texts in https://github.com/opencart/opencart/pull/15385
+* Changed: Some more argument type fixes in https://github.com/opencart/opencart/pull/15386
+* Fixed: Some more fixes as per PHPstan errors and warnings in https://github.com/opencart/opencart/pull/15389, https://github.com/opencart/opencart/pull/15390, and https://github.com/opencart/opencart/pull/15391
+* Fixed: use Composer for autoloading in https://github.com/opencart/opencart/pull/15392
+* Fixed: Fix FA7 admin icon in https://github.com/opencart/opencart/pull/15394
+* Changed: Applied PHP CS Fixer in https://github.com/opencart/opencart/pull/15400
+* Fixed: Admin language key references, twig-template bugs, model bugs, controller bugs and remove dead module.add() in https://github.com/opencart/opencart/pull/15397
+* Changed: Update order.php in https://github.com/opencart/opencart/pull/15403
+* Fixed: Catalog and Extensions Fixex in https://github.com/opencart/opencart/pull/15404
+* Fixed: Some more cache fixes in https://github.com/opencart/opencart/pull/15406
+* Changed: tax_rate_id instead of tax_id in https://github.com/opencart/opencart/pull/15408
+* Fixed: More bug and security fixes in https://github.com/opencart/opencart/pull/15409
+* Fixed: Missing user's name in activity on checkout register in https://github.com/opencart/opencart/pull/15412
+* Fixed: Fix add variant to cart adding master instead in https://github.com/opencart/opencart/pull/15415
+* Fixed: More fixes of bugs and security issues in https://github.com/opencart/opencart/pull/15416
+* Fixed: Keep variant's code override on master update in https://github.com/opencart/opencart/pull/15418
+* Fixed: Fix admin product list wrong discount value in https://github.com/opencart/opencart/pull/15421
+* Fixed: Fix dashboard activities sort in https://github.com/opencart/opencart/pull/15422
+* Changed: Use ENT_COMPAT in query clean in https://github.com/opencart/opencart/pull/15423
+* Changed: Removing unused SSL context options in https://github.com/opencart/opencart/pull/15424
+* Fixed: Fix multiple issues in checkout's register component in https://github.com/opencart/opencart/pull/15428
+* Fixed: "Argument #1 ($product_id) must be of type int, null …" in https://github.com/opencart/opencart/pull/15429
+* Fixed: Fix autocomplete in Safari in https://github.com/opencart/opencart/pull/15431
+* Fixed: db_schema PHP CS fixer in https://github.com/opencart/opencart/pull/15432
+* Fixed: Missing language texts in https://github.com/opencart/opencart/pull/15433
+* Fixed: Keep order's status on admin update in https://github.com/opencart/opencart/pull/15436
+* Changed: Removal of redundant console.log calls in https://github.com/opencart/opencart/pull/15438
+* Fixed: Fix couple UI issues in https://github.com/opencart/opencart/pull/15441
+* Fixed: Fix install open_basedir validation in https://github.com/opencart/opencart/pull/15447
+* Fixed: Prevent XSS in error log view in https://github.com/opencart/opencart/pull/15445
+* Changed: Corrections to .htaccess.txt in https://github.com/opencart/opencart/pull/15450
+* Removed: Remove HTTP_CLIENT_IP override in startup in https://github.com/opencart/opencart/pull/15451
+* Fixed: Fix missing data from the union operator being left-associative in https://github.com/opencart/opencart/pull/15442
+* Fixed: Fix promotions request in https://github.com/opencart/opencart/pull/15467
+* Changed: Admin Order edit changes in https://github.com/opencart/opencart/pull/15472
+* Changed: Change 'link' type from varchar to text in https://github.com/opencart/opencart/pull/15454
+* Fixed: Manufacturer SEO URLs in https://github.com/opencart/opencart/pull/15474
+* Fixed: Fix related products showing for wrong store in https://github.com/opencart/opencart/pull/15463
+* Fixed: Fix admin edit order not saving language and currency in https://github.com/opencart/opencart/pull/15476
+* Fixed: Fix escaping in backup in https://github.com/opencart/opencart/pull/15473
+* Changed: Adjust leading spaces in SQL language files in https://github.com/opencart/opencart/pull/15480
+* Changed: Support multi-word product name search v2 in https://github.com/opencart/opencart/pull/15479
+* Fixed: Fix admin order methods validation in https://github.com/opencart/opencart/pull/15478
+* Changed: Add missing @throws docblocks in https://github.com/opencart/opencart/pull/15455
+* Fixed: Fix related products showing for wrong store in https://github.com/opencart/opencart/pull/15463
+* Fixed: Bug: admin/model/cms/article.php getComments() in https://github.com/opencart/opencart/pull/15482
+* Changed: Fix products filtration in https://github.com/opencart/opencart/pull/15483
+* Fixed: Fixes for CMS SEO and topic module in https://github.com/opencart/opencart/pull/15486
+* Fixed: Admin order add in https://github.com/opencart/opencart/pull/15491
+* Fixed: Fix admin order addProduct validation in https://github.com/opencart/opencart/pull/15488
+* Fixed: Fix misnamed form attribute in https://github.com/opencart/opencart/pull/15485
+* Fixed: Fix image extension and getimagesize for PHP 8.5 in https://github.com/opencart/opencart/pull/15490
+* Fixed: Enforce PHP 8.1 minimum version in installers in https://github.com/opencart/opencart/pull/15492
+* Fixed: More admin order edit/add fixes in https://github.com/opencart/opencart/pull/15496
+* Fixed: More fixes for api/cart in https://github.com/opencart/opencart/pull/15497
+* Fixed: Fixed and optimized the GitHub Actions workflow configuration in https://github.com/opencart/opencart/pull/15494
+* Fixed: Fix option values check and error messages in https://github.com/opencart/opencart/pull/15495
+* Changed: Updated api/cart in https://github.com/opencart/opencart/pull/15503
+* Fixed: PHP CS Fixer for api/cart in https://github.com/opencart/opencart/pull/15504
+* Changed: Added caching for tools in https://github.com/opencart/opencart/pull/15500
+* Fixed: More fixes for usage of options in variant products in https://github.com/opencart/opencart/pull/15512
+* Fixed: More bugfixes for admin order product add in https://github.com/opencart/opencart/pull/15516
+* Changed: Reset modal-product form in https://github.com/opencart/opencart/pull/15517
+* Fixed: Merge variant code with options in https://github.com/opencart/opencart/pull/15518
+* Fixed: More admin order edit/add fixes in https://github.com/opencart/opencart/pull/15519
+* Changed: Change product rating field type to float in https://github.com/opencart/opencart/pull/15513
+* Fixed: Coupon category restriction not enforced in https://github.com/opencart/opencart/pull/15530
+* Fixed: Customer-facing 2FA email contains admin-oriented text in https://github.com/opencart/opencart/pull/15533
+* Fixed: reject traversal zip entries in marketplace installer in https://github.com/opencart/opencart/pull/15536
+* Fixed: Add product to cart in https://github.com/opencart/opencart/pull/15538
+* Changed: Improve admin performance with order table index in https://github.com/opencart/opencart/pull/15537
+* Fixed: Fix filter group sorting in admin in https://github.com/opencart/opencart/pull/15539
+* Changed: Use hash_equals() for API signature validation in https://github.com/opencart/opencart/pull/15541
+* Fixed: Fix library OCMOD in https://github.com/opencart/opencart/pull/15543
+* Fixed: Missing language texts in https://github.com/opencart/opencart/pull/15546
+* Fixed: Fix filter group sorting in admin in https://github.com/opencart/opencart/pull/15539
+* Changed: Help prevent long-running cron jobs from causing misses in https://github.com/opencart/opencart/pull/15548
+* Changed: Remove redundant language text in https://github.com/opencart/opencart/pull/15555
+* Fixed: Fix Admin Panel Product Option Value Weight Display Bug in https://github.com/opencart/opencart/pull/15556
+* Fixed: Fix email validation logic in https://github.com/opencart/opencart/pull/15554
+* Fixed: Add missing language texts in https://github.com/opencart/opencart/pull/15560
+* Fixed: Help prevent long-running cron jobs from causing misses in https://github.com/opencart/opencart/pull/15548
+* Changed: Use strict comparison for captcha and authorize code checks  in https://github.com/opencart/opencart/pull/15565
+* Changed: Only show the order fraud info tab if it's not empty in https://github.com/opencart/opencart/pull/15563
+* Changed: Update of upgrade scripts in https://github.com/opencart/opencart/pull/15566
+* Changed: Adjust cache-control headers in https://github.com/opencart/opencart/pull/15569
+* Fixed: Upgrade updates in https://github.com/opencart/opencart/pull/15570
+* Fixed: validate password when adding a new user in https://github.com/opencart/opencart/pull/15571
+* Fixed: Fix admin redirect and use of config_url in https://github.com/opencart/opencart/pull/15575
+* Fixed: Check modify permission in installer upload in https://github.com/opencart/opencart/pull/15578
+* Fixed: Only show the order total and payment info tabs if they're not empty in https://github.com/opencart/opencart/pull/15582
+* Fixed: Security Storage Move in https://github.com/opencart/opencart/pull/15584
+* Fixed: Fix is_writable in https://github.com/opencart/opencart/pull/15585
+* Fixed: Storage move changes in https://github.com/opencart/opencart/pull/15586
+* Fixed: Set httponly on the session cookie in https://github.com/opencart/opencart/pull/15587
+* Fixed: Check subscription permission in subscription api call in https://github.com/opencart/opencart/pull/15589
+* Fixed: Improved exception and error handlers in https://github.com/opencart/opencart/pull/15590
+* Fixed: Added payment instructions to order mail in https://github.com/opencart/opencart/pull/15591
+* Changed: Cookie changes in https://github.com/opencart/opencart/pull/15594
+* Fixed: Admin: Fixed Design -> Layouts form in https://github.com/opencart/opencart/pull/15596
+* Fixed: More error handler changes in https://github.com/opencart/opencart/pull/15597
+* Fixed: Admin: Fixed reports HTML markup errors in https://github.com/opencart/opencart/pull/15598
+* Fixed: Fix escape bypass on directory in filemanager getList https://github.com/opencart/opencart/pull/15599
+* Fixed: Fix order order email comments and instructions in https://github.com/opencart/opencart/pull/15601
+* Fixed: Fixed order comment during checkout in https://github.com/opencart/opencart/pull/15602
+* Fixed: Admin: Fixed filemanager pagination count in https://github.com/opencart/opencart/pull/15603
+* Fixed: Reject traversal entries in upgrade archive extraction in https://github.com/opencart/opencart/pull/15604
+* Fixed: Match api routes case insensitively in the startup gate in https://github.com/opencart/opencart/pull/15606
+* Fixed: Reject traversal extension codes in installer upload in https://github.com/opencart/opencart/pull/15609
+* Fixed: More checkout fixes in https://github.com/opencart/opencart/pull/15611
+* Fixed: More checkout comment fixes in https://github.com/opencart/opencart/pull/15615
+* Fixed: Honor configured 2FA authorization expiry on 4.x in https://github.com/opencart/opencart/pull/15619
+* Fixed: keep computed status authoritative in cms/comment add in https://github.com/opencart/opencart/pull/15632
+* Fixed: Add $args parameter type to Url::link() docblock in https://github.com/opencart/opencart/pull/15633
+
+## [v4.1.0.3] (Release date: 24.03.2025)
+
+https://github.com/opencart/opencart/releases/tag/4.1.0.3
+
+#### Changes
+* More PHPDocs work by @TheCartpenter in https://github.com/opencart/opencart/pull/14700
+* [fix] The update procedure does not work by @batumibiz in https://github.com/opencart/opencart/pull/14703
+* Modified upgrade/upgrade PHPDocs by @TheCartpenter in https://github.com/opencart/opencart/pull/14708
+* Update to admin marketplace/installer.php by @milsaware in https://github.com/opencart/opencart/pull/14709
+* removed country_id by @farshadfmr in https://github.com/opencart/opencart/pull/14713
+* Removed identifier_id in PHPDocs of getIdentifierByCode method in model/identifier by @TheCartpenter in https://github.com/opencart/opencart/pull/14714
+* Removed country_id and zone_id from deleteDescriptionsByLanguageId PHPDocs by @TheCartpenter in https://github.com/opencart/opencart/pull/14717
+* Modified localisation/country controller and model delete descriptions method by @TheCartpenter in https://github.com/opencart/opencart/pull/14720
+* More model comments work by @TheCartpenter in https://github.com/opencart/opencart/pull/14725
+* More PHPDocs work and fixed some package paths in extensions by @TheCartpenter in https://github.com/opencart/opencart/pull/14726
+* More PHPDocs work by @TheCartpenter in https://github.com/opencart/opencart/pull/14727
+
+
+
+## [v4.1.0.2] (Release date: 21.03.2025)
+
+https://github.com/opencart/opencart/releases/tag/4.1.0.2
+
+## [v4.1.0.1] (Release date: 20.03.2025)
+
+https://github.com/opencart/opencart/releases/tag/4.1.0.1
+
+## [v4.1.0.0] (Release date: 13.01.2025)
+
+https://github.com/opencart/opencart/releases/tag/4.1.0.0
+
+#### Changes
+
+* Added OCMod
+* Added French language
+* Added Blog system
+* Updated Order editor, normalised the ordered editor system.
+* Fixed subscription system
+
+## [v4.0.2.3] (Release date: 15.09.2023)
+
+https://github.com/opencart/opencart/releases/tag/4.0.2.3
+
 ## [v4.0.2.2] (Release date: 18.04.2023)
 
 https://github.com/opencart/opencart/releases/tag/4.0.2.2
@@ -14,7 +238,7 @@ https://github.com/opencart/opencart/releases/tag/4.0.2.0
 * Changed the route to use . instead of using | for compatibility with some payment gateways
 * Payment methods need to be updated:
 
-```		
+```
 $method_data = [];
 
 if ($status) {

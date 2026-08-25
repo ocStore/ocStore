@@ -209,6 +209,8 @@ class Information extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('catalog/information.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('catalog/information', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		$information_info = [];
+
 		if (isset($this->request->get['information_id'])) {
 			$this->load->model('catalog/information');
 
@@ -232,21 +234,17 @@ class Information extends \Opencart\System\Engine\Controller {
 			$data['information_description'] = [];
 		}
 
-		// Store
-		$data['stores'] = [];
+		// Stores
+		$stores = [];
 
-		$data['stores'][] = [
+		$stores[] = [
 			'store_id' => 0,
-			'name'     => $this->language->get('text_default')
+			'name'     => $this->config->get('config_name')
 		];
 
 		$this->load->model('setting/store');
 
-		$results = $this->model_setting_store->getStores();
-
-		foreach ($results as $result) {
-			$data['stores'][] = $result;
-		}
+		$data['stores'] = array_merge($stores, $this->model_setting_store->getStores());
 
 		if (!empty($information_info)) {
 			$data['information_store'] = $this->model_catalog_information->getStores($information_info['information_id']);

@@ -1,8 +1,11 @@
 <?php
 // Texte
-$_['text_model']        = 'Modèle';
-$_['text_subscription'] = 'Abonnement';
-$_['text_points']       = 'Points de Récompenses';
+$_['text_model']                 = 'Modèle';
+$_['text_subscription']          = 'Abonnement';
+$_['text_subscription_trial']    = '%s tous les %d %s(s) pour %d paiement(s) puis ';
+$_['text_subscription_duration'] = '%s tous les %d %s(s) pour %d paiement(s)';
+$_['text_subscription_cancel']   = '%s tous les %d %s(s) jusqu\'à annulation';
+$_['text_points']                = 'Points de Récompenses';
 
 // Colonne
 $_['column_product']    = 'Produit';

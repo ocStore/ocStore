@@ -115,7 +115,7 @@ $('#button-filter').on('click', function() {
 
     if (filter_category_id) {
         url += '&filter_category_id=' + filter_category_id;
-	}
+    }
 
     var filter_manufacturer_id = $('#input-manufacturer-id').val();
 
@@ -156,6 +156,18 @@ $('#button-filter').on('click', function() {
     window.history.pushState({}, null, 'index.php?route=catalog/product&user_token={{ user_token }}' + url);
 
     $('#product').load('index.php?route=catalog/product.list&user_token={{ user_token }}' + url);
+});
+
+$('#form-filter').on('reset', function() {
+    // This allows the native reset to happen first,
+    // then manually clears the hidden ID fields.
+    setTimeout(() => {
+        $(this).find('input[type="hidden"]').val('');
+
+        // Optional: Trigger a change or click the filter button
+        // if you want the list to refresh immediately after reset.
+        // $('#button-filter').trigger('click');
+    }, 10);
 });
 
 $('#input-name').autocomplete({

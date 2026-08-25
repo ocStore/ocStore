@@ -80,9 +80,9 @@ class Log extends \Opencart\System\Engine\Controller {
 
 			$data['logs'][] = [
 				'name'     => $filename,
-				'output'   => fread($handle, 3145728),
-				'download' => $this->url->link('tool/log.download', 'user_token=' . $this->session->data['user_token'] . '&filename=' . $filename),
-				'clear'    => $this->url->link('tool/log.clear', 'user_token=' . $this->session->data['user_token'] . '&filename=' . $filename),
+				'output'   => htmlspecialchars(fread($handle, 3145728), ENT_COMPAT, 'UTF-8'),
+				'download' => $this->url->link('tool/log.download', 'user_token=' . $this->session->data['user_token'] . '&filename=' . urlencode($filename)),
+				'clear'    => $this->url->link('tool/log.clear', 'user_token=' . $this->session->data['user_token'] . '&filename=' . urlencode($filename)),
 				'error'    => $error
 			];
 

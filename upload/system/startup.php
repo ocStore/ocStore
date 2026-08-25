@@ -3,8 +3,8 @@
 error_reporting(E_ALL);
 
 // Check Version
-if (version_compare(PHP_VERSION, '8.0', '<')) {
-	exit('PHP8.0+ Required');
+if (version_compare(PHP_VERSION, '8.1', '<')) {
+	exit('PHP8.1+ Required');
 }
 
 if (!ini_get('date.timezone')) {
@@ -45,11 +45,6 @@ if ((isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTP
 	$_SERVER['HTTPS'] = false;
 }
 
-// Check IP
-if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-	$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
-}
-
 // OpenCart Autoloader
 require_once(DIR_SYSTEM . 'engine/autoloader.php');
 
@@ -58,5 +53,4 @@ require_once(DIR_SYSTEM . 'engine/config.php');
 
 // Helper
 require_once(DIR_SYSTEM . 'helper/general.php');
-require_once(DIR_SYSTEM . 'helper/filter.php');
 require_once(DIR_SYSTEM . 'helper/validation.php');

@@ -25,17 +25,20 @@ class Exception extends \Opencart\System\Engine\Controller {
 
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
+			'href' => $this->url->link('common/home', 'language=' . $this->config->get('config_language'))
 		];
 
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('error/exception', 'user_token=' . $this->session->data['user_token'])
+			'href' => $this->url->link('error/exception', 'language=' . $this->config->get('config_language'))
 		];
 
-		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
+		$data['column_right'] = $this->load->controller('common/column_right');
+		$data['content_top'] = $this->load->controller('common/content_top');
+		$data['content_bottom'] = $this->load->controller('common/content_bottom');
 		$data['footer'] = $this->load->controller('common/footer');
+		$data['header'] = $this->load->controller('common/header');
 
 		$this->response->setOutput($this->load->view('error/exception', $data));
 	}

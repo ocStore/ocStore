@@ -112,7 +112,7 @@ class User extends \Opencart\System\Engine\Controller {
 
 		$data['user_groups'] = $this->model_user_user_group->getUserGroups();
 
-		$data['filter_username'] = $filter_name;
+		$data['filter_username'] = $filter_username;
 		$data['filter_name'] = $filter_name;
 		$data['filter_email'] = $filter_email;
 		$data['filter_user_group_id'] = $filter_user_group_id;
@@ -518,12 +518,16 @@ class User extends \Opencart\System\Engine\Controller {
 		}
 
 		$required = [
-			'user_id'   => 0,
-			'username'  => '',
-			'firstname' => '',
-			'lastname'  => '',
-			'email'     => '',
-			'password'  => '',
+			'user_id'       => 0,
+			'user_group_id' => 0,
+			'username'      => '',
+			'firstname'     => '',
+			'lastname'      => '',
+			'email'         => '',
+			'image'         => '',
+			'password'      => '',
+			'confirm'       => '',
+			'status'        => 0
 		];
 
 		$post_info = $this->request->post + $required;
@@ -558,7 +562,7 @@ class User extends \Opencart\System\Engine\Controller {
 			$json['error']['warning'] = $this->language->get('error_email_exists');
 		}
 
-		if ($post_info['password'] || (!isset($post_info['user_id']))) {
+		if ($post_info['password'] || !$post_info['user_id']) {
 			$password = html_entity_decode($post_info['password'], ENT_QUOTES, 'UTF-8');
 
 			if (!oc_validate_length($password, (int)$this->config->get('config_user_password_length'), 40)) {
@@ -722,8 +726,8 @@ class User extends \Opencart\System\Engine\Controller {
 			$user_authorize_id = 0;
 		}
 
-		if (isset($this->request->cookie['authorize'])) {
-			$token = $this->request->cookie['authorize'];
+		if (isset($this->request->cookie['admin_authorize'])) {
+			$token = $this->request->cookie['admin_authorize'];
 		} else {
 			$token = '';
 		}

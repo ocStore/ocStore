@@ -207,6 +207,8 @@ class SubscriptionPlan extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('catalog/subscription_plan.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('catalog/subscription_plan', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		$subscription_info = [];
+
 		if (isset($this->request->get['subscription_plan_id'])) {
 			$this->load->model('catalog/subscription_plan');
 

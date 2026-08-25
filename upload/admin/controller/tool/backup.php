@@ -186,14 +186,7 @@ class Backup extends \Opencart\System\Engine\Controller {
 
 				foreach (array_values($result) as $value) {
 					if ($value !== null) {
-						$value = str_replace(["\x00", "\x0a", "\x0d", "\x1a"], ['\0', '\n', '\r', '\Z'], $value);
-						$value = str_replace(["\n", "\r", "\t"], ['\n', '\r', '\t'], $value);
-						$value = str_replace('\\', '\\\\', $value);
-						$value = str_replace('\'', '\\\'', $value);
-						$value = str_replace('\\\n', '\n', $value);
-						$value = str_replace('\\\r', '\r', $value);
-						$value = str_replace('\\\t', '\t', $value);
-
+						$value = str_replace(['\\', "\x00", "\n", "\r", "\x1a", '\'', '"'], ['\\\\', '\0', '\n', '\r', '\Z', '\\\'', '\"'], $value);
 						$values .= '\'' . $value . '\', ';
 					} else {
 						$values .= 'NULL, ';
@@ -263,7 +256,7 @@ class Backup extends \Opencart\System\Engine\Controller {
 		}
 
 		if (isset($this->request->get['position'])) {
-			$position = $this->request->get['position'];
+			$position = (int)$this->request->get['position'];
 		} else {
 			$position = 0;
 		}

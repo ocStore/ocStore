@@ -6,6 +6,9 @@ namespace Opencart\System\Library\Template;
  * @package Opencart\System\Library\Template
  */
 class Template {
+	/**
+	 * @var string
+	 */
 	protected string $directory = '';
 	/**
 	 * @var array<string, string>

@@ -56,73 +56,21 @@ class Affiliate extends \Opencart\System\Engine\Controller {
 
 		$affiliate_info = $this->model_account_affiliate->getAffiliate($this->customer->getId());
 
-		if (!empty($affiliate_info)) {
-			$data['company'] = $affiliate_info['company'];
-		} else {
-			$data['company'] = '';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['website'] = $affiliate_info['website'];
-		} else {
-			$data['website'] = '';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['tax'] = $affiliate_info['tax'];
-		} else {
-			$data['tax'] = '';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['payment_method'] = $affiliate_info['payment_method'];
-		} else {
-			$data['payment_method'] = 'cheque';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['cheque'] = $affiliate_info['cheque'];
-		} else {
-			$data['cheque'] = '';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['paypal'] = $affiliate_info['paypal'];
-		} else {
-			$data['paypal'] = '';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['bank_name'] = $affiliate_info['bank_name'];
-		} else {
-			$data['bank_name'] = '';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['bank_branch_number'] = $affiliate_info['bank_branch_number'];
-		} else {
-			$data['bank_branch_number'] = '';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['bank_swift_code'] = $affiliate_info['bank_swift_code'];
-		} else {
-			$data['bank_swift_code'] = '';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['bank_account_name'] = $affiliate_info['bank_account_name'];
-		} else {
-			$data['bank_account_name'] = '';
-		}
-
-		if (!empty($affiliate_info)) {
-			$data['bank_account_number'] = $affiliate_info['bank_account_number'];
-		} else {
-			$data['bank_account_number'] = '';
-		}
+		$data['company'] = $affiliate_info ? $affiliate_info['company'] : '';
+		$data['website'] = $affiliate_info ? $affiliate_info['website'] : '';
+		$data['tax'] = $affiliate_info ? $affiliate_info['tax'] : '';
+		$data['payment_method'] = $affiliate_info ? $affiliate_info['payment_method'] : 'cheque';
+		$data['cheque'] = $affiliate_info ? $affiliate_info['cheque'] : '';
+		$data['paypal'] = $affiliate_info ? $affiliate_info['paypal'] : '';
+		$data['bank_name'] = $affiliate_info ? $affiliate_info['bank_name'] : '';
+		$data['bank_branch_number'] = $affiliate_info ? $affiliate_info['bank_branch_number'] : '';
+		$data['bank_swift_code'] = $affiliate_info ? $affiliate_info['bank_swift_code'] : '';
+		$data['bank_account_name'] = $affiliate_info ? $affiliate_info['bank_account_name'] : '';
+		$data['bank_account_number'] = $affiliate_info ? $affiliate_info['bank_account_number'] : '';
 
 		// Custom Field
+		$data['custom_fields'] = [];
+
 		$this->load->model('account/custom_field');
 
 		$custom_fields = $this->model_account_custom_field->getCustomFields((int)$this->config->get('config_customer_group_id'));
@@ -133,13 +81,7 @@ class Affiliate extends \Opencart\System\Engine\Controller {
 			}
 		}
 
-		if (!empty($affiliate_info)) {
-			$data['affiliate_custom_field'] = $affiliate_info['custom_field'];
-		} else {
-			$data['affiliate_custom_field'] = [];
-		}
-
-		$affiliate_info = $this->model_account_affiliate->getAffiliate($this->customer->getId());
+		$data['affiliate_custom_field'] = $affiliate_info ? $affiliate_info['custom_field'] : [];
 
 		if (!$affiliate_info && $this->config->get('config_affiliate_id')) {
 			// Information

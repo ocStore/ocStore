@@ -281,6 +281,8 @@ class Category extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('catalog/category.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('catalog/category', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		$category_info = [];
+
 		if (isset($this->request->get['category_id'])) {
 			$this->load->model('catalog/category');
 
@@ -338,21 +340,17 @@ class Category extends \Opencart\System\Engine\Controller {
 			}
 		}
 
-		// Store
-		$data['stores'] = [];
+		// Stores
+		$stores = [];
 
-		$data['stores'][] = [
+		$stores[] = [
 			'store_id' => 0,
-			'name'     => $this->language->get('text_default')
+			'name'     => $this->config->get('config_name')
 		];
 
 		$this->load->model('setting/store');
 
-		$results = $this->model_setting_store->getStores();
-
-		foreach ($results as $result) {
-			$data['stores'][] = $result;
-		}
+		$data['stores'] = array_merge($stores, $this->model_setting_store->getStores());
 
 		if (!empty($category_info)) {
 			$data['category_store'] = $this->model_catalog_category->getStores($category_info['category_id']);
@@ -589,24 +587,36 @@ class Category extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/category');
+			$filter_name = $this->request->get['filter_name'];
+		} else {
+			$filter_name = '';
+		}
 
-			$filter_data = [
-				'filter_name' => $this->request->get['filter_name'] . '%',
-				'sort'        => 'name',
-				'order'       => 'ASC',
-				'start'       => 0,
-				'limit'       => $this->config->get('config_autocomplete_limit')
+		if (isset($this->request->get['filter_status']) && $this->request->get['filter_status'] !== '') {
+			$filter_status = $this->request->get['filter_status'];
+		} else {
+			$filter_status = '';
+		}
+
+		$this->load->model('catalog/category');
+
+		$filter_data = [
+			'filter_name'   => $filter_name,
+			'filter_status' => $filter_status,
+			'sort'          => 'name',
+			'order'         => 'ASC',
+			'start'         => 0,
+			'limit'         => $this->config->get('config_autocomplete_limit')
+		];
+
+		$results = $this->model_catalog_category->getCategories($filter_data);
+
+		foreach ($results as $result) {
+			$json[] = [
+				'category_id' => $result['category_id'],
+				'name'        => $result['name'],
+				'status'      => $result['status']
 			];
-
-			$results = $this->model_catalog_category->getCategories($filter_data);
-
-			foreach ($results as $result) {
-				$json[] = [
-					'category_id' => $result['category_id'],
-					'name'        => $result['name']
-				];
-			}
 		}
 
 		$sort_order = [];

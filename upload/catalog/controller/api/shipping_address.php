@@ -1,5 +1,5 @@
 <?php
-namespace Opencart\catalog\controller\api;
+namespace Opencart\Catalog\Controller\Api;
 /**
  * Class Shipping Address
  *
@@ -21,15 +21,17 @@ class ShippingAddress extends \Opencart\System\Engine\Controller {
 		if ($this->cart->hasShipping()) {
 			// Add keys for missing post vars
 			$required = [
-				'shipping_firstname'  => '',
-				'shipping_lastname'   => '',
-				'shipping_company'    => '',
-				'shipping_address_1'  => '',
-				'shipping_address_2'  => '',
-				'shipping_postcode'   => '',
-				'shipping_city'       => '',
-				'shipping_zone_id'    => 0,
-				'shipping_country_id' => 0
+				'shipping_address_id'   => 0,
+				'shipping_firstname'    => '',
+				'shipping_lastname'     => '',
+				'shipping_company'      => '',
+				'shipping_address_1'    => '',
+				'shipping_address_2'    => '',
+				'shipping_postcode'     => '',
+				'shipping_city'         => '',
+				'shipping_zone_id'      => 0,
+				'shipping_country_id'   => 0,
+				'shipping_custom_field' => []
 			];
 
 			$post_info = $this->request->post + $required;

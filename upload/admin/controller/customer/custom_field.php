@@ -368,12 +368,13 @@ class CustomField extends \Opencart\System\Engine\Controller {
 		}
 
 		$required = [
-			'type'       => '',
-			'value'      => '',
-			'validation' => '',
-			'location'   => '',
-			'status'     => 0,
-			'sort_order' => 0
+			'type'                     => '',
+			'value'                    => '',
+			'validation'               => '',
+			'location'                 => '',
+			'status'                   => 0,
+			'sort_order'               => 0,
+			'custom_field_description' => []
 		];
 
 		$post_info = $this->request->post + $required;

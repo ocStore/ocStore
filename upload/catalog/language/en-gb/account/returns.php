@@ -19,7 +19,6 @@ $_['text_unopened']      = 'Unopened';
 $_['text_reason']        = 'Reason for Return';
 $_['text_action']        = 'Action';
 $_['text_tbc']           = 'TBC';
-$_['text_history']       = 'History';
 $_['text_comment']       = 'Comment';
 $_['text_history']       = 'Return History';
 $_['text_no_results']    = 'You have not made any previous returns!';

@@ -12,7 +12,7 @@ class Setting extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function index(): void {
-		$hostname = ($this->request->server['HTTPS'] ? 'https://' : 'http://') . str_replace('www.', '', $this->request->server['HTTP_HOST']) . rtrim(dirname($this->request->server['PHP_SELF']), '/.\\') . '/';
+		$hostname = (!empty($this->request->server['HTTPS']) ? 'https://' : 'http://') . str_replace('www.', '', $this->request->server['HTTP_HOST'] ?? '') . rtrim(dirname($this->request->server['PHP_SELF'] ?? ''), '/.\\') . '/';
 
 		// Store
 		$this->load->model('setting/store');

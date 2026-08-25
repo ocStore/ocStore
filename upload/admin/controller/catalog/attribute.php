@@ -207,6 +207,8 @@ class Attribute extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('catalog/attribute.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('catalog/attribute', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		$attribute_info = [];
+
 		if (isset($this->request->get['attribute_id'])) {
 			$this->load->model('catalog/attribute');
 

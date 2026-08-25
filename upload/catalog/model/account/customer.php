@@ -49,12 +49,14 @@ class Customer extends \Opencart\System\Engine\Model {
 
 		$customer_group_info = $this->model_account_customer_group->getCustomerGroup($customer_group_id);
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "customer` SET `customer_group_id` = '" . (int)$customer_group_id . "', `store_id` = '" . (int)$this->config->get('config_store_id') . "', `language_id` = '" . (int)$this->config->get('config_language_id') . "', `firstname` = '" . $this->db->escape($data['firstname']) . "', `lastname` = '" . $this->db->escape($data['lastname']) . "', `email` = '" . $this->db->escape(oc_strtolower($data['email'])) . "', `telephone` = '" . $this->db->escape($data['telephone']) . "', `custom_field` = '" . $this->db->escape(isset($data['custom_field']) ? json_encode($data['custom_field']) : '') . "', `password` = '" . $this->db->escape(password_hash(html_entity_decode($data['password'], ENT_QUOTES, 'UTF-8'), PASSWORD_DEFAULT)) . "', `newsletter` = '" . (isset($data['newsletter']) ? (int)$data['newsletter'] : 0) . "', `ip` = '" . $this->db->escape(oc_get_ip()) . "', `status` = '" . (int)!$customer_group_info['approval'] . "', `date_added` = NOW()");
+		$approval = !empty($customer_group_info['approval']);
+
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "customer` SET `customer_group_id` = '" . (int)$customer_group_id . "', `store_id` = '" . (int)$this->config->get('config_store_id') . "', `language_id` = '" . (int)$this->config->get('config_language_id') . "', `firstname` = '" . $this->db->escape($data['firstname']) . "', `lastname` = '" . $this->db->escape($data['lastname']) . "', `email` = '" . $this->db->escape(oc_strtolower($data['email'])) . "', `telephone` = '" . $this->db->escape($data['telephone']) . "', `custom_field` = '" . $this->db->escape(isset($data['custom_field']) ? json_encode($data['custom_field']) : '') . "', `password` = '" . $this->db->escape(password_hash(html_entity_decode($data['password'], ENT_QUOTES, 'UTF-8'), PASSWORD_DEFAULT)) . "', `newsletter` = '" . (isset($data['newsletter']) ? (int)$data['newsletter'] : 0) . "', `ip` = '" . $this->db->escape(oc_get_ip()) . "', `status` = '" . (int)!$approval . "', `date_added` = NOW()");
 
 		$customer_id = $this->db->getLastId();
 
 		// Approval
-		if ($customer_group_info['approval']) {
+		if ($approval) {
 			$this->load->model('account/approval');
 
 			$this->model_account_approval->addApproval($customer_id, 'customer');
@@ -147,12 +149,12 @@ class Customer extends \Opencart\System\Engine\Model {
 	public function deleteCustomer(int $customer_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer` WHERE `customer_id` = '" . (int)$customer_id . "'");
 
-		// Activity
+		// Activities
 		$this->load->model('account/activity');
 
 		$this->model_account_activity->deleteActivities($customer_id);
 
-		// Address
+		// Addresses
 		$this->load->model('account/address');
 
 		$this->model_account_address->deleteAddresses($customer_id);
@@ -162,22 +164,22 @@ class Customer extends \Opencart\System\Engine\Model {
 
 		$this->model_account_affiliate->deleteAffiliate($customer_id);
 
-		// Customer Approval
+		// Customer Approvals
 		$this->load->model('account/approval');
 
 		$this->model_account_approval->deleteApprovals($customer_id);
 
-		// Reward
+		// Rewards
 		$this->load->model('account/reward');
 
 		$this->model_account_reward->deleteRewards($customer_id);
 
-		// Transaction
+		// Transactions
 		$this->load->model('account/transaction');
 
 		$this->model_account_transaction->deleteTransactions($customer_id);
 
-		// Wishlist
+		// Wishlists
 		$this->load->model('account/wishlist');
 
 		$this->model_account_wishlist->deleteWishlists($customer_id);
@@ -255,9 +257,9 @@ class Customer extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * Delete Customer History
+	 * Delete Customer Histories
 	 *
-	 * Delete customer history record in the database.
+	 * Delete customer history records in the database.
 	 *
 	 * @param int $customer_id primary key of the customer record
 	 *
@@ -267,16 +269,16 @@ class Customer extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->load->model('account/customer');
 	 *
-	 * $this->model_account_customer->deleteHistory($customer_id);
+	 * $this->model_account_customer->deleteHistories($customer_id);
 	 */
-	public function deleteHistory(int $customer_id): void {
+	public function deleteHistories(int $customer_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer_history` WHERE `customer_id` = '" . (int)$customer_id . "'");
 	}
 
 	/**
-	 * Delete Ip
+	 * Delete Ips
 	 *
-	 * Delete customer ip record in the database.
+	 * Delete customer ip records in the database.
 	 *
 	 * @param int $customer_id primary key of the customer record
 	 *
@@ -286,9 +288,9 @@ class Customer extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->load->model('account/customer');
 	 *
-	 * $this->model_account_customer->deleteIp($customer_id);
+	 * $this->model_account_customer->deleteIps($customer_id);
 	 */
-	public function deleteIp(int $customer_id): void {
+	public function deleteIps(int $customer_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer_ip` WHERE `customer_id` = '" . (int)$customer_id . "'");
 	}
 
@@ -430,7 +432,8 @@ class Customer extends \Opencart\System\Engine\Model {
 	 *     'customer_id' => 1,
 	 *     'token'       => '',
 	 *     'ip'          => '',
-	 *     'user_agent'  => ''
+	 *     'user_agent'  => '',
+	 *     'expire'      => 90
 	 * ];
 	 *
 	 * $this->load->model('account/customer');
@@ -438,7 +441,7 @@ class Customer extends \Opencart\System\Engine\Model {
 	 * $this->model_account_customer->addAuthorize($customer_id, $authorize_data);
 	 */
 	public function addAuthorize(int $customer_id, array $data): void {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "customer_authorize` SET `customer_id` = '" . (int)$customer_id . "', `token` = '" . $this->db->escape($data['token']) . "', `ip` = '" . $this->db->escape($data['ip']) . "', `user_agent` = '" . $this->db->escape($data['user_agent']) . "', `date_added` = NOW(), `date_expire` = NOW()");
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "customer_authorize` SET `customer_id` = '" . (int)$customer_id . "', `token` = '" . $this->db->escape($data['token']) . "', `ip` = '" . $this->db->escape($data['ip']) . "', `user_agent` = '" . $this->db->escape($data['user_agent']) . "', `date_added` = NOW(), `date_expire` = DATE_ADD(NOW(), INTERVAL " . (int)$data['expire'] . " DAY)");
 	}
 
 	/**
@@ -480,9 +483,9 @@ class Customer extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * Delete Customer Authorize
+	 * Delete Customer Authorizes
 	 *
-	 * Delete customer authorize record in the database.
+	 * Delete customer authorize records in the database.
 	 *
 	 * @param int $customer_id           primary key of the customer record
 	 * @param int $customer_authorize_id primary key of the customer authorize record
@@ -493,9 +496,9 @@ class Customer extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->load->model('account/customer');
 	 *
-	 * $this->model_account_customer->deleteAuthorize($customer_id, $customer_authorize_id);
+	 * $this->model_account_customer->deleteAuthorizes($customer_id, $customer_authorize_id);
 	 */
-	public function deleteAuthorize(int $customer_id, int $customer_authorize_id = 0): void {
+	public function deleteAuthorizes(int $customer_id, int $customer_authorize_id = 0): void {
 		$sql = "DELETE FROM `" . DB_PREFIX . "customer_authorize` WHERE `customer_id` = '" . (int)$customer_id . "'";
 
 		if ($customer_authorize_id) {
@@ -542,7 +545,7 @@ class Customer extends \Opencart\System\Engine\Model {
 	 * $login_info = $this->model_account_customer->getAuthorizeByToken($customer_id, $token);
 	 */
 	public function getAuthorizeByToken(int $customer_id, string $token): array {
-		$query = $this->db->query("SELECT *, (SELECT SUM(`total`) FROM `" . DB_PREFIX . "customer_authorize` WHERE `customer_id` = '" . (int)$customer_id . "') AS `attempts` FROM `" . DB_PREFIX . "customer_authorize` WHERE `customer_id` = '" . (int)$customer_id . "' AND `token` = '" . $this->db->escape($token) . "'");
+		$query = $this->db->query("SELECT *, (SELECT SUM(`total`) FROM `" . DB_PREFIX . "customer_authorize` WHERE `customer_id` = '" . (int)$customer_id . "' AND `date_expire` > NOW()) AS `attempts` FROM `" . DB_PREFIX . "customer_authorize` WHERE `customer_id` = '" . (int)$customer_id . "' AND `token` = '" . $this->db->escape($token) . "' AND `date_expire` > NOW()");
 
 		return $query->row;
 	}
@@ -586,6 +589,23 @@ class Customer extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * Delete Token By Code
+	 *
+	 * @param string $code
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('account/customer');
+	 *
+	 * $this->model_account_customer->deleteTokenByCode($code);
+	 */
+	public function deleteTokenByCode(string $code): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer_token` WHERE `code` = '" . $this->db->escape($code) . "'");
+	}
+
+	/**
 	 * Get Token By Code
 	 *
 	 * @param string $code
@@ -604,23 +624,5 @@ class Customer extends \Opencart\System\Engine\Model {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "customer_token` `ct` LEFT JOIN `" . DB_PREFIX . "customer` `c` ON (`ct`.`customer_id` = `c`.`customer_id`) WHERE `ct`.`code` = '" . $this->db->escape($code) . "'");
 
 		return $query->row;
-	}
-
-	/**
-	 * Delete Token By Code
-	 *
-	 * @param string $code
-	 * @param int    $customer_id primary key of the customer record
-	 *
-	 * @return void
-	 *
-	 * @example
-	 *
-	 * $this->load->model('account/customer');
-	 *
-	 * $this->model_account_customer->deleteToken($customer_id);
-	 */
-	public function deleteTokenByCode(string $code): void {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer_token` WHERE `code` = '" . $this->db->escape($code) . "'");
 	}
 }

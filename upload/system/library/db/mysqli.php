@@ -28,7 +28,7 @@ class MySQLi {
 			$port = 3306;
 		}
 
-		// MSQL SSL connection
+		// MySQL SSL connection
 		$temp_ssl_key_file = '';
 
 		if ($ssl_key) {
@@ -94,7 +94,7 @@ class MySQLi {
 	 *
 	 * @return mixed
 	 */
-	public function query(string $sql) {
+	public function query(string $sql): mixed {
 		try {
 			$query = $this->connection->query($sql);
 

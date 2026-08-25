@@ -218,72 +218,32 @@ class Returns extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('account/returns.save', 'language=' . $this->config->get('config_language') . '&return_token=' . $this->session->data['return_token']);
 
 		// Order
-		$this->load->model('account/order');
+		$order_info = [];
 
 		if (isset($this->request->get['order_id'])) {
-			$order_info = $this->model_account_order->getOrder($this->request->get['order_id']);
+			$this->load->model('account/order');
+
+			$order_info = $this->model_account_order->getOrder((int)$this->request->get['order_id']) ?: [];
 		}
 
 		// Product
-		$this->load->model('catalog/product');
+		$product_info = [];
 
 		if (isset($this->request->get['product_id'])) {
-			$product_info = $this->model_catalog_product->getProduct($this->request->get['product_id']);
+			$this->load->model('catalog/product');
+
+			$product_info = $this->model_catalog_product->getProduct((int)$this->request->get['product_id']) ?: [];
 		}
 
-		if (!empty($order_info)) {
-			$data['order_id'] = $order_info['order_id'];
-		} else {
-			$data['order_id'] = '';
-		}
-
-		if (!empty($product_info)) {
-			$data['product_id'] = $product_info['product_id'];
-		} else {
-			$data['product_id'] = '';
-		}
-
-		if (!empty($order_info)) {
-			$data['date_ordered'] = date('Y-m-d', strtotime($order_info['date_added']));
-		} else {
-			$data['date_ordered'] = '';
-		}
-
-		if (!empty($order_info)) {
-			$data['firstname'] = $order_info['firstname'];
-		} else {
-			$data['firstname'] = $this->customer->getFirstName();
-		}
-
-		if (!empty($order_info)) {
-			$data['lastname'] = $order_info['lastname'];
-		} else {
-			$data['lastname'] = $this->customer->getLastName();
-		}
-
-		if (!empty($order_info)) {
-			$data['email'] = $order_info['email'];
-		} else {
-			$data['email'] = $this->customer->getEmail();
-		}
-
-		if (!empty($order_info)) {
-			$data['telephone'] = $order_info['telephone'];
-		} else {
-			$data['telephone'] = $this->customer->getTelephone();
-		}
-
-		if (!empty($product_info)) {
-			$data['product'] = $product_info['name'];
-		} else {
-			$data['product'] = '';
-		}
-
-		if (!empty($product_info)) {
-			$data['model'] = $product_info['model'];
-		} else {
-			$data['model'] = '';
-		}
+		$data['order_id'] = $order_info ? $order_info['order_id'] : '';
+		$data['product_id'] = $product_info ? $product_info['product_id'] : '';
+		$data['date_ordered'] = $order_info ? date('Y-m-d', strtotime($order_info['date_added'])) : '';
+		$data['firstname'] = $order_info ? $order_info['firstname'] : $this->customer->getFirstName();
+		$data['lastname'] = $order_info ? $order_info['lastname'] : $this->customer->getLastName();
+		$data['email'] = $order_info ? $order_info['email'] : $this->customer->getEmail();
+		$data['telephone'] = $order_info ? $order_info['telephone'] : $this->customer->getTelephone();
+		$data['product'] = $product_info ? $product_info['name'] : '';
+		$data['model'] = $product_info ? $product_info['model'] : '';
 
 		// Return Reason
 		$this->load->model('localisation/return_reason');
@@ -404,7 +364,7 @@ class Returns extends \Opencart\System\Engine\Controller {
 
 				$information_info = $this->model_catalog_information->getInformation((int)$this->config->get('config_return_id'));
 
-				if ($information_info && !isset($post_info['agree'])) {
+				if ($information_info && !$post_info['agree']) {
 					$json['error']['warning'] = sprintf($this->language->get('error_agree'), $information_info['title']);
 				}
 			}
@@ -465,7 +425,7 @@ class Returns extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function history(): void {
-		$this->load->language('account/return');
+		$this->load->language('account/returns');
 
 		if (!$this->load->controller('account/login.validate')) {
 			$this->session->data['redirect'] = $this->url->link('account/returns', 'language=' . $this->config->get('config_language'));
@@ -488,7 +448,7 @@ class Returns extends \Opencart\System\Engine\Controller {
 			$return_id = 0;
 		}
 
-		if (isset($this->request->get['page']) && $this->request->get['route'] == 'account/return.history') {
+		if (isset($this->request->get['page']) && isset($this->request->get['route']) && $this->request->get['route'] == 'account/returns.history') {
 			$page = (int)$this->request->get['page'];
 		} else {
 			$page = 1;
@@ -504,7 +464,7 @@ class Returns extends \Opencart\System\Engine\Controller {
 
 		$this->load->model('account/returns');
 
-		$results = $this->model_account_returns->getHistories($return_id, ($page - 1) * $limit, $limit);
+		$results = $this->model_account_returns->getHistories($return_id);
 
 		foreach ($results as $result) {
 			$data['histories'][] = [
@@ -519,7 +479,7 @@ class Returns extends \Opencart\System\Engine\Controller {
 			'total' => $return_total,
 			'page'  => $page,
 			'limit' => $limit,
-			'url'   => $this->url->link('account/return.history', 'customer_token=' . $this->session->data['customer_token'] . '&return_id=' . $return_id . '&page={page}')
+			'url'   => $this->url->link('account/returns.history', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token'] . '&return_id=' . $return_id . '&page={page}')
 		]);
 
 		$data['results'] = sprintf($this->language->get('text_pagination'), ($return_total) ? (($page - 1) * $limit) + 1 : 0, ((($page - 1) * $limit) > ($return_total - $limit)) ? $return_total : ((($page - 1) * $limit) + $limit), $return_total, ceil($return_total / $limit));

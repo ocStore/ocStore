@@ -10,10 +10,25 @@ class Api {
 	 * @var string
 	 */
 	private string $domain;
+	/**
+	 * @var string
+	 */
 	private string $path = '/';
+	/**
+	 * @var string
+	 */
 	private string $username;
+	/**
+	 * @var string
+	 */
 	private string $key;
+	/**
+	 * @var int
+	 */
 	private int $store_id;
+	/**
+	 * @var string
+	 */
 	private string $language;
 
 	/**
@@ -35,7 +50,13 @@ class Api {
 		$this->language = $language;
 	}
 
-	public function send(string $route, $data = []) {
+	/**
+	 * @param string              $route
+	 * @param array<mixed, mixed> $data
+	 *
+	 * @return array<mixed, mixed>
+	 */
+	public function send(string $route, array|object $data = []): array {
 		$time = time();
 
 		// Build hash string
@@ -51,7 +72,7 @@ class Api {
 		$signature = base64_encode(hash_hmac('sha1', $string, $this->key, true));
 
 		// Make remote call
-		$url  = 'http://' . $this->domain . $this->path . 'index.php?route=' . $route;
+		$url  = 'https://' . $this->domain . $this->path . 'index.php?route=' . $route;
 		$url .= '&username=' . urlencode($this->username);
 		$url .= '&store_id=' . $this->store_id;
 		$url .= '&language=' . $this->language;
@@ -61,19 +82,19 @@ class Api {
 		$curl = curl_init();
 
 		curl_setopt($curl, CURLOPT_URL, $url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_HEADER, false);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
 		curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
 
 		$response = curl_exec($curl);
 
 		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-		curl_close($curl);
+		unset($curl);
 
 		if ($status == 200) {
 			$response_info = json_decode($response, true);
@@ -81,15 +102,6 @@ class Api {
 			$response_info = [];
 		}
 
-		echo 'URL' . "\n";
-		echo $url . "\n";
-
-		echo 'STRING' . "\n";
-		echo $string . "\n";
-
-		echo 'RESPONSE' . "\n";
-		echo $response;
-
-		return $response_info;
+		return is_array($response_info) ? $response_info : [];
 	}
 }

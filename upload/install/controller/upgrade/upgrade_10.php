@@ -63,7 +63,8 @@ class Upgrade10 extends \Opencart\System\Engine\Controller {
 				'upc',
 				'ean',
 				'jan',
-				'isbn'
+				'isbn',
+				'mpn'
 			];
 
 			foreach ($remove as $field) {
@@ -84,7 +85,7 @@ class Upgrade10 extends \Opencart\System\Engine\Controller {
 		}
 
 		if (!$json) {
-			$json['text'] = sprintf($this->language->get('text_patch'), 10, 10, 11);
+			$json['text'] = sprintf($this->language->get('text_patch'), 10, 10, 12);
 
 			$url = '';
 

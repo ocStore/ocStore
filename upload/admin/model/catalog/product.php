@@ -130,6 +130,10 @@ class Product extends \Opencart\System\Engine\Model {
 		// Options
 		if (isset($data['product_option'])) {
 			foreach ($data['product_option'] as $product_option) {
+				if ((in_array($product_option['type'], ['select', 'radio', 'checkbox'])) && empty($product_option['product_option_value'])) {
+					continue;
+				}
+
 				$this->model_catalog_product->addOption($product_id, $product_option);
 			}
 		}
@@ -306,7 +310,7 @@ class Product extends \Opencart\System\Engine\Model {
 		// Attributes
 		$this->model_catalog_product->deleteAttributes($product_id);
 
-		if (!empty($data['product_attribute'])) {
+		if (isset($data['product_attribute'])) {
 			foreach ($data['product_attribute'] as $product_attribute) {
 				if ($product_attribute['attribute_id']) {
 					// Removes duplicates
@@ -324,6 +328,10 @@ class Product extends \Opencart\System\Engine\Model {
 
 		if (isset($data['product_option'])) {
 			foreach ($data['product_option'] as $product_option) {
+				if (in_array($product_option['type'], ['select', 'radio', 'checkbox']) && empty($product_option['product_option_value'])) {
+					continue;
+				}
+
 				$this->model_catalog_product->addOption($product_id, $product_option);
 			}
 		}
@@ -839,6 +847,11 @@ class Product extends \Opencart\System\Engine\Model {
 				}
 			}
 
+			// Codes
+			if (isset($override['product_code'])) {
+				$product_data['product_code'] = $this->model_catalog_product->getCodes($product['product_id']);
+			}
+
 			// Attributes
 			if (isset($override['product_attribute'])) {
 				$product_data['product_attribute'] = $this->model_catalog_product->getAttributes($product['product_id']);
@@ -925,8 +938,8 @@ class Product extends \Opencart\System\Engine\Model {
 	 *
 	 * Edit product rating record in the database.
 	 *
-	 * @param int $product_id primary key of the product record
-	 * @param int $rating
+	 * @param int   $product_id primary key of the product record
+	 * @param float $rating
 	 *
 	 * @return void
 	 *
@@ -936,8 +949,8 @@ class Product extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->model_catalog_product->editRating($result['product_id'], $this->model_catalog_review->getRating($product_id));
 	 */
-	public function editRating(int $product_id, int $rating): void {
-		$this->db->query("UPDATE `" . DB_PREFIX . "product` SET `rating` = '" . (int)$rating . "', `date_modified` = NOW() WHERE `product_id` = '" . (int)$product_id . "'");
+	public function editRating(int $product_id, float $rating): void {
+		$this->db->query("UPDATE `" . DB_PREFIX . "product` SET `rating` = '" . (float)$rating . "', `date_modified` = NOW() WHERE `product_id` = '" . (int)$product_id . "'");
 	}
 
 	/**
@@ -1020,7 +1033,13 @@ class Product extends \Opencart\System\Engine\Model {
 	 * $results = $this->model_catalog_product->getProducts($filter_data);
 	 */
 	public function getProducts(array $data = []): array {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "product` `p` LEFT JOIN `" . DB_PREFIX . "product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`)";
+		$sql = "SELECT `p`.*, `pd`.*";
+
+		if (!empty($data['filter_model'])) {
+			$sql .= ", `pc`.`product_code_id`, `pc`.`code`, `pc`.`value`";
+		}
+
+		$sql .= " FROM `" . DB_PREFIX . "product` `p` LEFT JOIN `" . DB_PREFIX . "product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`)";
 
 		if (!empty($data['filter_model'])) {
 			$sql .= " LEFT JOIN `" . DB_PREFIX . "product_code` `pc` ON (`p`.`product_id` = `pc`.`product_id`)";
@@ -1033,7 +1052,22 @@ class Product extends \Opencart\System\Engine\Model {
 		}
 
 		if (!empty($data['filter_name'])) {
-			$sql .= " AND LCASE(`pd`.`name`) LIKE '" . $this->db->escape(oc_strtolower($data['filter_name']) . '%') . "'";
+			$implode = [];
+
+			$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_name'])));
+			$words = array_filter($words);
+
+			foreach ($words as $word) {
+				$implode[] = "LCASE(`pd`.`name`) LIKE '%" . $this->db->escape(oc_strtolower($word)) . "%'";
+			}
+
+			if ($implode) {
+				if ($this->config->get('config_product_search_admin') == 'and') {
+					$sql .= " AND (" . implode(" AND ", $implode) . ")";
+				} else {
+					$sql .= " AND (" . implode(" OR ", $implode) . ")";
+				}
+			}
 		}
 
 		if (!empty($data['filter_model'])) {
@@ -1160,7 +1194,22 @@ class Product extends \Opencart\System\Engine\Model {
 		}
 
 		if (!empty($data['filter_name'])) {
-			$sql .= " AND LCASE(`pd`.`name`) LIKE '" . $this->db->escape(oc_strtolower($data['filter_name']) . '%') . "'";
+			$implode = [];
+
+			$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_name'])));
+			$words = array_filter($words);
+
+			foreach ($words as $word) {
+				$implode[] = "LCASE(`pd`.`name`) LIKE '%" . $this->db->escape(oc_strtolower($word)) . "%'";
+			}
+
+			if ($implode) {
+				if ($this->config->get('config_product_search_admin') == 'and') {
+					$sql .= " AND (" . implode(" AND ", $implode) . ")";
+				} else {
+					$sql .= " AND (" . implode(" OR ", $implode) . ")";
+				}
+			}
 		}
 
 		if (!empty($data['filter_model'])) {
@@ -2619,7 +2668,7 @@ class Product extends \Opencart\System\Engine\Model {
 	 *
 	 * @param int $product_id primary key of the product record
 	 *
-	 * @return array<int, string> seo url records that have product ID
+	 * @return array<int, array<int, string>> seo url records that have product ID
 	 *
 	 * @example
 	 *

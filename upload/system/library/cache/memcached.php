@@ -67,4 +67,15 @@ class Memcached {
 	public function delete(string $key): void {
 		$this->memcached->delete(CACHE_PREFIX . $key);
 	}
+
+	/**
+	 * Clear
+	 *
+	 * Clear all cache
+	 *
+	 * @return void
+	 */
+	public function clear(): void {
+		$this->memcached->flush();
+	}
 }

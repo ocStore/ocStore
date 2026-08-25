@@ -99,7 +99,7 @@ class SubscriptionPlan extends \Opencart\System\Engine\Model {
 	 * $this->model_catalog_subscription_plan->copySubscriptionPlan($subscription_plan_id);
 	 */
 	public function copySubscriptionPlan(int $subscription_plan_id): void {
-		$this->model_catalog_subscription_plan->addSubscriptionPlan($this->model_catalog_subscription_plan->getSubscriptionPlan($subscription_plan_id) + ['subscription_plan_description' => $this->model_catalog_subscription_plan->getDescription($subscription_plan_id)]);
+		$this->model_catalog_subscription_plan->addSubscriptionPlan($this->model_catalog_subscription_plan->getSubscriptionPlan($subscription_plan_id) + ['subscription_plan_description' => $this->model_catalog_subscription_plan->getDescriptions($subscription_plan_id)]);
 	}
 
 	/**

@@ -9,7 +9,6 @@ $_['text_install_success']            = 'Succès: Le répertoire d\'installation
 $_['text_storage']                    = 'Chemin de stockage';
 $_['text_storage_description']        = 'Il est très important de déplacer le répertoire de stockage en dehors du répertoire web (par exemple, public_html, www ou htdocs).';
 $_['text_storage_move']               = 'Déplacement de %s envers %s de %s fichiers de stockage';
-$_['text_storage_success']            = 'Succès: Le répertoire de stockage a été déplacé!';
 $_['text_storage_delete']             = 'Supprimer le répertoire de stockage précédent';
 $_['text_storage_delete_description'] = 'Le répertoire de stockage précédent doit être supprimé!';
 $_['text_storage_delete_success']     = 'Succès: Le répertoire de stockage précédent a été supprimé!';
@@ -23,7 +22,6 @@ $_['text_admin_delete_success']       = 'Succès: Le répertoire admin précéde
 $_['text_path']                       = 'Chemin';
 
 // Entrée
-$_['entry_path']                      = 'Chemin';
 $_['entry_path_current']              = 'Chemin Actuel';
 $_['entry_path_new']                  = 'Nouveau Chemin';
 $_['entry_name']                      = 'Nom du Répertoire';
@@ -44,4 +42,5 @@ $_['error_admin']                     = 'Attention: Le répertoire admin n\'exis
 $_['error_admin_allowed']             = 'Attention: Le nom de répertoire admin ne peut être utilisé!';
 $_['error_admin_exists']              = 'Attention: Le nom du répertoire admin existe déjà!';
 $_['error_writable']                  = 'Attention: Les fichiers config.php et admin/config.php doivent être rendus modifiables!';
+$_['error_writable_path']             = 'Attention: Le répertoire \'%s\' doit être modifiable!';
 $_['error_remove']                    = 'Attention: Le répertoire à supprimer n\'existe pas!';

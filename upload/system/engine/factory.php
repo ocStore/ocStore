@@ -53,7 +53,7 @@ class Factory {
 	 *
 	 * @param string $route
 	 *
-	 * @return \Opencart\System\Engine\Model
+	 * @return \Exception|\Opencart\System\Engine\Model
 	 */
 	public function model(string $route): object {
 		// Sanitize the call

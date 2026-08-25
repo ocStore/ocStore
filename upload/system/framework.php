@@ -8,7 +8,10 @@ $autoloader->register('Opencart\System', DIR_SYSTEM);
 //require_once(DIR_SYSTEM . 'helper/vendor.php');
 //oc_generate_vendor();
 
-require_once(DIR_SYSTEM . 'vendor.php');
+// use additional 3rd-party vendor autoloaders
+if (defined('DIR_STORAGE') && is_file(DIR_STORAGE . 'vendor/autoload.php')) {
+	require_once(DIR_STORAGE . 'vendor/autoload.php');
+}
 
 // Registry
 $registry = new \Opencart\System\Engine\Registry();
@@ -34,6 +37,12 @@ $registry->set('log', $log);
 
 // Error Handler
 set_error_handler(function(int $code, string $message, string $file, int $line) use ($log, $config) {
+	// PHP 8 compatible check for the @ suppression operator
+	if (!(error_reporting() & $code)) {
+		// Return false to let the standard PHP internal error handler take over (or do nothing)
+		return false;
+	}
+
 	switch ($code) {
 		case E_NOTICE:
 		case E_USER_NOTICE:
@@ -47,6 +56,10 @@ set_error_handler(function(int $code, string $message, string $file, int $line) 
 		case E_USER_ERROR:
 			$error = 'Fatal Error';
 			break;
+		case E_DEPRECATED:
+		case E_USER_DEPRECATED:
+			$error = 'Deprecated';
+			break;
 		default:
 			$error = 'Unknown';
 			break;
@@ -58,8 +71,10 @@ set_error_handler(function(int $code, string $message, string $file, int $line) 
 
 	if ($config->get('error_display')) {
 		echo '<b>' . $error . '</b>: ' . $message . ' in <b>' . $file . '</b> on line <b>' . $line . '</b>';
-	} else {
-		header('Location: ' . $config->get('error_page'));
+	} elseif ($error === 'Fatal Error' || $error === 'Unknown') {
+		if (!headers_sent()) {
+			header('Location: ' . $config->get('error_page'));
+		}
 		exit();
 	}
 
@@ -74,8 +89,8 @@ set_exception_handler(function(\Throwable $e) use ($log, $config): void {
 
 	foreach ($e->getTrace() as $key => $trace) {
 		$output .= 'Backtrace: ' . $key . "\n";
-		$output .= 'File: ' . $trace['file'] . "\n";
-		$output .= 'Line: ' . $trace['line'] . "\n";
+		$output .= 'File: ' . ($trace['file'] ?? 'unknown') . "\n";
+		$output .= 'Line: ' . ($trace['line'] ?? 'unknown') . "\n";
 
 		if (isset($trace['class'])) {
 			$output .= 'Class: ' . $trace['class'] . "\n";
@@ -139,8 +154,9 @@ $response->addHeader('Access-Control-Allow-Credentials: true');
 $response->addHeader('Access-Control-Max-Age: 1000');
 $response->addHeader('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Origin, Cache-Control, Pragma, Authorization, Accept, Accept-Encoding');
 $response->addHeader('Access-Control-Allow-Methods: PUT, POST, GET, OPTIONS, DELETE');
-$response->addHeader('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-$response->addHeader('Pragma: no-cache');
+header('Expires: Thu, 19 Nov 1981 08:52:00 GMT');
+header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+header('Pragma: no-cache');
 $response->setCompression((int)$config->get('response_compression'));
 
 // Database
@@ -168,8 +184,8 @@ if ($config->get('session_autostart')) {
 		'path'     => $config->get('session_path'),
 		'domain'   => $config->get('session_domain'),
 		'secure'   => $request->server['HTTPS'],
-		'httponly' => false,
-		'SameSite' => $config->get('session_samesite')
+		'httponly' => true,
+		'samesite' => $config->get('session_samesite')
 	];
 
 	setcookie($config->get('session_name'), $session->getId(), $option);

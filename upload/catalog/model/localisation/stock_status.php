@@ -54,15 +54,18 @@ class StockStatus extends \Opencart\System\Engine\Model {
 		}
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$key = md5($sql);

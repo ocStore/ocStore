@@ -44,16 +44,16 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 
 		$curl = curl_init(OPENCART_SERVER . 'index.php?route=api/upgrade');
 
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-		curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+		curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 
 		$response = curl_exec($curl);
 
 		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-		curl_close($curl);
+		unset($curl);
 
 		if ($status == 200) {
 			$response_info = json_decode($response, true);
@@ -121,9 +121,9 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 			$curl = curl_init('https://github.com/opencart/opencart/archive/' . $version . '.zip');
 
 			curl_setopt($curl, CURLOPT_USERAGENT, 'OpenCart ' . VERSION);
-			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-			curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-			curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
+			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+			curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+			curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
 			curl_setopt($curl, CURLOPT_TIMEOUT, 300);
 			curl_setopt($curl, CURLOPT_FILE, $handle);
 
@@ -137,7 +137,7 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 				$json['error'] = $this->language->get('error_download');
 			}
 
-			curl_close($curl);
+			unset($curl);
 		}
 
 		if (!$json) {
@@ -194,6 +194,11 @@ class Upgrade extends \Opencart\System\Engine\Controller {
 					if (substr($source, 0, strlen($remove)) == $remove) {
 						// Only extract the contents of the upload folder
 						$destination = str_replace('\\', '/', substr($source, strlen($remove)));
+
+						// Reject any entry that traverses outside the target directory
+						if (in_array('..', explode('/', $destination))) {
+							continue;
+						}
 
 						if (substr($destination, 0, 8) == 'install/') {
 							// Default copy location

@@ -1,5 +1,5 @@
 <?php
-namespace Opencart\catalog\Controller\Api;
+namespace Opencart\Catalog\Controller\Api;
 /**
  * Class Customer
  *

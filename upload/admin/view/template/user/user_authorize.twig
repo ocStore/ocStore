@@ -14,7 +14,7 @@
       {% if authorizes %}
         {% for authorize in authorizes %}
           <tr>
-            <td><a href="https://whatismyipaddress.com/ip/{{ user_login.ip }}" target="_blank">{{ authorize.ip }}</a></td>
+            <td><a href="https://whatismyipaddress.com/ip/{{ authorize.ip }}" target="_blank">{{ authorize.ip }}</a></td>
             <td>{{ authorize.user_agent }}</td>
             <td>{{ authorize.status }}</td>
             <td>{{ authorize.date_added }}</td>

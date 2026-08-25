@@ -34,9 +34,9 @@ class Handling extends \Opencart\System\Engine\Model {
 
 				foreach ($tax_rates as $tax_rate) {
 					if (!isset($taxes[$tax_rate['tax_rate_id']])) {
-						$taxes[$tax_rate['tax_rate_id']] = $tax_rate['amount'];
+						$taxes[(int)$tax_rate['tax_rate_id']] = (float)$tax_rate['amount'];
 					} else {
-						$taxes[$tax_rate['tax_rate_id']] += $tax_rate['amount'];
+						$taxes[(int)$tax_rate['tax_rate_id']] += (float)$tax_rate['amount'];
 					}
 				}
 			}

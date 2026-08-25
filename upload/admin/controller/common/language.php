@@ -93,16 +93,16 @@ class Language extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			$option = [
 				'expires'  => time() + 60 * 60 * 24 * 365 * 10,
-				'path'     => $this->config->get('session_path'),
 				'secure'   => $this->request->server['HTTPS'],
-				'SameSite' => $this->config->get('config_session_samesite')
+				'httponly' => true,
+				'samesite' => 'Lax'
 			];
 
 			setcookie('language', $code, $option);
 
-			if ($redirect && str_starts_with($redirect, $this->config->get('config_url'))) {
+			if ($redirect && str_starts_with($redirect, HTTP_SERVER)) {
 				$json['redirect'] = $redirect;
-			} else {
+			} elseif (isset($this->session->data['user_token'])) {
 				$json['redirect'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true);
 			}
 		}

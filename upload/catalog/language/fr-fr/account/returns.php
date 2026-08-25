@@ -19,7 +19,6 @@ $_['text_unopened']      = 'Unopened';
 $_['text_reason']        = 'Raison du Retour';
 $_['text_action']        = 'Action';
 $_['text_tbc']           = 'TBC';
-$_['text_history']       = 'Historique';
 $_['text_comment']       = 'Commentaires sur le Retour';
 $_['text_history']       = 'Historique des Retours';
 $_['text_no_results']    = 'Vous n\'avez effectué aucun retour précédent!';

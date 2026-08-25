@@ -14,7 +14,7 @@ class Basic extends \Opencart\System\Engine\Controller {
 	public function index(): string {
 		$this->load->language('extension/opencart/captcha/basic');
 
-		$data['route'] = (string)$this->request->get['route'];
+		$data['route'] = isset($this->request->get['route']) ? (string)$this->request->get['route'] : '';
 
 		$this->session->data['captcha'] = substr(oc_token(100), mt_rand(0, 94), 6);
 
@@ -29,7 +29,7 @@ class Basic extends \Opencart\System\Engine\Controller {
 	public function validate(): string {
 		$this->load->language('extension/opencart/captcha/basic');
 
-		if (!isset($this->session->data['captcha']) || !isset($this->request->post['captcha']) || ($this->session->data['captcha'] != $this->request->post['captcha'])) {
+		if (!isset($this->session->data['captcha']) || !isset($this->request->post['captcha']) || ($this->session->data['captcha'] !== $this->request->post['captcha'])) {
 			return $this->language->get('error_captcha');
 		} else {
 			return '';
@@ -65,12 +65,10 @@ class Basic extends \Opencart\System\Engine\Controller {
 		imagestring($image, 10, (int)(($width - (strlen($this->session->data['captcha']) * 9)) / 2), (int)(($height - 15) / 2), $this->session->data['captcha'], $black);
 
 		header('Content-type: image/jpeg');
-		header('Cache-Control: no-cache');
-		header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
 
 		imagejpeg($image);
 
-		imagedestroy($image);
+		unset($image);
 		exit();
 	}
 }

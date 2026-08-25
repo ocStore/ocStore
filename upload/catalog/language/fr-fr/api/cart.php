@@ -1,7 +1,10 @@
 <?php
 // Texte
-$_['text_success']       = 'Succès: Vous avez modifié votre panier!';
-$_['text_subscription']  = 'Abonnement';
+$_['text_success']               = 'Succès: Vous avez modifié votre panier!';
+$_['text_subscription']          = 'Abonnement';
+$_['text_subscription_trial']    = '%s tous les %d %s(s) pour %d paiement(s) puis ';
+$_['text_subscription_duration'] = '%s tous les %d %s(s) pour %d paiement(s)';
+$_['text_subscription_cancel']   = '%s tous les %d %s(s) jusqu\'à annulation';
 
 // Erreur
 $_['error_warning']      = 'Attention: Veuillez vérifier attentivement le panier pour détecter d\'éventuelles erreurs!';

@@ -31,9 +31,9 @@ class Reward extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * Delete Reward
+	 * Delete Rewards
 	 *
-	 * Delete customer reward record in the database.
+	 * Delete customer reward records in the database.
 	 *
 	 * @param int $customer_id primary key of the customer record
 	 * @param int $order_id    primary key of the order record
@@ -44,9 +44,9 @@ class Reward extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->load->model('account/reward');
 	 *
-	 * $this->model_account_reward->deleteReward($customer_id, $order_id);
+	 * $this->model_account_reward->deleteRewards($customer_id, $order_id);
 	 */
-	public function deleteReward(int $customer_id, int $order_id = 0): void {
+	public function deleteRewards(int $customer_id, int $order_id = 0): void {
 		$sql = "DELETE FROM `" . DB_PREFIX . "customer_reward` WHERE `customer_id` = '" . (int)$customer_id . "'";
 
 		if ($order_id) {
@@ -57,7 +57,7 @@ class Reward extends \Opencart\System\Engine\Model {
 	}
 
 	/**
-	 * Delete Reward By Order ID
+	 * Delete Rewards By Order ID
 	 *
 	 * Delete customer rewards by order record in the database.
 	 *
@@ -69,9 +69,9 @@ class Reward extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->load->model('account/reward');
 	 *
-	 * $this->model_account_reward->deleteRewardByOrderId($order_id);
+	 * $this->model_account_reward->deleteRewardsByOrderId($order_id);
 	 */
-	public function deleteRewardByOrderId(int $order_id): void {
+	public function deleteRewardsByOrderId(int $order_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "customer_reward` WHERE `order_id` = '" . (int)$order_id . "' AND `points` < 0");
 	}
 
@@ -120,15 +120,18 @@ class Reward extends \Opencart\System\Engine\Model {
 		}
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$query = $this->db->query($sql);

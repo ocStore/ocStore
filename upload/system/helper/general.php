@@ -22,17 +22,18 @@ function oc_get_ip(): string {
 	];
 
 	foreach ($headers as $header) {
-		if (array_key_exists($header, $_SERVER)) {
-			$ip = $_SERVER[$header];
+		if (!array_key_exists($header, $_SERVER)) {
+			continue;
+		}
 
-			// This line might or might not be used.
-			$ip = trim(explode(',', $ip)[0]);
+		$ip = trim(explode(',', $_SERVER[$header])[0]);
 
+		if ($ip !== '' && filter_var($ip, FILTER_VALIDATE_IP) !== false) {
 			return $ip;
 		}
 	}
 
-	return $_SERVER['REMOTE_ADDR'];
+	return $_SERVER['REMOTE_ADDR'] ?? '';
 }
 
 // Sting functions
@@ -97,45 +98,31 @@ function oc_strtolower(string $string): string {
 	return mb_strtolower($string);
 }
 
-// Pre PHP8 compatibility
-/*
- * @param string $string
- * @param string $find
+/**
+ * @param string $pattern
+ * @param int    $flags
  *
- * @return bool
+ * @return array<int, string>
  */
-if (!function_exists('str_starts_with')) {
-	function str_starts_with(string $string, string $find): bool {
-		$substring = substr($string, 0, strlen($find));
+function oc_glob(string $pattern, int $flags = 0): array {
+	if (strpos($pattern, '{') === false) {
+		$result = glob($pattern, $flags);
 
-		if ($substring === $find) {
-			return true;
-		} else {
-			return false;
+		return is_array($result) ? $result : [];
+	}
+
+	$matches = [];
+	if (preg_match('/\{([^}]+)\}/', $pattern, $m)) {
+		$options = explode(',', $m[1]);
+		foreach ($options as $opt) {
+			$newPattern = str_replace($m[0], $opt, $pattern);
+			// Now safe because oc_glob always returns an array
+			$matches = array_merge($matches, oc_glob($newPattern, $flags));
 		}
 	}
-}
 
-/*
- * @param string $string
- * @param string $find
- *
- * @return bool
- */
-if (!function_exists('str_ends_with')) {
-	function str_ends_with(string $string, string $find): bool {
-		return substr($string, -strlen($find)) === $find;
-	}
-}
+	$matches = array_unique($matches);
+	sort($matches);
 
-/*
- * @param string $string
- * @param string $find
- *
- * @return bool
- */
-if (!function_exists('str_contains')) {
-	function str_contains(string $string, string $find): bool {
-		return $find === '' || strpos($string, $find) !== false;
-	}
+	return $matches;
 }

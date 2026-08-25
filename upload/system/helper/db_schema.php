@@ -474,7 +474,7 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'link',
-				'type' => 'varchar(255)'
+				'type' => 'text'
 			],
 			[
 				'name' => 'image',
@@ -685,7 +685,7 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'description',
-				'type' => 'text'
+				'type' => 'mediumtext'
 			],
 			[
 				'name' => 'image',
@@ -950,7 +950,7 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'description',
-				'type' => 'text'
+				'type' => 'mediumtext'
 			],
 			[
 				'name' => 'image',
@@ -1230,7 +1230,7 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'description',
-				'type' => 'text'
+				'type' => 'mediumtext'
 			],
 			[
 				'name' => 'meta_title',
@@ -4118,7 +4118,7 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'setting',
-				'type' => 'text'
+				'type' => 'mediumtext'
 			]
 		],
 		'primary' => [
@@ -4646,6 +4646,12 @@ function oc_db_schema() {
 				'key'  => [
 					'email'
 				]
+			],
+			[
+				'name' => 'order_status_id',
+				'key'  => [
+					'order_status_id'
+				]
 			]
 		],
 		'engine'  => 'InnoDB',
@@ -5084,30 +5090,6 @@ function oc_db_schema() {
 				'type' => 'varchar(64)'
 			],
 			[
-				'name' => 'sku',
-				'type' => 'varchar(64)'
-			],
-			[
-				'name' => 'upc',
-				'type' => 'varchar(12)'
-			],
-			[
-				'name' => 'ean',
-				'type' => 'varchar(14)'
-			],
-			[
-				'name' => 'jan',
-				'type' => 'varchar(13)'
-			],
-			[
-				'name' => 'isbn',
-				'type' => 'varchar(17)'
-			],
-			[
-				'name' => 'mpn',
-				'type' => 'varchar(64)'
-			],
-			[
 				'name' => 'location',
 				'type' => 'varchar(128)'
 			],
@@ -5352,6 +5334,12 @@ function oc_db_schema() {
 				'key'  => [
 					'code'
 				]
+			],
+			[
+				'name' => 'product_id',
+				'key'  => [
+					'product_id'
+				]
 			]
 		],
 		'engine'  => 'InnoDB',
@@ -5376,7 +5364,7 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'description',
-				'type' => 'text'
+				'type' => 'mediumtext'
 			],
 			[
 				'name' => 'tag',
@@ -6503,7 +6491,7 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'data',
-				'type' => 'text'
+				'type' => 'mediumtext'
 			],
 			[
 				'name' => 'expire',
@@ -6549,7 +6537,7 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'value',
-				'type' => 'text'
+				'type' => 'mediumtext'
 			],
 			[
 				'name'    => 'serialized',

@@ -48,29 +48,38 @@ class Image {
 			exit('Error: PHP GD is not installed!');
 		}
 
-		if (is_file($file)) {
-			$this->file = $file;
-
-			$info = getimagesize($file);
-
-			$this->width = $info[0];
-			$this->height = $info[1];
-			$this->bits = $info['bits'] ?? '';
-			$this->mime = $info['mime'] ?? '';
-
-			if ($this->mime == 'image/gif') {
-				$this->image = imagecreatefromgif($file);
-			} elseif ($this->mime == 'image/png') {
-				$this->image = imagecreatefrompng($file);
-
-				imageinterlace($this->image, false);
-			} elseif ($this->mime == 'image/jpeg') {
-				$this->image = imagecreatefromjpeg($file);
-			} elseif ($this->mime == 'image/webp') {
-				$this->image = imagecreatefromwebp($file);
-			}
-		} else {
+		if (!is_file($file) || !is_readable($file)) {
 			throw new \Exception('Error: Could not load image ' . $file . '!');
+		}
+
+		$info = getimagesize($file);
+
+		if ($info === false) {
+			throw new \Exception('Error: Could not read image dimensions for ' . $file . '!');
+		}
+
+		$this->file = $file;
+		$this->width = (int)$info[0];
+		$this->height = (int)$info[1];
+		$this->bits = isset($info['bits']) ? (string)$info['bits'] : '';
+		$this->mime = $info['mime'] ?? '';
+
+		if ($this->mime == 'image/gif') {
+			$this->image = imagecreatefromgif($file);
+		} elseif ($this->mime == 'image/png') {
+			$this->image = imagecreatefrompng($file);
+
+			if ($this->image) {
+				imageinterlace($this->image, false);
+			}
+		} elseif ($this->mime == 'image/jpeg') {
+			$this->image = imagecreatefromjpeg($file);
+		} elseif ($this->mime == 'image/webp') {
+			$this->image = imagecreatefromwebp($file);
+		}
+
+		if (!$this->image) {
+			throw new \Exception('Error: Could not decode image ' . $file . '!');
 		}
 	}
 
@@ -139,7 +148,7 @@ class Image {
 	public function save(string $file, int $quality = 90): void {
 		$info = pathinfo($file);
 
-		$extension = strtolower($info['extension']);
+		$extension = isset($info['extension']) ? strtolower($info['extension']) : '';
 
 		if (is_object($this->image) || is_resource($this->image)) {
 			if ($extension == 'jpeg' || $extension == 'jpg') {
@@ -152,7 +161,7 @@ class Image {
 				imagewebp($this->image, $file);
 			}
 
-			imagedestroy($this->image);
+			$this->image = null;
 		}
 	}
 
@@ -218,7 +227,7 @@ class Image {
 		imagefilledrectangle($this->image, 0, 0, $width, $height, $background);
 
 		imagecopyresampled($this->image, $image_old, $xpos, $ypos, 0, 0, $new_width, $new_height, $this->width, $this->height);
-		imagedestroy($image_old);
+		unset($image_old);
 
 		$this->width = $width;
 		$this->height = $height;
@@ -280,7 +289,7 @@ class Image {
 		imagesavealpha($this->image, true);
 		imagecopy($this->image, $watermark->getImage(), $watermark_pos_x, $watermark_pos_y, 0, 0, $watermark->getWidth(), $watermark->getHeight());
 
-		imagedestroy($watermark->getImage());
+		// imagedestroy($watermark->getImage());
 	}
 
 	/**
@@ -298,7 +307,7 @@ class Image {
 		$this->image = imagecreatetruecolor($bottom_x - $top_x, $bottom_y - $top_y);
 
 		imagecopy($this->image, $image_old, 0, 0, $top_x, $top_y, $this->width, $this->height);
-		imagedestroy($image_old);
+		unset($image_old);
 
 		$this->width = $bottom_x - $top_x;
 		$this->height = $bottom_y - $top_y;

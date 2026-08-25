@@ -143,7 +143,7 @@ class Security extends \Opencart\System\Engine\Controller {
 				$next = array_shift($directory);
 
 				if (is_dir($next)) {
-					foreach (glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}', GLOB_BRACE) as $file) {
+					foreach (oc_glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}') as $file) {
 						// If directory add to path array
 						if (is_dir($file)) {
 							$directory[] = $file;
@@ -191,13 +191,13 @@ class Security extends \Opencart\System\Engine\Controller {
 		}
 
 		if (isset($this->request->get['name'])) {
-			$name = preg_replace('/[^a-zA-Z0-9_\.]/', '', basename(html_entity_decode(trim($this->request->get['name']), ENT_QUOTES, 'UTF-8')));
+			$name = preg_replace('/[^a-zA-Z0-9_\.-]/', '', basename(html_entity_decode(trim($this->request->get['name']), ENT_QUOTES, 'UTF-8')));
 		} else {
 			$name = '';
 		}
 
 		if (isset($this->request->get['path'])) {
-			$path = preg_replace('/[^a-zA-Z0-9_\:\/\.]/', '', html_entity_decode(trim($this->request->get['path']), ENT_QUOTES, 'UTF-8'));
+			$path = preg_replace('/[^a-zA-Z0-9_\:\/\.-]/', '', html_entity_decode(trim($this->request->get['path']), ENT_QUOTES, 'UTF-8'));
 		} else {
 			$path = '';
 		}
@@ -215,19 +215,41 @@ class Security extends \Opencart\System\Engine\Controller {
 				$json['error'] = $this->language->get('error_storage');
 			}
 
-			// Check the chosen directory is not in the public webspace
-			$root = str_replace('\\', '/', realpath($this->request->server['DOCUMENT_ROOT'] . '/../'));
+			if (!$json) {
+				// Check the chosen directory is not in the public webspace
+				$root = str_replace('\\', '/', realpath($this->request->server['DOCUMENT_ROOT']));
 
-			if ((substr($base_new, 0, strlen($root)) != $root) || ($root == $base_new)) {
-				$json['error'] = $this->language->get('error_storage_root');
+				if (!str_starts_with($root, rtrim($path, '/') . '/')) {
+					$json['error'] = $this->language->get('error_storage_root');
+				}
 			}
 
-			if (!str_starts_with($name, 'storage')) {
-				$json['error'] = $this->language->get('error_storage_name');
+			if (!$json) {
+				// check the storage name starts with 'storage'
+				if (!str_starts_with($name, 'storage')) {
+					$json['error'] = $this->language->get('error_storage_name');
+				}
 			}
 
-			if (!is_writable(DIR_OPENCART . 'config.php') || !is_writable(DIR_APPLICATION . 'config.php')) {
-				$json['error'] = $this->language->get('error_writable');
+			if (!$json) {
+				// check the config files are writeable, needed for modifications
+				if (!is_writable(DIR_OPENCART . 'config.php') || !is_writable(DIR_APPLICATION . 'config.php')) {
+					$json['error'] = $this->language->get('error_writable');
+				}
+			}
+
+			if (!$json) {
+				if (!is_dir($base_new)) {
+					// check the new storage folder can be created
+					if (!is_writable($path)) {
+						$json['error'] = str_replace('%s', $path, $this->language->get('error_writable_path'));
+					}
+				} else {
+					// check the new storage folder can be written to
+					if (!is_writable($base_new)) {
+						$json['error'] = str_replace('%s', $path, $this->language->get('error_writable_path'));
+					}
+				}
 			}
 		}
 
@@ -241,7 +263,7 @@ class Security extends \Opencart\System\Engine\Controller {
 			while (count($directory) != 0) {
 				$next = array_shift($directory);
 
-				foreach (glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}', GLOB_BRACE) as $file) {
+				foreach (oc_glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}') as $file) {
 					// If directory add to path array
 					if (is_dir($file)) {
 						$directory[] = $file;
@@ -408,7 +430,7 @@ class Security extends \Opencart\System\Engine\Controller {
 			while (count($directory) != 0) {
 				$next = array_shift($directory);
 
-				foreach (glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}', GLOB_BRACE) as $file) {
+				foreach (oc_glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}') as $file) {
 					// If directory, add to path array
 					if (is_dir($file)) {
 						$directory[] = $file;
@@ -565,7 +587,7 @@ class Security extends \Opencart\System\Engine\Controller {
 					$next = array_shift($directory);
 
 					if (is_dir($next)) {
-						foreach (glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}', GLOB_BRACE) as $file) {
+						foreach (oc_glob(rtrim($next, '/') . '/{*,.[!.]*,..?*}') as $file) {
 							// If directory add to path array
 							if (is_dir($file)) {
 								$directory[] = $file;

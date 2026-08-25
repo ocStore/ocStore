@@ -379,6 +379,8 @@ class Order extends \Opencart\System\Engine\Controller {
 
 			$data['continue'] = $this->url->link('account/order', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token']);
 
+			$data['language'] = $this->config->get('config_language');
+
 			$data['column_left'] = $this->load->controller('common/column_left');
 			$data['column_right'] = $this->load->controller('common/column_right');
 			$data['content_top'] = $this->load->controller('common/content_top');
@@ -450,7 +452,7 @@ class Order extends \Opencart\System\Engine\Controller {
 
 		foreach ($results as $result) {
 			$data['histories'][] = [
-				'comment'    => nl2br($result['comment']),
+				'comment'    => $result['notify'] ? nl2br($result['comment']) : '',
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added']))
 			] + $result;
 		}

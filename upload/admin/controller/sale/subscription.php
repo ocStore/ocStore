@@ -505,21 +505,17 @@ class Subscription extends \Opencart\System\Engine\Controller {
 			$data['customer_edit'] = '';
 		}
 
-		// Store
-		$data['stores'] = [];
+		// Stores
+		$stores = [];
 
-		$data['stores'][] = [
+		$stores[] = [
 			'store_id' => 0,
-			'name'     => $this->config->get('config_name')
+			'name'     => $this->language->get('text_default')
 		];
 
 		$this->load->model('setting/store');
 
-		$results = $this->model_setting_store->getStores();
-
-		foreach ($results as $result) {
-			$data['stores'][] = $result;
-		}
+		$data['stores'] = array_merge($stores, $this->model_setting_store->getStores());
 
 		if (!empty($subscription_info)) {
 			$data['store_id'] = $subscription_info['store_id'];
@@ -711,7 +707,7 @@ class Subscription extends \Opencart\System\Engine\Controller {
 			$data['shipping_zones'] = $this->model_localisation_zone->getZonesByCountryId($data['shipping_country_id']);
 		}
 
-		// Shipping method
+		// Shipping Method
 		if (!empty($subscription_info['shipping_method'])) {
 			$data['shipping_method_name'] = $subscription_info['shipping_method']['name'];
 			$data['shipping_method_code'] = $subscription_info['shipping_method']['code'];
@@ -757,7 +753,7 @@ class Subscription extends \Opencart\System\Engine\Controller {
 			if ($extension_info && $this->user->hasPermission('access', 'extension/' . $extension_info['extension'] . '/payment/' . $extension_info['code'])) {
 				$output = $this->load->controller('extension/payment/' . $order_info['payment_code'] . '.subscription');
 
-				if (!$output instanceof \Exception) {
+				if ($output && !$output instanceof \Exception) {
 					$this->load->language('extension/' . $extension_info['extension'] . '/payment/' . $extension_info['code'], 'extension');
 
 					$data['tabs'][] = [
@@ -821,19 +817,19 @@ class Subscription extends \Opencart\System\Engine\Controller {
 	 * $curl = curl_init();
 	 *
 	 * curl_setopt($curl, CURLOPT_URL, 'https://' . $domain . $path . 'index.php?route=api/api' . $url);
-	 * curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	 * curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	 * curl_setopt($curl, CURLOPT_HEADER, false);
-	 * curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+	 * curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 	 * curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
 	 * curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-	 * curl_setopt($curl, CURLOPT_POST, 1);
+	 * curl_setopt($curl, CURLOPT_POST, true);
 	 * curl_setopt($curl, CURLOPT_POSTFIELDS, $_POST);
 	 *
 	 * $response = curl_exec($curl);
 	 *
 	 * $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 	 *
-	 * curl_close($curl);
+	 * unset($curl);
 	 *
 	 * if ($status == 200) {
 	 *      $response_info = json_decode($response, true);
@@ -872,7 +868,7 @@ class Subscription extends \Opencart\System\Engine\Controller {
 			$currency = (string)$this->config->get('config_currency');
 		}
 
-		if (!$this->user->hasPermission('modify', 'sale/order')) {
+		if (!$this->user->hasPermission('modify', 'sale/subscription')) {
 			$json['error'] = $this->language->get('error_permission');
 		}
 

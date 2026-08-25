@@ -11,7 +11,7 @@ class Related extends \Opencart\System\Engine\Controller {
 	/**
 	 * Index
 	 *
-	 * @return ?\Opencart\System\Engine\Action
+	 * @return string
 	 */
 	public function index(): string {
 		$this->load->language('product/related');
@@ -23,6 +23,12 @@ class Related extends \Opencart\System\Engine\Controller {
 		}
 
 		$data['products'] = [];
+
+		// Product
+		$this->load->model('catalog/product');
+
+		// Image
+		$this->load->model('tool/image');
 
 		$results = $this->model_catalog_product->getRelated($product_id);
 

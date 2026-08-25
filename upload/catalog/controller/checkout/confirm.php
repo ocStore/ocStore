@@ -50,17 +50,18 @@ class Confirm extends \Opencart\System\Engine\Controller {
 				$status = false;
 			}
 		} else {
+			unset($this->session->data['order_id']);
 			unset($this->session->data['shipping_address']);
 			unset($this->session->data['shipping_method']);
 			unset($this->session->data['shipping_methods']);
 		}
 
-		// Validate has payment address if required
+		// Validate has payment address, if required
 		if ($this->config->get('config_checkout_payment_address') && !isset($this->session->data['payment_address'])) {
 			$status = false;
 		}
 
-		// Validate payment methods
+		// Validate payment method
 		if (!isset($this->session->data['payment_method'])) {
 			$status = false;
 		}
@@ -335,6 +336,8 @@ class Confirm extends \Opencart\System\Engine\Controller {
 		} else {
 			$code = '';
 		}
+
+		$this->load->model('setting/extension');
 
 		$extension_info = $this->model_setting_extension->getExtensionByCode('payment', $code);
 

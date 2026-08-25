@@ -29,6 +29,12 @@ class Error extends \Opencart\System\Engine\Controller {
 	 * @return bool
 	 */
 	public function error(int $code, string $message, string $file, int $line): bool {
+		// PHP 8 compatible check for the @ suppression operator
+		if (!(error_reporting() & $code)) {
+			// Return false to let the standard PHP internal error handler take over (or do nothing)
+			return false;
+		}
+
 		switch ($code) {
 			case E_NOTICE:
 			case E_USER_NOTICE:
@@ -42,6 +48,10 @@ class Error extends \Opencart\System\Engine\Controller {
 			case E_USER_ERROR:
 				$error = 'Fatal Error';
 				break;
+			case E_DEPRECATED:
+			case E_USER_DEPRECATED:
+				$error = 'Deprecated';
+				break;
 			default:
 				$error = 'Unknown';
 				break;
@@ -53,7 +63,7 @@ class Error extends \Opencart\System\Engine\Controller {
 
 		if ($this->config->get('config_error_display')) {
 			echo '<b>' . $error . '</b>: ' . $message . ' in <b>' . $file . '</b> on line <b>' . $line . '</b>';
-		} else {
+		} elseif ($error === 'Fatal Error' || $error === 'Unknown') {
 			header('Location: ' . $this->config->get('error_page'));
 			exit();
 		}
@@ -75,8 +85,8 @@ class Error extends \Opencart\System\Engine\Controller {
 
 		foreach ($e->getTrace() as $key => $trace) {
 			$output .= 'Backtrace: ' . $key . "\n";
-			$output .= 'File: ' . $trace['file'] . "\n";
-			$output .= 'Line: ' . $trace['line'] . "\n";
+			$output .= 'File: ' . ($trace['file'] ?? 'unknown') . "\n";
+			$output .= 'Line: ' . ($trace['line'] ?? 'unknown') . "\n";
 
 			if (isset($trace['class'])) {
 				$output .= 'Class: ' . $trace['class'] . "\n";

@@ -7,7 +7,7 @@ namespace Opencart\Catalog\Controller\Startup;
  */
 class SeoUrl extends \Opencart\System\Engine\Controller {
 	/**
-	 * @var array<string, string>
+	 * @var array<int, array<string, array<string, string>>>
 	 */
 	private array $data = [];
 
@@ -65,16 +65,20 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 	public function rewrite(string $link): string {
 		$url_info = parse_url(str_replace('&amp;', '&', $link));
 
+		if (!is_array($url_info)) {
+			return $link;
+		}
+
 		// Build the url
 		$url = '';
 
-		if ($url_info['scheme']) {
+		if (!empty($url_info['scheme'])) {
 			$url .= $url_info['scheme'];
 		}
 
 		$url .= '://';
 
-		if ($url_info['host']) {
+		if (!empty($url_info['host'])) {
 			$url .= $url_info['host'];
 		}
 
@@ -82,7 +86,11 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 			$url .= ':' . $url_info['port'];
 		}
 
-		parse_str($url_info['query'], $query);
+		$query = [];
+
+		if (!empty($url_info['query'])) {
+			parse_str($url_info['query'], $query);
+		}
 
 		$language_id = $this->config->get('config_language_id');
 
@@ -90,7 +98,7 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 		$paths = [];
 
 		// Parse the query into its separate parts
-		$parts = explode('&', $url_info['query']);
+		$parts = !empty($url_info['query']) ? explode('&', $url_info['query']) : [];
 
 		foreach ($parts as $part) {
 			$pair = explode('=', $part);
@@ -127,7 +135,7 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 		array_multisort($sort_order, SORT_ASC, $paths);
 
 		// Build the path
-		$url .= str_replace('/index.php', '', $url_info['path']);
+		$url .= str_replace('/index.php', '', $url_info['path'] ?? '');
 
 		foreach ($paths as $result) {
 			$url .= '/' . $result['keyword'];

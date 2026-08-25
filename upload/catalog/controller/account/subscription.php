@@ -318,6 +318,9 @@ class Subscription extends \Opencart\System\Engine\Controller {
 
 			$this->load->model('catalog/product');
 
+			// Upload
+			$this->load->model('tool/upload');
+
 			$results = $this->model_account_subscription->getProducts($subscription_id);
 
 			foreach ($results as $result) {
@@ -360,7 +363,7 @@ class Subscription extends \Opencart\System\Engine\Controller {
 				$data['description'] .= sprintf($this->language->get('text_subscription_trial'), $trial_price, $trial_cycle, $trial_frequency, $trial_duration);
 			}
 
-			$price = $this->currency->format($subscription_info['price'] + ($this->config->get('config_tax') ? $result['trial_tax'] : 0), $subscription_info['currency']);
+			$price = $this->currency->format($subscription_info['price'] + ($this->config->get('config_tax') ? $subscription_info['tax'] : 0), $subscription_info['currency']);
 			$cycle = $subscription_info['cycle'];
 			$frequency = $this->language->get('text_' . $subscription_info['frequency']);
 			$duration = $subscription_info['duration'];
@@ -588,7 +591,7 @@ class Subscription extends \Opencart\System\Engine\Controller {
 			$data['orders'][] = [
 				'total'      => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
-				'view'       => $this->url->link('account/subscription.order', 'customer_token=' . $this->session->data['customer_token'] . '&order_id=' . $result['order_id'] . '&page={page}')
+				'view'       => $this->url->link('account/order.info', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token'] . '&order_id=' . $result['order_id'])
 			] + $result;
 		}
 

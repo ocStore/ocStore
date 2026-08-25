@@ -17,10 +17,6 @@ class Customer {
 	/**
 	 * @var object
 	 */
-	private object $request; // Do not add namespace as it stops devs being able to extend classes
-	/**
-	 * @var object
-	 */
 	private object $session;
 	/**
 	 * @var int
@@ -67,7 +63,6 @@ class Customer {
 	public function __construct(\Opencart\System\Engine\Registry $registry) {
 		$this->db = $registry->get('db');
 		$this->config = $registry->get('config');
-		$this->request = $registry->get('request');
 		$this->session = $registry->get('session');
 
 		if (isset($this->session->data['customer_id'])) {

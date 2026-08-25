@@ -42,7 +42,7 @@ class Customer extends \Opencart\System\Engine\Model {
 	/**
 	 * Get Total Customers By Week
 	 *
-	 * @return array<int, array<string, int>>
+	 * @return array<int, array<string, mixed>>
 	 *
 	 * @example
 	 *
@@ -77,7 +77,7 @@ class Customer extends \Opencart\System\Engine\Model {
 	/**
 	 * Get Total Customers By Month
 	 *
-	 * @return array<int, array<string, int>>
+	 * @return array<int, array<string, mixed>>
 	 *
 	 * @example
 	 *
@@ -110,7 +110,7 @@ class Customer extends \Opencart\System\Engine\Model {
 	/**
 	 * Get Total Customers By Year
 	 *
-	 * @return array<int, array<string, int>>
+	 * @return array<int, array<string, mixed>>
 	 *
 	 * @example
 	 *
@@ -189,15 +189,18 @@ class Customer extends \Opencart\System\Engine\Model {
 		}
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$query = $this->db->query($sql);
@@ -295,15 +298,18 @@ class Customer extends \Opencart\System\Engine\Model {
 		$sql = "SELECT `t`.`customer_id`, `t`.`customer`, `t`.`email`, `t`.`customer_group`, `t`.`status`, COUNT(DISTINCT `t`.`order_id`) AS `orders`, SUM(`t`.`products`) AS `products`, SUM(`t`.`total`) AS `total` FROM (" . $sql . ") AS `t` GROUP BY `t`.`customer_id` ORDER BY `total` DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$query = $this->db->query($sql);
@@ -377,15 +383,18 @@ class Customer extends \Opencart\System\Engine\Model {
 		$sql .= " GROUP BY `cr`.`customer_id` ORDER BY `points` DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$query = $this->db->query($sql);
@@ -469,15 +478,18 @@ class Customer extends \Opencart\System\Engine\Model {
 		$sql .= " ORDER BY `ca`.`date_added` DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$query = $this->db->query($sql);
@@ -569,15 +581,18 @@ class Customer extends \Opencart\System\Engine\Model {
 		$sql .= " ORDER BY `cs`.`date_added` DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+			$start = isset($data['start']) ? (int)$data['start'] : 0;
+			$limit = isset($data['limit']) ? (int)$data['limit'] : 20;
+
+			if ($start < 0) {
+				$start = 0;
 			}
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			if ($limit < 1) {
+				$limit = 20;
 			}
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			$sql .= " LIMIT " . $start . "," . $limit;
 		}
 
 		$query = $this->db->query($sql);

@@ -34,12 +34,10 @@ class Reward extends \Opencart\System\Engine\Model {
 					}
 				}
 
-				$points = min($points, $points_total);
-
 				foreach ($this->cart->getProducts() as $product) {
 					$discount = 0;
 
-					if ($product['points']) {
+					if ($product['points'] && $points_total) {
 						$discount = $product['total'] * ($this->session->data['reward'] / $points_total);
 
 						if ($product['tax_class_id']) {
@@ -47,7 +45,13 @@ class Reward extends \Opencart\System\Engine\Model {
 
 							foreach ($tax_rates as $tax_rate) {
 								if ($tax_rate['type'] == 'P') {
-									$taxes[$tax_rate['tax_rate_id']] -= $tax_rate['amount'];
+									$tax_rate_id = (int)$tax_rate['tax_rate_id'];
+
+									if (!isset($taxes[$tax_rate_id])) {
+										$taxes[$tax_rate_id] = 0.0;
+									}
+
+									$taxes[$tax_rate_id] -= (float)$tax_rate['amount'];
 								}
 							}
 						}
@@ -111,6 +115,6 @@ class Reward extends \Opencart\System\Engine\Model {
 	public function unconfirm(array $order_info): void {
 		$this->load->model('account/reward');
 
-		$this->model_account_reward->deleteRewardByOrderId($order_info['order_id']);
+		$this->model_account_reward->deleteRewardsByOrderId($order_info['order_id']);
 	}
 }

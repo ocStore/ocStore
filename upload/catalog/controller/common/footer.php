@@ -69,7 +69,7 @@ class Footer extends \Opencart\System\Engine\Controller {
 			$this->load->model('tool/online');
 
 			if (isset($this->request->server['HTTP_HOST']) && isset($this->request->server['REQUEST_URI'])) {
-				$url = ($this->request->server['HTTPS'] ? 'https://' : 'http://') . $this->request->server['HTTP_HOST'] . $this->request->server['REQUEST_URI'];
+				$url = (!empty($this->request->server['HTTPS']) ? 'https://' : 'http://') . $this->request->server['HTTP_HOST'] . $this->request->server['REQUEST_URI'];
 			} else {
 				$url = '';
 			}

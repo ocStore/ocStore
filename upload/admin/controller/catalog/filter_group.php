@@ -210,6 +210,8 @@ class FilterGroup extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('catalog/filter_group.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('catalog/filter_group', 'user_token=' . $this->session->data['user_token'] . $url);
 
+		$filter_group_info = [];
+
 		if (isset($this->request->get['filter_group_id'])) {
 			$this->load->model('catalog/filter_group');
 

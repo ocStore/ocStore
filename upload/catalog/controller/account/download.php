@@ -53,32 +53,22 @@ class Download extends \Opencart\System\Engine\Controller {
 
 		$results = $this->model_account_download->getDownloads(($page - 1) * $limit, $limit);
 
+		$suffix = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
 		foreach ($results as $result) {
 			if (is_file(DIR_DOWNLOAD . $result['filename'])) {
-				$size = filesize(DIR_DOWNLOAD . $result['filename']);
+				$size = (float)filesize(DIR_DOWNLOAD . $result['filename']);
 
 				$i = 0;
 
-				$suffix = [
-					'B',
-					'KB',
-					'MB',
-					'GB',
-					'TB',
-					'PB',
-					'EB',
-					'ZB',
-					'YB'
-				];
-
-				while (($size / 1024) > 1) {
+				while (($size / 1024) > 1 && $i < count($suffix) - 1) {
 					$size /= 1024;
 					$i++;
 				}
 
 				$data['downloads'][] = [
 					'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
-					'size'       => round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i],
+					'size'       => round($size, 2) . $suffix[$i],
 					'href'       => $this->url->link('account/download.download', 'language=' . $this->config->get('config_language') . '&customer_token=' . $this->session->data['customer_token'] . '&download_id=' . $result['download_id'])
 				] + $result;
 			}

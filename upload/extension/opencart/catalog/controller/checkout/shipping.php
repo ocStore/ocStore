@@ -55,9 +55,9 @@ class Shipping extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		$required = [
-			'postcode',
-			'country_id',
-			'zone_id'
+			'postcode'   => '',
+			'country_id' => 0,
+			'zone_id'    => 0
 		];
 
 		$post_info = $this->request->post + $required;

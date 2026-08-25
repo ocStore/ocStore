@@ -50,7 +50,7 @@ $_['column_total']                = 'Разом';
 $_['column_comment']              = 'Коментар';
 $_['column_date_added']           = 'Дата додання';
 $_['button_cancel']               = 'Скасувати підписку';
-$_['error_subscription']          = 'Підписку не знайдено!';
+$_['error_subscription']          = 'Підписку не знайдено';
 $_['error_duration']              = 'Підписку не можна скасувати до виконання ще %s замовлень';
 $_['error_canceled']              = 'Підписку вже скасовано';
 

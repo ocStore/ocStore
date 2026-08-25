@@ -15,8 +15,8 @@ $_['text_activity_forgotten']      = '<a href="customer_id=%d">%s</a> - запи
 $_['text_activity_address_add']    = '<a href="customer_id=%d">%s</a> - додана нова адреса.';
 $_['text_activity_address_edit']   = '<a href="customer_id=%d">%s</a> - оновлена адреса.';
 $_['text_activity_address_delete'] = '<a href="customer_id=%d">%s</a> - видалена одна з адрес.';
-$_['text_activity_return_account'] = '<a href="customer_id=%d">%s</a> - запит повернення товару.';
-$_['text_activity_return_guest']   = '%s - запит повернення товару.';
+$_['text_activity_return_account'] = '<a href="customer_id=%d">%s</a> оформив <a href="return_id=%d">повернення товару</a>';
+$_['text_activity_return_guest']   = '%s оформив <a href="return_id=%d">повернення товару</a>';
 $_['text_activity_order_account']  = '<a href="customer_id=%d">%s</a> <a href="order_id=%d"> - нове замовлення</a>.';
 $_['text_activity_order_guest']    = '%s <a href="order_id=%d"> - нове замовлення</a>.';
 $_['text_activity_affiliate_add'] = '<a href="customer_id=%d">%s</a> - реєстрація облікового запису.';

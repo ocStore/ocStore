@@ -150,4 +150,4 @@ $_['error_keyword']           = 'SEO URL має містити від 1 до 64 
 $_['error_keyword_exists']    = 'SEO URL має бути унікальним';
 $_['error_keyword_character'] = 'SEO URL може містити тільки символи a-z, 0-9, - та _';
 $_['error_required']         = '%s  - обов’язкове поле';
-$_['error_option_value']     = 'Необхідно вказати значення опції для %s!';
+$_['error_option_value']     = 'Необхідно вказати значення опції для %s';

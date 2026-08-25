@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title'] = 'Виникла помилка!';
+$_['heading_title'] = 'Виникла помилка';
 
 // Text
 $_['text_home']     = 'Головна';

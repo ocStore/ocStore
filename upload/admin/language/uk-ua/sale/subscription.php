@@ -22,7 +22,6 @@ $_['text_subscription_plan']     = 'План підписки';
 $_['text_product']               = 'Товар';
 $_['text_quantity']              = 'Кількість';
 
-$_['text_subscription']          = 'Підписка';
 $_['text_trial']                 = 'Пробний період';
 $_['text_subscription']          = 'Підписка';
 $_['text_subscription_trial']    = 'Вартість: %s; Періодичність: %d %s; Кількість платежів: %d;  Далі,  ';

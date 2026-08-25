@@ -16,5 +16,4 @@ $_['text_account']      = 'Особистий кабінет';
 $_['text_order']        = 'Історія замовлень';
 $_['text_wishlist']     = 'Список бажань';
 $_['text_newsletter']   = 'Розсилка новин';
-$_['text_powered']      = '%s &copy; %s';
 $_['text_powered']      = 'Працює на <a target="_blank" href="https://ocstore.com/?utm_source=ocstore4_install">ocStore</a><br /> %s &copy; %s';

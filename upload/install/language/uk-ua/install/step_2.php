@@ -33,7 +33,7 @@ $_['text_unwritable']        = 'Не доступний для запису';
 $_['text_missing']           = 'Відсутній';
 
 // Error
-$_['error_version']          = 'Для роботи OpenCart потрібно використовувати PHP8 або вище';
+$_['error_version']          = 'Для роботи OpenCart потрібен PHP 8.1 або новіший';
 $_['error_open_basedir']     = 'open_basedir повинен дозволяти доступ до %s';
 $_['error_file_upload']      = 'file_uploads має бути включене';
 $_['error_session']          = 'OpenCart не працюватиме з увімкненим session.auto_start';

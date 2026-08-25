@@ -10,7 +10,7 @@ $_['text_sass_success'] = 'Кеш SASS очищений';
 $_['text_success']     = 'Налаштування змінені';
 $_['text_theme']       = 'Шаблон';
 $_['text_sass']        = 'SASS';
-$_['text_cache']       = 'Ви очистили кеш %s';
+$_['text_cache']       = 'Кеш';
 
 // Column
 $_['column_component'] = 'Компонент';

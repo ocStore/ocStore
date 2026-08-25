@@ -34,6 +34,7 @@ $_['entry_shipping']      = 'Безкоштовна доставка';
 $_['entry_total']         = 'Сума';
 $_['entry_category']      = 'Категорії';
 $_['entry_product']       = 'Товари';
+$_['entry_date']          = 'Дати';
 $_['entry_date_start']    = 'Дата початку';
 $_['entry_date_end']      = 'Дата завершення';
 $_['entry_uses_total']    = 'Кількість застосувань купона';

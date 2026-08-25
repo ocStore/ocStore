@@ -14,4 +14,9 @@ $_['entry_confirm']  = 'Підтвердіть пароль';
 // Error
 $_['error_token']    = 'Маркер пароля недійсний';
 $_['error_password'] = 'Пароль має містити від 4 до 20 символів';
+$_['error_password_uppercase'] = 'велика літера';
+$_['error_password_lowercase'] = 'мала літера';
+$_['error_password_number'] = 'цифра';
+$_['error_password_symbol'] = 'символ';
+$_['error_password_length'] = 'Пароль повинен містити від %d до 40 символів!';
 $_['error_confirm']  = 'Паролі не збігаються';

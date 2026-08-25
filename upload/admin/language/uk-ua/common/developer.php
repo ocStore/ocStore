@@ -1,6 +1,10 @@
 <?php
 // Heading
 $_['heading_title']    = 'Налаштування розробника';
+$_['text_developer_success'] = 'Налаштування розробника збережені';
+$_['text_cache_success'] = 'Кеш очищений';
+$_['text_theme_success'] = 'Кеш теми очищений';
+$_['text_sass_success'] = 'Кеш SASS очищений';
 
 // Text
 $_['text_success']     = 'Налаштування змінені';

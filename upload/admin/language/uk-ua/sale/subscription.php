@@ -10,7 +10,10 @@ $_['text_edit']                  = 'Підписка (#%s)';
 $_['text_filter']                = 'Фільтри';
 
 $_['text_date_added']            = 'Дата додання';
+$_['text_order_id']              = '№ замовлення';
 $_['text_order']                 = '№ замовлення';
+$_['text_product_add']           = 'Додати товар';
+$_['text_model']                 = 'Модель';
 $_['text_customer']              = 'Покупець';
 $_['text_subscription_plan']     = 'План підписки';
 
@@ -41,12 +44,15 @@ $_['text_remaining']             = 'Платежі, що залишилися';
 
 $_['text_payment_address']       = 'Платіжна адреса';
 $_['text_payment_method']        = 'Спосіб оплати';
+$_['text_payment']               = 'Будь ласка, виберіть бажаний спосіб оплати для цієї підписки';
 $_['text_shipping_address']      = 'Адреса доставки';
 $_['text_shipping_method']       = 'Спосіб доставки';
+$_['text_shipping']              = 'Будь ласка, виберіть бажаний спосіб доставки для цієї підписки';
 
 
 $_['text_history']               = 'Історія';
 $_['text_history_add']           = 'Додати історію';
+$_['text_log']                   = 'Журнали';
 
 // Column
 $_['column_subscription_id']     = 'Номер підписки';
@@ -56,15 +62,22 @@ $_['column_customer']            = 'Покупець';
 $_['column_comment']             = 'Коментар';
 $_['column_description']         = 'Опис';
 $_['column_amount']              = 'Разом';
+$_['column_code']                = 'Код';
 $_['column_notify']              = 'Сповіщення покупця';
 $_['column_status']              = 'Статус';
 $_['column_date_added']          = 'Дата додавання';
 $_['column_product']             = 'Деталі товару';
+$_['column_model']               = 'Модель';
 $_['column_quantity']            = 'Кількість';
+$_['column_price']               = 'Ціна';
+$_['column_total']               = 'Разом';
 $_['column_action']              = 'Дія';
 
 // Entry
 $_['entry_customer']             = 'Покупець';
+$_['entry_store']                = 'Магазин';
+$_['entry_language']             = 'Мова';
+$_['entry_currency']             = 'Валюта';
 $_['entry_subscription_id']      = '№ підписки';
 $_['entry_order_id']             = '№ замовлення';
 $_['entry_subscription_plan']    = 'План підписки';
@@ -87,6 +100,11 @@ $_['entry_override']             = 'Перевизначити';
 $_['entry_date_from']            = 'Дата початку';
 $_['entry_date_to']              = 'Дата завершення';
 $_['entry_subscription_status']  = 'Статус підписки';
+$_['entry_product']              = 'Оберіть товар';
+$_['entry_option']               = 'Оберіть опції';
+$_['entry_quantity']             = 'Кількість';
+$_['entry_payment_address']      = 'Платіжна адреса';
+$_['entry_shipping_address']     = 'Адреса доставки';
 
 // Help
 $_['help_trial_duration']   = 'Тривалість - це кількість разів, яку покупець здійснить платіж';

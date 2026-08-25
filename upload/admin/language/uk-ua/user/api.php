@@ -8,12 +8,14 @@ $_['text_list']            = 'Список API';
 $_['text_add']             = 'Додати';
 $_['text_edit']            = 'Редагування';
 $_['text_ip']              = 'Ви можете створити список IP-адрес, яким дозволений доступ до API. Ваша поточна IP-адреса: %s';
+$_['text_history']         = 'Історія';
 
 // Column
 $_['column_username']      = 'Назва API';
 $_['column_status']        = 'Статус';
 $_['column_token']         = 'Токен';
 $_['column_ip']            = 'IP';
+$_['column_call']          = 'Виклик';
 $_['column_date_added']    = 'Дата додавання';
 $_['column_date_modified'] = 'Дата оновлення';
 $_['column_action']        = 'Дія';

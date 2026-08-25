@@ -7,6 +7,8 @@ $_['text_upload']            = 'Доповнення завантажено';
 $_['text_success']           = 'Налаштування змінені';
 $_['text_progress']          = 'Прогрес встановлення';
 $_['text_installed']         = 'Встановлені доповнення';
+$_['text_info']              = 'Інформація про доповнення';
+$_['text_install']           = 'Встановлення файлів %s до %s з %s';
 
 // Column
 $_['column_image']           = 'Зображення';
@@ -17,6 +19,9 @@ $_['column_action']          = 'Дія';
 
 // Entry
 $_['entry_progress']         = 'Виконання';
+$_['entry_name']             = 'Назва';
+$_['entry_description']      = 'Опис';
+$_['entry_code']             = 'Код';
 
 // Error
 $_['error_permission']       = 'У вас недостатньо прав для внесення змін';
@@ -37,3 +42,13 @@ $_['error_directory']        = 'Папка встановлення %s не зн
 $_['error_directory_exists'] = 'Папка %s вже існує';
 $_['error_unzip']            = 'Не вдалося розпакувати архів';
 $_['error_upload']           = 'Не вдалося завантажити файл';
+$_['error_unknown']          = 'Сталася невідома помилка!';
+$_['zip_error_exists']       = 'Файл вже існує!';
+$_['zip_error_incons']       = 'Пошкоджений zip-архів!';
+$_['zip_error_inval']        = 'Невірний аргумент!';
+$_['zip_error_memory']       = 'Помилка виділення пам’яті!';
+$_['zip_error_noent']        = 'Файл не знайдено!';
+$_['zip_error_nozip']        = 'Це не zip-архів!';
+$_['zip_error_open']         = 'Не вдалося відкрити файл!';
+$_['zip_error_read']         = 'Помилка читання!';
+$_['zip_error_seek']         = 'Помилка позиціонування!';

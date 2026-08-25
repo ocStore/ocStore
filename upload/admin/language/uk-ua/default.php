@@ -94,6 +94,7 @@ $_['button_customer_add']           = 'Додати покупця';
 $_['button_approve']                = 'Схвалити';
 $_['button_deny']                   = 'Відхилити';
 $_['button_reset']                  = 'Скинути';
+$_['button_login']                  = 'Увійти';
 $_['button_generate']               = 'Генерувати';
 $_['button_voucher_add']            = 'Додати купон';
 $_['button_view']                   = 'Перегляд';

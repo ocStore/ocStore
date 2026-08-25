@@ -19,3 +19,4 @@ $_['text_return']      = 'Повернення товару';
 $_['text_transaction'] = 'Історія платежів';
 $_['text_newsletter']  = 'Підписка на новини';
 $_['text_subscription'] = 'Регулярні платежі';
+$_['text_payment_method'] = 'Способи оплати';

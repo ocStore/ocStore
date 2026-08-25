@@ -12,13 +12,18 @@ $_['text_password']         = 'Пароль';
 $_['text_other']            = 'Інше';
 $_['text_login']            = 'Журнал входу';
 $_['text_authorize']        = 'Журнал авторизацій';
+$_['text_filter']           = 'Фільтр';
 
 // Column
 $_['column_username']       = 'Логін';
+$_['column_name']           = 'Ім’я';
+$_['column_email']          = 'E-Mail';
+$_['column_user_group']     = 'Група';
 $_['column_status']         = 'Статус';
 $_['column_ip']             = 'IP';
 $_['column_user_agent']     = 'User Agent';
 $_['column_date_added']     = 'Дата додавання';
+$_['column_date_expire']    = 'Дата закінчення';
 $_['column_action']         = 'Дія';
 
 // Entry
@@ -31,6 +36,10 @@ $_['entry_lastname']        = 'Прізвище';
 $_['entry_email']           = 'E-Mail';
 $_['entry_image']           = 'Зображення';
 $_['entry_status']          = 'Статус';
+$_['entry_name']            = 'Ім’я';
+$_['entry_ip']              = 'IP';
+$_['entry_date_from']       = 'Дата від';
+$_['entry_date_to']         = 'Дата до';
 
 // Tab
 $_['tab_authorize']         = 'Авторизації';
@@ -47,4 +56,9 @@ $_['error_lastname']        = 'Прізвище має містити від 1 a
 $_['error_email']           = 'Невірно вказано адресу електронної пошти';
 $_['error_email_exists']    = 'Таку адресу електронної пошти вже зареєстровано';
 $_['error_password']        = 'Пароль має містити від 4 and 20 символів';
+$_['error_password_uppercase'] = 'велика літера';
+$_['error_password_lowercase'] = 'мала літера';
+$_['error_password_number'] = 'цифра';
+$_['error_password_symbol'] = 'символ';
+$_['error_password_length'] = 'Пароль повинен містити від %d до 20 символів!';
 $_['error_confirm']         = 'Пароль та підтвердження не збігаються';

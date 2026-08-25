@@ -18,6 +18,7 @@ $_['text_file']          = 'Файл';
 $_['text_date']          = 'Дата';
 $_['text_datetime']      = 'Дата та час';
 $_['text_time']          = 'Час';
+$_['text_regex']         = 'Регулярний вираз';
 $_['text_option']        = 'Опція';
 $_['text_value']         = 'Значення';
 
@@ -29,9 +30,11 @@ $_['column_action']      = 'Дія';
 // Entry
 $_['entry_name']         = 'Назва опції';
 $_['entry_type']         = 'Тип';
+$_['entry_validation']   = 'Перевірка';
 $_['entry_option_value'] = 'Назва значення опції';
 $_['entry_image']        = 'Зображення';
 $_['entry_sort_order']   = 'Порядок сортування';
+$_['help_regex']         = 'Використовуйте регулярний вираз. Наприклад: /[^a-zA-Z0-9_-]/';
 
 // Error
 $_['error_warning']      = 'Будь ласка, перевірте форму на наявність помилок';

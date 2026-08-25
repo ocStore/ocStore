@@ -61,6 +61,7 @@ $_['tab_description']    = 'Опис';
 $_['tab_documentation']  = 'Документація';
 $_['tab_download']       = 'Завантаження';
 $_['tab_comment']        = 'Коментар';
+$_['button_api']         = 'API магазину доповнень';
 
 // Button
 $_['button_opencart']    = 'API магазину доповнень';

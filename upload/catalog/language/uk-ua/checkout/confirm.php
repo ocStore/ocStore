@@ -1,6 +1,8 @@
 <?php
+$_['text_model']                 = 'Модель';
 // Text
 $_['text_points']                = 'Бонусні бали';
+$_['column_product']             = 'Товар';
 $_['text_subscription']          = 'Підписка';
 $_['text_subscription_trial']    = 'Вартість: %s; Періодичність: %d %s; Кількість платежів: %d;  Далі,   ';
 $_['text_subscription_duration'] = 'Вартість: %s; Періодичність: %d %s; Кількість платежів: %d';

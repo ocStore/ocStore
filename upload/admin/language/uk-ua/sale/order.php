@@ -13,6 +13,7 @@ $_['text_date_added']         = 'Дата додавання';
 $_['text_customer']           = 'Покупець';
 $_['text_cart_add']           = 'Додати';
 $_['text_product_add']        = 'Додати товар';
+$_['text_model']             = 'Модель';
 $_['text_voucher_add']        = 'Додати сертифікат';
 $_['text_points']             = 'Бали';
 $_['text_reward']             = 'Бонусні бали';
@@ -52,6 +53,7 @@ $_['text_accept_language']    = 'Використана мова';
 $_['text_order_id']           = 'ID замовлення';
 $_['text_website']            = 'Сайт';
 $_['text_invoice']            = 'Накладна';
+$_['text_tbc']               = 'Очікує підтвердження';
 $_['text_invoice_no']         = 'Номер накладної';
 $_['text_store_address']      = 'Адреса магазину';
 $_['text_store_telephone']    = 'Телефон магазину';
@@ -61,6 +63,12 @@ $_['text_customer_telephone'] = 'Телефон покупця';
 $_['text_missing']            = 'Загублені замовлення';
 $_['text_default']            = 'За замовчуванням';
 $_['text_picklist']           = 'Повідомлення про відправлення';
+$_['text_sku']               = 'SKU';
+$_['text_upc']               = 'UPC';
+$_['text_ean']               = 'EAN';
+$_['text_jan']               = 'JAN';
+$_['text_isbn']              = 'ISBN';
+$_['text_mpn']               = 'MPN';
 
 // Column
 $_['column_order_id']        = 'ID замовлення';
@@ -124,6 +132,8 @@ $_['entry_order_id']         = '№ замовлення';
 $_['entry_total']            = 'Разом';
 $_['entry_date_from']        = 'Початкова дата';
 $_['entry_date_to']          = 'Кінцева дата';
+$_['entry_date_modified_from'] = 'Дата зміни з';
+$_['entry_date_modified_to'] = 'Дата зміни по';
 
 // Help
 $_['help_override']          = 'Якщо замовлення блокується від зміни статусу розширенням боротьби з шахрайством включіть перевизначення';
@@ -135,4 +145,5 @@ $_['error_invoice_no']       = 'Номер накладної вже існує'
 $_['error_order']            = 'Замовлення не знайдено';
 $_['error_affiliate']        = 'Партнера не знайдено';
 $_['error_reward_add']       = 'Бонусні бали вже були додані';
+$_['error_reward_guest']     = 'Гості не можуть використовувати бонусні бали';
 $_['error_commission_add']   = 'Партнерська комісія для цього замовлення вже додана';

@@ -5,6 +5,7 @@ $_['heading_title']          = 'Конфігурація';
 // Text
 $_['text_step_3']            = 'Введіть інформацію про свою базу даних та адміністратора';
 $_['text_db_connection']     = '1. Введіть дані підключення до бази даних';
+$_['text_db_advanced']       = 'Додаткові параметри БД';
 $_['text_db_administration'] = '2. Будь ласка, введіть ім’я користувача та пароль для адміністратора';
 $_['text_mysqli']            = 'MySQLi';
 $_['text_pdo']               = 'mPDO';
@@ -12,6 +13,7 @@ $_['text_pgsql']             = 'PostgreSQL';
 $_['text_help']              = 'Інформація про налаштування баз даних на різних платформах:';
 $_['text_cpanel']            = 'Налаштування БД у CPanel';
 $_['text_plesk']             = 'Налаштування БД у Plesk';
+$_['text_db_ssl']            = 'Вхідні дані сертифіката повинні бути додані як один рядок, наприклад: "MIIDrzCCApegAwIBAgIQ....=="';
 
 // Entry
 $_['entry_db_driver']        = 'Драйвер';
@@ -21,6 +23,10 @@ $_['entry_db_password']      = 'Пароль';
 $_['entry_db_database']      = 'Ім’я БД';
 $_['entry_db_port']          = 'Порт';
 $_['entry_db_prefix']        = 'Префікс';
+$_['entry_db_advanced']      = 'Додатково';
+$_['entry_db_ssl_key']       = 'SSL Key';
+$_['entry_db_ssl_cert']      = 'SSL Cert';
+$_['entry_db_ssl_ca']        = 'SSL CA';
 $_['entry_username']         = 'Логін';
 $_['entry_password']         = 'Пароль';
 $_['entry_email']            = 'E-Mail';

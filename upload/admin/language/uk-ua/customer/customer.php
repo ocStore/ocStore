@@ -14,6 +14,8 @@ $_['text_password']         = 'Пароль';
 $_['text_other']            = 'Інше';
 $_['text_balance']          = 'Баланс';
 $_['text_address']          = 'Адреса';
+$_['text_address_add']      = 'Додати адресу';
+$_['text_address_edit']     = 'Змінити адресу';
 $_['text_payment_method']   = 'Способи оплати';
 $_['text_history']          = 'Історія';
 $_['text_history_add']      = 'Додати історію';
@@ -22,6 +24,7 @@ $_['text_transaction_add']  = 'Додати транзакцію';
 $_['text_reward']           = 'Бонусні бали';
 $_['text_reward_add']       = 'Додати бонусні бали';
 $_['text_ip']               = 'IP-адреси';
+$_['text_authorize']        = 'Історія авторизацій';
 $_['text_option']           = 'Опції';
 $_['text_login']            = 'Вхід у магазин';
 $_['text_unlock']           = 'Розблокувати';
@@ -45,10 +48,13 @@ $_['column_payment_method'] = 'Ім’я платника';
 $_['column_image']          = 'Зображення';
 $_['column_type']           = 'Тип';
 $_['column_date_expire']    = 'Завершення терміну дії';
+$_['column_user_agent']     = 'User Agent';
+$_['column_address']        = 'Адреса';
 $_['column_action']         = 'Дія';
 
 // Entry
 $_['entry_store']           = 'Магазин';
+$_['entry_language']        = 'Мова';
 $_['entry_customer_group']  = 'Група покупців';
 $_['entry_firstname']       = 'Ім’я';
 $_['entry_lastname']        = 'Прізвище';
@@ -57,6 +63,7 @@ $_['entry_telephone']       = 'Телефон';
 $_['entry_newsletter']      = 'Розсилка';
 $_['entry_status']          = 'Статус';
 $_['entry_safe']            = 'Безпечний';
+$_['entry_commenter']       = 'Коментатор';
 $_['entry_password']        = 'Пароль';
 $_['entry_confirm']         = 'Підтвердження';
 $_['entry_company']         = 'Компанія';
@@ -75,12 +82,14 @@ $_['entry_name']            = 'Ім’я покупця';
 $_['entry_ip']              = 'IP';
 $_['entry_date_from']       = 'Дата початку';
 $_['entry_date_to']         = 'Дата завершення';
+$_['tab_authorize']         = 'Авторизація';
 
 // Button
 $_['button_order']          = 'Замовлення';
 
 // Help
 $_['help_safe']             = 'Встановіть значення Безпечний - Так, щоб уникнути помилкового визначення системою протидії шахрайству';
+$_['help_commenter']        = 'Увімкніть щоб дозволити покупцю уникнути блокування антиспам-системою';
 $_['help_points']           = 'Використовуйте мінус для віднімання балів, наприклад -100';
 
 // Error
@@ -94,6 +103,11 @@ $_['error_lastname']        = 'Прізвище має містити від 1 �
 $_['error_email']           = 'E-Mail адресу введено невірно';
 $_['error_telephone']       = 'Номер телефону має містити від 3 до 32 символів';
 $_['error_password']        = 'Пароль має містити від 4 до 20 символів';
+$_['error_password_uppercase'] = 'велика літера';
+$_['error_password_lowercase'] = 'мала літера';
+$_['error_password_number'] = 'цифра';
+$_['error_password_symbol'] = 'символ';
+$_['error_password_length'] = 'Пароль повинен містити від %d до 40 символів!';
 $_['error_confirm']         = 'Пароль та підтвердження не збігаються';
 $_['error_address_1']       = 'Адреса має містити від 3 до 128 символів';
 $_['error_city']            = 'Назва міста має містити від 2 до 128 символів';

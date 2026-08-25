@@ -7,11 +7,16 @@ $_['text_success']           = 'Налаштування змінені';
 $_['text_list']              = 'Список категорій';
 $_['text_add']               = 'Додати';
 $_['text_edit']              = 'Редагування';
+$_['text_filter']            = 'Фільтр';
 $_['text_default']           = 'За замовчуванням';
+$_['text_general']           = 'Загальне';
+$_['text_meta']              = 'Мета-теги';
 $_['text_keyword']           = 'Має бути унікальним на всю систему, без пробілів та спецсимволів';
+$_['column_image']           = 'Зображення';
 
 // Column
 $_['column_name']            = 'Назва категорії';
+$_['column_status']          = 'Статус';
 $_['column_sort_order']      = 'Порядок сортування';
 $_['column_action']          = 'Дія';
 
@@ -46,4 +51,5 @@ $_['error_meta_title']       = 'Мета-тег Title має містити ві
 $_['error_parent']           = 'Вибрана вами батьківська категорія є дочірньою для поточної';
 $_['error_seo']              = 'Будь ласка, вкажіть SEO URL';
 $_['error_keyword']          = 'SEO URL має бути унікальним';
+$_['error_keyword_exists']   = 'SEO URL має бути унікальним';
 $_['error_keyword_character'] = 'SEO URL може містити тільки символи a-z, 0-9, - та _';

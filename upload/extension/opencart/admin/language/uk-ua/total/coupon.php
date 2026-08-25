@@ -6,6 +6,7 @@ $_['heading_title']    = 'Купони';
 $_['text_extension']   = 'Доповнення';
 $_['text_success']     = 'Налаштування змінені';
 $_['text_edit']        = 'Редагування';
+$_['entry_coupon']     = 'Купон';
 
 // Entry
 $_['entry_status']     = 'Статус';

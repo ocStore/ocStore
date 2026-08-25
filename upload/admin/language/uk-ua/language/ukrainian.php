@@ -1,7 +1,7 @@
 <?php
 // Heading
 $_['heading_title']    = 'Українська локалізація';
-$_['version_extension']= '4.0.2.3';
+$_['version_extension']= '4.1.0.4b';
 
 // Text
 $_['text_headline']    = 'Українська локалізація вітрини та адмінпанелі';

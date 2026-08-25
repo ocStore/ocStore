@@ -59,7 +59,7 @@ $_['entry_pin']          = 'PIN';
 // Tab
 $_['tab_description']    = 'Description';
 $_['tab_documentation']  = 'Documentation';
-$_['tab_changelog']      = 'Сhangelog';
+$_['tab_changelog']      = 'Changelog';
 $_['tab_download']       = 'Download';
 $_['tab_comment']        = 'Comment';
 

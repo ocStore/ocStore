@@ -1,6 +1,7 @@
 <?php
 // Text
 $_['text_success']           = 'Спосіб доставки встановлено';
+$_['error_customer']            = 'Необхідно вказати дані клієнта';
 
 // Error
 $_['error_shipping_address'] = 'Вкажіть адресу доставки';

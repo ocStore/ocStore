@@ -1,22 +1,22 @@
 <?php
 // Heading
-$_['heading_title']               = 'Додаткові налаштування';
+$_['heading_title']               = 'Advanced Settings';
 
 // Text
-$_['text_step_4']                 = 'Перед завершувальним етапом установки ви можете виконати додаткові дії';
-$_['text_yes']                    = 'Так';
-$_['text_no']                     = 'Ні';
-$_['text_select']                 = ' --- Оберіть --- ';
-$_['text_delete']                 = 'Так (видалити зображення та демо записи в БД)';
-$_['text_select_all']             = 'Виділити все';
-$_['text_unselect_all']           = 'Зняти виділення';
+$_['text_step_4']                 = 'Before the final stage of installation, you can do some additional actions';
+$_['text_yes']                    = 'Yes';
+$_['text_no']                     = 'No';
+$_['text_select']                 = ' --- Select --- ';
+$_['text_delete']                 = 'Yes (delete images and demo data from the database)';
+$_['text_select_all']             = 'Select All';
+$_['text_unselect_all']           = 'Deselect All';
 
 // Entry
-$_['entry_delete_demodata']       = 'Видалити Демо дані';
-$_['entry_country']               = 'Список країн';
+$_['entry_delete_demodata']       = 'Remove Demo Data';
+$_['entry_country']               = 'Countries';
 
-$_['help_country']                = 'Вибрані країни будуть автоматично включені після завершення установки';
+$_['help_country']                = 'Selected countries will be automatically enabled after installation is complete';
 
 // Error
-$_['error_delete_demodata']       = 'Необхідно обрати дію з демо даними';
-$_['error_country']               = 'Необхідно обрати принаймні одну країну';
+$_['error_delete_demodata']       = 'You need to select an action with demo data';
+$_['error_country']               = 'At least one country must be selected';

@@ -44,3 +44,7 @@
 /.DS_Store
 /.cache
 /.php-cs-fixer.cache
+
+# Local docker overrides
+/docker-compose.override.yml
+/upload/install.lock

@@ -519,6 +519,9 @@ class Article extends \Opencart\System\Engine\Model {
 		return $query->rows;
 	}
 
+	/**
+	 * @return array<int, array<string, mixed>>
+	 */
 	public function getRelated(int $article_id): array {
 		$article_data = [];
 
@@ -535,12 +538,18 @@ class Article extends \Opencart\System\Engine\Model {
 		return $article_data;
 	}
 
+	/**
+	 * @return array<int, int>
+	 */
 	public function getProducts(int $article_id): array {
 		$query = $this->db->query("SELECT `product_id` FROM `" . DB_PREFIX . "article_to_product` WHERE `article_id` = '" . (int)$article_id . "'");
 
 		return array_column($query->rows, 'product_id');
 	}
 
+	/**
+	 * @return array<int, array<string, mixed>>
+	 */
 	public function getArticlesByProductId(int $product_id): array {
 		$article_data = [];
 
@@ -557,6 +566,9 @@ class Article extends \Opencart\System\Engine\Model {
 		return $article_data;
 	}
 
+	/**
+	 * @return array<int, array<string, mixed>>
+	 */
 	public function getDownloads(int $article_id): array {
 		$query = $this->db->query("SELECT `d`.* FROM `" . DB_PREFIX . "article_to_download` `a2d` LEFT JOIN `" . DB_PREFIX . "download` `d` ON (`a2d`.`download_id` = `d`.`download_id`) LEFT JOIN `" . DB_PREFIX . "download_description` `dd` ON (`d`.`download_id` = `dd`.`download_id`) WHERE `a2d`.`article_id` = '" . (int)$article_id . "' AND `dd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'");
 
@@ -567,6 +579,9 @@ class Article extends \Opencart\System\Engine\Model {
 		$this->db->query("UPDATE `" . DB_PREFIX . "article` SET `viewed` = `viewed` + 1 WHERE `article_id` = '" . (int)$article_id . "'");
 	}
 
+	/**
+	 * @return array<int, array<string, mixed>>
+	 */
 	public function getArticlesByManufacturerId(int $manufacturer_id): array {
 		$article_data = [];
 
@@ -583,6 +598,9 @@ class Article extends \Opencart\System\Engine\Model {
 		return $article_data;
 	}
 
+	/**
+	 * @return array<int, array<string, mixed>>
+	 */
 	public function getArticlesByCategoryId(int $category_id): array {
 		$article_data = [];
 

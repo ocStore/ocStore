@@ -917,6 +917,9 @@ class Article extends \Opencart\System\Engine\Model {
 		return (int)$query->row['total'];
 	}
 
+	/**
+	 * @param array<int, int> $topics
+	 */
 	public function addTopics(int $article_id, int $main_topic_id, array $topics): void {
 		$this->model_cms_article->deleteTopics($article_id);
 
@@ -933,12 +936,18 @@ class Article extends \Opencart\System\Engine\Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_topic` WHERE `article_id` = '" . (int)$article_id . "'");
 	}
 
+	/**
+	 * @return array<int, int>
+	 */
 	public function getTopics(int $article_id): array {
 		$query = $this->db->query("SELECT `topic_id` FROM `" . DB_PREFIX . "article_to_topic` WHERE `article_id` = '" . (int)$article_id . "'");
 
 		return array_column($query->rows, 'topic_id');
 	}
 
+	/**
+	 * @param array<int, int> $related
+	 */
 	public function addRelated(int $article_id, array $related): void {
 		$this->model_cms_article->deleteRelated($article_id);
 
@@ -958,12 +967,18 @@ class Article extends \Opencart\System\Engine\Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_related` WHERE `related_id` = '" . (int)$article_id . "'");
 	}
 
+	/**
+	 * @return array<int, int>
+	 */
 	public function getRelated(int $article_id): array {
 		$query = $this->db->query("SELECT `related_id` FROM `" . DB_PREFIX . "article_related` WHERE `article_id` = '" . (int)$article_id . "'");
 
 		return array_column($query->rows, 'related_id');
 	}
 
+	/**
+	 * @param array<int, int> $products
+	 */
 	public function addProducts(int $article_id, array $products): void {
 		$this->model_cms_article->deleteProducts($article_id);
 
@@ -976,12 +991,18 @@ class Article extends \Opencart\System\Engine\Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_product` WHERE `article_id` = '" . (int)$article_id . "'");
 	}
 
+	/**
+	 * @return array<int, int>
+	 */
 	public function getProducts(int $article_id): array {
 		$query = $this->db->query("SELECT `product_id` FROM `" . DB_PREFIX . "article_to_product` WHERE `article_id` = '" . (int)$article_id . "'");
 
 		return array_column($query->rows, 'product_id');
 	}
 
+	/**
+	 * @param array<int, int> $downloads
+	 */
 	public function addDownloads(int $article_id, array $downloads): void {
 		$this->model_cms_article->deleteDownloads($article_id);
 
@@ -994,12 +1015,18 @@ class Article extends \Opencart\System\Engine\Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_download` WHERE `article_id` = '" . (int)$article_id . "'");
 	}
 
+	/**
+	 * @return array<int, int>
+	 */
 	public function getDownloads(int $article_id): array {
 		$query = $this->db->query("SELECT `download_id` FROM `" . DB_PREFIX . "article_to_download` WHERE `article_id` = '" . (int)$article_id . "'");
 
 		return array_column($query->rows, 'download_id');
 	}
 
+	/**
+	 * @param array<int, int> $manufacturers
+	 */
 	public function addManufacturers(int $article_id, array $manufacturers): void {
 		$this->model_cms_article->deleteManufacturers($article_id);
 
@@ -1012,12 +1039,18 @@ class Article extends \Opencart\System\Engine\Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_manufacturer` WHERE `article_id` = '" . (int)$article_id . "'");
 	}
 
+	/**
+	 * @return array<int, int>
+	 */
 	public function getManufacturers(int $article_id): array {
 		$query = $this->db->query("SELECT `manufacturer_id` FROM `" . DB_PREFIX . "article_to_manufacturer` WHERE `article_id` = '" . (int)$article_id . "'");
 
 		return array_column($query->rows, 'manufacturer_id');
 	}
 
+	/**
+	 * @param array<int, int> $categories
+	 */
 	public function addCategories(int $article_id, array $categories): void {
 		$this->model_cms_article->deleteCategories($article_id);
 
@@ -1030,6 +1063,9 @@ class Article extends \Opencart\System\Engine\Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_category` WHERE `article_id` = '" . (int)$article_id . "'");
 	}
 
+	/**
+	 * @return array<int, int>
+	 */
 	public function getCategories(int $article_id): array {
 		$query = $this->db->query("SELECT `category_id` FROM `" . DB_PREFIX . "article_to_category` WHERE `article_id` = '" . (int)$article_id . "'");
 

@@ -2,13 +2,11 @@
 namespace Opencart\Admin\Controller\Extension\LanguageUkrainian\Language;
 class Ukrainian extends \Opencart\System\Engine\Controller {
 
-	private $extensionPath              = 'extension/language_ukrainian/language/ukrainian';
-	private $extensionDescription       = 'Українська локалізація';
-	private $extensionVersion           = '4.0.2.3';
-	private $extensionCopy              = true;
-	private $extensionUninstallComplete = false;
-	private $extensionMaintenance       = true;
-	private $extensionTest              = false;
+	private string $extensionPath              = 'extension/language_ukrainian/language/ukrainian';
+	private string $extensionDescription       = 'Українська локалізація';
+	private bool $extensionCopy                = true;
+	private bool $extensionUninstallComplete   = false;
+	private bool $extensionMaintenance         = true;
 
 	public function index(): void {
 		$this->load->language($this->extensionPath);
@@ -573,7 +571,7 @@ class Ukrainian extends \Opencart\System\Engine\Controller {
 
 	}
 
-	private function custom_copy($src, $dst) : void { 
+	private function custom_copy(string $src, string $dst) : void {
 		$dir = opendir($src); 
 	  
 		if(!is_dir($dst))

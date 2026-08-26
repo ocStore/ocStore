@@ -11,7 +11,8 @@
 /upload/system/storage/backup/*
 !/upload/system/storage/backup/index.html
 
-# System Cache Files
+# System Cache Files,
+
 /upload/system/storage/cache/*
 !/upload/system/storage/cache/index.html
 
@@ -26,6 +27,9 @@
 # Marketplace Files
 # /upload/system/storage/marketplace/*
 # !/upload/system/storage/marketplace/index.html
+
+# HTMLPurifier Generated Cache
+/upload/system/helper/HTMLPurifier/DefinitionCache/Serializer/*/*.ser
 
 # Session Files
 /upload/system/storage/session/*

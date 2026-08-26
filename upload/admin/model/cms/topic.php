@@ -653,12 +653,18 @@ class Topic extends \Opencart\System\Engine\Model {
 		return implode('_', array_column($this->model_cms_topic->getPaths($topic_id), 'path_id'));
 	}
 
+	/**
+	 * @return array<int, array<string, mixed>>
+	 */
 	public function getPaths(int $topic_id): array {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "topic_path` WHERE `topic_id` = '" . (int)$topic_id . "' ORDER BY `level` ASC");
 
 		return $query->rows;
 	}
 
+	/**
+	 * @return array<int, array<string, mixed>>
+	 */
 	public function getPathsByPathId(int $path_id): array {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "topic_path` WHERE `path_id` = '" . (int)$path_id . "' ORDER BY `level` ASC");
 

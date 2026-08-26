@@ -20,10 +20,16 @@ class CliBlogMigrate {
 	private string $source;
 	private string $prefix;
 	private string $source_prefix;
+	/**
+	 * @var array<int, string>
+	 */
 	private array $report = [];
 
+	/**
+	 * @param array<string, string> $option
+	 */
 	public function __construct(array $option) {
-		$this->db = new \Opencart\System\Library\DB('mysqli', $option['db_hostname'], $option['db_username'], $option['db_password'], $option['db_database'], (int)$option['db_port']);
+		$this->db = new \Opencart\System\Library\DB('mysqli', $option['db_hostname'], $option['db_username'], $option['db_password'], $option['db_database'], (string)$option['db_port']);
 
 		$this->source = $option['source_database'];
 		$this->prefix = $option['db_prefix'];
@@ -102,6 +108,9 @@ class CliBlogMigrate {
 		$this->report[] = 'шляхи тем: ' . $this->count('topic_path');
 	}
 
+	/**
+	 * @param array<int, int> $path
+	 */
 	private function rebuildPaths(int $parent_id, array $path): void {
 		$query = $this->db->query("SELECT `topic_id` FROM " . $this->target('topic') . " WHERE `parent_id` = '" . (int)$parent_id . "'");
 
@@ -210,7 +219,7 @@ class CliBlogMigrate {
 		$this->db->query("DELETE FROM " . $this->target('seo_url') . " WHERE `key` IN ('article_id', 'topic_id')");
 
 		if (!$this->exists('seo_url')) {
-			$this->report[] = 'ЧПУ: таблиці немає, пропущено';
+			$this->report[] = 'SEO URL: таблиці немає, пропущено';
 
 			return;
 		}
@@ -221,7 +230,7 @@ class CliBlogMigrate {
 
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM " . $this->target('seo_url') . " WHERE `key` IN ('article_id', 'topic_id')");
 
-		$this->report[] = 'ЧПУ статей і тем: ' . (int)$query->row['total'];
+		$this->report[] = 'SEO URL статей і тем: ' . (int)$query->row['total'];
 	}
 }
 

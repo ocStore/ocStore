@@ -11,6 +11,8 @@ parameters:
         - ./tools/phpstan/
         - ./upload/system/storage/vendor/
         - ./upload/system/storage/cache/
+        - ./upload/system/helper/HTMLPurifier/
+        - ./upload/system/helper/HTMLPurifier.php
     tmpDir: .cache
     ignoreErrors:
         - '#^Access to an undefined property Opencart\\System\\Engine\\Proxy<Opencart\\Catalog\\Model\\Checkout\\Cart>::\$getTotals\.$#'
@@ -22,3 +24,4 @@ parameters:
         - '#^Parameter \#2 \$value of method Opencart\\Admin\\Model\\Design\\SeoUrl::\S+\(\) expects string, int given\.$#'
         - '#^Parameter \#\d+ \$\S+ of function \S+ expects .*(int|float|string).*, .*(int|float|string).* given\.$#'
         - '#^Variable \$\S+ might not be defined\.$#'
+        - '# HTMLPurifier(_\S+)?[ .]#'

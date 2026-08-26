@@ -151,11 +151,11 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 
 		$curl = curl_init(OPENCARTFORUM_SERVER . 'marketplace/api?' . $url);
 
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-		curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
-		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+		curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+		curl_setopt($curl, CURLOPT_POST, true);
 
 		$response = curl_exec($curl);
 
@@ -170,10 +170,10 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 		// Categories
         $curl = curl_init(OPENCARTFORUM_SERVER . 'marketplace/api/categories?' . $url);
 
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-        curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+        curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
 
         $response = curl_exec($curl);
 
@@ -514,11 +514,11 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 
 		$curl = curl_init(OPENCARTFORUM_SERVER . 'marketplace/api/info?' . $url);
 
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-		curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
-		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+		curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+		curl_setopt($curl, CURLOPT_POST, true);
 
 		$response = curl_exec($curl);
 
@@ -671,6 +671,12 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
      * @return string|array
      */
 
+    /**
+     * @param array<mixed>|string  $string
+     * @param \HTMLPurifier_Config $config
+     *
+     * @return array<mixed>|string
+     */
     private function strip($string, $config): string|array {
         $purifier = new \HTMLPurifier($config);
         if (is_array($string))  {

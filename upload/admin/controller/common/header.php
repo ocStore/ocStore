@@ -53,6 +53,7 @@ class Header extends \Opencart\System\Engine\Controller {
 			$data['home'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']);
 
 			$data['language'] = $this->load->controller('common/language');
+			$data['search'] = $this->load->controller('common/search');
 
 			// Notifications
 			$filter_data = [

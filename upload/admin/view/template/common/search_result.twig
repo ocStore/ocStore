@@ -1,0 +1,20 @@
+{% for group in groups %}
+  <h6 class="dropdown-header">{{ group.name }}</h6>
+  {% if group.results %}
+    {% for result in group.results %}
+      <a href="{{ result.href }}" class="dropdown-item search-result">
+        {% if result.thumb %}
+          <img src="{{ result.thumb }}" alt="{{ result.name }}" class="search-thumb"/>
+        {% elseif result.icon %}
+          <i class="{{ result.icon }} fa-fw"></i>
+        {% endif %}
+        <span class="search-name">{{ result.name }}</span>
+        {% if result.note %}
+          <span class="search-note">{{ result.note }}</span>
+        {% endif %}
+      </a>
+    {% endfor %}
+  {% else %}
+    <span class="dropdown-item disabled">{{ text_no_results }}</span>
+  {% endif %}
+{% endfor %}

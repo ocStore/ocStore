@@ -1113,3 +1113,42 @@ td {
 .extension-text img {
     max-width: 100%;
 }
+
+#nav-search {
+    flex: 1 1 auto;
+    max-width: 420px;
+    margin: 0 20px;
+}
+
+#search .dropdown-toggle::after {
+    display: none;
+}
+
+#search-result {
+    width: 100%;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+#search-result .search-result {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    white-space: normal;
+}
+
+#search-result .search-thumb {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+#search-result .search-name {
+    flex: 1 1 auto;
+}
+
+#search-result .search-note {
+    font-size: 12px;
+    color: #6c757d;
+    white-space: nowrap;
+}

@@ -253,6 +253,13 @@
               {% endfor %}
             </p>
           {% endif %}
+          {% if articles %}
+            <p>{{ text_article }}
+              {% for article in articles %}
+                <a href="{{ article.href }}">{{ article.name }}</a>{% if not loop.last %},{% endif %}
+              {% endfor %}
+            </p>
+          {% endif %}
         </div>
         {% if attribute_groups %}
           <div id="tab-specification" class="tab-pane fade">

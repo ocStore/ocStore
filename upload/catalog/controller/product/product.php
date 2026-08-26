@@ -450,6 +450,17 @@ class Product extends \Opencart\System\Engine\Controller {
 				}
 			}
 
+			$this->load->model('cms/article');
+
+			$data['articles'] = [];
+
+			foreach ($this->model_cms_article->getArticlesByProductId($product_id) as $result) {
+				$data['articles'][] = [
+					'name' => $result['name'],
+					'href' => $this->url->link('cms/blog.info', 'language=' . $this->config->get('config_language') . '&article_id=' . $result['article_id'])
+				];
+			}
+
 			if ($this->config->get('config_product_report_status')) {
 				$this->model_catalog_product->addReport($product_id, oc_get_ip());
 			}

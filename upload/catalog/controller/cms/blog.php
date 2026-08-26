@@ -142,7 +142,7 @@ class Blog extends \Opencart\System\Engine\Controller {
 				$this->document->setRobots('noindex,follow');
 			}
 
-			$data['heading_title'] = $topic_info['name'];
+			$data['heading_title'] = $topic_info['meta_h1'] ?: $topic_info['name'];
 		} else {
 			$this->document->setTitle($this->language->get('heading_title'));
 
@@ -409,7 +409,7 @@ class Blog extends \Opencart\System\Engine\Controller {
 				'href' => $this->url->link('cms/blog.info', 'language=' . $this->config->get('config_language') . '&article_id=' . $article_id . $url)
 			];
 
-			$data['heading_title'] = $article_info['name'];
+			$data['heading_title'] = $article_info['meta_h1'] ?: $article_info['name'];
 
 			// Image
 			$this->load->model('tool/image');

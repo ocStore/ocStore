@@ -20,6 +20,7 @@ $_['column_action']          = 'Дія';
 // Entry
 $_['entry_title']            = 'Назва статті';
 $_['entry_description']      = 'Зміст статті';
+$_['entry_meta_h1']       = 'Заголовок H1';
 $_['entry_meta_title']       = 'Мета-тег Title';
 $_['entry_meta_keyword']     = 'Мета-тег Keywords';
 $_['entry_meta_description'] = 'Мета-тег Description';

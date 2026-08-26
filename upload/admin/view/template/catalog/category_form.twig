@@ -52,6 +52,12 @@
                     </fieldset>
                     <fieldset>
                       <legend>{{ text_meta }}</legend>
+                      <div class="row mb-3">
+                        <label for="input-meta-h1-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_meta_h1 }}</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="category_description[{{ language.language_id }}][meta_h1]" value="{{ category_description[language.language_id] ? category_description[language.language_id].meta_h1 }}" placeholder="{{ entry_meta_h1 }}" id="input-meta-h1-{{ language.language_id }}" class="form-control"/>
+                        </div>
+                      </div>
                       <div class="row mb-3 required">
                         <label for="input-meta-title-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_meta_title }}</label>
                         <div class="col-sm-10">

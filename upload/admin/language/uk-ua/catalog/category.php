@@ -23,6 +23,7 @@ $_['column_action']          = 'Дія';
 // Entry
 $_['entry_name']             = 'Назва категорії';
 $_['entry_description']      = 'Опис';
+$_['entry_meta_h1']       = 'Заголовок H1';
 $_['entry_meta_title']       = 'Мета-тег Title';
 $_['entry_meta_keyword']     = 'Мета-тег Keywords';
 $_['entry_meta_description'] = 'Мета-тег Description';

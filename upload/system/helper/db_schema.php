@@ -1280,6 +1280,10 @@ function oc_db_schema() {
 			[
 				'name' => 'meta_keyword',
 				'type' => 'varchar(255)'
+			],
+			[
+				'name' => 'meta_h1',
+				'type' => 'varchar(255)'
 			]
 		],
 		'primary' => [
@@ -3515,6 +3519,10 @@ function oc_db_schema() {
 			[
 				'name' => 'meta_keyword',
 				'type' => 'varchar(255)'
+			],
+			[
+				'name' => 'meta_h1',
+				'type' => 'varchar(255)'
 			]
 		],
 		'primary' => [
@@ -5417,6 +5425,10 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'meta_keyword',
+				'type' => 'varchar(255)'
+			],
+			[
+				'name' => 'meta_h1',
 				'type' => 'varchar(255)'
 			]
 		],

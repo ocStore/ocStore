@@ -136,7 +136,7 @@ class Category extends \Opencart\System\Engine\Controller {
 				'href' => $this->url->link('product/category', 'language=' . $this->config->get('config_language') . $url)
 			];
 
-			$data['heading_title'] = $category_info['name'];
+			$data['heading_title'] = $category_info['meta_h1'] ?: $category_info['name'];
 
 			$data['text_compare'] = sprintf($this->language->get('text_compare'), isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0);
 

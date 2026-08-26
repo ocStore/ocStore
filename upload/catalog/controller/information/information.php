@@ -41,7 +41,7 @@ class Information extends \Opencart\System\Engine\Controller {
 				'href' => $this->url->link('information/information', 'language=' . $this->config->get('config_language') . '&information_id=' . $information_id)
 			];
 
-			$data['heading_title'] = $information_info['title'];
+			$data['heading_title'] = $information_info['meta_h1'] ?: $information_info['title'];
 
 			$data['description'] = html_entity_decode($information_info['description'], ENT_QUOTES, 'UTF-8');
 

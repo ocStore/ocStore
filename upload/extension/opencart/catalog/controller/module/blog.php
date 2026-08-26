@@ -16,6 +16,17 @@ class Blog extends \Opencart\System\Engine\Controller {
 	public function index(array $setting): string {
 		$this->load->language('extension/opencart/module/blog');
 
+		$position = (string)($setting['position'] ?? '');
+
+		if (substr($position, 0, 6) == 'column') {
+			$data['axis'] = 'vertical';
+		} else {
+			$data['axis'] = $setting['axis'] ?? 'horizontal';
+		}
+
+		$data['text_viewed'] = $this->language->get('text_viewed');
+		$data['button_more'] = $this->language->get('button_more');
+
 		$data['blogs'] = [];
 
 		// Blog
@@ -45,7 +56,9 @@ class Blog extends \Opencart\System\Engine\Controller {
 					'article_id'  => $result['article_id'],
 					'thumb'       => $image,
 					'name'        => $result['name'],
-					'description' => oc_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('config_article_description_length')) . '..',
+					'description' => oc_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, (int)($setting['description_length'] ?? 100)) . '..',
+					'viewed'      => $result['viewed'],
+					'date_added'  => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
 					'href'        => $this->url->link('cms/blog.info', 'language=' . $this->config->get('config_language') . '&article_id=' . $result['article_id'])
 				];
 			}

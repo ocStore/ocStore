@@ -18,11 +18,15 @@ class Promotion extends \Opencart\System\Engine\Controller {
         $this->load->language('install/promotion');
 
         $data['title_featured'] = $this->language->get('title_featured');
+        $data['text_by'] = $this->language->get('text_by');
+        $data['text_purchases'] = $this->language->get('text_purchases');
+        $data['text_downloads'] = $this->language->get('text_downloads');
 
 		$curl = curl_init();
 
-		curl_setopt($curl, CURLOPT_URL, 'https://ocstore.com/index.php?route=extension/json/extensions&version=' . urlencode(VERSION));
+		curl_setopt($curl, CURLOPT_URL, 'https://opencartforum.com/index.php?app=downloads&module=downloads&controller=api&do=extensions&version=' . urlencode(VERSION));
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($curl, CURLOPT_HEADER, false);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
@@ -40,7 +44,7 @@ class Promotion extends \Opencart\System\Engine\Controller {
 
 		$extensions = json_decode($response, true);
 
-		$data['extensions'] = $extensions['extensions'];
+		$data['extensions'] = $extensions['extensions'] ?? [];
 
 		unset($curl);
 

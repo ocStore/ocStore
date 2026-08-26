@@ -1,18 +1,45 @@
 <div id="extension-list">
-	<h3 class="text-center">{{ title_featured }}</h3>
-	<div class="row  pt-4">
-	{% for extension in extensions %}
-		<div class="col-md-6 text-center">
-			<section>
-				<div class="extension-preview"><a href="{{ extension.href }}&utm_campaign=ocstore4_install" target="_blank">
-						<img src="{{ extension.image }}" alt="{{ extension.name }}" title="{{ extension.name }}" class="img-responsive"></a>
+	<h3 class="text-center mb-4">{{ title_featured }}</h3>
+	<div class="row row-cols-2 row-cols-lg-4 g-3">
+		{% for extension in extensions %}
+			<div class="col">
+				<div class="card h-100 extension-card">
+					<a href="{{ extension.href }}" target="_blank" class="extension-image">
+						<img src="{{ extension.image }}" alt="{{ extension.name }}" title="{{ extension.name }}"/>
+						{% if extension.discount %}
+							<span class="extension-discount">-{{ extension.discount }}%</span>
+						{% endif %}
+						{% if extension.ukraine %}
+							<span class="extension-flag"></span>
+						{% endif %}
+					</a>
+					<div class="card-body d-flex flex-column p-3">
+						<a href="{{ extension.href }}" target="_blank" class="extension-title">{{ extension.name }}</a>
+						<div class="extension-meta mt-2">
+							{% if extension.author %}
+								{{ text_by }}
+								{% if extension.author_url %}
+									<a href="{{ extension.author_url }}" target="_blank" class="extension-author">{{ extension.author }}</a>
+								{% else %}
+									<span class="extension-author">{{ extension.author }}</span>
+								{% endif %}
+							{% endif %}
+							<i class="fa-solid fa-star"></i> {{ extension.rating }} <span class="text-muted">({{ extension.reviews ?: extension.comment }})</span>
+						</div>
+						<div class="extension-bottom mt-auto pt-2">
+							<div class="extension-price">
+								{% if extension.old_price %}<s>{{ extension.old_price }}</s> {% endif %}{{ extension.price }}
+							</div>
+							{% if extension.purchases or extension.downloads %}
+								<div class="extension-stats">
+									{% if extension.purchases %}<span title="{{ text_purchases }}"><i class="fa-solid fa-cart-shopping"></i> {{ extension.purchases }}</span>{% endif %}
+									{% if extension.downloads %}<span title="{{ text_downloads }}"><i class="fa-solid fa-download"></i> {{ extension.downloads }}</span>{% endif %}
+								</div>
+							{% endif %}
+						</div>
+					</div>
 				</div>
-				<div class="extension-name">
-					<p><a href="{{ extension.href }}" target="_blank">{{ extension.name }}</a></p>
-					<p><span>{{ extension.price }}</span></p>
-				</div>
-			</section>
-		</div>
-	{% endfor %}
+			</div>
+		{% endfor %}
 	</div>
 </div>

@@ -238,3 +238,100 @@ input[type="checkbox"]:not(.form-check-input):hover,
         text-align: right;
     }
 }
+.extension-card {
+    overflow: hidden;
+}
+
+.extension-card .extension-image {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    background: #fff;
+}
+
+.extension-card .extension-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.extension-card .extension-discount {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 2px 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: #e8590c;
+    border-radius: var(--bs-border-radius);
+}
+
+.extension-card .extension-flag {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 34px;
+    height: 22px;
+    background: linear-gradient(#0057b7 50%, #ffd700 50%);
+    border-radius: var(--bs-border-radius-sm);
+}
+
+.extension-card .extension-title {
+    display: -webkit-box;
+    overflow: hidden;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #212529;
+    text-decoration: none;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.extension-card .extension-title:hover {
+    color: #1e91cf;
+}
+
+.extension-card .extension-meta {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.extension-card .extension-author {
+    color: #495057;
+    text-decoration: none;
+}
+
+.extension-card .extension-meta .fa-star {
+    color: #ffb800;
+}
+
+.extension-card .extension-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.extension-card .extension-price {
+    font-size: 18px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.extension-card .extension-price s {
+    font-size: 13px;
+    font-weight: 400;
+    color: #adb5bd;
+}
+
+.extension-card .extension-stats {
+    display: flex;
+    gap: 8px;
+    padding: 3px 8px;
+    font-size: 12px;
+    color: #6c757d;
+    white-space: nowrap;
+    background: #f1f3f5;
+    border-radius: var(--bs-border-radius-pill);
+}

@@ -114,6 +114,7 @@ $_['entry_required']         = 'Обов’язково';
 $_['entry_status']           = 'Статус';
 $_['entry_sort_order']       = 'Порядок сортування';
 $_['entry_category']         = 'Категорії';
+$_['entry_main_category']    = 'Головна категорія';
 $_['entry_filter']           = 'Фільтри';
 $_['entry_download']         = 'Завантаження';
 $_['entry_related']          = 'Рекомендовані товари';

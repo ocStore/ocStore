@@ -526,6 +526,7 @@
                         <tbody>
                           {% for product_category in product_categories %}
                             <tr id="product-category-{{ product_category.category_id }}">
+                              <td class="text-center"><input type="radio" name="main_category_id" value="{{ product_category.category_id }}" class="form-check-input"{% if product_category.category_id == main_category_id %} checked{% endif %} title="{{ entry_main_category }}"/></td>
                               <td>{{ product_category.name }}<input type="hidden" name="product_category[]" value="{{ product_category.category_id }}"/></td>
                               <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>
                             </tr>
@@ -1394,6 +1395,7 @@ $('#input-category').autocomplete({
         $('#product-category-' + item['value']).remove();
 
         html = '<tr id="product-category-' + item['value'] + '">';
+        html += '  <td class="text-center"><input type="radio" name="main_category_id" value="' + item['value'] + '" class="form-check-input"/></td>';
         html += '  <td>' + item['label'] + '<input type="hidden" name="product_category[]" value="' + item['value'] + '"/></td>';
         html += '  <td class="text-end"><button type="button" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
         html += '</tr>';

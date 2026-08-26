@@ -108,6 +108,7 @@ $_['entry_required']             = 'Required';
 $_['entry_status']               = 'Status';
 $_['entry_sort_order']           = 'Sort Order';
 $_['entry_category']             = 'Categories';
+$_['entry_main_category']        = 'Main Category';
 $_['entry_filter']               = 'Filters';
 $_['entry_download']             = 'Downloads';
 $_['entry_related']              = 'Related Products';

@@ -5930,6 +5930,11 @@ function oc_db_schema() {
 			[
 				'name' => 'category_id',
 				'type' => 'int(11)'
+			],
+			[
+				'name'    => 'main_category',
+				'type'    => 'tinyint(1)',
+				'default' => '0'
 			]
 		],
 		'primary' => [

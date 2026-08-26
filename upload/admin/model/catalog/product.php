@@ -79,9 +79,10 @@ class Product extends \Opencart\System\Engine\Model {
 
 		// Categories
 		if (isset($data['product_category'])) {
-			foreach ($data['product_category'] as $category_id) {
-				$this->model_catalog_product->addCategory($product_id, $category_id);
+			$main_category_id = (int)($data['main_category_id'] ?? 0);
 
+			foreach ($data['product_category'] as $category_id) {
+				$this->model_catalog_product->addCategory($product_id, $category_id, (int)$category_id === $main_category_id);
 			}
 		}
 
@@ -266,8 +267,10 @@ class Product extends \Opencart\System\Engine\Model {
 		$this->model_catalog_product->deleteCategories($product_id);
 
 		if (isset($data['product_category'])) {
+			$main_category_id = (int)($data['main_category_id'] ?? 0);
+
 			foreach ($data['product_category'] as $category_id) {
-				$this->model_catalog_product->addCategory($product_id, $category_id);
+				$this->model_catalog_product->addCategory($product_id, $category_id, (int)$category_id === $main_category_id);
 			}
 		}
 
@@ -1552,8 +1555,14 @@ class Product extends \Opencart\System\Engine\Model {
 	 *
 	 * $this->model_catalog_product->addCategory($product_id, $category_id);
 	 */
-	public function addCategory(int $product_id, int $category_id): void {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "product_to_category` SET `product_id` = '" . (int)$product_id . "', `category_id` = '" . (int)$category_id . "'");
+	public function addCategory(int $product_id, int $category_id, bool $main_category = false): void {
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "product_to_category` SET `product_id` = '" . (int)$product_id . "', `category_id` = '" . (int)$category_id . "', `main_category` = '" . (int)$main_category . "'");
+	}
+
+	public function getMainCategoryId(int $product_id): int {
+		$query = $this->db->query("SELECT `category_id` FROM `" . DB_PREFIX . "product_to_category` WHERE `product_id` = '" . (int)$product_id . "' AND `main_category` = '1' LIMIT 1");
+
+		return $query->num_rows ? (int)$query->row['category_id'] : 0;
 	}
 
 	/**

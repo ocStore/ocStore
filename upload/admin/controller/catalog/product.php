@@ -848,6 +848,12 @@ class Product extends \Opencart\System\Engine\Controller {
 			$categories = [];
 		}
 
+		if ($product_id) {
+			$data['main_category_id'] = $this->model_catalog_product->getMainCategoryId($product_id);
+		} else {
+			$data['main_category_id'] = 0;
+		}
+
 		$data['product_categories'] = [];
 
 		foreach ($categories as $category_id) {
@@ -1178,6 +1184,7 @@ class Product extends \Opencart\System\Engine\Controller {
 		}
 
 		$required = [
+			'main_category_id'    => 0,
 			'product_id'          => 0,
 			'master_id'           => 0,
 			'product_description' => [],

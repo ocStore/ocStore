@@ -6,6 +6,14 @@ namespace Opencart\Catalog\Controller\Startup;
  * @package Opencart\Catalog\Controller\Startup
  */
 class SeoUrl extends \Opencart\System\Engine\Controller {
+	private \Opencart\System\Library\SeoPro $seo_pro;
+
+	public function __construct(\Opencart\System\Engine\Registry $registry) {
+		parent::__construct($registry);
+
+		$this->seo_pro = new \Opencart\System\Library\SeoPro($registry);
+	}
+
 	/**
 	 * @var array<int, array<string, array<string, string>>>
 	 */
@@ -32,6 +40,10 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 					array_pop($parts);
 				}
 
+				if ($this->config->get('config_seo_pro')) {
+					$parts = $this->seo_pro->prepareRoute($parts);
+				}
+
 				foreach ($parts as $key => $value) {
 					$seo_url_info = $this->model_design_seo_url->getSeoUrlByKeyword($value);
 
@@ -49,6 +61,10 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 				if ($parts) {
 					$this->request->get['route'] = $this->config->get('action_error');
 				}
+			}
+
+			if ($this->config->get('config_seo_pro')) {
+				$this->seo_pro->validate();
 			}
 		}
 
@@ -90,6 +106,33 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 
 		if (!empty($url_info['query'])) {
 			parse_str($url_info['query'], $query);
+		}
+
+		if ($this->config->get('config_seo_pro')) {
+			[$seo_url, $seo_query, $postfix] = $this->seo_pro->baseRewrite($query);
+
+			if ($seo_url !== null) {
+				$url .= str_replace('/index.php', '', $url_info['path'] ?? '');
+				$url .= $seo_url;
+
+				if (!parse_url($url, PHP_URL_PATH)) {
+					$url .= '/';
+				}
+
+				if ($postfix && $this->config->get('config_seopro_postfix')) {
+					$url .= $this->config->get('config_seopro_postfix');
+				} elseif ($this->config->get('config_seopro_addslash') || $seo_query) {
+					$url .= '/';
+				}
+
+				if ($seo_query) {
+					$url .= '?' . str_replace(['%2F'], ['/'], http_build_query($seo_query));
+				}
+
+				return $url;
+			}
+
+			return $link;
 		}
 
 		$language_id = $this->config->get('config_language_id');

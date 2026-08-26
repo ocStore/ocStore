@@ -1,0 +1,21 @@
+<h3>{{ heading_title }}</h3>
+<div class="row {% if axis == 'horizontal' %}row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4{% else %}row-cols-1{% endif %}">
+  {% for article in articles %}
+    <div class="col mb-3">
+      <div class="card h-100">
+        <a href="{{ article.href }}"><img src="{{ article.thumb }}" alt="{{ article.name }}" class="img-fluid mx-auto d-block p-2"/></a>
+        <div class="card-body">
+          <h4 class="card-title"><a href="{{ article.href }}">{{ article.name }}</a></h4>
+          <p class="card-text">{{ article.description }}</p>
+        </div>
+        <div class="card-footer p-0 bg-transparent">
+          <div class="btn-group w-100" role="group">
+            <a href="{{ article.href }}" class="btn btn-light btn-sm text-truncate"><i class="fa-solid fa-share"></i> {{ button_more }}</a>
+            <button type="button" class="btn btn-light btn-sm" data-bs-toggle="tooltip" title="{{ article.date_added }}"><i class="fa-solid fa-clock"></i></button>
+            <button type="button" class="btn btn-light btn-sm" data-bs-toggle="tooltip" title="{{ text_viewed }}: {{ article.viewed }}"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>

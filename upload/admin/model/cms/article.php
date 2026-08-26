@@ -58,6 +58,12 @@ class Article extends \Opencart\System\Engine\Model {
 		// Download
 		$this->model_cms_article->addDownloads($article_id, $data['article_download'] ?? []);
 
+		// Manufacturer
+		$this->model_cms_article->addManufacturers($article_id, $data['article_manufacturer'] ?? []);
+
+		// Category
+		$this->model_cms_article->addCategories($article_id, $data['article_category'] ?? []);
+
 		// SEO
 		$this->load->model('design/seo_url');
 
@@ -134,6 +140,12 @@ class Article extends \Opencart\System\Engine\Model {
 		// Download
 		$this->model_cms_article->addDownloads($article_id, $data['article_download'] ?? []);
 
+		// Manufacturer
+		$this->model_cms_article->addManufacturers($article_id, $data['article_manufacturer'] ?? []);
+
+		// Category
+		$this->model_cms_article->addCategories($article_id, $data['article_category'] ?? []);
+
 		// SEO
 		$this->load->model('design/seo_url');
 
@@ -204,6 +216,8 @@ class Article extends \Opencart\System\Engine\Model {
 		$this->model_cms_article->deleteRelated($article_id);
 		$this->model_cms_article->deleteProducts($article_id);
 		$this->model_cms_article->deleteDownloads($article_id);
+		$this->model_cms_article->deleteManufacturers($article_id);
+		$this->model_cms_article->deleteCategories($article_id);
 
 		// SEO
 		$this->load->model('design/seo_url');
@@ -984,5 +998,41 @@ class Article extends \Opencart\System\Engine\Model {
 		$query = $this->db->query("SELECT `download_id` FROM `" . DB_PREFIX . "article_to_download` WHERE `article_id` = '" . (int)$article_id . "'");
 
 		return array_column($query->rows, 'download_id');
+	}
+
+	public function addManufacturers(int $article_id, array $manufacturers): void {
+		$this->model_cms_article->deleteManufacturers($article_id);
+
+		foreach ($manufacturers as $manufacturer_id) {
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "article_to_manufacturer` SET `article_id` = '" . (int)$article_id . "', `manufacturer_id` = '" . (int)$manufacturer_id . "'");
+		}
+	}
+
+	public function deleteManufacturers(int $article_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_manufacturer` WHERE `article_id` = '" . (int)$article_id . "'");
+	}
+
+	public function getManufacturers(int $article_id): array {
+		$query = $this->db->query("SELECT `manufacturer_id` FROM `" . DB_PREFIX . "article_to_manufacturer` WHERE `article_id` = '" . (int)$article_id . "'");
+
+		return array_column($query->rows, 'manufacturer_id');
+	}
+
+	public function addCategories(int $article_id, array $categories): void {
+		$this->model_cms_article->deleteCategories($article_id);
+
+		foreach ($categories as $category_id) {
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "article_to_category` SET `article_id` = '" . (int)$article_id . "', `category_id` = '" . (int)$category_id . "'");
+		}
+	}
+
+	public function deleteCategories(int $article_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_category` WHERE `article_id` = '" . (int)$article_id . "'");
+	}
+
+	public function getCategories(int $article_id): array {
+		$query = $this->db->query("SELECT `category_id` FROM `" . DB_PREFIX . "article_to_category` WHERE `article_id` = '" . (int)$article_id . "'");
+
+		return array_column($query->rows, 'category_id');
 	}
 }

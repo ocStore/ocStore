@@ -566,4 +566,36 @@ class Article extends \Opencart\System\Engine\Model {
 	public function updateViewed(int $article_id): void {
 		$this->db->query("UPDATE `" . DB_PREFIX . "article` SET `viewed` = `viewed` + 1 WHERE `article_id` = '" . (int)$article_id . "'");
 	}
+
+	public function getArticlesByManufacturerId(int $manufacturer_id): array {
+		$article_data = [];
+
+		$query = $this->db->query("SELECT `a2m`.`article_id` FROM `" . DB_PREFIX . "article_to_manufacturer` `a2m` LEFT JOIN `" . DB_PREFIX . "article` `a` ON (`a2m`.`article_id` = `a`.`article_id`) LEFT JOIN `" . DB_PREFIX . "article_to_store` `a2s` ON (`a`.`article_id` = `a2s`.`article_id`) WHERE `a2m`.`manufacturer_id` = '" . (int)$manufacturer_id . "' AND `a`.`status` = '1' AND `a2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "'");
+
+		foreach ($query->rows as $result) {
+			$article_info = $this->model_cms_article->getArticle($result['article_id']);
+
+			if ($article_info) {
+				$article_data[$result['article_id']] = $article_info;
+			}
+		}
+
+		return $article_data;
+	}
+
+	public function getArticlesByCategoryId(int $category_id): array {
+		$article_data = [];
+
+		$query = $this->db->query("SELECT `a2c`.`article_id` FROM `" . DB_PREFIX . "article_to_category` `a2c` LEFT JOIN `" . DB_PREFIX . "article` `a` ON (`a2c`.`article_id` = `a`.`article_id`) LEFT JOIN `" . DB_PREFIX . "article_to_store` `a2s` ON (`a`.`article_id` = `a2s`.`article_id`) WHERE `a2c`.`category_id` = '" . (int)$category_id . "' AND `a`.`status` = '1' AND `a2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "'");
+
+		foreach ($query->rows as $result) {
+			$article_info = $this->model_cms_article->getArticle($result['article_id']);
+
+			if ($article_info) {
+				$article_data[$result['article_id']] = $article_info;
+			}
+		}
+
+		return $article_data;
+	}
 }

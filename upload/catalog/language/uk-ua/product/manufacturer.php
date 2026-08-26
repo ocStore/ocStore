@@ -19,3 +19,4 @@ $_['text_rating_desc']  = 'Рейтинг (за зменшенням)';
 $_['text_model_asc']    = 'Модель (А - Я)';
 $_['text_model_desc']   = 'Модель (Я - А)';
 $_['text_limit']        = 'Показати';
+$_['text_article']      = 'Статті';

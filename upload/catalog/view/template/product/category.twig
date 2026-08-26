@@ -104,6 +104,13 @@
         <p>{{ text_no_results }}</p>
         <div class="text-end"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
       {% endif %}
+            {% if articles %}
+        <p>{{ text_article }}
+          {% for article in articles %}
+            <a href="{{ article.href }}">{{ article.name }}</a>{% if not loop.last %},{% endif %}
+          {% endfor %}
+        </p>
+      {% endif %}
       {{ content_bottom }}</div>
     {{ column_right }}</div>
 </div>

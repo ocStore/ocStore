@@ -148,6 +148,17 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 			$data['compare'] = $this->url->link('product/compare', 'language=' . $this->config->get('config_language'));
 
 			// Product
+			$this->load->model('cms/article');
+
+			$data['articles'] = [];
+
+			foreach ($this->model_cms_article->getArticlesByManufacturerId((int)$manufacturer_id) as $result) {
+				$data['articles'][] = [
+					'name' => $result['name'],
+					'href' => $this->url->link('cms/blog.info', 'language=' . $this->config->get('config_language') . '&article_id=' . $result['article_id'])
+				];
+			}
+
 			$data['products'] = [];
 
 			$filter_data = [

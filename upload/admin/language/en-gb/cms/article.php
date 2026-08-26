@@ -56,3 +56,5 @@ $_['error_author']            = 'Author must be between 3 and 64 characters!';
 $_['error_keyword']           = 'SEO URL must be between 1 and 64 characters!';
 $_['error_keyword_exists']    = 'SEO URL must be unique!';
 $_['error_keyword_character'] = 'Keyword can only use characters a-z, 0-9, - and _!';
+$_['entry_manufacturer']      = 'Brands';
+$_['entry_category']          = 'Categories';

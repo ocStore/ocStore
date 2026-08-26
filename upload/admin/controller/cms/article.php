@@ -332,6 +332,48 @@ class Article extends \Opencart\System\Engine\Controller {
 			}
 		}
 
+		$this->load->model('catalog/manufacturer');
+
+		$data['article_manufacturers'] = [];
+
+		if (!empty($article_info)) {
+			$results = $this->model_cms_article->getManufacturers($article_info['article_id']);
+		} else {
+			$results = [];
+		}
+
+		foreach ($results as $manufacturer_id) {
+			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($manufacturer_id);
+
+			if ($manufacturer_info) {
+				$data['article_manufacturers'][] = [
+					'manufacturer_id' => $manufacturer_info['manufacturer_id'],
+					'name'            => $manufacturer_info['name']
+				];
+			}
+		}
+
+		$this->load->model('catalog/category');
+
+		$data['article_categories'] = [];
+
+		if (!empty($article_info)) {
+			$results = $this->model_cms_article->getCategories($article_info['article_id']);
+		} else {
+			$results = [];
+		}
+
+		foreach ($results as $category_id) {
+			$category_info = $this->model_catalog_category->getCategory($category_id);
+
+			if ($category_info) {
+				$data['article_categories'][] = [
+					'category_id' => $category_info['category_id'],
+					'name'        => ($category_info['path'] ? $category_info['path'] . ' &gt; ' . $category_info['name'] : $category_info['name'])
+				];
+			}
+		}
+
 		$this->load->model('catalog/download');
 
 		$data['article_downloads'] = [];
@@ -429,6 +471,8 @@ class Article extends \Opencart\System\Engine\Controller {
 			'article_related'     => [],
 			'article_product'     => [],
 			'article_download'    => [],
+			'article_manufacturer' => [],
+			'article_category'    => [],
 			'date_available'      => '',
 			'sort_order'          => 0,
 			'noindex'             => 0,

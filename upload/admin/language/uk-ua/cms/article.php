@@ -54,3 +54,5 @@ $_['error_keyword']           = 'SEO URL має містити від 1 до 64 
 $_['error_keyword_exists']    = 'SEO URL має бути унікальним';
 $_['error_keyword_character'] = 'Ключове слово може містити тільки символи a-z, 0-9, - та _';
 $_['error_author']            = 'Ім’я автора має містити від 3 до 64 символів';
+$_['entry_manufacturer']      = 'Виробники';
+$_['entry_category']          = 'Категорії';

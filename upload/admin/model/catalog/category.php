@@ -59,6 +59,15 @@ class Category extends \Opencart\System\Engine\Model {
 			}
 		}
 
+		// Product
+		$this->model_catalog_category->deleteRelateds($category_id);
+
+		if (isset($data['product_related'])) {
+			foreach ($data['product_related'] as $product_id) {
+				$this->model_catalog_category->addRelated($category_id, (int)$product_id);
+			}
+		}
+
 		if (isset($data['category_store'])) {
 			foreach ($data['category_store'] as $store_id) {
 				$this->model_catalog_category->addStore($category_id, $store_id);
@@ -256,6 +265,15 @@ class Category extends \Opencart\System\Engine\Model {
 		// Stores
 		$this->model_catalog_category->deleteStores($category_id);
 
+		// Product
+		$this->model_catalog_category->deleteRelateds($category_id);
+
+		if (isset($data['product_related'])) {
+			foreach ($data['product_related'] as $product_id) {
+				$this->model_catalog_category->addRelated($category_id, (int)$product_id);
+			}
+		}
+
 		if (isset($data['category_store'])) {
 			foreach ($data['category_store'] as $store_id) {
 				$this->model_catalog_category->addStore($category_id, $store_id);
@@ -292,6 +310,7 @@ class Category extends \Opencart\System\Engine\Model {
 	public function deleteCategory(int $category_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "category` WHERE `category_id` = '" . (int)$category_id . "'");
 
+		$this->model_catalog_category->deleteRelateds($category_id);
 		$this->model_catalog_category->deleteDescriptions($category_id);
 		$this->model_catalog_category->deleteFilters($category_id);
 		$this->model_catalog_category->deleteStores($category_id);
@@ -846,6 +865,79 @@ class Category extends \Opencart\System\Engine\Model {
 		}
 
 		return $category_filter_data;
+	}
+
+	/**
+	 * Add Related
+	 *
+	 * Link a product to the category so the featured product module can show it on its page.
+	 *
+	 * @param int $category_id primary key of the category record
+	 * @param int $product_id  primary key of the product record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/category');
+	 *
+	 * $this->model_catalog_category->addRelated($category_id, $product_id);
+	 */
+	public function addRelated(int $category_id, int $product_id): void {
+		$this->db->query("REPLACE INTO `" . DB_PREFIX . "product_related_wb` SET `category_id` = '" . (int)$category_id . "', `product_id` = '" . (int)$product_id . "'");
+	}
+
+	/**
+	 * Delete Relateds
+	 *
+	 * @param int $category_id primary key of the category record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/category');
+	 *
+	 * $this->model_catalog_category->deleteRelateds($category_id);
+	 */
+	public function deleteRelateds(int $category_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_related_wb` WHERE `category_id` = '" . (int)$category_id . "'");
+	}
+
+	/**
+	 * Delete Relateds By Product ID
+	 *
+	 * @param int $product_id primary key of the product record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/category');
+	 *
+	 * $this->model_catalog_category->deleteRelatedsByProductId($product_id);
+	 */
+	public function deleteRelatedsByProductId(int $product_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_related_wb` WHERE `product_id` = '" . (int)$product_id . "'");
+	}
+
+	/**
+	 * Get Relateds
+	 *
+	 * @param int $category_id primary key of the category record
+	 *
+	 * @return array<int, int> product IDs
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/category');
+	 *
+	 * $products = $this->model_catalog_category->getRelateds($category_id);
+	 */
+	public function getRelateds(int $category_id): array {
+		$query = $this->db->query("SELECT `product_id` FROM `" . DB_PREFIX . "product_related_wb` WHERE `category_id` = '" . (int)$category_id . "'");
+
+		return array_column($query->rows, 'product_id');
 	}
 
 	/**

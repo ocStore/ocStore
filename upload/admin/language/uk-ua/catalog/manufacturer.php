@@ -29,6 +29,9 @@ $_['entry_meta_h1']     = 'Заголовок H1';
 $_['entry_meta_title']  = 'Мета-тег Title';
 $_['entry_meta_description'] = 'Мета-тег Description';
 $_['entry_meta_keyword'] = 'Мета-тег Keywords';
+$_['tab_related']        = 'Зв’язки';
+$_['entry_related_mn']  = 'Рекомендовані товари:';
+$_['help_related']      = '(Автодоповнення)';
 
 // Error
 $_['error_warning']     = 'Будь ласка, перевірте форму на наявність помилок';

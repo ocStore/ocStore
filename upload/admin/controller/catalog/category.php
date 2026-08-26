@@ -408,6 +408,25 @@ class Category extends \Opencart\System\Engine\Controller {
 			}
 		}
 
+		// Product
+		if (!empty($category_info)) {
+			$product_relateds = $this->model_catalog_category->getRelateds((int)$category_info['category_id']);
+		} else {
+			$product_relateds = [];
+		}
+
+		$this->load->model('catalog/product');
+
+		$data['product_relateds'] = [];
+
+		foreach ($product_relateds as $product_id) {
+			$product_info = $this->model_catalog_product->getProduct($product_id);
+
+			if ($product_info) {
+				$data['product_relateds'][] = $product_info;
+			}
+		}
+
 		// Layout
 		$this->load->model('design/layout');
 
@@ -445,6 +464,7 @@ class Category extends \Opencart\System\Engine\Controller {
 		$required = [
 			'category_id'          => 0,
 			'category_description' => [],
+			'product_related'      => [],
 			'image'                => '',
 			'parent_id'            => 0,
 			'sort_order'           => 0,

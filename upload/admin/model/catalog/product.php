@@ -475,6 +475,13 @@ class Product extends \Opencart\System\Engine\Model {
 	 * $this->model_catalog_product->deleteProduct($product_id);
 	 */
 	public function deleteProduct(int $product_id): void {
+		// Featured product lists
+		$this->load->model('catalog/category');
+		$this->load->model('catalog/manufacturer');
+
+		$this->model_catalog_category->deleteRelatedsByProductId($product_id);
+		$this->model_catalog_manufacturer->deleteRelatedsByProductId($product_id);
+
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "product` WHERE `product_id` = '" . (int)$product_id . "'");
 
 		$this->model_catalog_product->deleteAttributes($product_id);

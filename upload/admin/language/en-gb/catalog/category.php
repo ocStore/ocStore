@@ -39,6 +39,9 @@ $_['entry_layout']            = 'Layout Override';
 // Help
 $_['help_parent']             = '(Autocomplete)';
 $_['help_filter']             = '(Autocomplete)';
+$_['tab_related']        = 'Links';
+$_['entry_related_wb']  = 'Featured Products:';
+$_['help_related']      = '(Autocomplete)';
 
 // Error
 $_['error_warning']           = 'Warning: Please check the form carefully for errors!';

@@ -40,6 +40,15 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 		}
 
 		// Store
+		// Product
+		$this->model_catalog_manufacturer->deleteRelateds($manufacturer_id);
+
+		if (isset($data['product_related'])) {
+			foreach ($data['product_related'] as $product_id) {
+				$this->model_catalog_manufacturer->addRelated($manufacturer_id, (int)$product_id);
+			}
+		}
+
 		if (isset($data['manufacturer_store'])) {
 			foreach ($data['manufacturer_store'] as $store_id) {
 				$this->model_catalog_manufacturer->addStore($manufacturer_id, $store_id);
@@ -104,6 +113,15 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 		// Store
 		$this->deleteStores($manufacturer_id);
 
+		// Product
+		$this->model_catalog_manufacturer->deleteRelateds($manufacturer_id);
+
+		if (isset($data['product_related'])) {
+			foreach ($data['product_related'] as $product_id) {
+				$this->model_catalog_manufacturer->addRelated($manufacturer_id, (int)$product_id);
+			}
+		}
+
 		if (isset($data['manufacturer_store'])) {
 			foreach ($data['manufacturer_store'] as $store_id) {
 				$this->model_catalog_manufacturer->addStore($manufacturer_id, $store_id);
@@ -155,6 +173,7 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 	public function deleteManufacturer(int $manufacturer_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "manufacturer` WHERE `manufacturer_id` = '" . (int)$manufacturer_id . "'");
 
+		$this->model_catalog_manufacturer->deleteRelateds($manufacturer_id);
 		$this->model_catalog_manufacturer->deleteDescriptions($manufacturer_id);
 		$this->model_catalog_manufacturer->deleteStores($manufacturer_id);
 		$this->model_catalog_manufacturer->deleteLayouts($manufacturer_id);
@@ -375,6 +394,79 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "manufacturer_description` WHERE `language_id` = '" . (int)$language_id . "'");
 
 		return $query->rows;
+	}
+
+	/**
+	 * Add Related
+	 *
+	 * Link a product to the manufacturer so the featured product module can show it on its page.
+	 *
+	 * @param int $manufacturer_id primary key of the manufacturer record
+	 * @param int $product_id  primary key of the product record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $this->model_catalog_manufacturer->addRelated($manufacturer_id, $product_id);
+	 */
+	public function addRelated(int $manufacturer_id, int $product_id): void {
+		$this->db->query("REPLACE INTO `" . DB_PREFIX . "product_related_mn` SET `manufacturer_id` = '" . (int)$manufacturer_id . "', `product_id` = '" . (int)$product_id . "'");
+	}
+
+	/**
+	 * Delete Relateds
+	 *
+	 * @param int $manufacturer_id primary key of the manufacturer record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $this->model_catalog_manufacturer->deleteRelateds($manufacturer_id);
+	 */
+	public function deleteRelateds(int $manufacturer_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_related_mn` WHERE `manufacturer_id` = '" . (int)$manufacturer_id . "'");
+	}
+
+	/**
+	 * Delete Relateds By Product ID
+	 *
+	 * @param int $product_id primary key of the product record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $this->model_catalog_manufacturer->deleteRelatedsByProductId($product_id);
+	 */
+	public function deleteRelatedsByProductId(int $product_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_related_mn` WHERE `product_id` = '" . (int)$product_id . "'");
+	}
+
+	/**
+	 * Get Relateds
+	 *
+	 * @param int $manufacturer_id primary key of the manufacturer record
+	 *
+	 * @return array<int, int> product IDs
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $products = $this->model_catalog_manufacturer->getRelateds($manufacturer_id);
+	 */
+	public function getRelateds(int $manufacturer_id): array {
+		$query = $this->db->query("SELECT `product_id` FROM `" . DB_PREFIX . "product_related_mn` WHERE `manufacturer_id` = '" . (int)$manufacturer_id . "'");
+
+		return array_column($query->rows, 'product_id');
 	}
 
 	/**

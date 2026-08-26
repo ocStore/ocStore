@@ -29,6 +29,9 @@ $_['entry_meta_h1']     = 'Heading H1';
 $_['entry_meta_title']  = 'Meta Tag Title';
 $_['entry_meta_description'] = 'Meta Tag Description';
 $_['entry_meta_keyword'] = 'Meta Tag Keywords';
+$_['tab_related']        = 'Links';
+$_['entry_related_mn']  = 'Featured Products:';
+$_['help_related']      = '(Autocomplete)';
 
 // Error
 $_['error_warning']           = 'Warning: Please check the form carefully for errors!';

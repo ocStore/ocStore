@@ -743,6 +743,62 @@ class Product extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * Get Related By Category
+	 *
+	 * Products picked by hand on the category form for the featured product module.
+	 *
+	 * @param int $category_id primary key of the category record
+	 * @param int $limit       how many products to return
+	 *
+	 * @return array<int, array<string, mixed>> product records
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/product');
+	 *
+	 * $results = $this->model_catalog_product->getRelatedByCategory($category_id, 4);
+	 */
+	public function getRelatedByCategory(int $category_id, int $limit = 4): array {
+		$query = $this->db->query("SELECT `pr`.`product_id` FROM `" . DB_PREFIX . "product_related_wb` `pr` LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`pr`.`product_id` = `p`.`product_id`) LEFT JOIN `" . DB_PREFIX . "product_to_store` `p2s` ON (`p`.`product_id` = `p2s`.`product_id`) WHERE `pr`.`category_id` = '" . (int)$category_id . "' AND `p`.`status` = '1' AND `p`.`date_available` <= NOW() AND `p2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "' LIMIT " . (int)$limit);
+
+		$product_data = [];
+
+		foreach ($query->rows as $result) {
+			$product_data[] = $this->getProduct((int)$result['product_id']);
+		}
+
+		return array_filter($product_data);
+	}
+
+	/**
+	 * Get Related By Manufacturer
+	 *
+	 * Products picked by hand on the manufacturer form for the featured product module.
+	 *
+	 * @param int $manufacturer_id primary key of the manufacturer record
+	 * @param int $limit           how many products to return
+	 *
+	 * @return array<int, array<string, mixed>> product records
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/product');
+	 *
+	 * $results = $this->model_catalog_product->getRelatedByManufacturer($manufacturer_id, 4);
+	 */
+	public function getRelatedByManufacturer(int $manufacturer_id, int $limit = 4): array {
+		$query = $this->db->query("SELECT `pr`.`product_id` FROM `" . DB_PREFIX . "product_related_mn` `pr` LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`pr`.`product_id` = `p`.`product_id`) LEFT JOIN `" . DB_PREFIX . "product_to_store` `p2s` ON (`p`.`product_id` = `p2s`.`product_id`) WHERE `pr`.`manufacturer_id` = '" . (int)$manufacturer_id . "' AND `p`.`status` = '1' AND `p`.`date_available` <= NOW() AND `p2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "' LIMIT " . (int)$limit);
+
+		$product_data = [];
+
+		foreach ($query->rows as $result) {
+			$product_data[] = $this->getProduct((int)$result['product_id']);
+		}
+
+		return array_filter($product_data);
+	}
+
+	/**
 	 * Get Related
 	 *
 	 * Get the record of the product related record in the database.*

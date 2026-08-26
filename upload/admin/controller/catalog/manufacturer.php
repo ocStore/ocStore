@@ -305,6 +305,25 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 			$data['manufacturer_seo_url'] = [];
 		}
 
+		// Product
+		if (!empty($manufacturer_info)) {
+			$product_relateds = $this->model_catalog_manufacturer->getRelateds((int)$manufacturer_info['manufacturer_id']);
+		} else {
+			$product_relateds = [];
+		}
+
+		$this->load->model('catalog/product');
+
+		$data['product_relateds'] = [];
+
+		foreach ($product_relateds as $product_id) {
+			$product_info = $this->model_catalog_product->getProduct($product_id);
+
+			if ($product_info) {
+				$data['product_relateds'][] = $product_info;
+			}
+		}
+
 		// Layout
 		$this->load->model('design/layout');
 
@@ -343,6 +362,7 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 			'manufacturer_id'          => 0,
 			'name'                     => '',
 			'manufacturer_description' => [],
+			'product_related'      => [],
 			'manufacturer_seo_url'     => []
 		];
 

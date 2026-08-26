@@ -1420,6 +1420,27 @@ function oc_db_schema() {
 	];
 
 	$tables[] = [
+		'name'  => 'product_related_wb',
+		'field' => [
+			[
+				'name' => 'product_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'category_id',
+				'type' => 'int(11)'
+			]
+		],
+		'primary' => [
+			'product_id',
+			'category_id'
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
 		'name'  => 'category_to_store',
 		'field' => [
 			[
@@ -3999,6 +4020,27 @@ function oc_db_schema() {
 				'table' => 'layout',
 				'field' => 'layout_id'
 			]
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
+		'name'  => 'product_related_mn',
+		'field' => [
+			[
+				'name' => 'product_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'manufacturer_id',
+				'type' => 'int(11)'
+			]
+		],
+		'primary' => [
+			'product_id',
+			'manufacturer_id'
 		],
 		'engine'  => 'InnoDB',
 		'charset' => 'utf8mb4',

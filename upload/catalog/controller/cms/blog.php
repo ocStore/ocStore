@@ -138,6 +138,10 @@ class Blog extends \Opencart\System\Engine\Controller {
 			$this->document->setDescription($topic_info['meta_description']);
 			$this->document->setKeywords($topic_info['meta_keyword']);
 
+			if (!empty($topic_info['noindex']) && $this->config->get('config_noindex_status')) {
+				$this->document->setRobots('noindex,follow');
+			}
+
 			$data['heading_title'] = $topic_info['name'];
 		} else {
 			$this->document->setTitle($this->language->get('heading_title'));
@@ -350,6 +354,10 @@ class Blog extends \Opencart\System\Engine\Controller {
 			$this->document->setDescription($article_info['meta_description']);
 			$this->document->setKeywords($article_info['meta_keyword']);
 
+			if (!empty($article_info['noindex']) && $this->config->get('config_noindex_status')) {
+				$this->document->setRobots('noindex,follow');
+			}
+
 			$data['breadcrumbs'] = [];
 
 			$data['breadcrumbs'][] = [
@@ -408,6 +416,8 @@ class Blog extends \Opencart\System\Engine\Controller {
 
 			if (!empty($article_info['image']) && is_file(DIR_IMAGE . html_entity_decode($article_info['image'], ENT_QUOTES, 'UTF-8'))) {
 				$data['image'] = $this->model_tool_image->resize($article_info['image'], $this->config->get('config_image_article_width'), $this->config->get('config_image_article_height'));
+
+				$this->document->setOgImage($data['image']);
 			} else {
 				$data['image'] = '';
 			}

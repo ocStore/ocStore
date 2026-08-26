@@ -37,6 +37,36 @@ class Header extends \Opencart\System\Engine\Controller {
 		$data['base'] = $this->config->get('config_url');
 		$data['description'] = $this->document->getDescription();
 		$data['keywords'] = $this->document->getKeywords();
+		if (!$this->document->getRobots() && $this->config->get('config_noindex_status')) {
+			$route = $this->request->get['route'] ?? '';
+
+			$noindex_routes = ['product/search', 'product/compare'];
+			$noindex_groups = ['account/', 'affiliate/', 'checkout/'];
+
+			$noindex = in_array($route, $noindex_routes, true);
+
+			foreach ($noindex_groups as $group) {
+				if (substr($route, 0, strlen($group)) == $group) {
+					$noindex = true;
+				}
+			}
+
+			if (!$noindex) {
+				$ignore = array_filter(array_map('trim', explode("\n", (string)$this->config->get('config_noindex_params'))));
+
+				foreach (['filter', 'sort', 'order', 'page', 'limit'] as $param) {
+					if (isset($this->request->get[$param]) && !in_array($param, $ignore, true)) {
+						$noindex = true;
+					}
+				}
+			}
+
+			if ($noindex) {
+				$this->document->setRobots('noindex,follow');
+			}
+		}
+
+		$data['robots'] = $this->document->getRobots();
 
 		// Hard coding css, so they can be replaced via the event's system.
 		$data['bootstrap'] = 'catalog/view/stylesheet/bootstrap.css';
@@ -64,6 +94,16 @@ class Header extends \Opencart\System\Engine\Controller {
 		} else {
 			$data['logo'] = '';
 		}
+
+		$data['og_status'] = (bool)$this->config->get('config_og_status');
+
+		if (isset($this->request->server['REQUEST_URI']) && $this->request->server['REQUEST_URI'] != '/') {
+			$data['og_url'] = rtrim($this->config->get('config_url'), '/') . '/' . ltrim($this->request->server['REQUEST_URI'], '/');
+		} else {
+			$data['og_url'] = $this->url->link('common/home', 'language=' . $this->config->get('config_language'));
+		}
+
+		$data['og_image'] = $this->document->getOgImage();
 
 		$this->load->language('common/header');
 

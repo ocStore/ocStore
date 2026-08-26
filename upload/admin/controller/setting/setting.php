@@ -468,6 +468,17 @@ class Setting extends \Opencart\System\Engine\Controller {
 		$data['config_seopro_lowercase'] = $this->config->get('config_seopro_lowercase');
 		$data['config_seopro_param_status'] = $this->config->get('config_seopro_param_status');
 		$data['config_seopro_params'] = $this->config->get('config_seopro_params');
+
+		// Meta
+		$data['config_add_prevnext'] = $this->config->get('config_add_prevnext');
+		$data['config_og_status'] = $this->config->get('config_og_status');
+		$data['config_noindex_status'] = $this->config->get('config_noindex_status');
+
+		if ($this->config->has('config_noindex_params')) {
+			$data['config_noindex_params'] = $this->config->get('config_noindex_params');
+		} else {
+			$data['config_noindex_params'] = 'page';
+		}
 		$data['config_compression'] = $this->config->get('config_compression');
 
 		// Security

@@ -5,12 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>{{ title }}</title>
+  {% if robots %}
+    <meta name="robots" content="{{ robots }}"/>
+  {% endif %}
   <base href="{{ base }}"/>
   {% if description %}
     <meta name="description" content="{{ description }}"/>
   {% endif %}
   {% if keywords %}
     <meta name="keywords" content="{{ keywords }}"/>
+  {% endif %}
+  {% if og_status %}
+    <meta property="og:title" content="{{ title }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{ og_url }}"/>
+    {% if og_image %}
+      <meta property="og:image" content="{{ og_image }}"/>
+    {% elseif logo %}
+      <meta property="og:image" content="{{ logo }}"/>
+    {% endif %}
+    <meta property="og:site_name" content="{{ name }}"/>
   {% endif %}
   <script src="{{ jquery }}" type="text/javascript"></script>
   <link href="{{ bootstrap }}" type="text/css" rel="stylesheet" media="screen"/>

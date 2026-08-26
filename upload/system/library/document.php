@@ -26,6 +26,14 @@ class Document {
 	 */
 	private string $keywords = '';
 	/**
+	 * @var string
+	 */
+	private string $robots = '';
+	/**
+	 * @var string
+	 */
+	private string $og_image = '';
+	/**
 	 * @var array<string, array<string, string>>
 	 */
 	private array $links = [];
@@ -60,6 +68,46 @@ class Document {
 	 */
 	public function getTitle(): string {
 		return $this->title;
+	}
+
+	/**
+	 * Set Robots
+	 *
+	 * @param string $robots
+	 *
+	 * @return void
+	 */
+	public function setRobots(string $robots): void {
+		$this->robots = $robots;
+	}
+
+	/**
+	 * Get Robots
+	 *
+	 * @return string
+	 */
+	public function getRobots(): string {
+		return $this->robots;
+	}
+
+	/**
+	 * Set Og Image
+	 *
+	 * @param string $image
+	 *
+	 * @return void
+	 */
+	public function setOgImage(string $image): void {
+		$this->og_image = $image;
+	}
+
+	/**
+	 * Get Og Image
+	 *
+	 * @return string
+	 */
+	public function getOgImage(): string {
+		return $this->og_image;
 	}
 
 	/**

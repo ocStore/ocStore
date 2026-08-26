@@ -41,6 +41,14 @@
           </div>
         </div>
       </div>
+      {% if subtopics %}
+        <h3>{{ text_subtopic }}</h3>
+        <ul>
+          {% for subtopic in subtopics %}
+            <li><a href="{{ subtopic.href }}">{{ subtopic.name }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
       {% if articles %}
         {% for article in articles %}
           <div class="mb-3">

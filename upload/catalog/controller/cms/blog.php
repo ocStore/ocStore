@@ -124,6 +124,15 @@ class Blog extends \Opencart\System\Engine\Controller {
 			];
 		}
 
+		$data['subtopics'] = [];
+
+		foreach ($this->model_cms_topic->getTopicsByParentId($filter_topic_id) as $result) {
+			$data['subtopics'][] = [
+				'name' => $result['name'],
+				'href' => $this->url->link('cms/blog', 'language=' . $this->config->get('config_language') . '&topic_id=' . $result['topic_id'])
+			];
+		}
+
 		if ($topic_info) {
 			$this->document->setTitle($topic_info['meta_title']);
 			$this->document->setDescription($topic_info['meta_description']);
@@ -157,8 +166,9 @@ class Blog extends \Opencart\System\Engine\Controller {
 		$data['articles'] = [];
 
 		$filter_data = [
-			'filter_search'   => $filter_search,
-			'filter_topic_id' => $filter_topic_id,
+			'filter_search'    => $filter_search,
+			'filter_sub_topic' => true,
+			'filter_topic_id'  => $filter_topic_id,
 			'filter_author'   => $filter_author,
 			'filter_tag'      => $filter_tag,
 			'sort'            => $sort,
@@ -404,6 +414,89 @@ class Blog extends \Opencart\System\Engine\Controller {
 
 			$data['description'] = html_entity_decode($article_info['description'], ENT_QUOTES, 'UTF-8');
 			$data['author'] = $article_info['author'];
+
+			$this->model_cms_article->updateViewed($article_id);
+
+			$data['viewed'] = (int)$article_info['viewed'] + 1;
+
+			$data['articles'] = [];
+
+			foreach ($this->model_cms_article->getRelated($article_id) as $result) {
+				if ($result['image']) {
+					$image = $this->model_tool_image->resize(html_entity_decode($result['image'], ENT_QUOTES, 'UTF-8'), $this->config->get('config_image_article_width'), $this->config->get('config_image_article_height'));
+				} else {
+					$image = '';
+				}
+
+				$data['articles'][] = [
+					'article_id'  => $result['article_id'],
+					'name'        => $result['name'],
+					'image'       => $image,
+					'description' => oc_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, 100) . '..',
+					'viewed'      => $result['viewed'],
+					'date_added'  => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+					'href'        => $this->url->link('cms/blog.info', 'language=' . $this->config->get('config_language') . '&article_id=' . $result['article_id'])
+				];
+			}
+
+			$data['products'] = [];
+
+			$this->load->model('catalog/product');
+
+			foreach ($this->model_cms_article->getProducts($article_id) as $product_id) {
+				$product_info = $this->model_catalog_product->getProduct($product_id);
+
+				if (!$product_info) {
+					continue;
+				}
+
+				if ($product_info['image']) {
+					$image = $this->model_tool_image->resize(html_entity_decode($product_info['image'], ENT_QUOTES, 'UTF-8'), $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
+				} else {
+					$image = $this->model_tool_image->resize('placeholder.png', $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
+				}
+
+				if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+					$price = false;
+				}
+
+				if ((float)$product_info['special']) {
+					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+					$special = false;
+				}
+
+				if ($this->config->get('config_tax')) {
+					$tax = $this->currency->format((float)$product_info['special'] ? $product_info['special'] : $product_info['price'], $this->session->data['currency']);
+				} else {
+					$tax = false;
+				}
+
+				$data['products'][] = $this->load->controller('product/thumb', [
+					'product_id'  => $product_info['product_id'],
+					'thumb'       => $image,
+					'name'        => $product_info['name'],
+					'description' => oc_substr(trim(strip_tags(html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8'))), 0, (int)$this->config->get('config_product_description_length')) . '..',
+					'price'       => $price,
+					'special'     => $special,
+					'tax'         => $tax,
+					'minimum'     => $product_info['minimum'] > 0 ? $product_info['minimum'] : 1,
+					'rating'      => $product_info['rating'],
+					'href'        => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product_info['product_id'])
+				]);
+			}
+
+			$data['downloads'] = [];
+
+			foreach ($this->model_cms_article->getDownloads($article_id) as $result) {
+				$data['downloads'][] = [
+					'name' => $result['name'],
+					'href' => $this->url->link('account/download.download', 'language=' . $this->config->get('config_language') . '&download_id=' . $result['download_id'])
+				];
+			}
+
 			$data['filter_author'] = $this->url->link('cms/blog', 'language=' . $this->config->get('config_language') . '&author=' . $article_info['author']);
 			$data['date_added'] = date($this->language->get('date_format_short'), strtotime($article_info['date_added']));
 

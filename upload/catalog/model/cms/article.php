@@ -79,7 +79,11 @@ class Article extends \Opencart\System\Engine\Model {
 		}
 
 		if (!empty($data['filter_topic_id'])) {
-			$sql .= " AND `a`.`topic_id` = '" . (int)$data['filter_topic_id'] . "'";
+			if (!empty($data['filter_sub_topic'])) {
+				$sql .= " AND `a`.`article_id` IN (SELECT `a2t`.`article_id` FROM `" . DB_PREFIX . "article_to_topic` `a2t` LEFT JOIN `" . DB_PREFIX . "topic_path` `tp` ON (`a2t`.`topic_id` = `tp`.`topic_id`) WHERE `tp`.`path_id` = '" . (int)$data['filter_topic_id'] . "')";
+			} else {
+				$sql .= " AND `a`.`article_id` IN (SELECT `a2t`.`article_id` FROM `" . DB_PREFIX . "article_to_topic` `a2t` WHERE `a2t`.`topic_id` = '" . (int)$data['filter_topic_id'] . "')";
+			}
 		}
 
 		if (!empty($data['filter_author'])) {
@@ -203,7 +207,11 @@ class Article extends \Opencart\System\Engine\Model {
 		}
 
 		if (!empty($data['filter_topic_id'])) {
-			$sql .= " AND `a`.`topic_id` = '" . (int)$data['filter_topic_id'] . "'";
+			if (!empty($data['filter_sub_topic'])) {
+				$sql .= " AND `a`.`article_id` IN (SELECT `a2t`.`article_id` FROM `" . DB_PREFIX . "article_to_topic` `a2t` LEFT JOIN `" . DB_PREFIX . "topic_path` `tp` ON (`a2t`.`topic_id` = `tp`.`topic_id`) WHERE `tp`.`path_id` = '" . (int)$data['filter_topic_id'] . "')";
+			} else {
+				$sql .= " AND `a`.`article_id` IN (SELECT `a2t`.`article_id` FROM `" . DB_PREFIX . "article_to_topic` `a2t` WHERE `a2t`.`topic_id` = '" . (int)$data['filter_topic_id'] . "')";
+			}
 		}
 
 		if (!empty($data['filter_author'])) {
@@ -509,5 +517,53 @@ class Article extends \Opencart\System\Engine\Model {
 		$query = $this->db->query($sql);
 
 		return $query->rows;
+	}
+
+	public function getRelated(int $article_id): array {
+		$article_data = [];
+
+		$query = $this->db->query("SELECT `ar`.`related_id` FROM `" . DB_PREFIX . "article_related` `ar` LEFT JOIN `" . DB_PREFIX . "article` `a` ON (`ar`.`related_id` = `a`.`article_id`) LEFT JOIN `" . DB_PREFIX . "article_to_store` `a2s` ON (`a`.`article_id` = `a2s`.`article_id`) WHERE `ar`.`article_id` = '" . (int)$article_id . "' AND `a`.`status` = '1' AND `a2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "'");
+
+		foreach ($query->rows as $result) {
+			$article_info = $this->model_cms_article->getArticle($result['related_id']);
+
+			if ($article_info) {
+				$article_data[$result['related_id']] = $article_info;
+			}
+		}
+
+		return $article_data;
+	}
+
+	public function getProducts(int $article_id): array {
+		$query = $this->db->query("SELECT `product_id` FROM `" . DB_PREFIX . "article_to_product` WHERE `article_id` = '" . (int)$article_id . "'");
+
+		return array_column($query->rows, 'product_id');
+	}
+
+	public function getArticlesByProductId(int $product_id): array {
+		$article_data = [];
+
+		$query = $this->db->query("SELECT `a2p`.`article_id` FROM `" . DB_PREFIX . "article_to_product` `a2p` LEFT JOIN `" . DB_PREFIX . "article` `a` ON (`a2p`.`article_id` = `a`.`article_id`) LEFT JOIN `" . DB_PREFIX . "article_to_store` `a2s` ON (`a`.`article_id` = `a2s`.`article_id`) WHERE `a2p`.`product_id` = '" . (int)$product_id . "' AND `a`.`status` = '1' AND `a2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "'");
+
+		foreach ($query->rows as $result) {
+			$article_info = $this->model_cms_article->getArticle($result['article_id']);
+
+			if ($article_info) {
+				$article_data[$result['article_id']] = $article_info;
+			}
+		}
+
+		return $article_data;
+	}
+
+	public function getDownloads(int $article_id): array {
+		$query = $this->db->query("SELECT `d`.* FROM `" . DB_PREFIX . "article_to_download` `a2d` LEFT JOIN `" . DB_PREFIX . "download` `d` ON (`a2d`.`download_id` = `d`.`download_id`) LEFT JOIN `" . DB_PREFIX . "download_description` `dd` ON (`d`.`download_id` = `dd`.`download_id`) WHERE `a2d`.`article_id` = '" . (int)$article_id . "' AND `dd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'");
+
+		return $query->rows;
+	}
+
+	public function updateViewed(int $article_id): void {
+		$this->db->query("UPDATE `" . DB_PREFIX . "article` SET `viewed` = `viewed` + 1 WHERE `article_id` = '" . (int)$article_id . "'");
 	}
 }

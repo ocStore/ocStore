@@ -21,3 +21,9 @@ $_['entry_search'] = 'Search';
 
 // Button
 $_['button_continue'] = 'Continue Reading';
+$_['text_viewed']     = 'views';
+$_['text_download']   = 'Downloads';
+$_['text_product']    = 'Related Products';
+$_['text_related']    = 'Related Articles';
+$_['text_subtopic']   = 'Subtopics';
+$_['text_more']       = 'Read more';

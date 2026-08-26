@@ -96,4 +96,28 @@ class Topic extends \Opencart\System\Engine\Model {
 			return 0;
 		}
 	}
+
+	public function getTopicsByParentId(int $parent_id = 0): array {
+		$sql = "SELECT * FROM `" . DB_PREFIX . "topic` `t` LEFT JOIN `" . DB_PREFIX . "topic_description` `td` ON (`t`.`topic_id` = `td`.`topic_id`) LEFT JOIN `" . DB_PREFIX . "topic_to_store` `t2s` ON (`t`.`topic_id` = `t2s`.`topic_id`) WHERE `t`.`parent_id` = '" . (int)$parent_id . "' AND `td`.`language_id` = '" . (int)$this->config->get('config_language_id') . "' AND `t2s`.`store_id` = '" . (int)$this->config->get('config_store_id') . "' AND `t`.`status` = '1' ORDER BY `t`.`sort_order`, LCASE(`td`.`name`)";
+
+		$key = md5($sql);
+
+		$topic_data = $this->cache->get('topic.' . $key);
+
+		if (!$topic_data) {
+			$query = $this->db->query($sql);
+
+			$topic_data = $query->rows;
+
+			$this->cache->set('topic.' . $key, $topic_data);
+		}
+
+		return $topic_data;
+	}
+
+	public function getPaths(int $topic_id): array {
+		$query = $this->db->query("SELECT `tp`.`topic_id`, `tp`.`path_id`, `tp`.`level`, `td`.`name` FROM `" . DB_PREFIX . "topic_path` `tp` LEFT JOIN `" . DB_PREFIX . "topic_description` `td` ON (`tp`.`path_id` = `td`.`topic_id`) WHERE `tp`.`topic_id` = '" . (int)$topic_id . "' AND `td`.`language_id` = '" . (int)$this->config->get('config_language_id') . "' ORDER BY `tp`.`level` ASC");
+
+		return $query->rows;
+	}
 }

@@ -13,7 +13,7 @@
       {% if image %}
         <img src="{{ image }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="img-thumbnail mb-2"/>
       {% endif %}
-      <p>{{ text_by }} <a href="{{ filter_author }}">{{ author }}</a> - {{ date_added }} - {{ comment_total }} {{ text_comment }}</p>
+      <p>{{ text_by }} <a href="{{ filter_author }}">{{ author }}</a> - {{ date_added }} - {{ comment_total }} {{ text_comment }} - {{ viewed }} {{ text_viewed }}</p>
       <div>{{ description }}</div>
       {% if tags %}
         <p>{{ text_tags }}
@@ -21,6 +21,47 @@
             <a href="{{ tag.href }}">{{ tag.tag }}</a>{% if not loop.last %},{% endif %}
           {% endfor %}
         </p>
+      {% endif %}
+      {% if downloads %}
+        <h3>{{ text_download }}</h3>
+        <ul class="list-unstyled">
+          {% for download in downloads %}
+            <li><a href="{{ download.href }}"><i class="fa-solid fa-download"></i> {{ download.name }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% if products %}
+        <h3>{{ text_product }}</h3>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 mb-4">
+          {% for product in products %}
+            <div class="col mb-3">{{ product }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if articles %}
+        <h3>{{ text_related }}</h3>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 mb-4">
+          {% for article in articles %}
+            <div class="col mb-3">
+              <div class="card h-100">
+                {% if article.image %}
+                  <a href="{{ article.href }}"><img src="{{ article.image }}" alt="{{ article.name }}" class="img-fluid mx-auto d-block p-2"/></a>
+                {% endif %}
+                <div class="card-body">
+                  <h4 class="card-title"><a href="{{ article.href }}">{{ article.name }}</a></h4>
+                  <p class="card-text">{{ article.description }}</p>
+                </div>
+                <div class="card-footer p-0 bg-transparent">
+                  <div class="btn-group w-100" role="group">
+                    <a href="{{ article.href }}" class="btn btn-light btn-sm text-truncate"><i class="fa-solid fa-share"></i> {{ text_more }}</a>
+                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="tooltip" title="{{ article.date_added }}"><i class="fa-solid fa-clock"></i></button>
+                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="tooltip" title="{{ text_viewed }}: {{ article.viewed }}"><i class="fa-solid fa-eye"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
       {% endif %}
       {% if comment %}
         <div id="comment-container">{{ comment }}</div>

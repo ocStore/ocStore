@@ -8,6 +8,9 @@
   <div class="row">{{ column_left }}
     <div id="content" class="col">{{ content_top }}
       <h1>{{ heading_title }}</h1>
+      {% if description %}
+        <div class="mb-3">{{ description }}</div>
+      {% endif %}
       {% if products %}
         <div id="display-control" class="row">
           <div class="col-md-3">

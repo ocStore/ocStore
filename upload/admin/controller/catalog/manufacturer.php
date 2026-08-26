@@ -185,6 +185,9 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
+		$this->document->addScript('view/javascript/ckeditor/ckeditor.js');
+		$this->document->addScript('view/javascript/ckeditor/adapters/jquery.js');
+
 		$data['text_form'] = !isset($this->request->get['manufacturer_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
 
 		$url = '';
@@ -286,6 +289,13 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
+		// Description
+		if (!empty($manufacturer_info)) {
+			$data['manufacturer_description'] = $this->model_catalog_manufacturer->getDescriptions($manufacturer_info['manufacturer_id']);
+		} else {
+			$data['manufacturer_description'] = [];
+		}
+
 		// SEO
 		if (!empty($manufacturer_info)) {
 			$this->load->model('design/seo_url');
@@ -330,9 +340,10 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 		}
 
 		$required = [
-			'manufacturer_id'      => 0,
-			'name'                 => '',
-			'manufacturer_seo_url' => []
+			'manufacturer_id'          => 0,
+			'name'                     => '',
+			'manufacturer_description' => [],
+			'manufacturer_seo_url'     => []
 		];
 
 		$post_info = $this->request->post + $required;

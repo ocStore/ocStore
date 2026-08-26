@@ -2155,6 +2155,26 @@ VALUES (5, 'HTC', 'catalog/demo/htc_logo.jpg', 0),
 -----------------------------------------------------------
 
 --
+-- Dumping data for table `oc_manufacturer_description`
+--
+
+INSERT INTO `oc_manufacturer_description` (`manufacturer_id`, `language_id`, `description`, `meta_title`, `meta_description`, `meta_keyword`, `meta_h1`)
+VALUES (5, 1, 'Опис виробника HTC', 'Заголовок - HTC', 'Мета опис - HTC', '', 'Всі товари виробника HTC'),
+       (6, 1, 'Опис виробника Palm', 'Заголовок - Palm', 'Мета опис - Palm', '', 'Всі товари виробника Palm'),
+       (7, 1, 'Опис виробника Hewlett-Packard', 'Заголовок - Hewlett-Packard', 'Мета опис - Hewlett-Packard', '', 'Всі товари виробника Hewlett-Packard'),
+       (8, 1, 'Опис виробника Apple', 'Заголовок - Apple', 'Мета опис - Apple', '', 'Всі товари виробника Apple'),
+       (9, 1, 'Опис виробника Canon', 'Заголовок - Canon', 'Мета опис - Canon', '', 'Всі товари виробника Canon'),
+       (10, 1, 'Опис виробника Sony', 'Заголовок - Sony', 'Мета опис - Sony', '', 'Всі товари виробника Sony'),
+       (5, 2, 'Description of HTC', 'Title - HTC', 'Meta description - HTC', '', 'All products by HTC'),
+       (6, 2, 'Description of Palm', 'Title - Palm', 'Meta description - Palm', '', 'All products by Palm'),
+       (7, 2, 'Description of Hewlett-Packard', 'Title - Hewlett-Packard', 'Meta description - Hewlett-Packard', '', 'All products by Hewlett-Packard'),
+       (8, 2, 'Description of Apple', 'Title - Apple', 'Meta description - Apple', '', 'All products by Apple'),
+       (9, 2, 'Description of Canon', 'Title - Canon', 'Meta description - Canon', '', 'All products by Canon'),
+       (10, 2, 'Description of Sony', 'Title - Sony', 'Meta description - Sony', '', 'All products by Sony');
+
+-----------------------------------------------------------
+
+--
 -- Dumping data for table `oc_manufacturer_to_store`
 --
 
@@ -2698,7 +2718,7 @@ VALUES (1, 1, 'В очікуванні'),
 INSERT INTO `oc_setting` (`store_id`, `code`, `key`, `value`, `serialized`)
 VALUES (0, 'config', 'config_shared', '0', 0),
        (0, 'config', 'config_fraud_detection', '0', 0),
-       (0, 'config', 'config_description', '{"1":{"meta_title":"Магазин","meta_description":"","meta_keyword":""}}', 1),
+       (0, 'config', 'config_description', '{"1":{"meta_title":"Магазин","meta_description":"","meta_keyword":""},"2":{"meta_title":"Your Store","meta_description":"","meta_keyword":""}}', 1),
        (0, 'config', 'config_session_expire', '86400', 0),
        (0, 'config', 'config_session_samesite', 'Strict', 0),
        (0, 'config', 'config_theme', 'basic', 0),
@@ -15617,12 +15637,12 @@ VALUES (69, 0, 1, 0, 0),
 --
 
 INSERT INTO `oc_topic_description` (`topic_id`, `language_id`, `name`, `description`, `image`, `meta_title`, `meta_description`, `meta_keyword`, `meta_h1`)
-VALUES (70, 1, 'Огляди', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/iphone_2.jpg', '', '', '', ''),
-       (69, 1, 'Новини', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/canon_eos_5d_2.jpg', '', '', '', ''),
-       (71, 1, 'Анонси', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/canon_eos_5d_1.jpg', '', '', '', ''),
-       (70, 2, 'Reviews', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/iphone_2.jpg', '', '', '', ''),
-       (69, 2, 'News', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/canon_eos_5d_2.jpg', '', '', '', ''),
-       (71, 2, 'Announcements', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/canon_eos_5d_1.jpg', '', '', '', '');
+VALUES (70, 1, 'Огляди', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/iphone_2.jpg', 'Огляди', '', '', ''),
+       (69, 1, 'Новини', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/canon_eos_5d_2.jpg', 'Новини', '', '', ''),
+       (71, 1, 'Анонси', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/canon_eos_5d_1.jpg', 'Анонси', '', '', ''),
+       (70, 2, 'Reviews', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/iphone_2.jpg', 'Reviews', '', '', ''),
+       (69, 2, 'News', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/canon_eos_5d_2.jpg', 'News', '', '', ''),
+       (71, 2, 'Announcements', '&lt;p&gt;&lt;br&gt;&lt;/p&gt;', 'catalog/demo/canon_eos_5d_1.jpg', 'Announcements', '', '', '');
 
 -----------------------------------------------------------
 
@@ -15668,12 +15688,12 @@ VALUES (120, 71, 'ocStore', 0, 1, '2026-08-04 10:15:00', '2026-08-04 10:15:00', 
 INSERT INTO `oc_article_description` (`article_id`, `language_id`, `name`, `description`, `image`, `tag`, `meta_title`, `meta_description`, `meta_keyword`, `meta_h1`)
 VALUES (120, 1, 'CMS для інтернет-магазинів ocStore v4.x', '&lt;p&gt;Раді представити Вашій увазі ocStore v4.x на основі OpenCart v4.x&lt;/p&gt;\r\n', 'catalog/cart.png', '', 'CMS для інтернет-магазинів ocStore v4.x - Скачати', 'CMS для інтернет-магазинів ocStore v4.x це безкоштовний функціональний движок для створення якісних магазинів, що продають.', 'cms, opencart, ocstore', 'CMS для інтернет-магазинів ocStore v4.x'),
        (123, 1, 'Огляд Перший', '&lt;p&gt;Це перший фото огляд тут можна написати багато якогось тексту який описує фото огляд і розповідає що і як і чому навіщо :-) Це перший фото огляд тут можна написати багато якогось тексту який описує фото огляд і розповідає що і як і чому навіщо :-) Це перший фото огляд тут можна написати багато якогось тексту який описує фото огляд і розповідає що і як і чому навіщо :-) Це перший фото огляд тут можна написати багато якогось тексту який описує фото огляд і розповідає що і як і чому навіщо :-) Це перший фото огляд тут можна написати багато якогось тексту який описує фото огляд і розповідає що і як і чому навіщо :-) Це перший фото огляд тут можна написати багато якогось тексту який описує фото огляд і розповідає що і як і чому навіщо :-) Це перший фото огляд тут можна написати багато якогось тексту який описує фото огляд і розповідає що і як і чому навіщо :-) Це перший фото огляд тут можна написати багато якогось тексту який описує фото огляд і розповідає що і як і чому навіщо :-) Це перший фото огляд тут можна написати багато якогось тексту який описує фото огляд і розповідає що і як і чому навіщо :-)&lt;/p&gt;\r\n', 'catalog/demo/canon_eos_5d_2.jpg', '', 'Фото Огляд Перший', 'Фото Огляд Перший', 'Фото Огляд Перший', 'Фото Огляд Перший'),
-       (124, 1, 'Важлива стаття', '&lt;p&gt;Це дуже важлива стаття, яку потрібно прочитати всім важливим людям про важливі події важливих людей :-)&lt;/p&gt;', 'catalog/demo/canon_eos_5d_3.jpg', '', '', '', '', ''),
-       (125, 1, 'Перша новина', '&lt;p&gt;Це перша новина всім новинам новина :-)&lt;/p&gt;', 'catalog/demo/canon_eos_5d_2.jpg', '', '', '', '', ''),
+       (124, 1, 'Важлива стаття', '&lt;p&gt;Це дуже важлива стаття, яку потрібно прочитати всім важливим людям про важливі події важливих людей :-)&lt;/p&gt;', 'catalog/demo/canon_eos_5d_3.jpg', '', 'Важлива стаття', '', '', ''),
+       (125, 1, 'Перша новина', '&lt;p&gt;Це перша новина всім новинам новина :-)&lt;/p&gt;', 'catalog/demo/canon_eos_5d_2.jpg', '', 'Перша новина', '', '', ''),
        (120, 2, 'ocStore v4.x, a shopping cart for online stores', '&lt;p&gt;We are glad to introduce ocStore v4.x, based on OpenCart v4.x&lt;/p&gt;\r\n', 'catalog/cart.png', '', 'ocStore v4.x, a shopping cart for online stores - Download', 'ocStore v4.x is a free, fully featured platform for building quality stores that sell.', 'cms, opencart, ocstore', 'ocStore v4.x, a shopping cart for online stores'),
        (123, 2, 'The First Review', '&lt;p&gt;This is the first photo review, here you can write plenty of text that describes the review and explains what, how, why and what for :-) This is the first photo review, here you can write plenty of text that describes the review and explains what, how, why and what for :-) This is the first photo review, here you can write plenty of text that describes the review and explains what, how, why and what for :-) This is the first photo review, here you can write plenty of text that describes the review and explains what, how, why and what for :-) This is the first photo review, here you can write plenty of text that describes the review and explains what, how, why and what for :-) This is the first photo review, here you can write plenty of text that describes the review and explains what, how, why and what for :-) This is the first photo review, here you can write plenty of text that describes the review and explains what, how, why and what for :-) This is the first photo review, here you can write plenty of text that describes the review and explains what, how, why and what for :-) This is the first photo review, here you can write plenty of text that describes the review and explains what, how, why and what for :-)&lt;/p&gt;\r\n', 'catalog/demo/canon_eos_5d_2.jpg', '', 'Photo Review One', 'Photo Review One', '', 'Photo Review One'),
-       (124, 2, 'An Important Article', '&lt;p&gt;This is a very important article that all important people should read, about the important events of important people :-)&lt;/p&gt;', 'catalog/demo/canon_eos_5d_3.jpg', '', '', '', '', ''),
-       (125, 2, 'The First News Item', '&lt;p&gt;This is the first news item, the news to end all news :-)&lt;/p&gt;', 'catalog/demo/canon_eos_5d_2.jpg', '', '', '', '', '');
+       (124, 2, 'An Important Article', '&lt;p&gt;This is a very important article that all important people should read, about the important events of important people :-)&lt;/p&gt;', 'catalog/demo/canon_eos_5d_3.jpg', '', 'An Important Article', '', '', ''),
+       (125, 2, 'The First News Item', '&lt;p&gt;This is the first news item, the news to end all news :-)&lt;/p&gt;', 'catalog/demo/canon_eos_5d_2.jpg', '', 'The First News Item', '', '', '');
 
 -----------------------------------------------------------
 

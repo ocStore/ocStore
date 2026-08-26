@@ -23,6 +23,12 @@ $_['entry_keyword']           = 'Keyword';
 $_['entry_image']             = 'Image';
 $_['entry_sort_order']        = 'Sort Order';
 $_['entry_layout']            = 'Layout Override';
+$_['text_meta']         = 'Meta Tags';
+$_['entry_description'] = 'Description';
+$_['entry_meta_h1']     = 'Heading H1';
+$_['entry_meta_title']  = 'Meta Tag Title';
+$_['entry_meta_description'] = 'Meta Tag Description';
+$_['entry_meta_keyword'] = 'Meta Tag Keywords';
 
 // Error
 $_['error_warning']           = 'Warning: Please check the form carefully for errors!';

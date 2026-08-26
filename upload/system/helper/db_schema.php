@@ -3921,6 +3921,47 @@ function oc_db_schema() {
 	];
 
 	$tables[] = [
+		'name'  => 'manufacturer_description',
+		'field' => [
+			[
+				'name' => 'manufacturer_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'language_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'description',
+				'type' => 'mediumtext'
+			],
+			[
+				'name' => 'meta_title',
+				'type' => 'varchar(255)'
+			],
+			[
+				'name' => 'meta_description',
+				'type' => 'varchar(255)'
+			],
+			[
+				'name' => 'meta_keyword',
+				'type' => 'varchar(255)'
+			],
+			[
+				'name' => 'meta_h1',
+				'type' => 'varchar(255)'
+			]
+		],
+		'primary' => [
+			'manufacturer_id',
+			'language_id'
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
 		'name'  => 'manufacturer_to_layout',
 		'field' => [
 			[

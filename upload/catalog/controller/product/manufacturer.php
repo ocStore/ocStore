@@ -104,7 +104,14 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 		$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($manufacturer_id);
 
 		if ($manufacturer_info) {
-			$this->document->setTitle($manufacturer_info['name']);
+			if (!empty($manufacturer_info['meta_title'])) {
+				$this->document->setTitle($manufacturer_info['meta_title']);
+			} else {
+				$this->document->setTitle($manufacturer_info['name']);
+			}
+
+			$this->document->setDescription((string)($manufacturer_info['meta_description'] ?? ''));
+			$this->document->setKeywords((string)($manufacturer_info['meta_keyword'] ?? ''));
 
 			$data['breadcrumbs'] = [];
 
@@ -141,7 +148,9 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 				'href' => $this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . '&manufacturer_id=' . $this->request->get['manufacturer_id'] . $url)
 			];
 
-			$data['heading_title'] = $manufacturer_info['name'];
+			$data['heading_title'] = !empty($manufacturer_info['meta_h1']) ? $manufacturer_info['meta_h1'] : $manufacturer_info['name'];
+
+			$data['description'] = html_entity_decode((string)($manufacturer_info['description'] ?? ''), ENT_QUOTES, 'UTF-8');
 
 			$data['text_compare'] = sprintf($this->language->get('text_compare'), isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0);
 

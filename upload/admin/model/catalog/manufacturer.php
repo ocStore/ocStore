@@ -34,6 +34,11 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 
 		$manufacturer_id = $this->db->getLastId();
 
+		// Description
+		foreach ($data['manufacturer_description'] as $language_id => $manufacturer_description) {
+			$this->model_catalog_manufacturer->addDescription($manufacturer_id, $language_id, $manufacturer_description);
+		}
+
 		// Store
 		if (isset($data['manufacturer_store'])) {
 			foreach ($data['manufacturer_store'] as $store_id) {
@@ -89,6 +94,13 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 	public function editManufacturer(int $manufacturer_id, array $data): void {
 		$this->db->query("UPDATE `" . DB_PREFIX . "manufacturer` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `image` = '" . $this->db->escape((string)$data['image']) . "', `sort_order` = '" . (int)$data['sort_order'] . "' WHERE `manufacturer_id` = '" . (int)$manufacturer_id . "'");
 
+		// Description
+		$this->deleteDescriptions($manufacturer_id);
+
+		foreach ($data['manufacturer_description'] as $language_id => $manufacturer_description) {
+			$this->model_catalog_manufacturer->addDescription($manufacturer_id, $language_id, $manufacturer_description);
+		}
+
 		// Store
 		$this->deleteStores($manufacturer_id);
 
@@ -143,6 +155,7 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 	public function deleteManufacturer(int $manufacturer_id): void {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "manufacturer` WHERE `manufacturer_id` = '" . (int)$manufacturer_id . "'");
 
+		$this->model_catalog_manufacturer->deleteDescriptions($manufacturer_id);
 		$this->model_catalog_manufacturer->deleteStores($manufacturer_id);
 		$this->model_catalog_manufacturer->deleteLayouts($manufacturer_id);
 
@@ -255,6 +268,113 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "manufacturer`");
 
 		return (int)$query->row['total'];
+	}
+
+	/**
+	 * Add Description
+	 *
+	 * Add manufacturer description record in the database.
+	 *
+	 * @param int                  $manufacturer_id primary key of the manufacturer record
+	 * @param int                  $language_id     primary key of the language record
+	 * @param array<string, mixed> $data            array of data
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $this->model_catalog_manufacturer->addDescription($manufacturer_id, $language_id, $manufacturer_data);
+	 */
+	public function addDescription(int $manufacturer_id, int $language_id, array $data): void {
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "manufacturer_description` SET `manufacturer_id` = '" . (int)$manufacturer_id . "', `language_id` = '" . (int)$language_id . "', `description` = '" . $this->db->escape((string)($data['description'] ?? '')) . "', `meta_title` = '" . $this->db->escape((string)($data['meta_title'] ?? '')) . "', `meta_description` = '" . $this->db->escape((string)($data['meta_description'] ?? '')) . "', `meta_keyword` = '" . $this->db->escape((string)($data['meta_keyword'] ?? '')) . "', `meta_h1` = '" . $this->db->escape((string)($data['meta_h1'] ?? '')) . "'");
+	}
+
+	/**
+	 * Delete Descriptions
+	 *
+	 * Delete manufacturer description records in the database.
+	 *
+	 * @param int $manufacturer_id primary key of the manufacturer record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $this->model_catalog_manufacturer->deleteDescriptions($manufacturer_id);
+	 */
+	public function deleteDescriptions(int $manufacturer_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "manufacturer_description` WHERE `manufacturer_id` = '" . (int)$manufacturer_id . "'");
+	}
+
+	/**
+	 * Delete Descriptions By Language ID
+	 *
+	 * Delete manufacturer description records by language ID in the database.
+	 *
+	 * @param int $language_id primary key of the language record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $this->model_catalog_manufacturer->deleteDescriptionsByLanguageId($language_id);
+	 */
+	public function deleteDescriptionsByLanguageId(int $language_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "manufacturer_description` WHERE `language_id` = '" . (int)$language_id . "'");
+	}
+
+	/**
+	 * Get Descriptions
+	 *
+	 * Get the record of the manufacturer description records in the database.
+	 *
+	 * @param int $manufacturer_id primary key of the manufacturer record
+	 *
+	 * @return array<int, array<string, string>> description records that have manufacturer ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $manufacturer_description = $this->model_catalog_manufacturer->getDescriptions($manufacturer_id);
+	 */
+	public function getDescriptions(int $manufacturer_id): array {
+		$manufacturer_description_data = [];
+
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "manufacturer_description` WHERE `manufacturer_id` = '" . (int)$manufacturer_id . "'");
+
+		foreach ($query->rows as $result) {
+			$manufacturer_description_data[$result['language_id']] = $result;
+		}
+
+		return $manufacturer_description_data;
+	}
+
+	/**
+	 * Get Descriptions By Language ID
+	 *
+	 * Get the record of the manufacturer description records by language ID in the database.
+	 *
+	 * @param int $language_id primary key of the language record
+	 *
+	 * @return array<int, array<string, string>> description records that have language ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('catalog/manufacturer');
+	 *
+	 * $results = $this->model_catalog_manufacturer->getDescriptionsByLanguageId($language_id);
+	 */
+	public function getDescriptionsByLanguageId(int $language_id): array {
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "manufacturer_description` WHERE `language_id` = '" . (int)$language_id . "'");
+
+		return $query->rows;
 	}
 
 	/**

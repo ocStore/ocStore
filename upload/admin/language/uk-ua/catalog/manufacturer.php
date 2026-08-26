@@ -23,6 +23,12 @@ $_['entry_keyword']     = 'SEO URL';
 $_['entry_image']       = 'Зображення';
 $_['entry_sort_order']  = 'Порядок сортування';
 $_['entry_layout']      = 'Змінити макет';
+$_['text_meta']         = 'Мета-теги';
+$_['entry_description'] = 'Опис';
+$_['entry_meta_h1']     = 'Заголовок H1';
+$_['entry_meta_title']  = 'Мета-тег Title';
+$_['entry_meta_description'] = 'Мета-тег Description';
+$_['entry_meta_keyword'] = 'Мета-тег Keywords';
 
 // Error
 $_['error_warning']     = 'Будь ласка, перевірте форму на наявність помилок';

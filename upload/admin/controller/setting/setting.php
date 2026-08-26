@@ -458,6 +458,16 @@ class Setting extends \Opencart\System\Engine\Controller {
 		$data['config_session_expire'] = $this->config->get('config_session_expire');
 		$data['config_session_samesite'] = $this->config->get('config_session_samesite');
 		$data['config_seo_url'] = $this->config->get('config_seo_url');
+
+		// SeoPro
+		$data['config_seo_pro'] = $this->config->get('config_seo_pro');
+		$data['config_seo_url_include_path'] = $this->config->get('config_seo_url_include_path');
+		$data['config_seo_url_cache'] = $this->config->get('config_seo_url_cache');
+		$data['config_seopro_postfix'] = $this->config->get('config_seopro_postfix');
+		$data['config_seopro_addslash'] = $this->config->get('config_seopro_addslash');
+		$data['config_seopro_lowercase'] = $this->config->get('config_seopro_lowercase');
+		$data['config_seopro_param_status'] = $this->config->get('config_seopro_param_status');
+		$data['config_seopro_params'] = $this->config->get('config_seopro_params');
 		$data['config_compression'] = $this->config->get('config_compression');
 
 		// Security

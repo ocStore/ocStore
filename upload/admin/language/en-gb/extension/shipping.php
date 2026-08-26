@@ -5,6 +5,7 @@ $_['heading_title']     = 'Shipping';
 // Text
 $_['text_success']      = 'Success: You have modified shipping!';
 $_['text_list']         = 'Shipping List';
+$_['text_hide_modules'] = 'Shipping modules hidden in the <a href="%s" class="alert-link">user group permissions</a> are left out of this list';
 
 // Column
 $_['column_name']       = 'Shipping Method';

@@ -85,6 +85,24 @@
               </div>
             </div>
           </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label"><span data-bs-toggle="tooltip" title="{{ help_hiden }}">{{ entry_hiden }}</span></label>
+            <div class="col-sm-10">
+              <div id="user-group-hiden" class="form-control" style="height: 250px; overflow: auto;">
+                <table class="table table-borderless table-striped">
+                  <tbody>
+                    {% for hide in hiden %}
+                      <tr>
+                        <td class="w-50"><label for="input-hiden-{{ loop.index }}">{{ hide }}</label></td>
+                        <td class="text-center"><input type="checkbox" name="permission[hiden][]" value="{{ hide }}" id="input-hiden-{{ loop.index }}" class="form-check-input"{% if hide in ishide %} checked{% endif %}/></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <button type="button" onclick="$('#user-group-hiden input[type=\'checkbox\']').prop('checked', true);" class="btn btn-link">{{ text_select_all }}</button> / <button type="button" onclick="$('#user-group-hiden input[type=\'checkbox\']').prop('checked', false);" class="btn btn-link">{{ text_unselect_all }}</button>
+            </div>
+          </div>
           <input type="hidden" name="user_group_id" value="{{ user_group_id }}" id="input-user-group-id"/>
         </form>
       </div>

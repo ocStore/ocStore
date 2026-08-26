@@ -46,6 +46,15 @@ class Shipping extends \Opencart\System\Engine\Controller {
 			}
 		}
 
+		// Hidden by the user group
+		$visible = $this->model_setting_extension->getVisible('shipping', $results);
+
+		$data['hiden'] = (count($visible) != count($results));
+
+		$data['text_hide_modules'] = sprintf($this->language->get('text_hide_modules'), $this->url->link('user/user_permission', 'user_token=' . $this->session->data['user_token']));
+
+		$results = $visible;
+
 		$data['extensions'] = [];
 
 		if ($results) {

@@ -298,10 +298,20 @@ class UserPermission extends \Opencart\System\Engine\Controller {
 		// Extension permissions
 		$results = oc_glob(DIR_EXTENSION . '*/admin/controller/{,*/,*/*/,*/*/*/}*.php');
 
+		$data['hiden'] = [];
+
 		foreach ($results as $result) {
 			$path = substr($result, strlen(DIR_EXTENSION));
 
-			$data['extensions'][] = 'extension/' . str_replace('admin/controller/', '', substr($path, 0, strrpos($path, '.')));
+			$permission = 'extension/' . str_replace('admin/controller/', '', substr($path, 0, strrpos($path, '.')));
+
+			$data['extensions'][] = $permission;
+
+			$hidefiles = explode('/', $permission);
+
+			if (isset($hidefiles[2]) && in_array($hidefiles[2], ['module', 'payment', 'shipping'])) {
+				$data['hiden'][] = $permission;
+			}
 		}
 
 		if (isset($user_group_info['permission']['access'])) {
@@ -314,6 +324,12 @@ class UserPermission extends \Opencart\System\Engine\Controller {
 			$data['modify'] = $user_group_info['permission']['modify'];
 		} else {
 			$data['modify'] = [];
+		}
+
+		if (isset($user_group_info['permission']['hiden'])) {
+			$data['ishide'] = $user_group_info['permission']['hiden'];
+		} else {
+			$data['ishide'] = [];
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];

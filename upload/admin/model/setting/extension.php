@@ -470,6 +470,40 @@ class Extension extends \Opencart\System\Engine\Model {
 	 *
 	 * $path_total = $this->model_setting_extension->getTotalPaths($path);
 	 */
+	/**
+	 * Get Visible
+	 *
+	 * Removes the extension controllers that the user group hides. The list of hidden routes
+	 * is kept in the group permissions next to access and modify, so a hidden extension only
+	 * drops out of the list and keeps working.
+	 *
+	 * @param string             $type    extension type: module, payment or shipping
+	 * @param array<int, string> $results file paths of the extension controllers
+	 *
+	 * @return array<int, string> file paths that are left
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/extension');
+	 *
+	 * $results = $this->model_setting_extension->getVisible('module', $results);
+	 */
+	public function getVisible(string $type, array $results): array {
+		foreach ($results as $key => $result) {
+			$path = substr($result, strlen(DIR_EXTENSION));
+
+			$extension = substr($path, 0, strpos($path, '/'));
+
+			$code = basename($result, '.php');
+
+			if ($this->user->hasPermission('hiden', 'extension/' . $extension . '/' . $type . '/' . $code)) {
+				unset($results[$key]);
+			}
+		}
+
+		return $results;
+	}
+
 	public function getTotalPaths(string $path): int {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "extension_path` WHERE `path` LIKE '" . $this->db->escape($path) . "'");
 

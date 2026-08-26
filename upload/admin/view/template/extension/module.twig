@@ -2,6 +2,9 @@
 <fieldset>
   <legend>{{ heading_title }}</legend>
   <div class="alert alert-info"><i class="fa-solid fa-info-circle"></i> {{ text_layout }}</div>
+  {% if hiden %}
+    <div class="alert alert-info"><i class="fa-solid fa-circle-check"></i> {{ text_hide_modules }}</div>
+  {% endif %}
   <div class="table-responsive">
     <table class="table table-bordered table-hover">
       <thead>

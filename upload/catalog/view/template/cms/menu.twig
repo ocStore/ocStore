@@ -1,0 +1,12 @@
+<div class="dropdown"><span role="button" data-bs-toggle="dropdown" class="dropdown-toggle"><i class="fa-solid fa-book"></i> <span class="d-none d-md-inline">{{ text_blog }}</span> <i class="fa-solid fa-caret-down"></i></span>
+  <ul class="dropdown-menu">
+    {% for topic in topics %}
+      <li><a href="{{ topic.href }}" class="dropdown-item">{{ topic.name }}</a></li>
+      {% for child in topic.children %}
+        <li><a href="{{ child.href }}" class="dropdown-item"><i class="fa-solid fa-angle-right"></i> {{ child.name }}</a></li>
+      {% endfor %}
+    {% endfor %}
+    <li><hr class="dropdown-divider"/></li>
+    <li><a href="{{ blog }}" class="dropdown-item">{{ text_all }}</a></li>
+  </ul>
+</div>

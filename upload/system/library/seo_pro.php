@@ -3,7 +3,7 @@
  * @package   SeoPro
  * @author    Oclabs
  * @copyright Copyright (c) 2017, Oclabs (https://www.oclabs.pro/)
- * @copyright Copyright (c) 2021, ocStore (https://ocstore.com/)
+ * @copyright Copyright (c) 2026, ocStore (https://ocstore.com/)
  * @license   https://opensource.org/licenses/GPL-3.0
  */
 namespace Opencart\System\Library;
@@ -11,21 +11,67 @@ namespace Opencart\System\Library;
 class SeoPro {
 	private object $registry;
 	private object $config;
-	private $request;
-	private $response;
-	private $session;
-	private $db;
-	private $cache;
-	private $url;
+	private ?object $request = null;
+	private ?object $response = null;
+	private ?object $session = null;
+	private ?object $db = null;
+	private ?object $cache = null;
+	private ?object $url = null;
 	private bool $ajax = false;
+	/**
+	 * @var array<int, string>
+	 */
 	private array $topic_tree = [];
+	/**
+	 * @var array<int, string>
+	 */
 	private array $category_tree = [];
+	/**
+	 * @var array<string, array<int, array<int, string>>>
+	 */
 	private array $keywords = [];
+	/**
+	 * @var array<string, int>
+	 */
+	private array $language_ids = [];
+	/**
+	 * @var array<string, array<string, mixed>>
+	 */
+	private array $language_prefixes = [];
+	private int $link_language_id = 0;
+	private bool $link_language_distinct = true;
+	/**
+	 * @var array<string, array<int, array<int, string>>>
+	 */
 	private array $queries = [];
+	/**
+	 * @var array<int, string>
+	 */
 	private array $product_categories = [];
+	/**
+	 * @var array<int, string>
+	 */
 	private array $allowed_params = [];
+	/**
+	 * @var array<int, array<string, mixed>>
+	 */
+	private array $handlers = [];
+	/**
+	 * @var array<int, string>
+	 */
+	private array $handler_keys = [];
 
-	private const ENTITIES = ['path', 'product_id', 'manufacturer_id', 'information_id', 'article_id', 'topic_id', 'route'];
+	/**
+	 * Єдиний екземпляр на запит. Зберігається в реєстрі, тож доступний
+	 * як $this->seo_pro з будь-якого контролера, моделі чи обробника.
+	 */
+	public static function getInstance(\Opencart\System\Engine\Registry $registry): self {
+		if (!$registry->has('seo_pro')) {
+			$registry->set('seo_pro', new self($registry));
+		}
+
+		return $registry->get('seo_pro');
+	}
 
 	public function __construct(\Opencart\System\Engine\Registry $registry) {
 		$this->registry = $registry;
@@ -44,6 +90,8 @@ class SeoPro {
 		$this->db = $registry->get('db');
 		$this->cache = $registry->get('cache');
 
+		$this->registerHandlers();
+
 		$this->detectPostfix();
 		$this->detectLanguage();
 		$this->initHelpers();
@@ -55,7 +103,73 @@ class SeoPro {
 		}
 	}
 
+	/**
+	 * Додає обробник SEO URL. Менший sort_order перевіряється раніше.
+	 */
+	public function addHandler(\Opencart\System\Library\Seo\HandlerInterface $handler, int $sort_order = 100): void {
+		$this->handlers[] = ['handler' => $handler, 'sort_order' => $sort_order];
+		$this->handler_keys = [];
+
+		usort($this->handlers, function (array $a, array $b): int {
+			return $a['sort_order'] <=> $b['sort_order'];
+		});
+	}
+
+	/**
+	 * @return array<int, \Opencart\System\Library\Seo\HandlerInterface>
+	 */
+	public function getHandlers(): array {
+		return array_column($this->handlers, 'handler');
+	}
+
+	/**
+	 * Усі ключі запиту, за які відповідають обробники.
+	 *
+	 * @return array<int, string>
+	 */
+	public function getHandlerKeys(): array {
+		if (!$this->handler_keys) {
+			$keys = ['route'];
+
+			foreach ($this->getHandlers() as $handler) {
+				$keys = array_merge($keys, $handler->getKeys());
+			}
+
+			$this->handler_keys = array_values(array_unique($keys));
+		}
+
+		return $this->handler_keys;
+	}
+
+	private function registerHandlers(): void {
+		$this->addHandler(new \Opencart\System\Library\Seo\Product($this->registry, $this), 10);
+		$this->addHandler(new \Opencart\System\Library\Seo\Article($this->registry, $this), 20);
+		$this->addHandler(new \Opencart\System\Library\Seo\Category($this->registry, $this), 30);
+		$this->addHandler(new \Opencart\System\Library\Seo\Manufacturer($this->registry, $this), 40);
+		$this->addHandler(new \Opencart\System\Library\Seo\Information($this->registry, $this), 50);
+		$this->addHandler(new \Opencart\System\Library\Seo\Topic($this->registry, $this), 60);
+
+		// Сторонні обробники. Подієва шина на цьому кроці ще порожня —
+		// startup/event виконується пізніше, тому читаємо реєстрації напряму.
+		$query = $this->db->query("SELECT `action`, `sort_order` FROM `" . DB_PREFIX . "event` WHERE `trigger` = 'seo/handler/register' AND `status` = '1' ORDER BY `sort_order` ASC");
+
+		foreach ($query->rows as $row) {
+			$args = [$this];
+
+			$action = new \Opencart\System\Engine\Action($row['action']);
+
+			$action->execute($this->registry, $args);
+		}
+	}
+
+	/**
+	 * @param array<int, string> $parts
+	 *
+	 * @return array<int, string>
+	 */
 	public function prepareRoute(array $parts): array {
+		$parts = $this->applyLanguagePrefix($parts);
+
 		$segments = array_values($parts);
 		$total = count($segments);
 		$leftover = [];
@@ -91,7 +205,7 @@ class SeoPro {
 
 			[$key, $value] = array_pad(explode('=', $query, 2), 2, '');
 
-			if (!in_array($key, self::ENTITIES)) {
+			if (!in_array($key, $this->getHandlerKeys())) {
 				return $parts;
 			}
 
@@ -112,125 +226,88 @@ class SeoPro {
 			return [];
 		}
 
-		if (isset($this->request->get['product_id'])) {
-			unset($this->request->get['path']);
+		foreach ($this->getHandlers() as $handler) {
+			$decoded = $handler->decode($this->request->get);
 
-			$path = $this->getCategoryByProduct((int)$this->request->get['product_id']);
+			if ($decoded !== null) {
+				$this->request->get = $decoded;
 
-			if ($path) {
-				$this->request->get['path'] = $path;
+				return $leftover;
 			}
-
-			$this->request->get['route'] = 'product/product';
-		} elseif (isset($this->request->get['route'])) {
-			return $leftover;
-		} elseif (isset($this->request->get['path'])) {
-			$this->request->get['route'] = 'product/category';
-		} elseif (isset($this->request->get['manufacturer_id'])) {
-			$this->request->get['route'] = 'product/manufacturer.info';
-		} elseif (isset($this->request->get['information_id'])) {
-			$this->request->get['route'] = 'information/information';
-		} elseif (isset($this->request->get['article_id'])) {
-			$this->request->get['route'] = 'cms/blog.info';
-		} elseif (isset($this->request->get['topic_id'])) {
-			$this->request->get['route'] = 'cms/blog';
 		}
 
 		return $leftover;
 	}
 
+	/**
+	 * @param array<int, string> $parts
+	 *
+	 * @return array<int, string>
+	 */
+	private function applyLanguagePrefix(array $parts): array {
+		if (!$this->config->get('config_seopro_language') || !$parts) {
+			return $parts;
+		}
+
+		$prefix = (string)reset($parts);
+
+		$languages = $this->getLanguagePrefixes();
+
+		if (!isset($languages[$prefix])) {
+			return $parts;
+		}
+
+		$this->request->get['language'] = $languages[$prefix]['code'];
+
+		$this->config->set('config_language_id', $languages[$prefix]['language_id']);
+		$this->config->set('config_language', $languages[$prefix]['code']);
+
+		array_shift($parts);
+
+		return array_values($parts);
+	}
+
+	/**
+	 * @param array<string, mixed> $data
+	 *
+	 * @return array<int, mixed>
+	 */
 	public function baseRewrite(array $data): array {
 		$url = null;
 		$postfix = null;
+		$encoded = false;
+
+		$language_code = isset($data['language']) ? (string)$data['language'] : '';
+
+		$this->link_language_id = $language_code ? $this->getLanguageIdByCode($language_code) : 0;
+		$this->link_language_distinct = true;
 
 		unset($data['language']);
 
 		$route = $data['route'] ?? '';
 
-		switch ($route) {
-			case 'product/product':
-				if (isset($data['product_id'])) {
-					$product_id = $data['product_id'];
-					$path = '';
-
-					if (isset($data['path']) || $this->config->get('config_seo_url_include_path')) {
-						$path = $this->getCategoryByProduct((int)$product_id);
-					}
-
-					$kept = $this->keepAllowed($data);
-
-					$data = ['route' => $route];
-
-					if ($path && $this->config->get('config_seo_url_include_path')) {
-						$data['path'] = $path;
-					}
-
-					$data['product_id'] = $product_id;
-					$data += $kept;
-				}
-				break;
-			case 'cms/blog.info':
-				if (isset($data['article_id'])) {
-					$article_id = $data['article_id'];
-					$topic_id = '';
-
-					if (isset($data['topic_id']) || $this->config->get('config_seo_url_include_path')) {
-						$topic_id = $this->getTopicByArticle((int)$article_id);
-					}
-
-					$kept = $this->keepAllowed($data);
-
-					$data = ['route' => $route];
-
-					if ($topic_id && $this->config->get('config_seo_url_include_path')) {
-						$data['topic_id'] = $topic_id;
-					}
-
-					$data['article_id'] = $article_id;
-					$data += $kept;
-				}
-				break;
-			case 'product/category':
-				if (isset($data['path'])) {
-					$categories = explode('_', (string)$data['path']);
-
-					$data['path'] = $this->getPathByCategory((int)end($categories));
-				}
-				break;
-			default:
-				break;
-		}
-
-		if (isset($data['route'])) {
-			unset($data['route']);
-		}
-
 		$queries = [];
 
-		foreach ($data as $key => $value) {
-			switch ($key) {
-				case 'product_id':
-				case 'manufacturer_id':
-				case 'information_id':
-				case 'article_id':
-					$queries[] = $key . '=' . (int)$value;
+		foreach ($this->getHandlers() as $handler) {
+			if ($route && $handler->getRoute() && $handler->getRoute() != $route) {
+				continue;
+			}
+
+			$encode = $handler->encode($data);
+
+			if ($encode !== null) {
+				$queries = $encode['queries'];
+				$data = $encode['data'];
+
+				if (!empty($encode['postfix'])) {
 					$postfix = true;
-					unset($data[$key]);
-					break;
-				case 'topic_id':
-					foreach (explode('_', (string)$value) as $topic_id) {
-						$queries[] = 'topic_id=' . (int)$topic_id;
-					}
-					unset($data[$key]);
-					break;
-				case 'path':
-					$queries[] = 'path=' . (string)$value;
-					unset($data[$key]);
-					break;
-				default:
-					break;
+				}
+
+				break;
 			}
 		}
+
+		unset($data['route']);
 
 		if (!$queries && $route) {
 			if ($route == $this->config->get('action_default')) {
@@ -240,6 +317,8 @@ class SeoPro {
 
 				if ($keyword !== null && $keyword !== '') {
 					$url = '/' . str_replace('%2F', '/', rawurlencode($keyword));
+
+					$encoded = true;
 				} else {
 					$data['route'] = $route;
 				}
@@ -259,10 +338,40 @@ class SeoPro {
 				foreach ($rows as $row) {
 					$url .= '/' . str_replace('%2F', '/', rawurlencode($row));
 				}
+
+				$encoded = true;
 			} else {
 				$data['route'] = $route;
 			}
 		}
+
+		if ($language_code && $language_code != $this->config->get('config_language_catalog')) {
+			$mode = (string)$this->config->get('config_seopro_language');
+
+			$unique = $encoded && $this->link_language_distinct;
+
+			if ($mode == 'keyword' && $unique) {
+				$prefix = '';
+			} elseif ($mode == 'keyword' || $mode == 'prefix') {
+				$prefix = $this->getPrefixByCode($language_code);
+			} else {
+				$prefix = '';
+
+				if (!$unique) {
+					$data['language'] = $language_code;
+				}
+			}
+
+			if ($prefix) {
+				$url = '/' . $prefix . (string)$url;
+
+				if ($url == '/' . $prefix) {
+					$url .= '/';
+				}
+			}
+		}
+
+		$this->link_language_id = 0;
 
 		return [$url, $data, $postfix];
 	}
@@ -296,7 +405,7 @@ class SeoPro {
 
 		$this->request->get['route'] = $route;
 
-		if (isset($this->request->get['page']) && (float)$this->request->get['page'] < 1) {
+		if (isset($this->request->get['page']) && (float)$this->request->get['page'] < 1) { // @phpstan-ignore isset.offset
 			unset($this->request->get['page']);
 		}
 
@@ -316,7 +425,12 @@ class SeoPro {
 		}
 	}
 
-	private function keepAllowed(array $data): array {
+	/**
+	 * @param array<string, mixed> $data
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function keepAllowed(array $data): array {
 		$kept = [];
 
 		foreach ($this->allowed_params as $param) {
@@ -362,7 +476,7 @@ class SeoPro {
 		if (!$this->config->get('config_language_id')) {
 			$code = (string)$this->config->get('config_language_catalog');
 
-			if (isset($this->session->data['language'])) {
+			if ($this->session && isset($this->session->data['language'])) {
 				$code = (string)$this->session->data['language'];
 			}
 
@@ -408,7 +522,11 @@ class SeoPro {
 			return;
 		}
 
-		$this->session->data['language'] = $query->row['code'];
+		if ($this->session) {
+			$this->session->data['language'] = $query->row['code'];
+		}
+
+		$this->request->get['language'] = $query->row['code'];
 
 		$this->config->set('config_language_id', $language_id);
 		$this->config->set('config_language', $query->row['code']);
@@ -456,6 +574,55 @@ class SeoPro {
 		}
 	}
 
+	/**
+	 * @return array<string, array<string, mixed>>
+	 */
+	private function getLanguagePrefixes(): array {
+		if ($this->language_prefixes) {
+			return $this->language_prefixes;
+		}
+
+		$query = $this->db->query("SELECT `language_id`, `code` FROM `" . DB_PREFIX . "language` WHERE `status` = '1'");
+
+		$short = [];
+
+		foreach ($query->rows as $row) {
+			$prefix = (string)strtok($row['code'], '-');
+
+			$short[$prefix][] = $row;
+		}
+
+		foreach ($short as $prefix => $rows) {
+			foreach ($rows as $row) {
+				$key = count($rows) > 1 ? $row['code'] : $prefix;
+
+				$this->language_prefixes[$key] = ['language_id' => (int)$row['language_id'], 'code' => $row['code']];
+			}
+		}
+
+		return $this->language_prefixes;
+	}
+
+	private function getPrefixByCode(string $code): string {
+		foreach ($this->getLanguagePrefixes() as $prefix => $language) {
+			if ($language['code'] == $code) {
+				return $prefix;
+			}
+		}
+
+		return '';
+	}
+
+	private function getLanguageIdByCode(string $code): int {
+		if (!isset($this->language_ids[$code])) {
+			$query = $this->db->query("SELECT `language_id` FROM `" . DB_PREFIX . "language` WHERE `code` = '" . $this->db->escape($code) . "' AND `status` = '1' LIMIT 1");
+
+			$this->language_ids[$code] = $query->num_rows ? (int)$query->row['language_id'] : 0;
+		}
+
+		return $this->language_ids[$code];
+	}
+
 	private function getQueryByKeyword(string $keyword): string {
 		$store_id = (int)$this->config->get('config_store_id');
 		$language_id = (int)$this->config->get('config_language_id');
@@ -469,16 +636,26 @@ class SeoPro {
 
 	private function getKeywordByQuery(string $query): ?string {
 		$store_id = (int)$this->config->get('config_store_id');
-		$language_id = (int)$this->config->get('config_language_id');
+		$language_id = $this->link_language_id ?: (int)$this->config->get('config_language_id');
 
-		if (isset($this->keywords[$query][$store_id][$language_id])) {
-			return $this->keywords[$query][$store_id][$language_id];
+		if (!isset($this->keywords[$query][$store_id][$language_id])) {
+			return null;
 		}
 
-		return null;
+		$keyword = $this->keywords[$query][$store_id][$language_id];
+
+		if ($this->link_language_id) {
+			$default_id = $this->getLanguageIdByCode((string)$this->config->get('config_language_catalog'));
+
+			if (($this->keywords[$query][$store_id][$default_id] ?? $keyword) === $keyword) {
+				$this->link_language_distinct = false;
+			}
+		}
+
+		return $keyword;
 	}
 
-	private function getCategoryByProduct(int $product_id): string {
+	public function getCategoryByProduct(int $product_id): string {
 		if ($product_id < 1) {
 			return '';
 		}
@@ -496,11 +673,11 @@ class SeoPro {
 		return $path;
 	}
 
-	private function getPathByCategory(int $category_id): string {
+	public function getPathByCategory(int $category_id): string {
 		return $this->category_tree[$category_id] ?? '';
 	}
 
-	private function getTopicByArticle(int $article_id): string {
+	public function getTopicByArticle(int $article_id): string {
 		if ($article_id < 1) {
 			return '';
 		}
@@ -514,6 +691,9 @@ class SeoPro {
 		return $this->topic_tree[$query->row['topic_id']] ?? (string)$query->row['topic_id'];
 	}
 
+	/**
+	 * @param array<int, string> $exclude
+	 */
 	private function getQueryString(array $exclude = []): string {
 		return urldecode(http_build_query(array_diff_key($this->request->get, array_flip($exclude))));
 	}

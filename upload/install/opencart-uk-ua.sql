@@ -2947,7 +2947,8 @@ VALUES (0, 'config', 'config_shared', '0', 0),
        (0, 'config', 'config_seopro_addslash', '0', 0),
        (0, 'config', 'config_seopro_lowercase', '1', 0),
        (0, 'config', 'config_seopro_param_status', '0', 0),
-       (0, 'config', 'config_seopro_params', '', 0);
+       (0, 'config', 'config_seopro_params', '', 0),
+       (0, 'config', 'config_seopro_language', 'prefix', 0);
 
 -----------------------------------------------------------
 

@@ -1615,6 +1615,17 @@
                     <div class="form-text">{{ help_seopro_params }}</div>
                   </div>
                 </div>
+                <div class="row mb-3">
+                  <label for="input-seo-language" class="col-sm-2 col-form-label">{{ entry_seopro_language }}</label>
+                  <div class="col-sm-10">
+                    <select name="config_seopro_language" id="input-seo-language" class="form-select">
+                      <option value=""{% if not config_seopro_language %} selected{% endif %}>{{ text_seopro_language_param }}</option>
+                      <option value="prefix"{% if config_seopro_language == 'prefix' %} selected{% endif %}>{{ text_seopro_language_prefix }}</option>
+                      <option value="keyword"{% if config_seopro_language == 'keyword' %} selected{% endif %}>{{ text_seopro_language_keyword }}</option>
+                    </select>
+                    <div class="form-text">{{ help_seopro_language }}</div>
+                  </div>
+                </div>
                 <fieldset>
                   <legend>{{ text_meta }}</legend>
                   <div class="row mb-3">

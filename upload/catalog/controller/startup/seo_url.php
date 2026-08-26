@@ -11,7 +11,7 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 	public function __construct(\Opencart\System\Engine\Registry $registry) {
 		parent::__construct($registry);
 
-		$this->seo_pro = new \Opencart\System\Library\SeoPro($registry);
+		$this->seo_pro = \Opencart\System\Library\SeoPro::getInstance($registry);
 	}
 
 	/**
@@ -121,7 +121,7 @@ class SeoUrl extends \Opencart\System\Engine\Controller {
 
 				if ($postfix && $this->config->get('config_seopro_postfix')) {
 					$url .= $this->config->get('config_seopro_postfix');
-				} elseif ($this->config->get('config_seopro_addslash') || $seo_query) {
+				} elseif (($this->config->get('config_seopro_addslash') || $seo_query) && !str_ends_with($url, '/')) {
 					$url .= '/';
 				}
 

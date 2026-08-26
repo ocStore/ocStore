@@ -468,6 +468,7 @@ class Setting extends \Opencart\System\Engine\Controller {
 		$data['config_seopro_lowercase'] = $this->config->get('config_seopro_lowercase');
 		$data['config_seopro_param_status'] = $this->config->get('config_seopro_param_status');
 		$data['config_seopro_params'] = $this->config->get('config_seopro_params');
+		$data['config_seopro_language'] = $this->config->get('config_seopro_language');
 
 		// Meta
 		$data['config_add_prevnext'] = $this->config->get('config_add_prevnext');

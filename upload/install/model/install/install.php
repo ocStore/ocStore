@@ -140,7 +140,7 @@ class Install extends \Opencart\System\Engine\Model {
 		$db->query("UPDATE `" . $data['db_prefix'] . "setting` SET `value` = 'INV-" . date('Y') . "-00' WHERE `key` = 'config_invoice_prefix'");
 	}
     public function getCountries() {
-        $query = $this->db->query("SELECT country_id, name, status FROM " . DB_PREFIX . "country ORDER BY status = 1 DESC, LCASE(name)");
+        $query = $this->db->query("SELECT c.country_id, cd.name, c.status FROM " . DB_PREFIX . "country c LEFT JOIN " . DB_PREFIX . "country_description cd ON (c.country_id = cd.country_id) WHERE cd.language_id = '1' ORDER BY c.status = 1 DESC, LCASE(cd.name)");
 
         return $query->rows;
     }
@@ -152,11 +152,16 @@ class Install extends \Opencart\System\Engine\Model {
 
         $this->db->query("UPDATE " . DB_PREFIX . "country SET status = '1' WHERE country_id IN (" . implode(',', $countries_filtered) . ")");
 
-        if (in_array(176, $countries_filtered)) {
-            $this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `value` = '176' WHERE `key` = 'config_country_id'");
+        $query = $this->db->query("SELECT country_id FROM " . DB_PREFIX . "country WHERE iso_code_2 = 'UA'");
+
+        $default_id = $query->num_rows ? (int)$query->row['country_id'] : 0;
+
+        if ($default_id && in_array($default_id, $countries_filtered)) {
+            $country_id = $default_id;
         } else {
-            $country_id = array_shift($countries_filtered);
-            $this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `value` = '" . (int)$country_id . "' WHERE `key` = 'config_country_id'");
+            $country_id = (int)array_shift($countries_filtered);
         }
+
+        $this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `value` = '" . (int)$country_id . "' WHERE `key` = 'config_country_id'");
     }
 }

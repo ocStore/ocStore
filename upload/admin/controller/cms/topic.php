@@ -263,6 +263,51 @@ class Topic extends \Opencart\System\Engine\Controller {
 			$data['topic_store'] = [0];
 		}
 
+		$data['topics'] = [];
+
+		$exclude = [];
+
+		if (!empty($topic_info)) {
+			foreach ($this->model_cms_topic->getPathsByPathId($topic_info['topic_id']) as $result) {
+				$exclude[] = (int)$result['topic_id'];
+			}
+		}
+
+		$topics = $this->model_cms_topic->getTopics();
+
+		$names = array_column($topics, 'name', 'topic_id');
+
+		foreach ($topics as $topic) {
+			if (in_array((int)$topic['topic_id'], $exclude)) {
+				continue;
+			}
+
+			$path = [];
+
+			foreach ($this->model_cms_topic->getPaths($topic['topic_id']) as $result) {
+				if (isset($names[$result['path_id']])) {
+					$path[] = $names[$result['path_id']];
+				}
+			}
+
+			$data['topics'][] = [
+				'topic_id' => $topic['topic_id'],
+				'name'     => implode(' &gt; ', $path)
+			];
+		}
+
+		if (!empty($topic_info)) {
+			$data['parent_id'] = $topic_info['parent_id'];
+		} else {
+			$data['parent_id'] = 0;
+		}
+
+		if (!empty($topic_info)) {
+			$data['noindex'] = $topic_info['noindex'];
+		} else {
+			$data['noindex'] = false;
+		}
+
 		if (!empty($topic_info)) {
 			$data['sort_order'] = $topic_info['sort_order'];
 		} else {
@@ -320,6 +365,8 @@ class Topic extends \Opencart\System\Engine\Controller {
 		$required = [
 			'topic_id'          => 0,
 			'topic_description' => [],
+			'parent_id'         => 0,
+			'noindex'           => 0,
 			'sort_order'        => 0,
 			'status'            => 1,
 			'topic_store'       => [],

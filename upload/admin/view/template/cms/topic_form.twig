@@ -78,6 +78,12 @@
                         </div>
                       </div>
                       <div class="row mb-3">
+                        <label for="input-meta-h1-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_meta_h1 }}</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="topic_description[{{ language.language_id }}][meta_h1]" value="{{ topic_description[language.language_id] ? topic_description[language.language_id].meta_h1 }}" placeholder="{{ entry_meta_h1 }}" id="input-meta-h1-{{ language.language_id }}" class="form-control"/>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
                         <label for="input-meta-keyword-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_meta_keyword }}</label>
                         <div class="col-sm-10">
                           <textarea name="topic_description[{{ language.language_id }}][meta_keyword]" rows="5" placeholder="{{ entry_meta_keyword }}" id="input-meta-keyword-{{ language.language_id }}" class="form-control">{{ topic_description[language.language_id] ? topic_description[language.language_id].meta_keyword }}</textarea>
@@ -98,6 +104,25 @@
                         <input type="checkbox" name="topic_store[]" value="{{ store.store_id }}" id="input-store-{{ store.store_id }}" class="form-check-input"{% if store.store_id in topic_store %} checked{% endif %}/> <label for="input-store-{{ store.store_id }}" class="form-check-label">{{ store.name }}</label>
                       </div>
                     {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="input-parent" class="col-sm-2 col-form-label">{{ entry_parent }}</label>
+                <div class="col-sm-10">
+                  <select name="parent_id" id="input-parent" class="form-select">
+                    <option value="0">{{ text_none }}</option>
+                    {% for topic in topics %}
+                      <option value="{{ topic.topic_id }}"{% if topic.topic_id == parent_id %} selected{% endif %}>{{ topic.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_noindex }}</label>
+                <div class="col-sm-10">
+                  <div class="form-switch form-switch-lg">
+                    <input type="hidden" name="noindex" value="0"/> <input type="checkbox" name="noindex" value="1" id="input-noindex" class="form-check-input"{% if noindex %} checked{% endif %}/>
                   </div>
                 </div>
               </div>

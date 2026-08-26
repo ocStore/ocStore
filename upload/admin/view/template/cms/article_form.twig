@@ -85,6 +85,12 @@
                         </div>
                       </div>
                       <div class="row mb-3">
+                        <label for="input-meta-h1-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_meta_h1 }}</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="article_description[{{ language.language_id }}][meta_h1]" value="{{ article_description[language.language_id] ? article_description[language.language_id].meta_h1 }}" placeholder="{{ entry_meta_h1 }}" id="input-meta-h1-{{ language.language_id }}" class="form-control"/>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
                         <label for="input-meta-keyword-{{ language.language_id }}" class="col-sm-2 col-form-label">{{ entry_meta_keyword }}</label>
                         <div class="col-sm-10">
                           <textarea name="article_description[{{ language.language_id }}][meta_keyword]" rows="5" placeholder="{{ entry_meta_keyword }}" id="input-meta-keyword-{{ language.language_id }}" class="form-control">{{ article_description[language.language_id] ? article_description[language.language_id].meta_keyword }}</textarea>
@@ -112,6 +118,96 @@
                       <option value="{{ topic.topic_id }}"{% if topic.topic_id == topic_id %} selected{% endif %}>{{ topic.name }}</option>
                     {% endfor %}
                   </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_topics }}</label>
+                <div class="col-sm-10">
+                  <div class="form-control" style="height: 150px; overflow: auto;">
+                    {% for topic in topics %}
+                      <div class="form-check">
+                        <input type="checkbox" name="article_topic[]" value="{{ topic.topic_id }}" id="input-topic-{{ topic.topic_id }}" class="form-check-input"{% if topic.topic_id in article_topic %} checked{% endif %}/> <label for="input-topic-{{ topic.topic_id }}" class="form-check-label">{{ topic.name }}</label>
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <div class="form-text">{{ help_topics }}</div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_related }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="related" value="" placeholder="{{ entry_related }}" id="input-related" data-oc-target="autocomplete-related" class="form-control" autocomplete="off"/>
+                  <ul id="autocomplete-related" class="dropdown-menu"></ul>
+                  <div class="form-control p-0" style="height: 150px; overflow: auto;">
+                    <table id="article-related" class="table table-sm table-hover table-borderless m-0">
+                      <tbody>
+                        {% for article_related in article_relateds %}
+                          <tr id="article-related-{{ article_related.article_id }}">
+                            <td>{{ article_related.name }}<input type="hidden" name="article_related[]" value="{{ article_related.article_id }}"/></td>
+                            <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_product }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="product" value="" placeholder="{{ entry_product }}" id="input-product" data-oc-target="autocomplete-product" class="form-control" autocomplete="off"/>
+                  <ul id="autocomplete-product" class="dropdown-menu"></ul>
+                  <div class="form-control p-0" style="height: 150px; overflow: auto;">
+                    <table id="article-product" class="table table-sm table-hover table-borderless m-0">
+                      <tbody>
+                        {% for article_product in article_products %}
+                          <tr id="article-product-{{ article_product.product_id }}">
+                            <td>{{ article_product.name }}<input type="hidden" name="article_product[]" value="{{ article_product.product_id }}"/></td>
+                            <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_download }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="download" value="" placeholder="{{ entry_download }}" id="input-download" data-oc-target="autocomplete-download" class="form-control" autocomplete="off"/>
+                  <ul id="autocomplete-download" class="dropdown-menu"></ul>
+                  <div class="form-control p-0" style="height: 150px; overflow: auto;">
+                    <table id="article-download" class="table table-sm table-hover table-borderless m-0">
+                      <tbody>
+                        {% for article_download in article_downloads %}
+                          <tr id="article-download-{{ article_download.download_id }}">
+                            <td>{{ article_download.name }}<input type="hidden" name="article_download[]" value="{{ article_download.download_id }}"/></td>
+                            <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="input-date-available" class="col-sm-2 col-form-label">{{ entry_date_available }}</label>
+                <div class="col-sm-10">
+                  <input type="date" name="date_available" value="{{ date_available }}" id="input-date-available" class="form-control"/>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="input-sort-order" class="col-sm-2 col-form-label">{{ entry_sort_order }}</label>
+                <div class="col-sm-10">
+                  <input type="number" name="sort_order" value="{{ sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">{{ entry_noindex }}</label>
+                <div class="col-sm-10">
+                  <div class="form-switch form-switch-lg">
+                    <input type="hidden" name="noindex" value="0"/> <input type="checkbox" name="noindex" value="1" id="input-noindex" class="form-check-input"{% if noindex %} checked{% endif %}/>
+                  </div>
                 </div>
               </div>
               <div class="row mb-3">
@@ -198,6 +294,97 @@
 <script type="text/javascript"><!--
 $('textarea[data-oc-toggle=\'ckeditor\']').ckeditor({
     language: '{{ ckeditor }}'
+});
+
+$('#input-related').autocomplete({
+    'source': function(request, response) {
+        $.ajax({
+            url: 'index.php?route=cms/article.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+                response($.map(json, function(item) {
+                    return {
+                        label: item['name'],
+                        value: item['article_id']
+                    }
+                }));
+            }
+        });
+    },
+    'select': function(item) {
+        $('#input-related').val('');
+
+        $('#article-related-' + item['value']).remove();
+
+        html = '<tr id="article-related-' + item['value'] + '">';
+        html += '  <td>' + item['label'] + '<input type="hidden" name="article_related[]" value="' + item['value'] + '"/></td>';
+        html += '  <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>';
+        html += '</tr>';
+
+        $('#article-related tbody').append(html);
+    }
+});
+
+$('#input-product').autocomplete({
+    'source': function(request, response) {
+        $.ajax({
+            url: 'index.php?route=catalog/product.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+                response($.map(json, function(item) {
+                    return {
+                        label: item['name'],
+                        value: item['product_id']
+                    }
+                }));
+            }
+        });
+    },
+    'select': function(item) {
+        $('#input-product').val('');
+
+        $('#article-product-' + item['value']).remove();
+
+        html = '<tr id="article-product-' + item['value'] + '">';
+        html += '  <td>' + item['label'] + '<input type="hidden" name="article_product[]" value="' + item['value'] + '"/></td>';
+        html += '  <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>';
+        html += '</tr>';
+
+        $('#article-product tbody').append(html);
+    }
+});
+
+$('#input-download').autocomplete({
+    'source': function(request, response) {
+        $.ajax({
+            url: 'index.php?route=catalog/download.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+                response($.map(json, function(item) {
+                    return {
+                        label: item['name'],
+                        value: item['download_id']
+                    }
+                }));
+            }
+        });
+    },
+    'select': function(item) {
+        $('#input-download').val('');
+
+        $('#article-download-' + item['value']).remove();
+
+        html = '<tr id="article-download-' + item['value'] + '">';
+        html += '  <td>' + item['label'] + '<input type="hidden" name="article_download[]" value="' + item['value'] + '"/></td>';
+        html += '  <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>';
+        html += '</tr>';
+
+        $('#article-download tbody').append(html);
+    }
+});
+
+$(document).on('click', '#article-related tbody button, #article-product tbody button, #article-download tbody button', function() {
+    $(this).closest('tr').remove();
 });
 //--></script>
 {{ footer }}

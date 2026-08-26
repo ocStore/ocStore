@@ -268,6 +268,91 @@ class Article extends \Opencart\System\Engine\Controller {
 			$data['topic_id'] = 0;
 		}
 
+		if (!empty($article_info)) {
+			$data['article_topic'] = $this->model_cms_article->getTopics($article_info['article_id']);
+		} else {
+			$data['article_topic'] = [];
+		}
+
+		if (!empty($article_info)) {
+			$data['date_available'] = ($article_info['date_available'] != '0000-00-00') ? date('Y-m-d', strtotime($article_info['date_available'])) : '';
+		} else {
+			$data['date_available'] = date('Y-m-d');
+		}
+
+		if (!empty($article_info)) {
+			$data['sort_order'] = $article_info['sort_order'];
+		} else {
+			$data['sort_order'] = 0;
+		}
+
+		if (!empty($article_info)) {
+			$data['noindex'] = $article_info['noindex'];
+		} else {
+			$data['noindex'] = false;
+		}
+
+		$data['article_relateds'] = [];
+
+		if (!empty($article_info)) {
+			$results = $this->model_cms_article->getRelated($article_info['article_id']);
+		} else {
+			$results = [];
+		}
+
+		foreach ($results as $related_id) {
+			$related_info = $this->model_cms_article->getArticle($related_id);
+
+			if ($related_info) {
+				$data['article_relateds'][] = [
+					'article_id' => $related_info['article_id'],
+					'name'       => $related_info['name']
+				];
+			}
+		}
+
+		$this->load->model('catalog/product');
+
+		$data['article_products'] = [];
+
+		if (!empty($article_info)) {
+			$results = $this->model_cms_article->getProducts($article_info['article_id']);
+		} else {
+			$results = [];
+		}
+
+		foreach ($results as $product_id) {
+			$product_info = $this->model_catalog_product->getProduct($product_id);
+
+			if ($product_info) {
+				$data['article_products'][] = [
+					'product_id' => $product_info['product_id'],
+					'name'       => $product_info['name']
+				];
+			}
+		}
+
+		$this->load->model('catalog/download');
+
+		$data['article_downloads'] = [];
+
+		if (!empty($article_info)) {
+			$results = $this->model_cms_article->getDownloads($article_info['article_id']);
+		} else {
+			$results = [];
+		}
+
+		foreach ($results as $download_id) {
+			$download_info = $this->model_catalog_download->getDownload($download_id);
+
+			if ($download_info) {
+				$data['article_downloads'][] = [
+					'download_id' => $download_info['download_id'],
+					'name'        => $download_info['name']
+				];
+			}
+		}
+
 		// Stores
 		$stores = [];
 
@@ -339,6 +424,14 @@ class Article extends \Opencart\System\Engine\Controller {
 			'article_id'          => 0,
 			'article_description' => [],
 			'author'              => '',
+			'topic_id'            => 0,
+			'article_topic'       => [],
+			'article_related'     => [],
+			'article_product'     => [],
+			'article_download'    => [],
+			'date_available'      => '',
+			'sort_order'          => 0,
+			'noindex'             => 0,
 			'status'              => 0,
 			'article_seo_url'     => []
 		];
@@ -503,6 +596,32 @@ class Article extends \Opencart\System\Engine\Controller {
 				$json['success'] = $this->language->get('text_success');
 
 				$json['next'] = '';
+			}
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
+
+	public function autocomplete(): void {
+		$json = [];
+
+		if (isset($this->request->get['filter_name'])) {
+			$this->load->model('cms/article');
+
+			$filter_data = [
+				'filter_name' => (string)$this->request->get['filter_name'] . '%',
+				'start'       => 0,
+				'limit'       => 5
+			];
+
+			$results = $this->model_cms_article->getArticles($filter_data);
+
+			foreach ($results as $result) {
+				$json[] = [
+					'article_id' => $result['article_id'],
+					'name'       => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'))
+				];
 			}
 		}
 

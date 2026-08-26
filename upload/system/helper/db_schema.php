@@ -569,6 +569,25 @@ function oc_db_schema() {
 			[
 				'name' => 'date_modified',
 				'type' => 'datetime'
+			],
+			[
+				'name'    => 'sort_order',
+				'type'    => 'int(3)',
+				'default' => '0'
+			],
+			[
+				'name' => 'date_available',
+				'type' => 'date'
+			],
+			[
+				'name'    => 'viewed',
+				'type'    => 'int(11)',
+				'default' => '0'
+			],
+			[
+				'name'    => 'noindex',
+				'type'    => 'tinyint(1)',
+				'default' => '0'
 			]
 		],
 		'primary' => [
@@ -705,6 +724,10 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'meta_keyword',
+				'type' => 'varchar(255)'
+			],
+			[
+				'name' => 'meta_h1',
 				'type' => 'varchar(255)'
 			]
 		],
@@ -923,6 +946,16 @@ function oc_db_schema() {
 				'name'    => 'status',
 				'type'    => 'tinyint(1)',
 				'default' => '0'
+			],
+			[
+				'name'    => 'parent_id',
+				'type'    => 'int(11)',
+				'default' => '0'
+			],
+			[
+				'name'    => 'noindex',
+				'type'    => 'tinyint(1)',
+				'default' => '0'
 			]
 		],
 		'primary' => [
@@ -966,6 +999,10 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'meta_keyword',
+				'type' => 'varchar(255)'
+			],
+			[
+				'name' => 'meta_h1',
 				'type' => 'varchar(255)'
 			]
 		],
@@ -7937,6 +7974,236 @@ function oc_db_schema() {
 				'key'   => 'zone_id',
 				'table' => 'zone',
 				'field' => 'zone_id'
+			]
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
+		'name'  => 'topic_path',
+		'field' => [
+			[
+				'name' => 'topic_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'path_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'level',
+				'type' => 'int(11)'
+			]
+		],
+		'primary' => [
+			'topic_id',
+			'path_id'
+		],
+		'foreign' => [
+			[
+				'key'   => 'topic_id',
+				'table' => 'topic',
+				'field' => 'topic_id'
+			]
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
+		'name'  => 'article_to_topic',
+		'field' => [
+			[
+				'name' => 'article_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'topic_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name'    => 'main_topic',
+				'type'    => 'tinyint(1)',
+				'default' => '0'
+			]
+		],
+		'primary' => [
+			'article_id',
+			'topic_id'
+		],
+		'foreign' => [
+			[
+				'key'   => 'article_id',
+				'table' => 'article',
+				'field' => 'article_id'
+			],
+			[
+				'key'   => 'topic_id',
+				'table' => 'topic',
+				'field' => 'topic_id'
+			]
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
+		'name'  => 'article_related',
+		'field' => [
+			[
+				'name' => 'article_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'related_id',
+				'type' => 'int(11)'
+			]
+		],
+		'primary' => [
+			'article_id',
+			'related_id'
+		],
+		'foreign' => [
+			[
+				'key'   => 'article_id',
+				'table' => 'article',
+				'field' => 'article_id'
+			]
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
+		'name'  => 'article_to_product',
+		'field' => [
+			[
+				'name' => 'article_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'product_id',
+				'type' => 'int(11)'
+			]
+		],
+		'primary' => [
+			'article_id',
+			'product_id'
+		],
+		'foreign' => [
+			[
+				'key'   => 'article_id',
+				'table' => 'article',
+				'field' => 'article_id'
+			],
+			[
+				'key'   => 'product_id',
+				'table' => 'product',
+				'field' => 'product_id'
+			]
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
+		'name'  => 'article_to_download',
+		'field' => [
+			[
+				'name' => 'article_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'download_id',
+				'type' => 'int(11)'
+			]
+		],
+		'primary' => [
+			'article_id',
+			'download_id'
+		],
+		'foreign' => [
+			[
+				'key'   => 'article_id',
+				'table' => 'article',
+				'field' => 'article_id'
+			],
+			[
+				'key'   => 'download_id',
+				'table' => 'download',
+				'field' => 'download_id'
+			]
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
+		'name'  => 'article_to_manufacturer',
+		'field' => [
+			[
+				'name' => 'article_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'manufacturer_id',
+				'type' => 'int(11)'
+			]
+		],
+		'primary' => [
+			'article_id',
+			'manufacturer_id'
+		],
+		'foreign' => [
+			[
+				'key'   => 'article_id',
+				'table' => 'article',
+				'field' => 'article_id'
+			],
+			[
+				'key'   => 'manufacturer_id',
+				'table' => 'manufacturer',
+				'field' => 'manufacturer_id'
+			]
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
+		'name'  => 'article_to_category',
+		'field' => [
+			[
+				'name' => 'article_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'category_id',
+				'type' => 'int(11)'
+			]
+		],
+		'primary' => [
+			'article_id',
+			'category_id'
+		],
+		'foreign' => [
+			[
+				'key'   => 'article_id',
+				'table' => 'article',
+				'field' => 'article_id'
+			],
+			[
+				'key'   => 'category_id',
+				'table' => 'category',
+				'field' => 'category_id'
 			]
 		],
 		'engine'  => 'InnoDB',

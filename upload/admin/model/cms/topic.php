@@ -30,7 +30,7 @@ class Topic extends \Opencart\System\Engine\Model {
 	 * $topic_id = $this->model_cms_topic->addTopic($topic_data);
 	 */
 	public function addTopic(array $data): int {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "topic` SET `sort_order` = '" . (int)$data['sort_order'] . "', `status` = '" . (bool)($data['status'] ?? 0) . "'");
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "topic` SET `parent_id` = '" . (int)($data['parent_id'] ?? 0) . "', `sort_order` = '" . (int)$data['sort_order'] . "', `noindex` = '" . (bool)($data['noindex'] ?? 0) . "', `status` = '" . (bool)($data['status'] ?? 0) . "'");
 
 		$topic_id = $this->db->getLastId();
 
@@ -38,6 +38,19 @@ class Topic extends \Opencart\System\Engine\Model {
 		foreach ($data['topic_description'] as $language_id => $value) {
 			$this->model_cms_topic->addDescription($topic_id, $language_id, $value);
 		}
+
+		// Path
+		$level = 0;
+
+		$results = $this->model_cms_topic->getPaths((int)($data['parent_id'] ?? 0));
+
+		foreach ($results as $result) {
+			$this->model_cms_topic->addPath($topic_id, $result['path_id'], $level);
+
+			$level++;
+		}
+
+		$this->model_cms_topic->addPath($topic_id, $topic_id, $level);
 
 		// Store
 		if (isset($data['topic_store'])) {
@@ -92,7 +105,30 @@ class Topic extends \Opencart\System\Engine\Model {
 	 * $this->model_cms_topic->editTopic($topic_id, $topic_data);
 	 */
 	public function editTopic(int $topic_id, array $data): void {
-		$this->db->query("UPDATE `" . DB_PREFIX . "topic` SET `sort_order` = '" . (int)$data['sort_order'] . "', `status` = '" . (bool)($data['status'] ?? 0) . "' WHERE `topic_id` = '" . (int)$topic_id . "'");
+		$this->db->query("UPDATE `" . DB_PREFIX . "topic` SET `parent_id` = '" . (int)($data['parent_id'] ?? 0) . "', `sort_order` = '" . (int)$data['sort_order'] . "', `noindex` = '" . (bool)($data['noindex'] ?? 0) . "', `status` = '" . (bool)($data['status'] ?? 0) . "' WHERE `topic_id` = '" . (int)$topic_id . "'");
+
+		// Path
+		$this->model_cms_topic->deletePaths($topic_id);
+
+		$paths = [];
+
+		$results = $this->model_cms_topic->getPaths((int)($data['parent_id'] ?? 0));
+
+		foreach ($results as $result) {
+			$paths[] = $result['path_id'];
+		}
+
+		$level = 0;
+
+		foreach ($paths as $path_id) {
+			$this->model_cms_topic->addPath($topic_id, $path_id, $level);
+
+			$level++;
+		}
+
+		$this->model_cms_topic->addPath($topic_id, $topic_id, $level);
+
+		$this->model_cms_topic->repairTopics($topic_id);
 
 		// Description
 		$this->model_cms_topic->deleteDescriptions($topic_id);
@@ -155,6 +191,15 @@ class Topic extends \Opencart\System\Engine\Model {
 
 		$this->model_cms_topic->deleteDescriptions($topic_id);
 		$this->model_cms_topic->deleteStores($topic_id);
+		$this->model_cms_topic->deletePaths($topic_id);
+
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_topic` WHERE `topic_id` = '" . (int)$topic_id . "'");
+
+		$query = $this->db->query("SELECT `topic_id` FROM `" . DB_PREFIX . "topic` WHERE `parent_id` = '" . (int)$topic_id . "'");
+
+		foreach ($query->rows as $result) {
+			$this->model_cms_topic->deleteTopic($result['topic_id']);
+		}
 
 		// SEO
 		$this->load->model('design/seo_url');
@@ -319,7 +364,7 @@ class Topic extends \Opencart\System\Engine\Model {
 	 * $this->model_cms_topic->addDescription($topic_id, $language_id, $topic_data);
 	 */
 	public function addDescription(int $topic_id, int $language_id, array $data): void {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "topic_description` SET `topic_id` = '" . (int)$topic_id . "', `language_id` = '" . (int)$language_id . "', `image` = '" . $this->db->escape((string)$data['image']) . "', `name` = '" . $this->db->escape($data['name']) . "', `description` = '" . $this->db->escape($data['description']) . "', `meta_title` = '" . $this->db->escape($data['meta_title']) . "', `meta_description` = '" . $this->db->escape($data['meta_description']) . "', `meta_keyword` = '" . $this->db->escape($data['meta_keyword']) . "'");
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "topic_description` SET `topic_id` = '" . (int)$topic_id . "', `language_id` = '" . (int)$language_id . "', `image` = '" . $this->db->escape((string)$data['image']) . "', `name` = '" . $this->db->escape($data['name']) . "', `description` = '" . $this->db->escape($data['description']) . "', `meta_title` = '" . $this->db->escape($data['meta_title']) . "', `meta_description` = '" . $this->db->escape($data['meta_description']) . "', `meta_keyword` = '" . $this->db->escape($data['meta_keyword']) . "', `meta_h1` = '" . $this->db->escape((string)($data['meta_h1'] ?? '')) . "'");
 	}
 
 	/**
@@ -573,5 +618,50 @@ class Topic extends \Opencart\System\Engine\Model {
 		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "topic_to_layout` WHERE `layout_id` = '" . (int)$layout_id . "'");
 
 		return (int)$query->row['total'];
+	}
+
+	public function repairTopics(int $parent_id = 0): void {
+		$query = $this->db->query("SELECT `topic_id` FROM `" . DB_PREFIX . "topic` WHERE `parent_id` = '" . (int)$parent_id . "'");
+
+		foreach ($query->rows as $topic) {
+			$this->model_cms_topic->deletePaths($topic['topic_id']);
+
+			$level = 0;
+
+			$paths = $this->model_cms_topic->getPaths($parent_id);
+
+			foreach ($paths as $path) {
+				$this->model_cms_topic->addPath($topic['topic_id'], $path['path_id'], $level);
+
+				$level++;
+			}
+
+			$this->model_cms_topic->addPath($topic['topic_id'], $topic['topic_id'], $level);
+			$this->model_cms_topic->repairTopics($topic['topic_id']);
+		}
+	}
+
+	public function addPath(int $topic_id, int $path_id, int $level): void {
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "topic_path` SET `topic_id` = '" . (int)$topic_id . "', `path_id` = '" . (int)$path_id . "', `level` = '" . (int)$level . "'");
+	}
+
+	public function deletePaths(int $topic_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "topic_path` WHERE `topic_id` = '" . (int)$topic_id . "'");
+	}
+
+	public function getPath(int $topic_id): string {
+		return implode('_', array_column($this->model_cms_topic->getPaths($topic_id), 'path_id'));
+	}
+
+	public function getPaths(int $topic_id): array {
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "topic_path` WHERE `topic_id` = '" . (int)$topic_id . "' ORDER BY `level` ASC");
+
+		return $query->rows;
+	}
+
+	public function getPathsByPathId(int $path_id): array {
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "topic_path` WHERE `path_id` = '" . (int)$path_id . "' ORDER BY `level` ASC");
+
+		return $query->rows;
 	}
 }

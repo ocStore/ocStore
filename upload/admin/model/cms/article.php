@@ -30,7 +30,7 @@ class Article extends \Opencart\System\Engine\Model {
 	 * $article_id = $this->model_cms_article->addArticle($article_data);
 	 */
 	public function addArticle(array $data): int {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "article` SET `topic_id` = '" . (int)$data['topic_id'] . "', `author` = '" . $this->db->escape($data['author']) . "', `status` = '" . (bool)($data['status'] ?? 0) . "', `date_added` = NOW(), `date_modified` = NOW()");
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "article` SET `topic_id` = '" . (int)$data['topic_id'] . "', `author` = '" . $this->db->escape($data['author']) . "', `sort_order` = '" . (int)($data['sort_order'] ?? 0) . "', `date_available` = '" . $this->db->escape(!empty($data['date_available']) ? (string)$data['date_available'] : date('Y-m-d')) . "', `noindex` = '" . (bool)($data['noindex'] ?? 0) . "', `status` = '" . (bool)($data['status'] ?? 0) . "', `date_added` = NOW(), `date_modified` = NOW()");
 
 		$article_id = $this->db->getLastId();
 
@@ -45,6 +45,18 @@ class Article extends \Opencart\System\Engine\Model {
 				$this->model_cms_article->addStore($article_id, $store_id);
 			}
 		}
+
+		// Topic
+		$this->model_cms_article->addTopics($article_id, (int)$data['topic_id'], $data['article_topic'] ?? []);
+
+		// Related
+		$this->model_cms_article->addRelated($article_id, $data['article_related'] ?? []);
+
+		// Product
+		$this->model_cms_article->addProducts($article_id, $data['article_product'] ?? []);
+
+		// Download
+		$this->model_cms_article->addDownloads($article_id, $data['article_download'] ?? []);
 
 		// SEO
 		$this->load->model('design/seo_url');
@@ -92,7 +104,7 @@ class Article extends \Opencart\System\Engine\Model {
 	 * $this->model_cms_article->editArticle($article_id, $article_data);
 	 */
 	public function editArticle(int $article_id, array $data): void {
-		$this->db->query("UPDATE `" . DB_PREFIX . "article` SET `topic_id` = '" . (int)$data['topic_id'] . "', `author` = '" . $this->db->escape($data['author']) . "', `status` = '" . (bool)($data['status'] ?? 0) . "', `date_modified` = NOW() WHERE `article_id` = '" . (int)$article_id . "'");
+		$this->db->query("UPDATE `" . DB_PREFIX . "article` SET `topic_id` = '" . (int)$data['topic_id'] . "', `author` = '" . $this->db->escape($data['author']) . "', `sort_order` = '" . (int)($data['sort_order'] ?? 0) . "', `date_available` = '" . $this->db->escape(!empty($data['date_available']) ? (string)$data['date_available'] : date('Y-m-d')) . "', `noindex` = '" . (bool)($data['noindex'] ?? 0) . "', `status` = '" . (bool)($data['status'] ?? 0) . "', `date_modified` = NOW() WHERE `article_id` = '" . (int)$article_id . "'");
 
 		// Description
 		$this->model_cms_article->deleteDescriptions($article_id);
@@ -109,6 +121,18 @@ class Article extends \Opencart\System\Engine\Model {
 				$this->model_cms_article->addStore($article_id, $store_id);
 			}
 		}
+
+		// Topic
+		$this->model_cms_article->addTopics($article_id, (int)$data['topic_id'], $data['article_topic'] ?? []);
+
+		// Related
+		$this->model_cms_article->addRelated($article_id, $data['article_related'] ?? []);
+
+		// Product
+		$this->model_cms_article->addProducts($article_id, $data['article_product'] ?? []);
+
+		// Download
+		$this->model_cms_article->addDownloads($article_id, $data['article_download'] ?? []);
 
 		// SEO
 		$this->load->model('design/seo_url');
@@ -176,6 +200,10 @@ class Article extends \Opencart\System\Engine\Model {
 		$this->model_cms_article->deleteDescriptions($article_id);
 		$this->model_cms_article->deleteStores($article_id);
 		$this->model_cms_article->deleteCommentsByArticleId($article_id);
+		$this->model_cms_article->deleteTopics($article_id);
+		$this->model_cms_article->deleteRelated($article_id);
+		$this->model_cms_article->deleteProducts($article_id);
+		$this->model_cms_article->deleteDownloads($article_id);
 
 		// SEO
 		$this->load->model('design/seo_url');
@@ -345,7 +373,7 @@ class Article extends \Opencart\System\Engine\Model {
 	 * $this->model_cms_article->addDescription($article_id, $language_id, $article_data);
 	 */
 	public function addDescription(int $article_id, int $language_id, array $data): void {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "article_description` SET `article_id` = '" . (int)$article_id . "', `language_id` = '" . (int)$language_id . "', `image` = '" . $this->db->escape($data['image']) . "', `name` = '" . $this->db->escape($data['name']) . "', `description` = '" . $this->db->escape($data['description']) . "', `tag` = '" . $this->db->escape($data['tag']) . "', `meta_title` = '" . $this->db->escape($data['meta_title']) . "', `meta_description` = '" . $this->db->escape($data['meta_description']) . "', `meta_keyword` = '" . $this->db->escape($data['meta_keyword']) . "'");
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "article_description` SET `article_id` = '" . (int)$article_id . "', `language_id` = '" . (int)$language_id . "', `image` = '" . $this->db->escape($data['image']) . "', `name` = '" . $this->db->escape($data['name']) . "', `description` = '" . $this->db->escape($data['description']) . "', `tag` = '" . $this->db->escape($data['tag']) . "', `meta_title` = '" . $this->db->escape($data['meta_title']) . "', `meta_description` = '" . $this->db->escape($data['meta_description']) . "', `meta_keyword` = '" . $this->db->escape($data['meta_keyword']) . "', `meta_h1` = '" . $this->db->escape((string)($data['meta_h1'] ?? '')) . "'");
 	}
 
 	/**
@@ -873,5 +901,88 @@ class Article extends \Opencart\System\Engine\Model {
 		$query = $this->db->query($sql);
 
 		return (int)$query->row['total'];
+	}
+
+	public function addTopics(int $article_id, int $main_topic_id, array $topics): void {
+		$this->model_cms_article->deleteTopics($article_id);
+
+		if ($main_topic_id && !in_array($main_topic_id, $topics)) {
+			$topics[] = $main_topic_id;
+		}
+
+		foreach ($topics as $topic_id) {
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "article_to_topic` SET `article_id` = '" . (int)$article_id . "', `topic_id` = '" . (int)$topic_id . "', `main_topic` = '" . (int)((int)$topic_id === $main_topic_id) . "'");
+		}
+	}
+
+	public function deleteTopics(int $article_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_topic` WHERE `article_id` = '" . (int)$article_id . "'");
+	}
+
+	public function getTopics(int $article_id): array {
+		$query = $this->db->query("SELECT `topic_id` FROM `" . DB_PREFIX . "article_to_topic` WHERE `article_id` = '" . (int)$article_id . "'");
+
+		return array_column($query->rows, 'topic_id');
+	}
+
+	public function addRelated(int $article_id, array $related): void {
+		$this->model_cms_article->deleteRelated($article_id);
+
+		foreach ($related as $related_id) {
+			if ((int)$related_id === $article_id) {
+				continue;
+			}
+
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "article_related` SET `article_id` = '" . (int)$article_id . "', `related_id` = '" . (int)$related_id . "'");
+			$this->db->query("DELETE FROM `" . DB_PREFIX . "article_related` WHERE `article_id` = '" . (int)$related_id . "' AND `related_id` = '" . (int)$article_id . "'");
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "article_related` SET `article_id` = '" . (int)$related_id . "', `related_id` = '" . (int)$article_id . "'");
+		}
+	}
+
+	public function deleteRelated(int $article_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_related` WHERE `article_id` = '" . (int)$article_id . "'");
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_related` WHERE `related_id` = '" . (int)$article_id . "'");
+	}
+
+	public function getRelated(int $article_id): array {
+		$query = $this->db->query("SELECT `related_id` FROM `" . DB_PREFIX . "article_related` WHERE `article_id` = '" . (int)$article_id . "'");
+
+		return array_column($query->rows, 'related_id');
+	}
+
+	public function addProducts(int $article_id, array $products): void {
+		$this->model_cms_article->deleteProducts($article_id);
+
+		foreach ($products as $product_id) {
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "article_to_product` SET `article_id` = '" . (int)$article_id . "', `product_id` = '" . (int)$product_id . "'");
+		}
+	}
+
+	public function deleteProducts(int $article_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_product` WHERE `article_id` = '" . (int)$article_id . "'");
+	}
+
+	public function getProducts(int $article_id): array {
+		$query = $this->db->query("SELECT `product_id` FROM `" . DB_PREFIX . "article_to_product` WHERE `article_id` = '" . (int)$article_id . "'");
+
+		return array_column($query->rows, 'product_id');
+	}
+
+	public function addDownloads(int $article_id, array $downloads): void {
+		$this->model_cms_article->deleteDownloads($article_id);
+
+		foreach ($downloads as $download_id) {
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "article_to_download` SET `article_id` = '" . (int)$article_id . "', `download_id` = '" . (int)$download_id . "'");
+		}
+	}
+
+	public function deleteDownloads(int $article_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "article_to_download` WHERE `article_id` = '" . (int)$article_id . "'");
+	}
+
+	public function getDownloads(int $article_id): array {
+		$query = $this->db->query("SELECT `download_id` FROM `" . DB_PREFIX . "article_to_download` WHERE `article_id` = '" . (int)$article_id . "'");
+
+		return array_column($query->rows, 'download_id');
 	}
 }

@@ -237,6 +237,13 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 					'image'        => $result['image'],
 					'license'      => $result['license'],
 					'price'        => $result['price'],
+					'old_price'    => $result['old_price'] ?? '',
+					'discount'     => $result['discount'] ?? '',
+					'ukraine'      => $result['ukraine'] ?? '',
+					'sales'        => $result['sales'] ?? '',
+					'downloaded'   => $result['downloaded'] ?? '',
+					'author'       => $result['member_username'] ?? '',
+					'author_url'   => $result['member_url'] ?? '',
 					'rating'       => $result['rating'],
 					'rating_total' => $result['rating_total'],
 					'href'         => $this->url->link('marketplace/opencartforum.info', 'user_token=' . $this->session->data['user_token'] . '&extension_id=' . $result['extension_id'] . $url)
@@ -256,6 +263,13 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 					'image'        => $result['image'],
 					'license'      => $result['license'],
 					'price'        => $result['price'],
+					'old_price'    => $result['old_price'] ?? '',
+					'discount'     => $result['discount'] ?? '',
+					'ukraine'      => $result['ukraine'] ?? '',
+					'sales'        => $result['sales'] ?? '',
+					'downloaded'   => $result['downloaded'] ?? '',
+					'author'       => $result['member_username'] ?? '',
+					'author_url'   => $result['member_url'] ?? '',
 					'rating'       => $result['rating'],
 					'rating_total' => $result['rating_total'],
 					'href'         => $this->url->link('marketplace/opencartforum.info', 'user_token=' . $this->session->data['user_token'] . '&extension_id=' . $result['extension_id'] . $url, true)
@@ -588,10 +602,15 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
             \HTMLPurifier_Bootstrap::registerAutoload();
 
             $config = \HTMLPurifier_Config::createDefault();
-            $config->set('AutoFormat.RemoveEmpty',true);
-            $config->set('HTML.Allowed', 'p,ul[style],ol,li,a,img');
-            $config->set('HTML.AllowedAttributes', 'src, *.style, alt, href, target');
-            $config->set('CSS.AllowedProperties', 'font-size, text-align, color');
+            $config->set('AutoFormat.RemoveEmpty', true);
+            $config->set('HTML.Allowed', 'div,span,p,br,hr,h1,h2,h3,h4,h5,h6,strong,b,em,i,u,s,del,ins,sub,sup,small,mark,code,kbd,samp,var,abbr,pre,blockquote,ul,ol,li,dl,dt,dd,a,img,table,thead,tbody,tfoot,tr,th,td,caption,figure,figcaption');
+            $config->set('HTML.AllowedAttributes', '*.style, *.title, abbr.title, a.href, a.target, a.rel, img.src, img.alt, img.width, img.height, td.colspan, td.rowspan, th.colspan, th.rowspan, th.scope, ol.start, li.value');
+            $config->set('CSS.AllowedProperties', 'font-size, font-weight, font-style, font-family, text-align, text-decoration, text-transform, line-height, letter-spacing, color, background, background-color, border, border-top, border-right, border-bottom, border-left, border-color, border-style, border-width, padding, padding-top, padding-right, padding-bottom, padding-left, margin, margin-top, margin-right, margin-bottom, margin-left, width, max-width, height, max-height, list-style-type, vertical-align, white-space');
+            $config->set('CSS.AllowTracingURI', false);
+            $config->set('CSS.MaxImgLength', '1200px');
+            $config->set('HTML.MaxImgLength', 1200);
+            $config->set('URI.AllowedSchemes', ['http' => true, 'https' => true, 'mailto' => true]);
+            $config->set('Attr.AllowedClasses', []);
             $config->set('HTML.Nofollow', true);
             $config->set('HTML.TargetBlank', true);
 
@@ -604,7 +623,17 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 
             $data['date_added'] = date($this->language->get('date_format_short'), strtotime($response_info['date_added']));
             $data['date_modified'] = date($this->language->get('date_format_short'), strtotime($response_info['date_modified']));
-            $data['member_date_added'] = date($this->language->get('date_format_short'), strtotime($response_info['member_date_added']));
+            $member_date_added = trim((string)$response_info['member_date_added']);
+
+            $member_date = \DateTime::createFromFormat('d.m.y H:i', $member_date_added);
+
+            if (!$member_date) {
+                $member_timestamp = strtotime($member_date_added);
+
+                $member_date = $member_timestamp ? (new \DateTime())->setTimestamp($member_timestamp) : null;
+            }
+
+            $data['member_date_added'] = $member_date ? $member_date->format($this->language->get('date_format_short')) : '';
 
             if (isset($response_info['comment_total'])) {
 				$data['comment_total'] = $response_info['comment_total'];

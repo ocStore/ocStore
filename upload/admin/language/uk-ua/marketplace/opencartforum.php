@@ -32,6 +32,7 @@ $_['text_downloaded']    = 'Завантажені';
 $_['text_member_since']  = 'Учасник з:';
 $_['text_price']         = 'Ціна';
 $_['text_featured']      = 'Рекомендовано';
+$_['text_by']           = 'від';
 $_['text_partner']       = 'Розроблено партнером OpenCart';
 $_['text_support']       = '12 місяців безкоштовної підтримки';
 $_['text_documentation'] = 'Документацію включено';

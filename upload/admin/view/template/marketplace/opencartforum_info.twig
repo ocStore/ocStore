@@ -14,96 +14,112 @@
 		</div>
 	</div>
 	<div id="marketplace-extension-info" class="container-fluid">
-    {% if error_warning %}
-      <div class="alert alert-danger"><i class="fa-solid fa-circle-exclamation"></i> {{ error_warning }}</div>
-    {% endif %}
+		{% if error_warning %}
+			<div class="alert alert-danger"><i class="fa-solid fa-circle-exclamation"></i> {{ error_warning }}</div>
+		{% endif %}
 		<div class="card">
-			<div class="card-header"><i class="fa-solid fa-puzzle-piece"></i> {{ name }}</div>
-			<div class="card-body">
-				<div class="row extension-info">
-					<div class="col-md-8 col-lg-9">
-						{% if banner %}
-							<div id="banner" class="text-center img-thumbnail mb-3"><img src="{{ banner }}" title="{{ name }}" alt="{{ name }}" class="img-fluid"/></div>
-						{% endif %}
-						<div class="row thumbnails">
-							{% for image in images %}
-								<div class="col-4 col-md-3 col-lg-2 mb-3"><a href="{{ image.popup }}"><img src="{{ image.thumb }}" alt="{{ image.name }}" title="{{ image.name }}" class="img-fluid img-thumbnail"/></a></div>
-							{% endfor %}
-						</div>
-						<ul class="nav nav-tabs">
-							<li class="nav-item"><a href="#tab-description" class="nav-link active" data-bs-toggle="tab">{{ tab_general }}</a></li>
-							<li class="nav-item"><a href="#tab-changelog" class="nav-link" data-bs-toggle="tab">{{ tab_changelog }}</a></li>
-						</ul>
-						<div class="tab-content">
-							<div id="tab-description" class="tab-pane fade show active">{{ description }}</div>
-							<div id="tab-changelog" class="tab-pane fade">{{ changelog }}</div>
-						</div>
+		<div class="card-body">
+		<div class="extension-head mb-3">
+			<h2 class="extension-head-title">{{ name }}{% if ukraine %} <span class="extension-flag" title="Ukraine"></span>{% endif %}</h2>
+			<div class="extension-head-meta">
+				<a href="{{ filter_member }}" class="extension-member">
+					<img src="{{ member_image }}" alt="{{ member_username }}" class="rounded-circle"/> {{ member_username }}
+				</a>
+				{% if rating_total %}
+					<span class="extension-stars">{% for i in 1..5 %}{% if rating < i %}<i class="fa-regular fa-star"></i>{% else %}<i class="fa-solid fa-star"></i>{% endif %}{% endfor %}</span>
+					<span>{{ rating_total }} {{ text_reviews }}</span>
+				{% endif %}
+				<span><i class="fa-solid fa-download"></i> {{ downloaded }}</span>
+				<span><i class="fa-solid fa-cart-shopping"></i> {{ sales }}</span>
+				<span><i class="fa-solid fa-clock-rotate-left"></i> {{ date_modified }}</span>
+			</div>
+		</div>
+		<div class="row extension-info">
+			<div class="col-lg-8">
+				{% if banner %}
+					<div class="extension-banner text-center mb-3">
+						<img src="{{ banner }}" title="{{ name }}" alt="{{ name }}" class="img-fluid"/>
 					</div>
-					<div class="col-md-4 col-lg-3">
-						<div id="buy" class="card mb-3">
-							<div class="card-body">
-								<div class="text-center"><a href="{{ extension_url }}" target="_blank" id="button-buy" class="btn btn-success btn-lg btn-block">{{ button_purchase }}</a></div>
-								<div id="price" class="row">
-									<div class="col-lg-5"><strong>{{ text_price }}</strong></div>
-									<div class="col-lg-7 text-end">{% if license %}
-											{{ price }}
-										{% else %}
-											{{ text_free }}
-										{% endif %}
-									</div>
-								</div>
-								<hr>
-								<ul class="list-check">
-									{% for field in cfields %}
-										<li class="pb-1">{{ field.name }}: {{ field.value|raw }}</li>
-									{% endfor %}
-								</ul>
-								<hr>
-								<div class="row">
-									<div class="col-md-5"><strong>{{ text_rating }}</strong></div>
-									<div class="col-md-7 text-end">{% for i in 1..5 %}
-											{% if rating < i %}
-                        <i class="fa-regular fa-star"></i>
-                      {% else %}
-                        <i class="fa-solid fa-star"></i>
-                      {% endif %}
-										{% endfor %} ({{ rating_total }})
-									</div>
-								</div>
-								<hr>
-								<div class="row">
-									<div class="col-md-5"><strong>{{ text_date_modified }}</strong></div>
-									<div class="col-md-7 text-end">{{ date_modified }}</div>
-								</div>
-								<hr>
-								<div class="row">
-									<div class="col-md-5"><strong>{{ text_date_added }}</strong></div>
-									<div class="col-md-7 text-end">{{ date_added }}</div>
-								</div>
-							</div>
-						</div>
-						<div id="sales" class="card mb-3">
-							<div class="card-body"><i class="fa-solid fa-shopping-cart"></i> <strong>{{ sales }}</strong> {{ text_sales }}</div>
-						</div>
-						<div id="sales" class="card mb-3">
-							<div class="card-body"><i class="fa-solid fa-download"></i> <strong>{{ downloaded }}</strong> {{ text_downloaded }}</div>
-						</div>
-						<div class="card mb-3  text-center">
-							<div class="card-body">
-								<div class="media text-center">
-									<img src="{{ member_image }}" alt="{{ member_username }}" title="{{ member_username }}" class="rounded-circle developer-avatar">
-									<div class="media-body">
-										<h5 class="mt-2"><a href="{{ filter_member }}">{{ member_username }}</a></h5>
-										<small>{{ text_member_since }} {{ member_date_added }}</small>
-									</div>
-								</div>
-								<br/>
-								<a href="{{ filter_member }}" target="_blank" class="btn btn-primary btn-lg btn-block mb-2">{{ button_view_all }}</a> <a href="https://opencartforum.com/topic/{{ topicid }}-{{ topicseoname }}" target="_blank" class="btn btn-outline-secondary btn-lg btn-block">{{ button_support }}</a>
-							</div>
-						</div>
+				{% endif %}
+				{% if images %}
+					<div class="thumbnails extension-strip mb-3">
+						{% for image in images %}
+							<a href="{{ image.popup }}"><img src="{{ image.thumb }}" alt="{{ name }}" title="{{ name }}"/></a>
+						{% endfor %}
+					</div>
+				{% endif %}
+				<div>
+					<ul class="nav nav-tabs">
+							<li class="nav-item"><a href="#tab-description" class="nav-link active" data-bs-toggle="tab">{{ tab_description }}</a></li>
+							{% if changelog %}
+								<li class="nav-item"><a href="#tab-changelog" class="nav-link" data-bs-toggle="tab">{{ tab_changelog }}</a></li>
+							{% endif %}
+							{% if documentation %}
+								<li class="nav-item"><a href="#tab-documentation" class="nav-link" data-bs-toggle="tab">{{ tab_documentation }}</a></li>
+							{% endif %}
+					</ul>
+					<div class="tab-content extension-text pt-3">
+						<div id="tab-description" class="tab-pane fade show active">{{ description }}</div>
+						{% if changelog %}
+							<div id="tab-changelog" class="tab-pane fade">{{ changelog }}</div>
+						{% endif %}
+						{% if documentation %}
+							<div id="tab-documentation" class="tab-pane fade">{{ documentation }}</div>
+						{% endif %}
 					</div>
 				</div>
 			</div>
+			<div class="col-lg-4">
+				<div class="extension-side">
+				<div class="mb-4">
+					<div>
+						<div class="extension-buy-price">
+							{% if license %}
+								{% if old_price %}<s>{{ old_price }}</s>{% endif %}
+								<strong>{{ price }}</strong>
+								{% if discount %}<span class="extension-discount-inline">-{{ discount }}%</span>{% endif %}
+							{% else %}
+								<strong class="text-success">{{ text_free }}</strong>
+							{% endif %}
+						</div>
+						<a href="{{ extension_url }}" target="_blank" id="button-buy" class="btn btn-primary w-100 mb-2"><i class="fa-solid fa-cart-shopping"></i> {{ button_purchase }}</a>
+						<a href="https://opencartforum.com/topic/{{ topicid }}-{{ topicseoname }}" target="_blank" class="btn btn-outline-secondary w-100"><i class="fa-regular fa-comments"></i> {{ button_support }}</a>
+					</div>
+					<table class="table table-sm extension-fields mt-3 mb-0">
+						{% for field in cfields %}
+							<tr>
+								<td>{{ field.name }}</td>
+								<td class="text-end">{{ field.value|raw }}</td>
+							</tr>
+						{% endfor %}
+						<tr>
+							<td>{{ text_download }}</td>
+							<td class="text-end">{{ downloaded }}</td>
+						</tr>
+						<tr>
+							<td>{{ text_date_added }}</td>
+							<td class="text-end">{{ date_added }}</td>
+						</tr>
+						<tr>
+							<td>{{ text_date_modified }}</td>
+							<td class="text-end">{{ date_modified }}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="border-top pt-4">
+					<div class="text-center">
+						<img src="{{ member_image }}" alt="{{ member_username }}" title="{{ member_username }}" class="rounded-circle developer-avatar"/>
+						<h5 class="mt-2 mb-0"><a href="{{ filter_member }}">{{ member_username }}</a></h5>
+						{% if member_date_added %}
+							<small class="text-muted d-block">{{ text_member_since }} {{ member_date_added }}</small>
+						{% endif %}
+						<a href="{{ filter_member }}" class="btn btn-light w-100 mt-3">{{ button_view_all }}</a>
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+		</div>
 		</div>
 	</div>
 </div>

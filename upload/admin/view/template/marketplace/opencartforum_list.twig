@@ -61,32 +61,46 @@
         <div>
           {% if promotions %}
             <h3>{{ text_featured }}</h3>
-            <div class="row">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 mb-3">
               {% for extension in promotions %}
                 {% if extension %}
-                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <section>
-                      <div class="extension-preview text-center">
-                        <a href="{{ extension.href }}">
-                          <div class="extension-description">
-
+                  <div class="col">
+                    <div class="card h-100 extension-card">
+                      <a href="{{ extension.href }}" class="extension-image">
+                        <img src="{{ extension.image }}" alt="{{ extension.name }}" title="{{ extension.name }}"/>
+                        {% if extension.discount %}
+                          <span class="extension-discount">-{{ extension.discount }}%</span>
+                        {% endif %}
+                        {% if extension.ukraine %}
+                          <span class="extension-flag"></span>
+                        {% endif %}
+                      </a>
+                      <div class="card-body d-flex flex-column p-3">
+                        <a href="{{ extension.href }}" class="extension-title">{{ extension.name }}</a>
+                        <div class="extension-meta mt-2">
+                          {% if extension.author %}
+                            {{ text_by }}
+                            {% if extension.author_url %}
+                              <a href="{{ extension.author_url }}" target="_blank" class="extension-author">{{ extension.author }}</a>
+                            {% else %}
+                              <span class="extension-author">{{ extension.author }}</span>
+                            {% endif %}
+                          {% endif %}
+                          {% if extension.rating_total %}<i class="fa-solid fa-star"></i> {{ extension.rating|number_format(1) }} <span class="text-muted">({{ extension.rating_total }})</span>{% endif %}
+                        </div>
+                        <div class="extension-bottom mt-auto pt-2">
+                          <div class="extension-price">
+                            {% if extension.old_price %}<s>{{ extension.old_price }}</s> {% endif %}{{ extension.price }}
                           </div>
-                          <img src="{{ extension.image }}" alt="{{ extension.name }}" title="{{ extension.name }}" class="img-fluid"/></a>
-                      </div>
-                      <div class="extension-name">
-                        <h4><a href="{{ extension.href }}">{{ extension.name }}</a></h4>
-                        {{ extension.price }}</div>
-                      <div class="extension-rate mb-2">
-                        <div class="row">
-                          <div class="col-6">{% for i in 1..5 %}
-                              {% if extension.rating < i %}<i class="fa-regular fa-star"></i>{% else %}<i class="fa-solid fa-star"></i>{% endif %}
-                            {% endfor %}</div>
-                          <div class="col-6">
-                            <div class="text-end">{{ extension.rating_total }} {{ text_reviews }}</div>
-                          </div>
+                          {% if extension.sales or extension.downloaded %}
+                            <div class="extension-stats">
+                              {% if extension.sales %}<span title="{{ text_sales }}"><i class="fa-solid fa-cart-shopping"></i> {{ extension.sales }}</span>{% endif %}
+                              {% if extension.downloaded %}<span title="{{ text_download }}"><i class="fa-solid fa-download"></i> {{ extension.downloaded }}</span>{% endif %}
+                            </div>
+                          {% endif %}
                         </div>
                       </div>
-                    </section>
+                    </div>
                   </div>
                 {% endif %}
               {% endfor %}
@@ -94,31 +108,50 @@
             <hr/>
           {% endif %}
           {% if extensions %}
-            <div class="row">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
               {% for extension in extensions %}
                 {% if extension %}
-                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <section>
-                      <div class="extension-preview text-center"><a href="{{ extension.href }}">
-                          <div class="extension-description"></div>
-                          <img src="{{ extension.image }}" alt="{{ extension.name }}" title="{{ extension.name }}" class="img-fluid"/></a></div>
-                      <div class="extension-name">
-                        <h4><a href="{{ extension.href }}">{{ extension.name }}</a></h4>
-                        <span class="text-danger fw-bolder font-size-large">{{ extension.price }}</span></div>
-                      <div class="extension-rate mb-4">
-                        <div class="row">
-                          <div class="col-6">{% for i in 1..5 %}
-                              {% if extension.rating < i %}<i class="fa-regular fa-star"></i>{% else %}<i class="fa-solid fa-star"></i>{% endif %}
-                            {% endfor %}</div>
-                          <div class="col-6">
-                            <div class="text-end">{{ extension.rating_total }} {{ text_reviews }}</div>
+                  <div class="col">
+                    <div class="card h-100 extension-card">
+                      <a href="{{ extension.href }}" class="extension-image">
+                        <img src="{{ extension.image }}" alt="{{ extension.name }}" title="{{ extension.name }}"/>
+                        {% if extension.discount %}
+                          <span class="extension-discount">-{{ extension.discount }}%</span>
+                        {% endif %}
+                        {% if extension.ukraine %}
+                          <span class="extension-flag"></span>
+                        {% endif %}
+                      </a>
+                      <div class="card-body d-flex flex-column p-3">
+                        <a href="{{ extension.href }}" class="extension-title">{{ extension.name }}</a>
+                        <div class="extension-meta mt-2">
+                          {% if extension.author %}
+                            {{ text_by }}
+                            {% if extension.author_url %}
+                              <a href="{{ extension.author_url }}" target="_blank" class="extension-author">{{ extension.author }}</a>
+                            {% else %}
+                              <span class="extension-author">{{ extension.author }}</span>
+                            {% endif %}
+                          {% endif %}
+                          {% if extension.rating_total %}<i class="fa-solid fa-star"></i> {{ extension.rating|number_format(1) }} <span class="text-muted">({{ extension.rating_total }})</span>{% endif %}
+                        </div>
+                        <div class="extension-bottom mt-auto pt-2">
+                          <div class="extension-price">
+                            {% if extension.old_price %}<s>{{ extension.old_price }}</s> {% endif %}{{ extension.price }}
                           </div>
+                          {% if extension.sales or extension.downloaded %}
+                            <div class="extension-stats">
+                              {% if extension.sales %}<span title="{{ text_sales }}"><i class="fa-solid fa-cart-shopping"></i> {{ extension.sales }}</span>{% endif %}
+                              {% if extension.downloaded %}<span title="{{ text_download }}"><i class="fa-solid fa-download"></i> {{ extension.downloaded }}</span>{% endif %}
+                            </div>
+                          {% endif %}
                         </div>
                       </div>
-                    </section>
+                    </div>
                   </div>
                 {% endif %}
-              {% endfor %}</div>
+              {% endfor %}
+            </div>
           {% else %}
             <p class="text-center">{{ text_no_results }}</p>
           {% endif %}

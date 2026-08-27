@@ -1114,6 +1114,15 @@ td {
     max-width: 100%;
 }
 
+#header > .container-fluid {
+    justify-content: flex-start;
+}
+
+#nav-adds .nav-link {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
 #nav-search {
     flex: 1 1 auto;
     max-width: 640px;

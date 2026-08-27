@@ -38,7 +38,7 @@
       {% if logged %}
         <button type="button" id="button-menu" class="btn btn-link d-inline-block d-lg-none"><i class="fa-solid fa-bars"></i></button>
         {% if adds %}
-          <ul class="nav navbar-nav">
+          <ul id="nav-adds" class="nav navbar-nav">
             <li id="nav-add" class="nav-item dropdown">
               <a href="#" data-bs-toggle="dropdown" class="nav-link"><i class="fa-solid fa-plus"></i><span class="d-none d-lg-inline"> {{ text_new }}</span></a>
               <ul class="dropdown-menu">
@@ -50,7 +50,7 @@
           </ul>
         {% endif %}
         <div id="nav-search" class="d-none d-md-block">{{ search }}</div>
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav ms-auto">
           <li id="nav-notification" class="nav-item dropdown">
             <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle"><i class="fa-regular fa-bell"></i>{% if notification_total %} <span class="badge bg-danger">{{ notification_total }}</span>{% endif %}</a>
             <div class="dropdown-menu dropdown-menu-end">

@@ -471,7 +471,7 @@ class Setting extends \Opencart\System\Engine\Controller {
 		$data['config_seopro_language'] = $this->config->get('config_seopro_language');
 
 		// Meta
-		$data['config_add_prevnext'] = $this->config->get('config_add_prevnext');
+		$data['config_add_prevnext'] = $this->config->has('config_add_prevnext') ? $this->config->get('config_add_prevnext') : 1;
 		$data['config_og_status'] = $this->config->get('config_og_status');
 		$data['config_noindex_status'] = $this->config->get('config_noindex_status');
 

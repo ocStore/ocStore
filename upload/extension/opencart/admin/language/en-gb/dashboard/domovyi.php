@@ -51,6 +51,7 @@ $_['text_cache_image']            = 'Resizes';
 $_['text_widget']                 = 'Widget';
 $_['text_dashboard']              = 'Dashboard';
 $_['text_about']                  = 'About';
+$_['text_open']                   = 'Open';
 $_['text_about_intro']            = 'Domovyi keeps the state of the store on a single card: PHP and database versions, the size of the cache, log and image resize directories, server limits, write permissions and the freshest errors. Everything a store owner usually hunts for across a dozen pages is right here.';
 $_['text_about_community']        = 'Built for the OpenCartForum community.';
 $_['text_about_inspire']          = 'A community lives on the people who build something useful and give it away. If you can do something the rest cannot, build it and share it. That is how ocStore and OpenCart move forward, and that is how Domovyi came to be.';
@@ -82,8 +83,7 @@ $_['text_copyright']              = 'Domovyi 1.1.0 — Dinox [opencartforum.com]
 
 // Entry
 $_['entry_status']                = 'Status';
-$_['entry_sort_order']            = 'Sort Order';
-$_['entry_width']                 = 'Width';
+$_['help_status']                 = 'The Domovyi tab appears at the bottom of the dashboard';
 $_['entry_danger_funtions']       = 'List of dangerous functions to check for';
 $_['entry_warning_funtions']      = 'List of potentially dangerous functions to check for';
 $_['entry_theme_cache']           = 'Theme cache';

@@ -64,12 +64,6 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		$data['dashboard_domovyi_disk_free_space'] = $this->config->get('dashboard_domovyi_disk_free_space') ?: 500;
 		$data['dashboard_domovyi_free_space_status'] = $this->config->get('dashboard_domovyi_free_space_status');
 
-		$data['columns'] = [];
-
-		for ($i = 3; $i <= 12; $i++) {
-			$data['columns'][] = $i;
-		}
-
 		$data['dashboard_domovyi_width'] = $this->config->get('dashboard_domovyi_width');
 		$data['dashboard_domovyi_status'] = $this->config->get('dashboard_domovyi_status');
 		$data['dashboard_domovyi_sort_order'] = $this->config->get('dashboard_domovyi_sort_order');
@@ -111,11 +105,113 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 	/**
 	 * Dashboard
 	 *
+	 * The strip on the dashboard: a name, the state at a glance and a button that slides the panel out.
+	 *
 	 * @return string
 	 */
 	public function dashboard(): string {
+		$this->load->language('extension/opencart/dashboard/domovyi');
+
+		$this->recalcDue();
+
+		$data['user_token'] = $this->session->data['user_token'];
+
+		$data['setting'] = $this->url->link('extension/opencart/dashboard/domovyi', 'user_token=' . $this->session->data['user_token']);
+
+		$data['issues'] = $this->getIssues();
+
+		return $this->load->view('extension/opencart/dashboard/domovyi_info', $data);
+	}
+
+	/**
+	 * Recalc Due
+	 *
+	 * Measure the folders the store owner asked to keep an eye on once their period has passed.
+	 *
+	 * @return void
+	 */
+	private function recalcDue(): void {
+		$cron = $this->getCron();
+
+		foreach (array_keys($this->getFolders()) as $key) {
+			$cache = $this->getCache($key);
+
+			if (!empty($cron[$key]['status']) && $this->dateDiff(date('Y-m-d H:i:s'), (string)($cache['date'] ?? '')) > (float)($cron[$key]['time'] ?? 0) * 60) {
+				$this->calcFolder($key);
+			}
+		}
+	}
+
+	/**
+	 * Get Issues
+	 *
+	 * Everything that deserves attention, cheap enough to run on every dashboard load.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function getIssues(): array {
+		$items = [];
+
+		$missing = count(array_filter($this->getExtensions(), fn(array $extension): bool => !$extension['status']));
+
+		if ($missing) {
+			$items[] = sprintf($this->language->get('text_missing'), $missing) . ' — ' . $this->language->get('text_extensions');
+		}
+
+		$below = count(array_filter($this->getLimits(), fn(array $limit): bool => !$limit['status']));
+
+		if ($below) {
+			$items[] = sprintf($this->language->get('text_below'), $below) . ' — ' . $this->language->get('text_limits');
+		}
+
+		$readonly = count(array_filter($this->getPermissions(), fn(array $permission): bool => !$permission['status']));
+
+		if ($readonly) {
+			$items[] = sprintf($this->language->get('text_readonly'), $readonly) . ' — ' . $this->language->get('text_permissions');
+		}
+
+		$errors = $this->getErrors();
+
+		if ($errors['total']) {
+			$items[] = $this->language->get('text_errors') . ': ' . $errors['total'];
+		}
+
+		$cron = $this->getCron();
+
+		foreach (array_keys($this->getFolders()) as $key) {
+			$cache = $this->getCache($key);
+
+			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
+
+			if ($cache && $limit && $cache['size'] > $limit) {
+				$items[] = $this->language->get('text_dir_' . $key);
+			}
+		}
+
+		if ($this->checkFunc((array)preg_split('/\R/', $this->getFunctions('danger')))) {
+			$items[] = $this->language->get('text_functions');
+		}
+
+		return [
+			'total' => count($items),
+			'items' => $items
+		];
+	}
+
+	/**
+	 * Panel
+	 *
+	 * @return void
+	 */
+	public function panel(): void {
 		$this->load->language('common/developer');
 		$this->load->language('extension/opencart/dashboard/domovyi');
+
+		if (!$this->user->hasPermission('access', 'extension/opencart/dashboard/domovyi')) {
+			$this->response->setOutput($this->language->get('error_permission'));
+
+			return;
+		}
 
 		$data['user_token'] = $this->session->data['user_token'];
 
@@ -136,11 +232,6 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
 
 			$cache = $this->getCache($key);
-
-			// Recalculate the folder once the period set by the user has passed
-			if (!empty($cron[$key]['status']) && $this->dateDiff(date('Y-m-d H:i:s'), (string)($cache['date'] ?? '')) > (float)($cron[$key]['time'] ?? 0) * 60) {
-				$cache = $this->calcFolder($key);
-			}
 
 			if ($cache) {
 				$folder['size'] = $cache['unit']['size'] . ' ' . $cache['unit']['unit'];
@@ -206,7 +297,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 
 		$data['log'] = $this->url->link('tool/log', 'user_token=' . $this->session->data['user_token'] . '&filename=error.log');
 
-		return $this->load->view('extension/opencart/dashboard/domovyi_info', $data);
+		$this->response->setOutput($this->load->view('extension/opencart/dashboard/domovyi_panel', $data));
 	}
 
 	/**

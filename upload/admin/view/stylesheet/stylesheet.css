@@ -1117,7 +1117,7 @@ td {
 #nav-search {
     flex: 1 1 auto;
     max-width: 640px;
-    margin: 0 20px 0 12px;
+    margin: 0 20px 0 0;
 }
 
 #nav-add .nav-link {
@@ -1128,6 +1128,12 @@ td {
     margin-left: 0.35em;
     font-size: 0.85em;
     opacity: 0.75;
+}
+
+/* The toggle opens the group, so it must not keep the rounded right side */
+#search .input-group > .dropdown-toggle {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 #search-result {

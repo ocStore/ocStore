@@ -110,7 +110,7 @@ function alert_response(json) {
     }
 }
 
-function refresh(element) {
+function refresh(element, callback) {
     $.ajax({
         url: '{{ refresh }}',
         dataType: 'json',
@@ -122,6 +122,10 @@ function refresh(element) {
         },
         success: function(json) {
             alert_response(json);
+
+            if (callback) {
+                callback(json);
+            }
         },
         error: function(xhr, ajaxOptions, thrownError) {
             console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -186,13 +190,17 @@ $('.button-restore').on('click', function(e) {
             $(element).button('loading');
         },
         success: function(json) {
-            alert_response(json);
+            if (json['error']) {
+                alert_response(json);
 
-            if (json['success']) {
-                location.reload();
-            } else {
                 $(element).button('reset');
+
+                return;
             }
+
+            refresh(element, function() {
+                location.reload();
+            });
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(element).button('reset');

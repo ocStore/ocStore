@@ -684,7 +684,7 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 				$string[$k] = $this->strip($v, $config);
 			}
 
-return $string;
+			return $string;
 		}
 
 		return $purifier->purify($string);

@@ -55,6 +55,26 @@ class Header extends \Opencart\System\Engine\Controller {
 			$data['language'] = $this->load->controller('common/language');
 			$data['search'] = $this->load->controller('common/search');
 
+			// Quick links to the add forms
+			$adds = [
+				'product'      => 'catalog/product',
+				'category'     => 'catalog/category',
+				'manufacturer' => 'catalog/manufacturer',
+				'customer'     => 'customer/customer',
+				'download'     => 'catalog/download'
+			];
+
+			$data['adds'] = [];
+
+			foreach ($adds as $key => $route) {
+				if ($this->user->hasPermission('modify', $route)) {
+					$data['adds'][] = [
+						'text' => $this->language->get('text_new_' . $key),
+						'href' => $this->url->link($route . '.form', 'user_token=' . $this->session->data['user_token'])
+					];
+				}
+			}
+
 			// Notifications
 			$filter_data = [
 				'start' => 0,

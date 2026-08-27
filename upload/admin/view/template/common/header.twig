@@ -37,6 +37,18 @@
       <a href="{{ home }}" class="navbar-brand d-none d-lg-block"><img src="view/image/logo.png" alt="{{ heading_title }}" title="{{ heading_title }}"/></a>
       {% if logged %}
         <button type="button" id="button-menu" class="btn btn-link d-inline-block d-lg-none"><i class="fa-solid fa-bars"></i></button>
+        {% if adds %}
+          <ul class="nav navbar-nav">
+            <li id="nav-add" class="nav-item dropdown">
+              <a href="#" data-bs-toggle="dropdown" class="nav-link"><i class="fa-solid fa-plus"></i><span class="d-none d-lg-inline"> {{ text_new }}</span></a>
+              <ul class="dropdown-menu">
+                {% for add in adds %}
+                  <li><a href="{{ add.href }}" class="dropdown-item">{{ add.text }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+          </ul>
+        {% endif %}
         <div id="nav-search" class="d-none d-md-block">{{ search }}</div>
         <ul class="nav navbar-nav">
           <li id="nav-notification" class="nav-item dropdown">

@@ -1116,8 +1116,12 @@ td {
 
 #nav-search {
     flex: 1 1 auto;
-    max-width: 420px;
-    margin: 0 20px;
+    max-width: 640px;
+    margin: 0 20px 0 12px;
+}
+
+#nav-add .nav-link {
+    white-space: nowrap;
 }
 
 #search .dropdown-toggle::after {

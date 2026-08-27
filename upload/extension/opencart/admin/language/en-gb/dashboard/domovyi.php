@@ -56,6 +56,7 @@ $_['text_about_community']        = 'Built for the OpenCartForum community.';
 $_['text_about_inspire']          = 'A community lives on the people who build something useful and give it away. If you can do something the rest cannot, build it and share it. That is how ocStore and OpenCart move forward, and that is how Domovyi came to be.';
 $_['text_about_author']           = 'Developer profile';
 $_['text_about_updates']          = 'Extension page and updates';
+$_['text_about_files']            = 'Other extensions by the author';
 $_['text_unit_mb']                = 'MB';
 $_['text_unit_min']               = 'min';
 $_['text_folders']                = 'Directories';

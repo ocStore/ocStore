@@ -142,8 +142,11 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 			}
 
 			if ($cache) {
-				$folder['size'] = sprintf($this->language->get('text_folder_size'), $cache['unit']['size'] . ' ' . $cache['unit']['unit']);
-				$folder['files'] = sprintf($this->language->get('text_folder_files'), $cache['files']) . ' | ' . $cache['date'];
+				$folder['size'] = $cache['unit']['size'] . ' ' . $cache['unit']['unit'];
+				$folder['files'] = sprintf($this->language->get('text_folder_files'), $cache['files']);
+				$folder['date'] = date($this->language->get('datetime_format'), (int)strtotime($cache['date']));
+				$folder['limit'] = $limit ? $this->formatSize($limit) : [];
+				$folder['percent'] = $limit ? min(100, round($cache['size'] / $limit * 100)) : 0;
 
 				if ($limit && $cache['size'] > $limit) {
 					$folder['warning'] = sprintf($this->language->get('text_warning_size'), $cron[$key]['size']);
@@ -151,8 +154,11 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 					$folder['warning'] = '';
 				}
 			} else {
-				$folder['size'] = $this->language->get('text_check');
-				$folder['files'] = '';
+				$folder['size'] = '';
+				$folder['files'] = $this->language->get('text_never');
+				$folder['date'] = '';
+				$folder['limit'] = [];
+				$folder['percent'] = 0;
 				$folder['warning'] = '';
 			}
 
@@ -190,6 +196,14 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 
 		$data['danger_funtions'] = $this->checkFunc((array)preg_split('/\R/', $this->getFunctions('danger')));
 		$data['warning_funtions'] = $this->checkFunc((array)preg_split('/\R/', $this->getFunctions('warning')));
+
+		$data['extensions'] = $this->getExtensions();
+		$data['limits'] = $this->getLimits();
+		$data['permissions'] = $this->getPermissions();
+		$data['database'] = $this->getDatabase();
+		$data['errors'] = $this->getErrors();
+
+		$data['log'] = $this->url->link('tool/log', 'user_token=' . $this->session->data['user_token'] . '&filename=error.log');
 
 		return $this->load->view('extension/opencart/dashboard/domovyi_info', $data);
 	}
@@ -261,13 +275,19 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 
 			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
 
-			if ($limit && $folder['size'] > $limit) {
-				$warning = sprintf($this->language->get('text_warning_size'), $cron[$key]['size']);
-			} else {
-				$warning = $this->language->get('text_normal');
+			$json['size'] = $folder['unit']['size'] . ' ' . $folder['unit']['unit'];
+			$json['percent'] = $limit ? min(100, round($folder['size'] / $limit * 100)) : 0;
+			$json['warning'] = ($limit && $folder['size'] > $limit) ? sprintf($this->language->get('text_warning_size'), $cron[$key]['size']) : '';
+
+			$text = sprintf($this->language->get('text_folder_files'), $folder['files']) . ' · ' . date($this->language->get('datetime_format'), (int)strtotime($folder['date']));
+
+			if ($limit) {
+				$unit = $this->formatSize($limit);
+
+				$text .= ' · ' . sprintf($this->language->get('text_limit'), $unit['size'] . ' ' . $unit['unit']);
 			}
 
-			$json['success'] = sprintf($this->language->get('text_folder_size'), $folder['unit']['size'] . ' ' . $folder['unit']['unit']) . ' ' . sprintf($this->language->get('text_folder_files'), $folder['files']) . ' | ' . $folder['date'] . ' ' . $warning;
+			$json['text'] = $text;
 		}
 
 		$this->response->addHeader('Content-Type: application/json');
@@ -297,6 +317,219 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		$data['phpinfo'] = preg_replace('@<style[^>]*?>.*?</style>@si', '', $data['phpinfo']);
 
 		$this->response->setOutput($this->load->view('extension/opencart/dashboard/phpinfo', $data));
+	}
+
+	/**
+	 * Get Extensions
+	 *
+	 * The PHP extensions the store cannot run without.
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
+	private function getExtensions(): array {
+		$required = [
+			'db'       => (bool)array_filter(['mysqli', 'pdo', 'pgsql'], 'extension_loaded'),
+			'gd'       => extension_loaded('gd'),
+			'curl'     => extension_loaded('curl'),
+			'openssl'  => function_exists('openssl_encrypt'),
+			'zlib'     => extension_loaded('zlib'),
+			'zip'      => extension_loaded('zip'),
+			'mbstring' => extension_loaded('mbstring'),
+			'iconv'    => function_exists('iconv')
+		];
+
+		$extensions = [];
+
+		foreach ($required as $name => $status) {
+			$extensions[] = [
+				'name'   => $name == 'db' ? $this->language->get('text_db_driver') : $name,
+				'status' => $status
+			];
+		}
+
+		return $extensions;
+	}
+
+	/**
+	 * Get Limits
+	 *
+	 * The php.ini values worth keeping an eye on, compared with what a store needs.
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
+	private function getLimits(): array {
+		$required = [
+			'memory_limit'        => [256 * 1024 * 1024, true],
+			'upload_max_filesize' => [8 * 1024 * 1024, true],
+			'post_max_size'       => [8 * 1024 * 1024, true],
+			'max_execution_time'  => [30, false],
+			'max_input_vars'      => [5000, false]
+		];
+
+		$limits = [];
+
+		foreach ($required as $name => $required_data) {
+			list($recommended, $is_size) = $required_data;
+
+			$value = (string)ini_get($name);
+
+			if ($is_size) {
+				$current = $this->toBytes($value);
+				$unit = $this->formatSize((float)$recommended);
+				$expected = $unit['size'] . ' ' . $unit['unit'];
+			} else {
+				$current = (float)$value;
+				$expected = (string)$recommended;
+			}
+
+			$limits[] = [
+				'name'        => $name,
+				'value'       => $value !== '' ? $value : '—',
+				'recommended' => $expected,
+				'status'      => $current <= 0 || $current >= $recommended
+			];
+		}
+
+		return $limits;
+	}
+
+	/**
+	 * Get Permissions
+	 *
+	 * The paths the store has to be able to write into.
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
+	private function getPermissions(): array {
+		$paths = [
+			'system/storage/cache'     => DIR_CACHE,
+			'system/storage/logs'      => DIR_LOGS,
+			'system/storage/session'   => DIR_SESSION,
+			'system/storage/upload'    => DIR_UPLOAD,
+			'system/storage/download'  => DIR_DOWNLOAD,
+			'system/storage/backup'    => DIR_STORAGE . 'backup/',
+			'image/cache'              => DIR_IMAGE . 'cache/',
+			'extension/ocmod'          => DIR_EXTENSION . 'ocmod/',
+			'config.php'               => DIR_OPENCART . 'config.php',
+			'admin/config.php'         => DIR_APPLICATION . 'config.php'
+		];
+
+		$permissions = [];
+
+		foreach ($paths as $name => $path) {
+			$permissions[] = [
+				'name'   => $name,
+				'status' => file_exists($path) && is_writable($path)
+			];
+		}
+
+		return $permissions;
+	}
+
+	/**
+	 * Get Database
+	 *
+	 * The total size of the database and the tables that weigh the most.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function getDatabase(): array {
+		$query = $this->db->query("SELECT `TABLE_NAME` AS `name`, (`DATA_LENGTH` + `INDEX_LENGTH`) AS `size`, `TABLE_ROWS` AS `rows` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = DATABASE() ORDER BY `size` DESC");
+
+		$total = 0;
+		$tables = [];
+
+		foreach ($query->rows as $row) {
+			$total += (float)$row['size'];
+
+			if (count($tables) < 5) {
+				$unit = $this->formatSize((float)$row['size']);
+
+				$tables[] = [
+					'name' => $row['name'],
+					'rows' => (int)$row['rows'],
+					'size' => $unit['size'] . ' ' . $unit['unit']
+				];
+			}
+		}
+
+		$unit = $this->formatSize($total);
+
+		return [
+			'total'  => $unit['size'] . ' ' . $unit['unit'],
+			'tables' => $tables
+		];
+	}
+
+	/**
+	 * Get Errors
+	 *
+	 * The tail of the error log, so a broken store is visible without leaving the dashboard.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function getErrors(): array {
+		$file = DIR_LOGS . 'error.log';
+
+		if (!is_file($file) || !filesize($file)) {
+			return ['total' => 0, 'lines' => []];
+		}
+
+		$handle = fopen($file, 'r');
+
+		if (!$handle) {
+			return ['total' => 0, 'lines' => []];
+		}
+
+		// Only the tail is worth reading, the log can grow to megabytes
+		$size = (int)filesize($file);
+		$offset = max(0, $size - 65536);
+
+		fseek($handle, $offset);
+
+		$content = (string)fread($handle, $size - $offset);
+
+		fclose($handle);
+
+		$lines = array_values(array_filter(array_map('trim', explode("\n", $content))));
+
+		if ($offset) {
+			array_shift($lines);
+		}
+
+		return [
+			'total'    => count($lines),
+			'trimmed'  => (bool)$offset,
+			'lines'    => array_slice($lines, -5)
+		];
+	}
+
+	/**
+	 * To Bytes
+	 *
+	 * @param string $value php.ini shorthand such as 256M
+	 *
+	 * @return float
+	 */
+	private function toBytes(string $value): float {
+		$value = trim($value);
+
+		if ($value === '') {
+			return 0;
+		}
+
+		$number = (float)$value;
+
+		switch (strtolower(substr($value, -1))) {
+			case 'g':
+				return $number * 1024 * 1024 * 1024;
+			case 'm':
+				return $number * 1024 * 1024;
+			case 'k':
+				return $number * 1024;
+			default:
+				return $number;
+		}
 	}
 
 	/**

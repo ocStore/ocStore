@@ -1,89 +1,227 @@
 <div id="domovyi" class="card mb-3">
   <div class="card-header">
-    <div class="float-end"><a href="{{ setting }}" data-bs-toggle="tooltip" title="{{ text_setting }}" class="text-reset"><i class="fa-solid fa-cog"></i></a></div>
+    <div class="float-end">
+      <button type="button" id="button-phpinfo" data-bs-toggle="tooltip" title="{{ text_phpinfo }}" class="btn btn-outline-secondary btn-sm">phpinfo</button>
+      <a href="{{ setting }}" data-bs-toggle="tooltip" title="{{ text_setting }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-cog"></i></a>
+    </div>
     <i class="fa-solid fa-house-chimney-crack"></i> {{ heading_title }}
   </div>
-  <div class="card-body pb-0">
+  <div class="card-body">
     <div id="domovyi-alert"></div>
-    <div class="d-flex flex-wrap gap-2 mb-3">
-      <button type="button" id="button-phpinfo" data-bs-toggle="tooltip" title="{{ text_phpinfo }}" class="btn btn-info btn-sm">phpinfo</button>
-      {% if phpversion %}
-        <button type="button" data-oc-copy="#phpversion" data-bs-toggle="tooltip" title="{{ text_copy }}" class="btn btn-light btn-sm"><i class="fa-brands fa-php"></i> <span id="phpversion">PHP {{ phpversion }}</span></button>
-      {% endif %}
-      {% if database_version %}
-        <button type="button" data-oc-copy="#database-version" data-bs-toggle="tooltip" title="{{ text_copy }}" class="btn btn-light btn-sm"><i class="fa-solid fa-database"></i> <span id="database-version">MySQL {{ database_version }}</span></button>
+    <div class="row row-cols-2 row-cols-md-4 g-2 mb-4">
+      <div class="col">
+        <div class="border rounded p-2 h-100 domovyi-copy" data-oc-copy="#domovyi-php" role="button" data-bs-toggle="tooltip" title="{{ text_copy }}">
+          <div class="text-muted small text-uppercase">{{ text_php }}</div>
+          <div class="fw-semibold text-truncate" id="domovyi-php">{{ phpversion }}</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="border rounded p-2 h-100 domovyi-copy" data-oc-copy="#domovyi-dbms" role="button" data-bs-toggle="tooltip" title="{{ text_copy }}">
+          <div class="text-muted small text-uppercase">{{ text_dbms }}</div>
+          <div class="fw-semibold text-truncate" id="domovyi-dbms">{{ database_version }}</div>
+        </div>
+      </div>
+      {% if disk_free_space %}
+        <div class="col">
+          <div class="border rounded p-2 h-100{% if disk_free_space_warning %} border-danger text-danger{% endif %}">
+            <div class="text-muted small text-uppercase">{{ text_disk }}</div>
+            <div class="fw-semibold text-truncate">{{ disk_free_space.size }} {{ disk_free_space.unit }}</div>
+          </div>
+        </div>
       {% endif %}
       {% if ioncube_version %}
-        <button type="button" data-oc-copy="#ioncube-version" data-bs-toggle="tooltip" title="{{ text_copy }}" class="btn btn-light btn-sm"><i class="fa-regular fa-square"></i> <span id="ioncube-version">ionCube {{ ioncube_version }}</span></button>
+        <div class="col">
+          <div class="border rounded p-2 h-100">
+            <div class="text-muted small text-uppercase">{{ text_ioncube }}</div>
+            <div class="fw-semibold text-truncate">{{ ioncube_version }}</div>
+          </div>
+        </div>
       {% endif %}
-      {% if disk_free_space %}
-        <button type="button" data-oc-copy="#disk-free-space" data-bs-toggle="tooltip" title="{{ text_copy }}" class="btn btn-sm {% if disk_free_space_warning %}btn-danger{% else %}btn-light{% endif %}"><i class="fa-solid fa-hard-drive"></i> <span id="disk-free-space">{{ text_disk_free_space }} {{ disk_free_space.size }} {{ disk_free_space.unit }}</span></button>
-      {% endif %}
+      <div class="col">
+        <div class="border rounded p-2 h-100">
+          <div class="text-muted small text-uppercase">{{ text_database }}</div>
+          <div class="fw-semibold text-truncate">{{ database.total }}</div>
+        </div>
+      </div>
     </div>
-    <div class="table-responsive">
-      <table class="table table-bordered table-sm align-middle">
-        <tbody>
-          <tr>
-            <td>{{ entry_theme_cache }}</td>
-            <td class="text-end" style="width: 1px;"><button type="button" value="theme" data-bs-toggle="tooltip" title="{{ button_refresh }}" class="btn btn-warning btn-sm button-developer"><i class="fa-solid fa-rotate"></i></button></td>
-          </tr>
-          <tr>
-            <td>
-              <div class="form-check form-switch d-inline-block align-middle me-2">
-                <input type="hidden" name="developer_sass" value="0"/>
-                <input type="checkbox" name="developer_sass" value="1" id="input-domovyi-sass" class="form-check-input"{% if developer_sass %} checked{% endif %}/>
+    {% if disk_free_space_warning %}
+      <div class="alert alert-danger"><i class="fa-solid fa-triangle-exclamation"></i> {{ disk_free_space_warning }}</div>
+    {% endif %}
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <h6 class="text-uppercase text-muted small">{{ text_cache_control }}</h6>
+        <div class="row row-cols-2 g-2 mb-4">
+          <div class="col"><button type="button" value="theme" class="btn btn-outline-warning w-100 text-truncate button-developer"><i class="fa-solid fa-rotate"></i> {{ entry_theme_cache }}</button></div>
+          <div class="col"><button type="button" id="button-ocmod" class="btn btn-outline-warning w-100 text-truncate"><i class="fa-solid fa-rotate"></i> {{ entry_modification_cache }}</button></div>
+          <div class="col"><button type="button" value="sass" class="btn btn-outline-warning w-100 text-truncate button-developer"><i class="fa-solid fa-rotate"></i> {{ entry_sass }}</button></div>
+          <div class="col"><button type="button" value="all" class="btn btn-outline-danger w-100 text-truncate button-developer"><i class="fa-solid fa-broom"></i> {{ entry_allcache }}</button></div>
+        </div>
+        <div class="form-check form-switch mb-4">
+          <input type="hidden" name="developer_sass" value="0"/>
+          <input type="checkbox" name="developer_sass" value="1" id="input-domovyi-sass" class="form-check-input"{% if developer_sass %} checked{% endif %}/>
+          <label for="input-domovyi-sass" class="form-check-label">{{ text_sass }}</label>
+        </div>
+        <h6 class="text-uppercase text-muted small">{{ text_folders }}</h6>
+        {% for folder in folders %}
+          <div class="mb-3" data-oc-folder="{{ folder.key }}">
+            <div class="d-flex align-items-center justify-content-between">
+              <span class="text-truncate">{{ folder.name }}</span>
+              <span class="text-nowrap ms-2">
+                <span class="badge {% if folder.warning %}text-bg-danger{% else %}text-bg-secondary{% endif %} me-1{% if not folder.size %} d-none{% endif %}">{{ folder.size }}</span>
+                <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_calculate }}" class="btn btn-outline-success btn-sm button-calc"><i class="fa-solid fa-gauge"></i></button>
+                <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_clear }}" class="btn btn-outline-warning btn-sm button-clear"><i class="fa-solid fa-eraser"></i></button>
+              </span>
+            </div>
+            <div class="progress mt-1" style="height: 4px;">
+              <div class="progress-bar{% if folder.warning %} bg-danger{% endif %}" style="width: {{ folder.percent }}%;"></div>
+            </div>
+            <div class="small text-muted mt-1 domovyi-folder-text">{{ folder.files }}{% if folder.date %} · {{ folder.date }}{% endif %}{% if folder.limit %} · {{ text_limit|format(folder.limit.size ~ ' ' ~ folder.limit.unit) }}{% endif %}</div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="col-lg-6">
+        <div class="accordion accordion-flush border rounded" id="domovyi-accordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" data-bs-toggle="collapse" data-bs-target="#domovyi-extensions" class="accordion-button collapsed">
+                <span class="flex-grow-1">{{ text_extensions }}</span>
+                {% set missing = extensions|filter(e => not e.status)|length %}
+                <span class="badge {% if missing %}text-bg-danger{% else %}text-bg-success{% endif %} me-2">{% if missing %}{{ text_missing|format(missing) }}{% else %}{{ text_all_good }}{% endif %}</span>
+              </button>
+            </h2>
+            <div id="domovyi-extensions" class="accordion-collapse collapse" data-bs-parent="#domovyi-accordion">
+              <div class="accordion-body">
+                {% for extension in extensions %}
+                  <span class="badge {% if extension.status %}text-bg-success{% else %}text-bg-danger{% endif %} me-1 mb-1">
+                    <i class="fa-solid {% if extension.status %}fa-check{% else %}fa-xmark{% endif %}"></i> {{ extension.name }}
+                  </span>
+                {% endfor %}
               </div>
-              {{ entry_sass }}
-            </td>
-            <td class="text-end"><button type="button" value="sass" data-bs-toggle="tooltip" title="{{ button_refresh }}" class="btn btn-warning btn-sm button-developer"><i class="fa-solid fa-rotate"></i></button></td>
-          </tr>
-          <tr>
-            <td>{{ entry_modification_cache }}</td>
-            <td class="text-end"><button type="button" id="button-ocmod" data-bs-toggle="tooltip" title="{{ button_refresh }}" class="btn btn-warning btn-sm"><i class="fa-solid fa-rotate"></i></button></td>
-          </tr>
-          <tr>
-            <td>{{ entry_allcache }}</td>
-            <td class="text-end"><button type="button" value="all" data-bs-toggle="tooltip" title="{{ button_refresh }}" class="btn btn-warning btn-sm button-developer"><i class="fa-solid fa-rotate"></i></button></td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" data-bs-toggle="collapse" data-bs-target="#domovyi-limits" class="accordion-button collapsed">
+                <span class="flex-grow-1">{{ text_limits }}</span>
+                {% set below = limits|filter(l => not l.status)|length %}
+                <span class="badge {% if below %}text-bg-warning{% else %}text-bg-success{% endif %} me-2">{% if below %}{{ text_below|format(below) }}{% else %}{{ text_all_good }}{% endif %}</span>
+              </button>
+            </h2>
+            <div id="domovyi-limits" class="accordion-collapse collapse" data-bs-parent="#domovyi-accordion">
+              <div class="accordion-body p-0">
+                <table class="table table-sm mb-0">
+                  <tbody>
+                    {% for limit in limits %}
+                      <tr>
+                        <td class="text-truncate"><code>{{ limit.name }}</code></td>
+                        <td class="text-end text-nowrap">
+                          <span class="{% if not limit.status %}text-danger fw-semibold{% endif %}">{{ limit.value }}</span>
+                          {% if not limit.status %}<span class="text-muted small">{{ text_recommended|format(limit.recommended) }}</span>{% endif %}
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" data-bs-toggle="collapse" data-bs-target="#domovyi-permissions" class="accordion-button collapsed">
+                <span class="flex-grow-1">{{ text_permissions }}</span>
+                {% set readonly = permissions|filter(p => not p.status)|length %}
+                <span class="badge {% if readonly %}text-bg-danger{% else %}text-bg-success{% endif %} me-2">{% if readonly %}{{ text_readonly|format(readonly) }}{% else %}{{ text_all_good }}{% endif %}</span>
+              </button>
+            </h2>
+            <div id="domovyi-permissions" class="accordion-collapse collapse" data-bs-parent="#domovyi-accordion">
+              <div class="accordion-body">
+                {% for permission in permissions %}
+                  <div class="d-flex justify-content-between border-bottom py-1">
+                    <code class="text-truncate">{{ permission.name }}</code>
+                    <i class="fa-solid {% if permission.status %}fa-check text-success{% else %}fa-xmark text-danger{% endif %} ms-2"></i>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" data-bs-toggle="collapse" data-bs-target="#domovyi-database" class="accordion-button collapsed">
+                <span class="flex-grow-1">{{ text_database }}</span>
+                <span class="badge text-bg-secondary me-2">{{ database.total }}</span>
+              </button>
+            </h2>
+            <div id="domovyi-database" class="accordion-collapse collapse" data-bs-parent="#domovyi-accordion">
+              <div class="accordion-body p-0">
+                <table class="table table-sm mb-0">
+                  <tbody>
+                    {% for table in database.tables %}
+                      <tr>
+                        <td class="text-truncate"><code>{{ table.name }}</code>
+                          <div class="text-muted small">{{ text_rows|format(table.rows) }}</div>
+                        </td>
+                        <td class="text-end text-nowrap align-middle">{{ table.size }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" data-bs-toggle="collapse" data-bs-target="#domovyi-errors" class="accordion-button collapsed">
+                <span class="flex-grow-1">{{ text_errors }}</span>
+                <span class="badge {% if errors.total %}text-bg-danger{% else %}text-bg-success{% endif %} me-2"{% if errors.trimmed %} data-bs-toggle="tooltip" title="{{ text_errors_trimmed }}"{% endif %}>{% if errors.total %}{{ errors.total }}{% if errors.trimmed %}+{% endif %}{% else %}{{ text_all_good }}{% endif %}</span>
+              </button>
+            </h2>
+            <div id="domovyi-errors" class="accordion-collapse collapse" data-bs-parent="#domovyi-accordion">
+              <div class="accordion-body">
+                {% if errors.lines %}
+                  <pre class="small mb-2 p-2 bg-body-secondary rounded" style="max-height: 200px; overflow: auto;">{% for line in errors.lines %}{{ line }}
+{% endfor %}</pre>
+                  <div class="d-flex gap-2">
+                    <a href="{{ log }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-up-right-from-square"></i> {{ text_log }}</a>
+                    <button type="button" id="button-error-log" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-eraser"></i> {{ button_clear }}</button>
+                  </div>
+                {% else %}
+                  <span class="text-muted">{{ text_errors_empty }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" data-bs-toggle="collapse" data-bs-target="#domovyi-functions" class="accordion-button collapsed">
+                <span class="flex-grow-1">{{ text_functions }}</span>
+                <span class="badge {% if danger_funtions %}text-bg-danger{% else %}text-bg-success{% endif %} me-2">{% if danger_funtions %}{{ text_warning }}{% else %}{{ text_all_good }}{% endif %}</span>
+              </button>
+            </h2>
+            <div id="domovyi-functions" class="accordion-collapse collapse" data-bs-parent="#domovyi-accordion">
+              <div class="accordion-body">
+                <div class="mb-2">
+                  {% if danger_funtions %}
+                    <div class="text-danger">{{ text_danger_info }}</div>
+                    <code>{{ danger_funtions }}</code>
+                  {% else %}
+                    <span class="text-muted">{{ text_danger_info_normal }}</span>
+                  {% endif %}
+                </div>
+                <div>
+                  {% if warning_funtions %}
+                    <div class="text-warning-emphasis">{{ text_warning_info }}</div>
+                    <code>{{ warning_funtions }}</code>
+                  {% else %}
+                    <span class="text-muted">{{ text_warning_info_normal }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <ul class="list-group list-group-flush">
-    {% if disk_free_space_warning %}
-      <li class="list-group-item"><span class="badge bg-danger">{{ text_warning }}</span> {{ disk_free_space_warning }}</li>
-    {% endif %}
-    {% for folder in folders %}
-      <li class="list-group-item">
-        <div class="float-end text-nowrap">
-          <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_calculate }}" class="btn btn-success btn-sm button-calc"><i class="fa-solid fa-gears"></i></button>
-          <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_clear }}" class="btn btn-warning btn-sm button-clear"><i class="fa-solid fa-eraser"></i></button>
-        </div>
-        {{ folder.name }}
-        <div class="text-muted small folder-text" data-oc-folder="{{ folder.key }}">{{ folder.size }} {{ folder.files }}
-          {% if folder.warning %}
-            <span class="badge bg-danger">{{ text_warning }}</span> {{ folder.warning }}
-          {% else %}
-            <span class="badge bg-success">{{ text_normal }}</span>
-          {% endif %}
-        </div>
-      </li>
-    {% endfor %}
-    <li class="list-group-item">
-      {% if danger_funtions %}
-        <span class="badge bg-danger">{{ text_warning }}</span> {{ text_danger_info }} <span class="text-danger">{{ danger_funtions }}</span>
-      {% else %}
-        <span class="badge bg-success">{{ text_normal }}</span> {{ text_danger_info_normal }}
-      {% endif %}
-    </li>
-    <li class="list-group-item">
-      {% if warning_funtions %}
-        <span class="badge bg-warning">{{ text_warning }}</span> {{ text_warning_info }} <span>{{ warning_funtions }}</span>
-      {% else %}
-        <span class="badge bg-success">{{ text_normal }}</span> {{ text_warning_info_normal }}
-      {% endif %}
-    </li>
-  </ul>
 </div>
 <script type="text/javascript"><!--
 function domovyi_alert(json) {
@@ -98,11 +236,10 @@ function domovyi_alert(json) {
     }
 }
 
-$('#domovyi [data-oc-copy]').on('click', function() {
+$('#domovyi .domovyi-copy').on('click', function() {
     var element = this;
-    var text = $($(element).attr('data-oc-copy')).text();
 
-    navigator.clipboard.writeText(text).then(function() {
+    navigator.clipboard.writeText($($(element).attr('data-oc-copy')).text()).then(function() {
         $(element).attr('data-bs-original-title', '{{ text_copied }}').tooltip('show');
 
         setTimeout(function() {
@@ -203,6 +340,27 @@ $('#button-ocmod').on('click', function() {
     });
 });
 
+$('#button-error-log').on('click', function() {
+    var element = this;
+
+    $.ajax({
+        url: 'index.php?route=tool/log.clear&user_token={{ user_token }}&filename=error.log',
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        complete: function() {
+            $(element).button('reset');
+        },
+        success: function(json) {
+            domovyi_alert(json);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
 function domovyi_calc(element) {
     $.ajax({
         url: 'index.php?route=extension/opencart/dashboard/domovyi.calc&dir=' + encodeURIComponent($(element).val()) + '&user_token={{ user_token }}',
@@ -218,8 +376,14 @@ function domovyi_calc(element) {
                 domovyi_alert(json);
             }
 
-            if (json['success']) {
-                $('#domovyi [data-oc-folder=\'' + $(element).val() + '\']').text(json['success']);
+            if (json['text']) {
+                var folder = $('#domovyi [data-oc-folder=\'' + $(element).val() + '\']');
+
+                folder.find('.badge').removeClass('d-none').text(json['size'])
+                    .toggleClass('text-bg-danger', json['warning'] != '')
+                    .toggleClass('text-bg-secondary', json['warning'] == '');
+                folder.find('.progress-bar').css('width', json['percent'] + '%').toggleClass('bg-danger', json['warning'] != '');
+                folder.find('.domovyi-folder-text').text(json['text']);
             }
         },
         error: function(xhr, ajaxOptions, thrownError) {

@@ -1,16 +1,6 @@
 <div id="domovyi-launcher">
   <button type="button" id="button-domovyi-open" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ text_open }}" class="btn shadow">
-<svg viewBox="0 0 64 64" width="22" height="22" xmlns="http://www.w3.org/2000/svg" class="align-text-bottom me-1" role="img" aria-hidden="true">
-  <defs>
-    <mask id="dm-mlauncher" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
-      <rect width="64" height="64" fill="#000"/>
-      <path d="M32 3.5 55 12v19c0 14.8-9.6 24.3-23 29.5C18.6 55.3 9 45.8 9 31V12z" fill="#fff"/>
-      <path d="M32 18.5 46.5 31.5h-4.2V45H21.7V31.5h-4.2z" fill="#000"/>
-      <rect x="28.8" y="35.5" width="6.4" height="9.5" rx="1.4" fill="#fff"/>
-    </mask>
-  </defs>
-  <rect width="64" height="64" fill="currentColor" mask="url(#dm-mlauncher)"/>
-</svg>
+<img src="../extension/opencart/admin/view/image/domovyi.png" alt="{{ heading_title }}" height="30" class="me-1"/>
     {{ heading_title }}
     {% if issues.total %}
       <span class="badge text-bg-danger ms-1">{{ issues.total }}</span>
@@ -21,17 +11,7 @@
 </div>
 <div id="offcanvas-domovyi" class="offcanvas offcanvas-end" style="width: 780px; max-width: 100%;" tabindex="-1">
   <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title text-truncate d-flex align-items-center gap-2"><svg viewBox="0 0 64 64" width="26" height="26" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-  <defs>
-    <mask id="dm-mpanel" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
-      <rect width="64" height="64" fill="#000"/>
-      <path d="M32 3.5 55 12v19c0 14.8-9.6 24.3-23 29.5C18.6 55.3 9 45.8 9 31V12z" fill="#fff"/>
-      <path d="M32 18.5 46.5 31.5h-4.2V45H21.7V31.5h-4.2z" fill="#000"/>
-      <rect x="28.8" y="35.5" width="6.4" height="9.5" rx="1.4" fill="#fff"/>
-    </mask>
-  </defs>
-  <rect width="64" height="64" fill="currentColor" mask="url(#dm-mpanel)"/>
-</svg> {{ heading_title }}</h5>
+    <h5 class="offcanvas-title text-truncate d-flex align-items-center gap-2"><img src="../extension/opencart/admin/view/image/domovyi.png" alt="{{ heading_title }}" height="30"/> {{ heading_title }}</h5>
     <div class="ms-auto d-flex align-items-center gap-2">
       <button type="button" id="button-about" data-bs-toggle="tooltip" title="{{ text_about }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-circle-info"></i></button>
       <a href="{{ setting }}" data-bs-toggle="tooltip" title="{{ text_setting }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-cog"></i></a>
@@ -46,31 +26,11 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title d-flex align-items-center gap-2"><svg viewBox="0 0 64 64" width="26" height="26" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-  <defs>
-    <mask id="dm-mmodaltitle" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
-      <rect width="64" height="64" fill="#000"/>
-      <path d="M32 3.5 55 12v19c0 14.8-9.6 24.3-23 29.5C18.6 55.3 9 45.8 9 31V12z" fill="#fff"/>
-      <path d="M32 18.5 46.5 31.5h-4.2V45H21.7V31.5h-4.2z" fill="#000"/>
-      <rect x="28.8" y="35.5" width="6.4" height="9.5" rx="1.4" fill="#fff"/>
-    </mask>
-  </defs>
-  <rect width="64" height="64" fill="currentColor" mask="url(#dm-mmodaltitle)"/>
-</svg> {{ heading_title }}</h5>
+        <h5 class="modal-title d-flex align-items-center gap-2"><img src="../extension/opencart/admin/view/image/domovyi.png" alt="{{ heading_title }}" height="30"/> {{ heading_title }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="text-center text-body mb-3"><svg viewBox="0 0 64 64" width="104" height="104" xmlns="http://www.w3.org/2000/svg" class="text-success" role="img" aria-hidden="true">
-  <defs>
-    <mask id="dm-mmodal" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
-      <rect width="64" height="64" fill="#000"/>
-      <path d="M32 3.5 55 12v19c0 14.8-9.6 24.3-23 29.5C18.6 55.3 9 45.8 9 31V12z" fill="#fff"/>
-      <path d="M32 18.5 46.5 31.5h-4.2V45H21.7V31.5h-4.2z" fill="#000"/>
-      <rect x="28.8" y="35.5" width="6.4" height="9.5" rx="1.4" fill="#fff"/>
-    </mask>
-  </defs>
-  <rect width="64" height="64" fill="currentColor" mask="url(#dm-mmodal)"/>
-</svg></div>
+        <div class="text-center mb-3"><img src="../extension/opencart/admin/view/image/domovyi.png" alt="{{ heading_title }}" height="160"/></div>
         <p>{{ text_about_intro }}</p>
         <p class="fw-semibold">{{ text_about_community }}</p>
         <blockquote class="border-start border-3 ps-3 text-body-secondary fst-italic">{{ text_about_inspire }}</blockquote>

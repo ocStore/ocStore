@@ -1,0 +1,259 @@
+<div id="domovyk" class="card mb-3">
+  <div class="card-header">
+    <div class="float-end"><a href="{{ setting }}" data-bs-toggle="tooltip" title="{{ text_setting }}" class="text-reset"><i class="fa-solid fa-cog"></i></a></div>
+    <i class="fa-solid fa-house-chimney-crack"></i> {{ heading_title }}
+  </div>
+  <div class="card-body pb-0">
+    <div id="domovyk-alert"></div>
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <button type="button" id="button-phpinfo" data-bs-toggle="tooltip" title="{{ text_phpinfo }}" class="btn btn-info btn-sm">phpinfo</button>
+      {% if phpversion %}
+        <button type="button" data-oc-copy="#phpversion" data-bs-toggle="tooltip" title="{{ text_copy }}" class="btn btn-light btn-sm"><i class="fa-brands fa-php"></i> <span id="phpversion">PHP {{ phpversion }}</span></button>
+      {% endif %}
+      {% if database_version %}
+        <button type="button" data-oc-copy="#database-version" data-bs-toggle="tooltip" title="{{ text_copy }}" class="btn btn-light btn-sm"><i class="fa-solid fa-database"></i> <span id="database-version">MySQL {{ database_version }}</span></button>
+      {% endif %}
+      {% if ioncube_version %}
+        <button type="button" data-oc-copy="#ioncube-version" data-bs-toggle="tooltip" title="{{ text_copy }}" class="btn btn-light btn-sm"><i class="fa-regular fa-square"></i> <span id="ioncube-version">ionCube {{ ioncube_version }}</span></button>
+      {% endif %}
+      {% if disk_free_space %}
+        <button type="button" data-oc-copy="#disk-free-space" data-bs-toggle="tooltip" title="{{ text_copy }}" class="btn btn-sm {% if disk_free_space_warning %}btn-danger{% else %}btn-light{% endif %}"><i class="fa-solid fa-hard-drive"></i> <span id="disk-free-space">{{ text_disk_free_space }} {{ disk_free_space.size }} {{ disk_free_space.unit }}</span></button>
+      {% endif %}
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm align-middle">
+        <tbody>
+          <tr>
+            <td>{{ entry_theme_cache }}</td>
+            <td class="text-end" style="width: 1px;"><button type="button" value="theme" data-bs-toggle="tooltip" title="{{ button_refresh }}" class="btn btn-warning btn-sm button-developer"><i class="fa-solid fa-rotate"></i></button></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="form-check form-switch d-inline-block align-middle me-2">
+                <input type="hidden" name="developer_sass" value="0"/>
+                <input type="checkbox" name="developer_sass" value="1" id="input-domovyk-sass" class="form-check-input"{% if developer_sass %} checked{% endif %}/>
+              </div>
+              {{ entry_sass }}
+            </td>
+            <td class="text-end"><button type="button" value="sass" data-bs-toggle="tooltip" title="{{ button_refresh }}" class="btn btn-warning btn-sm button-developer"><i class="fa-solid fa-rotate"></i></button></td>
+          </tr>
+          <tr>
+            <td>{{ entry_modification_cache }}</td>
+            <td class="text-end"><button type="button" id="button-ocmod" data-bs-toggle="tooltip" title="{{ button_refresh }}" class="btn btn-warning btn-sm"><i class="fa-solid fa-rotate"></i></button></td>
+          </tr>
+          <tr>
+            <td>{{ entry_allcache }}</td>
+            <td class="text-end"><button type="button" value="all" data-bs-toggle="tooltip" title="{{ button_refresh }}" class="btn btn-warning btn-sm button-developer"><i class="fa-solid fa-rotate"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <ul class="list-group list-group-flush">
+    {% if disk_free_space_warning %}
+      <li class="list-group-item"><span class="badge bg-danger">{{ text_warning }}</span> {{ disk_free_space_warning }}</li>
+    {% endif %}
+    {% for folder in folders %}
+      <li class="list-group-item">
+        <div class="float-end text-nowrap">
+          <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_calculate }}" class="btn btn-success btn-sm button-calc"><i class="fa-solid fa-gears"></i></button>
+          <button type="button" value="{{ folder.key }}" data-bs-toggle="tooltip" title="{{ text_clear }}" class="btn btn-warning btn-sm button-clear"><i class="fa-solid fa-eraser"></i></button>
+        </div>
+        {{ folder.name }}
+        <div class="text-muted small folder-text" data-oc-folder="{{ folder.key }}">{{ folder.size }} {{ folder.files }}
+          {% if folder.warning %}
+            <span class="badge bg-danger">{{ text_warning }}</span> {{ folder.warning }}
+          {% else %}
+            <span class="badge bg-success">{{ text_normal }}</span>
+          {% endif %}
+        </div>
+      </li>
+    {% endfor %}
+    <li class="list-group-item">
+      {% if danger_funtions %}
+        <span class="badge bg-danger">{{ text_warning }}</span> {{ text_danger_info }} <span class="text-danger">{{ danger_funtions }}</span>
+      {% else %}
+        <span class="badge bg-success">{{ text_normal }}</span> {{ text_danger_info_normal }}
+      {% endif %}
+    </li>
+    <li class="list-group-item">
+      {% if warning_funtions %}
+        <span class="badge bg-warning">{{ text_warning }}</span> {{ text_warning_info }} <span>{{ warning_funtions }}</span>
+      {% else %}
+        <span class="badge bg-success">{{ text_normal }}</span> {{ text_warning_info_normal }}
+      {% endif %}
+    </li>
+  </ul>
+</div>
+<script type="text/javascript"><!--
+function domovyk_alert(json) {
+    $('#domovyk-alert').html('');
+
+    if (json['error']) {
+        $('#domovyk-alert').html('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+    }
+
+    if (json['success']) {
+        $('#domovyk-alert').html('<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+    }
+}
+
+$('#domovyk [data-oc-copy]').on('click', function() {
+    var element = this;
+    var text = $($(element).attr('data-oc-copy')).text();
+
+    navigator.clipboard.writeText(text).then(function() {
+        $(element).attr('data-bs-original-title', '{{ text_copied }}').tooltip('show');
+
+        setTimeout(function() {
+            $(element).tooltip('hide').attr('data-bs-original-title', '{{ text_copy }}');
+        }, 1000);
+    });
+});
+
+$('#button-phpinfo').on('click', function() {
+    var element = this;
+
+    $.ajax({
+        url: 'index.php?route=extension/opencart/dashboard/domovyk.phpinfo&user_token={{ user_token }}',
+        dataType: 'html',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        complete: function() {
+            $(element).button('reset');
+        },
+        success: function(html) {
+            $('#modal-phpinfo').remove();
+
+            $('body').prepend('<div id="modal-phpinfo" class="modal">' + html + '</div>');
+
+            new bootstrap.Modal('#modal-phpinfo').show();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$('#domovyk .button-developer').on('click', function() {
+    var element = this;
+
+    $.ajax({
+        url: 'index.php?route=common/developer.' + $(element).val() + '&user_token={{ user_token }}',
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        complete: function() {
+            $(element).button('reset');
+        },
+        success: function(json) {
+            domovyk_alert(json);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$('#input-domovyk-sass').on('change', function() {
+    $.ajax({
+        url: 'index.php?route=common/developer.edit&user_token={{ user_token }}',
+        type: 'post',
+        data: $('#domovyk input[name=\'developer_sass\']:checked'),
+        dataType: 'json',
+        beforeSend: function() {
+            $('#input-domovyk-sass').prop('disabled', true);
+        },
+        complete: function() {
+            $('#input-domovyk-sass').prop('disabled', false);
+        },
+        success: function(json) {
+            domovyk_alert(json);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$('#button-ocmod').on('click', function() {
+    var element = this;
+
+    $.ajax({
+        url: 'index.php?route=marketplace/modification.refresh&user_token={{ user_token }}',
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        complete: function() {
+            $(element).button('reset');
+        },
+        success: function(json) {
+            if (!json['error']) {
+                json['success'] = '{{ text_ocmod_cache_success }}';
+            }
+
+            domovyk_alert(json);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+function domovyk_calc(element) {
+    $.ajax({
+        url: 'index.php?route=extension/opencart/dashboard/domovyk.calc&dir=' + encodeURIComponent($(element).val()) + '&user_token={{ user_token }}',
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        complete: function() {
+            $(element).button('reset');
+        },
+        success: function(json) {
+            if (json['error']) {
+                domovyk_alert(json);
+            }
+
+            if (json['success']) {
+                $('#domovyk [data-oc-folder=\'' + $(element).val() + '\']').text(json['success']);
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+}
+
+$('#domovyk .button-calc').on('click', function() {
+    domovyk_calc(this);
+});
+
+$('#domovyk .button-clear').on('click', function() {
+    var element = this;
+
+    $.ajax({
+        url: 'index.php?route=extension/opencart/dashboard/domovyk.clear&dir=' + encodeURIComponent($(element).val()) + '&user_token={{ user_token }}',
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        complete: function() {
+            $(element).button('reset');
+        },
+        success: function(json) {
+            domovyk_alert(json);
+
+            if (json['success']) {
+                domovyk_calc($('#domovyk .button-calc[value=\'' + $(element).val() + '\']'));
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+//--></script>

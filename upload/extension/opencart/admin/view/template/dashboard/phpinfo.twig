@@ -1,0 +1,70 @@
+<div class="modal-dialog modal-xl">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title"><i class="fa-solid fa-cog"></i> phpinfo</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body" id="phpinfo">
+      {{ phpinfo|raw }}
+    </div>
+  </div>
+</div>
+<style>
+#phpinfo pre {
+	margin: 0;
+	font-family: monospace;
+}
+
+#phpinfo table {
+	border-collapse: collapse;
+	border: 0;
+	width: 100%;
+	margin: 1em 0;
+}
+
+#phpinfo td,
+#phpinfo th {
+	border: 1px solid var(--bs-border-color);
+	font-size: 75%;
+	vertical-align: baseline;
+	padding: 4px 5px;
+	word-break: break-all;
+}
+
+#phpinfo .center {
+	text-align: center;
+}
+
+#phpinfo .center table {
+	text-align: left;
+}
+
+#phpinfo .center th {
+	text-align: center !important;
+}
+
+#phpinfo .e {
+	width: 300px;
+	font-weight: bold;
+}
+
+#phpinfo .h {
+	font-weight: bold;
+}
+
+#phpinfo h1 {
+	font-size: 150%;
+}
+
+#phpinfo h2 {
+	font-size: 125%;
+}
+
+#phpinfo img {
+	display: none;
+}
+
+#phpinfo hr {
+	display: none;
+}
+</style>

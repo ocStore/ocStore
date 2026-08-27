@@ -39,6 +39,10 @@
 /upload/system/storage/upload/*
 !/upload/system/storage/upload/index.html
 
+# Generated OCMOD Files
+/upload/extension/ocmod/*
+!/upload/extension/ocmod/index.html
+
 # CSS Files
 /upload/catalog/view/stylesheet/stylesheet.css
 

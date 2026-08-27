@@ -1,21 +1,86 @@
 <div id="domovyi-launcher">
   <button type="button" id="button-domovyi-open" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ text_open }}" class="btn btn-dark shadow">
-<svg viewBox="0 0 64 64" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg" class="align-text-bottom me-1" role="img" aria-hidden="true">
+<svg viewBox="0 0 128 128" width="24" height="24" xmlns="http://www.w3.org/2000/svg" class="align-text-bottom me-1" role="img" aria-hidden="true">
   <defs>
-    <linearGradient id="domovyi-glow-launcher" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#6ee787"/>
-      <stop offset="1" stop-color="#1f9d55"/>
+    <linearGradient id="dm-bglauncher" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#141c24"/>
+      <stop offset="1" stop-color="#05080b"/>
     </linearGradient>
+    <radialGradient id="dm-halolauncher" cx="50%" cy="46%" r="50%">
+      <stop offset="0" stop-color="#2ee36a" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#2ee36a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dm-greenlauncher" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7dffae"/>
+      <stop offset=".55" stop-color="#33e878"/>
+      <stop offset="1" stop-color="#0f9b4d"/>
+    </linearGradient>
+    <linearGradient id="dm-hatlauncher" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#39465a"/>
+      <stop offset="1" stop-color="#1a2230"/>
+    </linearGradient>
+    <linearGradient id="dm-facelauncher" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2e3a4b"/>
+      <stop offset="1" stop-color="#151c27"/>
+    </linearGradient>
+    <linearGradient id="dm-beardlauncher" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eaf1f8"/>
+      <stop offset=".45" stop-color="#c3cede"/>
+      <stop offset="1" stop-color="#8593a8"/>
+    </linearGradient>
+    <filter id="dm-blurlauncher" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="dm-softlauncher" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.1"/>
+    </filter>
   </defs>
-  <path d="M32 2 5 20v4h54v-4z" fill="currentColor" opacity=".8"/>
-  <rect x="9" y="29" width="5" height="10" rx="2.5" fill="currentColor" opacity=".65"/>
-  <rect x="50" y="29" width="5" height="10" rx="2.5" fill="currentColor" opacity=".65"/>
-  <rect x="15" y="22" width="34" height="25" rx="9" fill="currentColor"/>
-  <rect x="23" y="29" width="6" height="9" rx="3" fill="url(#domovyi-glow-launcher)"/>
-  <rect x="35" y="29" width="6" height="9" rx="3" fill="url(#domovyi-glow-launcher)"/>
-  <path d="M27 41.5c1.5 1.7 3.1 2.5 5 2.5s3.5-.8 5-2.5" stroke="url(#domovyi-glow-launcher)" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M32 46.5l9.5 2.6v4.4c0 4.2-3.8 7.4-9.5 10-5.7-2.6-9.5-5.8-9.5-10v-4.4z" fill="url(#domovyi-glow-launcher)"/>
-  <path d="M28.4 53.6l2.7 2.7 4.7-4.9" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect width="128" height="128" rx="28" fill="url(#dm-bglauncher)"/>
+  <circle cx="64" cy="60" r="46" fill="url(#dm-halolauncher)"/>
+  <circle cx="64" cy="62" r="52" stroke="#2ee36a" stroke-opacity=".16" stroke-width="1.2" fill="none" stroke-dasharray="18 10"/>
+  <circle cx="64" cy="62" r="44" stroke="#2ee36a" stroke-opacity=".1" stroke-width="1" fill="none" stroke-dasharray="6 8"/>
+
+  <path d="M64 14.5 106.5 30v34.5c0 25.8-17.8 42.4-42.5 50.5C39.3 106.9 21.5 90.3 21.5 64.5V30z" fill="#0d2318" fill-opacity=".55" stroke="url(#dm-greenlauncher)" stroke-width="2" stroke-opacity=".75"/>
+  <circle cx="64" cy="14.5" r="2.6" fill="url(#dm-greenlauncher)"/>
+  <circle cx="106.5" cy="30" r="2.2" fill="url(#dm-greenlauncher)" fill-opacity=".8"/>
+  <circle cx="21.5" cy="30" r="2.2" fill="url(#dm-greenlauncher)" fill-opacity=".8"/>
+
+  <path d="M64 27 43 43.5h42z" fill="url(#dm-hatlauncher)"/>
+  <path d="M64 27 43 43.5h21z" fill="#46566e" fill-opacity=".45"/>
+  <rect x="38.5" y="43" width="51" height="8.5" rx="4.25" fill="url(#dm-hatlauncher)"/>
+  <path d="M47 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM56.4 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM65.8 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM75.2 47.25l2.4-2.4 2.4 2.4-2.4 2.4z" fill="url(#dm-greenlauncher)"/>
+
+  <path d="M44 60c0-4.4 3.6-8 8-8h24c4.4 0 8 3.6 8 8v11c0 8.8-8.1 15-20 15s-20-6.2-20-15z" fill="url(#dm-facelauncher)"/>
+  <rect x="47.5" y="55.5" width="13" height="4" rx="2" fill="#8b9bb2" fill-opacity=".55" transform="rotate(-6 54 57.5)"/>
+  <rect x="67.5" y="55.5" width="13" height="4" rx="2" fill="#8b9bb2" fill-opacity=".55" transform="rotate(6 74 57.5)"/>
+
+  <g filter="url(#dm-blurlauncher)" opacity=".85">
+    <rect x="50.5" y="61" width="9" height="12" rx="4.5" fill="#3ff58c"/>
+    <rect x="68.5" y="61" width="9" height="12" rx="4.5" fill="#3ff58c"/>
+  </g>
+  <rect x="50.5" y="61" width="9" height="12" rx="4.5" fill="url(#dm-greenlauncher)"/>
+  <rect x="68.5" y="61" width="9" height="12" rx="4.5" fill="url(#dm-greenlauncher)"/>
+  <rect x="52.5" y="63" width="3" height="4" rx="1.5" fill="#eafff2" fill-opacity=".85"/>
+  <rect x="70.5" y="63" width="3" height="4" rx="1.5" fill="#eafff2" fill-opacity=".85"/>
+
+  <path d="M40.5 76c-1.6 12.6.6 22.4 6.6 29.4 4.6 5.4 10.5 8.4 16.9 8.4s12.3-3 16.9-8.4c6-7 8.2-16.8 6.6-29.4-2.4 5.4-6.6 9.1-12.6 11.1-3.5 1.2-7.1 1.8-10.9 1.8s-7.4-.6-10.9-1.8c-6-2-10.2-5.7-12.6-11.1z" fill="url(#dm-beardlauncher)"/>
+  <path d="M53 113.2c2.6-3.4 4-8.2 4.2-14.4M75 113.2c-2.6-3.4-4-8.2-4.2-14.4M64 114v-16" stroke="#7c8ba1" stroke-opacity=".45" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <path d="M46 79.5c4.4 4 10.3 6 18 6s13.6-2 18-6" stroke="#ffffff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M52.5 76.5c3 3.4 6.8 5.1 11.5 5.1s8.5-1.7 11.5-5.1" fill="#e9f0f8"/>
+  <path d="M55 78.5c2.4 2.2 5.4 3.3 9 3.3s6.6-1.1 9-3.3" stroke="#9dabbf" stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+  <g filter="url(#dm-softlauncher)" opacity=".9">
+    <path d="M52 92v8M64 95v9M76 92v8" stroke="url(#dm-greenlauncher)" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+  <path d="M52 92v8M64 95v9M76 92v8" stroke="url(#dm-greenlauncher)" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="52" cy="101.5" r="1.9" fill="url(#dm-greenlauncher)"/>
+  <circle cx="76" cy="101.5" r="1.9" fill="url(#dm-greenlauncher)"/>
+  <path d="M64 105.5l3.4 3.4-3.4 3.4-3.4-3.4z" fill="url(#dm-greenlauncher)"/>
+
+  <path d="M44 65h-9M84 65h9" stroke="url(#dm-greenlauncher)" stroke-width="1.6" stroke-linecap="round" stroke-opacity=".8"/>
+  <circle cx="32.5" cy="65" r="2.4" fill="url(#dm-greenlauncher)"/>
+  <circle cx="95.5" cy="65" r="2.4" fill="url(#dm-greenlauncher)"/>
 </svg>
     {{ heading_title }}
     {% if issues.total %}
@@ -27,22 +92,87 @@
 </div>
 <div id="offcanvas-domovyi" class="offcanvas offcanvas-end" style="width: 780px; max-width: 100%;" tabindex="-1">
   <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title text-truncate d-flex align-items-center gap-2"><svg viewBox="0 0 64 64" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img" aria-hidden="true">
+    <h5 class="offcanvas-title text-truncate d-flex align-items-center gap-2"><svg viewBox="0 0 128 128" width="28" height="28" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
   <defs>
-    <linearGradient id="domovyi-glow-panel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#6ee787"/>
-      <stop offset="1" stop-color="#1f9d55"/>
+    <linearGradient id="dm-bgpanel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#141c24"/>
+      <stop offset="1" stop-color="#05080b"/>
     </linearGradient>
+    <radialGradient id="dm-halopanel" cx="50%" cy="46%" r="50%">
+      <stop offset="0" stop-color="#2ee36a" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#2ee36a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dm-greenpanel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7dffae"/>
+      <stop offset=".55" stop-color="#33e878"/>
+      <stop offset="1" stop-color="#0f9b4d"/>
+    </linearGradient>
+    <linearGradient id="dm-hatpanel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#39465a"/>
+      <stop offset="1" stop-color="#1a2230"/>
+    </linearGradient>
+    <linearGradient id="dm-facepanel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2e3a4b"/>
+      <stop offset="1" stop-color="#151c27"/>
+    </linearGradient>
+    <linearGradient id="dm-beardpanel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eaf1f8"/>
+      <stop offset=".45" stop-color="#c3cede"/>
+      <stop offset="1" stop-color="#8593a8"/>
+    </linearGradient>
+    <filter id="dm-blurpanel" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="dm-softpanel" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.1"/>
+    </filter>
   </defs>
-  <path d="M32 2 5 20v4h54v-4z" fill="currentColor" opacity=".8"/>
-  <rect x="9" y="29" width="5" height="10" rx="2.5" fill="currentColor" opacity=".65"/>
-  <rect x="50" y="29" width="5" height="10" rx="2.5" fill="currentColor" opacity=".65"/>
-  <rect x="15" y="22" width="34" height="25" rx="9" fill="currentColor"/>
-  <rect x="23" y="29" width="6" height="9" rx="3" fill="url(#domovyi-glow-panel)"/>
-  <rect x="35" y="29" width="6" height="9" rx="3" fill="url(#domovyi-glow-panel)"/>
-  <path d="M27 41.5c1.5 1.7 3.1 2.5 5 2.5s3.5-.8 5-2.5" stroke="url(#domovyi-glow-panel)" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M32 46.5l9.5 2.6v4.4c0 4.2-3.8 7.4-9.5 10-5.7-2.6-9.5-5.8-9.5-10v-4.4z" fill="url(#domovyi-glow-panel)"/>
-  <path d="M28.4 53.6l2.7 2.7 4.7-4.9" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect width="128" height="128" rx="28" fill="url(#dm-bgpanel)"/>
+  <circle cx="64" cy="60" r="46" fill="url(#dm-halopanel)"/>
+  <circle cx="64" cy="62" r="52" stroke="#2ee36a" stroke-opacity=".16" stroke-width="1.2" fill="none" stroke-dasharray="18 10"/>
+  <circle cx="64" cy="62" r="44" stroke="#2ee36a" stroke-opacity=".1" stroke-width="1" fill="none" stroke-dasharray="6 8"/>
+
+  <path d="M64 14.5 106.5 30v34.5c0 25.8-17.8 42.4-42.5 50.5C39.3 106.9 21.5 90.3 21.5 64.5V30z" fill="#0d2318" fill-opacity=".55" stroke="url(#dm-greenpanel)" stroke-width="2" stroke-opacity=".75"/>
+  <circle cx="64" cy="14.5" r="2.6" fill="url(#dm-greenpanel)"/>
+  <circle cx="106.5" cy="30" r="2.2" fill="url(#dm-greenpanel)" fill-opacity=".8"/>
+  <circle cx="21.5" cy="30" r="2.2" fill="url(#dm-greenpanel)" fill-opacity=".8"/>
+
+  <path d="M64 27 43 43.5h42z" fill="url(#dm-hatpanel)"/>
+  <path d="M64 27 43 43.5h21z" fill="#46566e" fill-opacity=".45"/>
+  <rect x="38.5" y="43" width="51" height="8.5" rx="4.25" fill="url(#dm-hatpanel)"/>
+  <path d="M47 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM56.4 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM65.8 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM75.2 47.25l2.4-2.4 2.4 2.4-2.4 2.4z" fill="url(#dm-greenpanel)"/>
+
+  <path d="M44 60c0-4.4 3.6-8 8-8h24c4.4 0 8 3.6 8 8v11c0 8.8-8.1 15-20 15s-20-6.2-20-15z" fill="url(#dm-facepanel)"/>
+  <rect x="47.5" y="55.5" width="13" height="4" rx="2" fill="#8b9bb2" fill-opacity=".55" transform="rotate(-6 54 57.5)"/>
+  <rect x="67.5" y="55.5" width="13" height="4" rx="2" fill="#8b9bb2" fill-opacity=".55" transform="rotate(6 74 57.5)"/>
+
+  <g filter="url(#dm-blurpanel)" opacity=".85">
+    <rect x="50.5" y="61" width="9" height="12" rx="4.5" fill="#3ff58c"/>
+    <rect x="68.5" y="61" width="9" height="12" rx="4.5" fill="#3ff58c"/>
+  </g>
+  <rect x="50.5" y="61" width="9" height="12" rx="4.5" fill="url(#dm-greenpanel)"/>
+  <rect x="68.5" y="61" width="9" height="12" rx="4.5" fill="url(#dm-greenpanel)"/>
+  <rect x="52.5" y="63" width="3" height="4" rx="1.5" fill="#eafff2" fill-opacity=".85"/>
+  <rect x="70.5" y="63" width="3" height="4" rx="1.5" fill="#eafff2" fill-opacity=".85"/>
+
+  <path d="M40.5 76c-1.6 12.6.6 22.4 6.6 29.4 4.6 5.4 10.5 8.4 16.9 8.4s12.3-3 16.9-8.4c6-7 8.2-16.8 6.6-29.4-2.4 5.4-6.6 9.1-12.6 11.1-3.5 1.2-7.1 1.8-10.9 1.8s-7.4-.6-10.9-1.8c-6-2-10.2-5.7-12.6-11.1z" fill="url(#dm-beardpanel)"/>
+  <path d="M53 113.2c2.6-3.4 4-8.2 4.2-14.4M75 113.2c-2.6-3.4-4-8.2-4.2-14.4M64 114v-16" stroke="#7c8ba1" stroke-opacity=".45" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <path d="M46 79.5c4.4 4 10.3 6 18 6s13.6-2 18-6" stroke="#ffffff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M52.5 76.5c3 3.4 6.8 5.1 11.5 5.1s8.5-1.7 11.5-5.1" fill="#e9f0f8"/>
+  <path d="M55 78.5c2.4 2.2 5.4 3.3 9 3.3s6.6-1.1 9-3.3" stroke="#9dabbf" stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+  <g filter="url(#dm-softpanel)" opacity=".9">
+    <path d="M52 92v8M64 95v9M76 92v8" stroke="url(#dm-greenpanel)" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+  <path d="M52 92v8M64 95v9M76 92v8" stroke="url(#dm-greenpanel)" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="52" cy="101.5" r="1.9" fill="url(#dm-greenpanel)"/>
+  <circle cx="76" cy="101.5" r="1.9" fill="url(#dm-greenpanel)"/>
+  <path d="M64 105.5l3.4 3.4-3.4 3.4-3.4-3.4z" fill="url(#dm-greenpanel)"/>
+
+  <path d="M44 65h-9M84 65h9" stroke="url(#dm-greenpanel)" stroke-width="1.6" stroke-linecap="round" stroke-opacity=".8"/>
+  <circle cx="32.5" cy="65" r="2.4" fill="url(#dm-greenpanel)"/>
+  <circle cx="95.5" cy="65" r="2.4" fill="url(#dm-greenpanel)"/>
 </svg> {{ heading_title }}</h5>
     <div class="ms-auto d-flex align-items-center gap-2">
       <button type="button" id="button-about" data-bs-toggle="tooltip" title="{{ text_about }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-circle-info"></i></button>
@@ -58,42 +188,172 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title d-flex align-items-center gap-2"><svg viewBox="0 0 64 64" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img" aria-hidden="true">
+        <h5 class="modal-title d-flex align-items-center gap-2"><svg viewBox="0 0 128 128" width="28" height="28" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
   <defs>
-    <linearGradient id="domovyi-glow-modal-title" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#6ee787"/>
-      <stop offset="1" stop-color="#1f9d55"/>
+    <linearGradient id="dm-bgmodaltitle" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#141c24"/>
+      <stop offset="1" stop-color="#05080b"/>
     </linearGradient>
+    <radialGradient id="dm-halomodaltitle" cx="50%" cy="46%" r="50%">
+      <stop offset="0" stop-color="#2ee36a" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#2ee36a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dm-greenmodaltitle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7dffae"/>
+      <stop offset=".55" stop-color="#33e878"/>
+      <stop offset="1" stop-color="#0f9b4d"/>
+    </linearGradient>
+    <linearGradient id="dm-hatmodaltitle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#39465a"/>
+      <stop offset="1" stop-color="#1a2230"/>
+    </linearGradient>
+    <linearGradient id="dm-facemodaltitle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2e3a4b"/>
+      <stop offset="1" stop-color="#151c27"/>
+    </linearGradient>
+    <linearGradient id="dm-beardmodaltitle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eaf1f8"/>
+      <stop offset=".45" stop-color="#c3cede"/>
+      <stop offset="1" stop-color="#8593a8"/>
+    </linearGradient>
+    <filter id="dm-blurmodaltitle" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="dm-softmodaltitle" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.1"/>
+    </filter>
   </defs>
-  <path d="M32 2 5 20v4h54v-4z" fill="currentColor" opacity=".8"/>
-  <rect x="9" y="29" width="5" height="10" rx="2.5" fill="currentColor" opacity=".65"/>
-  <rect x="50" y="29" width="5" height="10" rx="2.5" fill="currentColor" opacity=".65"/>
-  <rect x="15" y="22" width="34" height="25" rx="9" fill="currentColor"/>
-  <rect x="23" y="29" width="6" height="9" rx="3" fill="url(#domovyi-glow-modal-title)"/>
-  <rect x="35" y="29" width="6" height="9" rx="3" fill="url(#domovyi-glow-modal-title)"/>
-  <path d="M27 41.5c1.5 1.7 3.1 2.5 5 2.5s3.5-.8 5-2.5" stroke="url(#domovyi-glow-modal-title)" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M32 46.5l9.5 2.6v4.4c0 4.2-3.8 7.4-9.5 10-5.7-2.6-9.5-5.8-9.5-10v-4.4z" fill="url(#domovyi-glow-modal-title)"/>
-  <path d="M28.4 53.6l2.7 2.7 4.7-4.9" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect width="128" height="128" rx="28" fill="url(#dm-bgmodaltitle)"/>
+  <circle cx="64" cy="60" r="46" fill="url(#dm-halomodaltitle)"/>
+  <circle cx="64" cy="62" r="52" stroke="#2ee36a" stroke-opacity=".16" stroke-width="1.2" fill="none" stroke-dasharray="18 10"/>
+  <circle cx="64" cy="62" r="44" stroke="#2ee36a" stroke-opacity=".1" stroke-width="1" fill="none" stroke-dasharray="6 8"/>
+
+  <path d="M64 14.5 106.5 30v34.5c0 25.8-17.8 42.4-42.5 50.5C39.3 106.9 21.5 90.3 21.5 64.5V30z" fill="#0d2318" fill-opacity=".55" stroke="url(#dm-greenmodaltitle)" stroke-width="2" stroke-opacity=".75"/>
+  <circle cx="64" cy="14.5" r="2.6" fill="url(#dm-greenmodaltitle)"/>
+  <circle cx="106.5" cy="30" r="2.2" fill="url(#dm-greenmodaltitle)" fill-opacity=".8"/>
+  <circle cx="21.5" cy="30" r="2.2" fill="url(#dm-greenmodaltitle)" fill-opacity=".8"/>
+
+  <path d="M64 27 43 43.5h42z" fill="url(#dm-hatmodaltitle)"/>
+  <path d="M64 27 43 43.5h21z" fill="#46566e" fill-opacity=".45"/>
+  <rect x="38.5" y="43" width="51" height="8.5" rx="4.25" fill="url(#dm-hatmodaltitle)"/>
+  <path d="M47 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM56.4 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM65.8 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM75.2 47.25l2.4-2.4 2.4 2.4-2.4 2.4z" fill="url(#dm-greenmodaltitle)"/>
+
+  <path d="M44 60c0-4.4 3.6-8 8-8h24c4.4 0 8 3.6 8 8v11c0 8.8-8.1 15-20 15s-20-6.2-20-15z" fill="url(#dm-facemodaltitle)"/>
+  <rect x="47.5" y="55.5" width="13" height="4" rx="2" fill="#8b9bb2" fill-opacity=".55" transform="rotate(-6 54 57.5)"/>
+  <rect x="67.5" y="55.5" width="13" height="4" rx="2" fill="#8b9bb2" fill-opacity=".55" transform="rotate(6 74 57.5)"/>
+
+  <g filter="url(#dm-blurmodaltitle)" opacity=".85">
+    <rect x="50.5" y="61" width="9" height="12" rx="4.5" fill="#3ff58c"/>
+    <rect x="68.5" y="61" width="9" height="12" rx="4.5" fill="#3ff58c"/>
+  </g>
+  <rect x="50.5" y="61" width="9" height="12" rx="4.5" fill="url(#dm-greenmodaltitle)"/>
+  <rect x="68.5" y="61" width="9" height="12" rx="4.5" fill="url(#dm-greenmodaltitle)"/>
+  <rect x="52.5" y="63" width="3" height="4" rx="1.5" fill="#eafff2" fill-opacity=".85"/>
+  <rect x="70.5" y="63" width="3" height="4" rx="1.5" fill="#eafff2" fill-opacity=".85"/>
+
+  <path d="M40.5 76c-1.6 12.6.6 22.4 6.6 29.4 4.6 5.4 10.5 8.4 16.9 8.4s12.3-3 16.9-8.4c6-7 8.2-16.8 6.6-29.4-2.4 5.4-6.6 9.1-12.6 11.1-3.5 1.2-7.1 1.8-10.9 1.8s-7.4-.6-10.9-1.8c-6-2-10.2-5.7-12.6-11.1z" fill="url(#dm-beardmodaltitle)"/>
+  <path d="M53 113.2c2.6-3.4 4-8.2 4.2-14.4M75 113.2c-2.6-3.4-4-8.2-4.2-14.4M64 114v-16" stroke="#7c8ba1" stroke-opacity=".45" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <path d="M46 79.5c4.4 4 10.3 6 18 6s13.6-2 18-6" stroke="#ffffff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M52.5 76.5c3 3.4 6.8 5.1 11.5 5.1s8.5-1.7 11.5-5.1" fill="#e9f0f8"/>
+  <path d="M55 78.5c2.4 2.2 5.4 3.3 9 3.3s6.6-1.1 9-3.3" stroke="#9dabbf" stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+  <g filter="url(#dm-softmodaltitle)" opacity=".9">
+    <path d="M52 92v8M64 95v9M76 92v8" stroke="url(#dm-greenmodaltitle)" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+  <path d="M52 92v8M64 95v9M76 92v8" stroke="url(#dm-greenmodaltitle)" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="52" cy="101.5" r="1.9" fill="url(#dm-greenmodaltitle)"/>
+  <circle cx="76" cy="101.5" r="1.9" fill="url(#dm-greenmodaltitle)"/>
+  <path d="M64 105.5l3.4 3.4-3.4 3.4-3.4-3.4z" fill="url(#dm-greenmodaltitle)"/>
+
+  <path d="M44 65h-9M84 65h9" stroke="url(#dm-greenmodaltitle)" stroke-width="1.6" stroke-linecap="round" stroke-opacity=".8"/>
+  <circle cx="32.5" cy="65" r="2.4" fill="url(#dm-greenmodaltitle)"/>
+  <circle cx="95.5" cy="65" r="2.4" fill="url(#dm-greenmodaltitle)"/>
 </svg> {{ heading_title }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="text-center text-body mb-3"><svg viewBox="0 0 64 64" width="120" height="120" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img" aria-hidden="true">
+        <div class="text-center text-body mb-3"><svg viewBox="0 0 128 128" width="128" height="128" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
   <defs>
-    <linearGradient id="domovyi-glow-modal" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#6ee787"/>
-      <stop offset="1" stop-color="#1f9d55"/>
+    <linearGradient id="dm-bgmodal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#141c24"/>
+      <stop offset="1" stop-color="#05080b"/>
     </linearGradient>
+    <radialGradient id="dm-halomodal" cx="50%" cy="46%" r="50%">
+      <stop offset="0" stop-color="#2ee36a" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#2ee36a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dm-greenmodal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7dffae"/>
+      <stop offset=".55" stop-color="#33e878"/>
+      <stop offset="1" stop-color="#0f9b4d"/>
+    </linearGradient>
+    <linearGradient id="dm-hatmodal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#39465a"/>
+      <stop offset="1" stop-color="#1a2230"/>
+    </linearGradient>
+    <linearGradient id="dm-facemodal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2e3a4b"/>
+      <stop offset="1" stop-color="#151c27"/>
+    </linearGradient>
+    <linearGradient id="dm-beardmodal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eaf1f8"/>
+      <stop offset=".45" stop-color="#c3cede"/>
+      <stop offset="1" stop-color="#8593a8"/>
+    </linearGradient>
+    <filter id="dm-blurmodal" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="dm-softmodal" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.1"/>
+    </filter>
   </defs>
-  <path d="M32 2 5 20v4h54v-4z" fill="currentColor" opacity=".8"/>
-  <rect x="9" y="29" width="5" height="10" rx="2.5" fill="currentColor" opacity=".65"/>
-  <rect x="50" y="29" width="5" height="10" rx="2.5" fill="currentColor" opacity=".65"/>
-  <rect x="15" y="22" width="34" height="25" rx="9" fill="currentColor"/>
-  <rect x="23" y="29" width="6" height="9" rx="3" fill="url(#domovyi-glow-modal)"/>
-  <rect x="35" y="29" width="6" height="9" rx="3" fill="url(#domovyi-glow-modal)"/>
-  <path d="M27 41.5c1.5 1.7 3.1 2.5 5 2.5s3.5-.8 5-2.5" stroke="url(#domovyi-glow-modal)" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M32 46.5l9.5 2.6v4.4c0 4.2-3.8 7.4-9.5 10-5.7-2.6-9.5-5.8-9.5-10v-4.4z" fill="url(#domovyi-glow-modal)"/>
-  <path d="M28.4 53.6l2.7 2.7 4.7-4.9" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect width="128" height="128" rx="28" fill="url(#dm-bgmodal)"/>
+  <circle cx="64" cy="60" r="46" fill="url(#dm-halomodal)"/>
+  <circle cx="64" cy="62" r="52" stroke="#2ee36a" stroke-opacity=".16" stroke-width="1.2" fill="none" stroke-dasharray="18 10"/>
+  <circle cx="64" cy="62" r="44" stroke="#2ee36a" stroke-opacity=".1" stroke-width="1" fill="none" stroke-dasharray="6 8"/>
+
+  <path d="M64 14.5 106.5 30v34.5c0 25.8-17.8 42.4-42.5 50.5C39.3 106.9 21.5 90.3 21.5 64.5V30z" fill="#0d2318" fill-opacity=".55" stroke="url(#dm-greenmodal)" stroke-width="2" stroke-opacity=".75"/>
+  <circle cx="64" cy="14.5" r="2.6" fill="url(#dm-greenmodal)"/>
+  <circle cx="106.5" cy="30" r="2.2" fill="url(#dm-greenmodal)" fill-opacity=".8"/>
+  <circle cx="21.5" cy="30" r="2.2" fill="url(#dm-greenmodal)" fill-opacity=".8"/>
+
+  <path d="M64 27 43 43.5h42z" fill="url(#dm-hatmodal)"/>
+  <path d="M64 27 43 43.5h21z" fill="#46566e" fill-opacity=".45"/>
+  <rect x="38.5" y="43" width="51" height="8.5" rx="4.25" fill="url(#dm-hatmodal)"/>
+  <path d="M47 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM56.4 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM65.8 47.25l2.4-2.4 2.4 2.4-2.4 2.4zM75.2 47.25l2.4-2.4 2.4 2.4-2.4 2.4z" fill="url(#dm-greenmodal)"/>
+
+  <path d="M44 60c0-4.4 3.6-8 8-8h24c4.4 0 8 3.6 8 8v11c0 8.8-8.1 15-20 15s-20-6.2-20-15z" fill="url(#dm-facemodal)"/>
+  <rect x="47.5" y="55.5" width="13" height="4" rx="2" fill="#8b9bb2" fill-opacity=".55" transform="rotate(-6 54 57.5)"/>
+  <rect x="67.5" y="55.5" width="13" height="4" rx="2" fill="#8b9bb2" fill-opacity=".55" transform="rotate(6 74 57.5)"/>
+
+  <g filter="url(#dm-blurmodal)" opacity=".85">
+    <rect x="50.5" y="61" width="9" height="12" rx="4.5" fill="#3ff58c"/>
+    <rect x="68.5" y="61" width="9" height="12" rx="4.5" fill="#3ff58c"/>
+  </g>
+  <rect x="50.5" y="61" width="9" height="12" rx="4.5" fill="url(#dm-greenmodal)"/>
+  <rect x="68.5" y="61" width="9" height="12" rx="4.5" fill="url(#dm-greenmodal)"/>
+  <rect x="52.5" y="63" width="3" height="4" rx="1.5" fill="#eafff2" fill-opacity=".85"/>
+  <rect x="70.5" y="63" width="3" height="4" rx="1.5" fill="#eafff2" fill-opacity=".85"/>
+
+  <path d="M40.5 76c-1.6 12.6.6 22.4 6.6 29.4 4.6 5.4 10.5 8.4 16.9 8.4s12.3-3 16.9-8.4c6-7 8.2-16.8 6.6-29.4-2.4 5.4-6.6 9.1-12.6 11.1-3.5 1.2-7.1 1.8-10.9 1.8s-7.4-.6-10.9-1.8c-6-2-10.2-5.7-12.6-11.1z" fill="url(#dm-beardmodal)"/>
+  <path d="M53 113.2c2.6-3.4 4-8.2 4.2-14.4M75 113.2c-2.6-3.4-4-8.2-4.2-14.4M64 114v-16" stroke="#7c8ba1" stroke-opacity=".45" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <path d="M46 79.5c4.4 4 10.3 6 18 6s13.6-2 18-6" stroke="#ffffff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M52.5 76.5c3 3.4 6.8 5.1 11.5 5.1s8.5-1.7 11.5-5.1" fill="#e9f0f8"/>
+  <path d="M55 78.5c2.4 2.2 5.4 3.3 9 3.3s6.6-1.1 9-3.3" stroke="#9dabbf" stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+  <g filter="url(#dm-softmodal)" opacity=".9">
+    <path d="M52 92v8M64 95v9M76 92v8" stroke="url(#dm-greenmodal)" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+  <path d="M52 92v8M64 95v9M76 92v8" stroke="url(#dm-greenmodal)" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="52" cy="101.5" r="1.9" fill="url(#dm-greenmodal)"/>
+  <circle cx="76" cy="101.5" r="1.9" fill="url(#dm-greenmodal)"/>
+  <path d="M64 105.5l3.4 3.4-3.4 3.4-3.4-3.4z" fill="url(#dm-greenmodal)"/>
+
+  <path d="M44 65h-9M84 65h9" stroke="url(#dm-greenmodal)" stroke-width="1.6" stroke-linecap="round" stroke-opacity=".8"/>
+  <circle cx="32.5" cy="65" r="2.4" fill="url(#dm-greenmodal)"/>
+  <circle cx="95.5" cy="65" r="2.4" fill="url(#dm-greenmodal)"/>
 </svg></div>
         <p>{{ text_about_intro }}</p>
         <p class="fw-semibold">{{ text_about_community }}</p>

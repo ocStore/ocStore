@@ -7,7 +7,7 @@
  * @link      https://opencartforum.com/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu
  */
 // Heading
-$_['heading_title']               = 'Domovyi';
+$_['heading_title']               = 'Domovyi 1.1.0';
 
 // Text
 $_['text_extension']              = 'Extensions';
@@ -44,6 +44,12 @@ $_['text_dbms']                   = 'DBMS';
 $_['text_disk']                   = 'Free disk space';
 $_['text_ioncube']                = 'ionCube';
 $_['text_cache_control']          = 'Cache';
+$_['text_cache_theme']            = 'Theme';
+$_['text_cache_ocmod']            = 'OCMOD';
+$_['text_cache_all']              = 'Everything';
+$_['text_widget']                 = 'Widget';
+$_['text_unit_mb']                = 'MB';
+$_['text_unit_min']               = 'min';
 $_['text_folders']                = 'Directories';
 $_['text_extensions']             = 'PHP extensions';
 $_['text_limits']                 = 'PHP limits';
@@ -63,7 +69,7 @@ $_['text_errors_empty']           = 'The error log is empty';
 $_['text_errors_trimmed']         = 'showing the tail of the log';
 $_['text_log']                    = 'Open the log';
 $_['text_never']                  = 'not measured yet';
-$_['text_copyright']              = 'Domovyi 1.0.2 — Dinox [opencartforum.com]';
+$_['text_copyright']              = 'Domovyi 1.1.0 — Dinox [opencartforum.com]';
 
 // Entry
 $_['entry_status']                = 'Status';
@@ -75,11 +81,13 @@ $_['entry_theme_cache']           = 'Theme cache';
 $_['entry_sass']                  = 'SASS';
 $_['entry_modification_cache']    = 'OCMOD cache';
 $_['entry_allcache']              = 'Every cache and image resizes, OCMOD excluded';
-$_['entry_folder_cron_status']    = 'Watch the directory size?';
-$_['entry_folder_space_limit']    = 'Directory size threshold, MB';
-$_['entry_folder_calc_time']      = 'Directory size recheck, in minutes (runs when you enter the admin)';
-$_['entry_disk_free_space_limit'] = 'Minimum free disk space left, MB';
-$_['entry_free_space_status']     = 'Show the free disk space left (usually works on VPS/Dedicated)';
+$_['entry_folder_watch']          = 'Watch the size';
+$_['entry_folder_limit']          = 'Size threshold';
+$_['entry_folder_period']         = 'Recheck every';
+$_['help_folder_period']          = 'Runs when you enter the admin';
+$_['entry_disk_free_space_limit'] = 'Minimum left';
+$_['entry_free_space_status']     = 'Show the free disk space';
+$_['help_free_space_status']      = 'Usually works on VPS/Dedicated only';
 
 // Error
 $_['error_permission']            = 'Warning: You do not have permission to modify this dashboard!';

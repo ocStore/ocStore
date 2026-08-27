@@ -7,7 +7,7 @@
  * @link      https://opencartforum.com/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu
  */
 // Heading
-$_['heading_title']               = 'Домовий';
+$_['heading_title']               = 'Домовий 1.1.0';
 
 // Text
 $_['text_extension']              = 'Доповнення';
@@ -44,6 +44,12 @@ $_['text_dbms']                   = 'СУБД';
 $_['text_disk']                   = 'Вільно на диску';
 $_['text_ioncube']                = 'ionCube';
 $_['text_cache_control']          = 'Кеш';
+$_['text_cache_theme']            = 'Шаблон';
+$_['text_cache_ocmod']            = 'OCMOD';
+$_['text_cache_all']              = 'Весь кеш';
+$_['text_widget']                 = 'Віджет';
+$_['text_unit_mb']                = 'Мб';
+$_['text_unit_min']               = 'хв';
 $_['text_folders']                = 'Теки';
 $_['text_extensions']             = 'Розширення PHP';
 $_['text_limits']                 = 'Ліміти PHP';
@@ -63,7 +69,7 @@ $_['text_errors_empty']           = 'Журнал помилок порожні�
 $_['text_errors_trimmed']         = 'показано хвіст журналу';
 $_['text_log']                    = 'Відкрити журнал';
 $_['text_never']                  = 'ще не заміряна';
-$_['text_copyright']              = 'Домовий 1.0.2 — Dinox [opencartforum.com]';
+$_['text_copyright']              = 'Домовий 1.1.0 — Dinox [opencartforum.com]';
 
 // Entry
 $_['entry_status']                = 'Статус';
@@ -75,11 +81,13 @@ $_['entry_theme_cache']           = 'Кеш шаблону';
 $_['entry_sass']                  = 'SASS';
 $_['entry_modification_cache']    = 'Кеш модифікаторів OCMOD';
 $_['entry_allcache']              = 'Весь кеш та ресайзи зображень, без OCMOD';
-$_['entry_folder_cron_status']    = 'Стежити за обсягом теки?';
-$_['entry_folder_space_limit']    = 'Поріг обсягу теки, Мб';
-$_['entry_folder_calc_time']      = 'Перерахунок розміру теки, у хвилинах (працює при вході в адмінку)';
-$_['entry_disk_free_space_limit'] = 'Мінімальний залишок вільного місця на диску, Мб';
-$_['entry_free_space_status']     = 'Показувати залишок вільного місця на диску (здебільшого працює на VPS/Dedicated)';
+$_['entry_folder_watch']          = 'Стежити за обсягом';
+$_['entry_folder_limit']          = 'Поріг обсягу';
+$_['entry_folder_period']         = 'Перерахунок';
+$_['help_folder_period']          = 'Спрацьовує при вході в адмінку';
+$_['entry_disk_free_space_limit'] = 'Мінімальний залишок';
+$_['entry_free_space_status']     = 'Показувати вільне місце';
+$_['help_free_space_status']      = 'Здебільшого працює лише на VPS/Dedicated';
 
 // Error
 $_['error_permission']            = 'У вас недостатньо прав для налаштування цього модуля';

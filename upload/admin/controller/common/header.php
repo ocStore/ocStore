@@ -23,12 +23,13 @@ class Header extends \Opencart\System\Engine\Controller {
 		$data['keywords'] = $this->document->getKeywords();
 
 		// Hard coding css so they can be replaced via the event's system.
-		$data['bootstrap'] = 'view/stylesheet/bootstrap.css';
+		$data['bootstrap'] = 'view/stylesheet/bootstrap.css' . $this->stamp('view/stylesheet/bootstrap.css');
 		$data['icons'] = 'view/stylesheet/fonts/fontawesome/css/all.min.css';
-		$data['stylesheet'] = 'view/stylesheet/stylesheet.css';
+		$data['stylesheet'] = 'view/stylesheet/stylesheet.css' . $this->stamp('view/stylesheet/stylesheet.css');
 
 		// Hard coding scripts so they can be replaced via the event's system.
 		$data['jquery'] = 'view/javascript/jquery/jquery-3.7.1.min.js';
+		$data['common_js'] = 'view/javascript/common.js' . $this->stamp('view/javascript/common.js');
 
 		$data['links'] = $this->document->getLinks();
 		$data['styles'] = $this->document->getStyles();
@@ -137,5 +138,20 @@ class Header extends \Opencart\System\Engine\Controller {
 		}
 
 		return $this->load->view('common/header', $data);
+	}
+
+	/**
+	 * Stamp
+	 *
+	 * Version marker for the asset, so a proxy or a browser does not serve yesterday's file.
+	 *
+	 * @param string $file
+	 *
+	 * @return string
+	 */
+	private function stamp(string $file): string {
+		$time = @filemtime(DIR_APPLICATION . $file);
+
+		return $time ? '?v=' . $time : '';
 	}
 }

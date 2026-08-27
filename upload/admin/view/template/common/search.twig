@@ -1,6 +1,6 @@
 <div id="search" class="dropdown">
   <div class="input-group">
-    <button type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" class="btn btn-light dropdown-toggle" title="{{ text_search_options }}"><i id="search-icon" class="fa-solid fa-book"></i></button>
+    <button type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" class="btn btn-light dropdown-toggle" title="{{ text_search_options }}"><i id="search-icon" class="fa-solid fa-magnifying-glass"></i></button>
     <ul class="dropdown-menu">
       <li><h6 class="dropdown-header">{{ text_search_options }}</h6></li>
       {% for option in options %}
@@ -18,7 +18,6 @@ $('#search .dropdown-menu [data-oc-option]').on('click', function (e) {
 
     $('#input-search-option').val($(this).attr('data-oc-option'));
     $('#input-search').attr('placeholder', $(this).attr('data-oc-placeholder')).trigger('focus');
-    $('#search-icon').attr('class', $(this).attr('data-oc-icon'));
 
     $('#search-result').removeClass('show').html('');
 });

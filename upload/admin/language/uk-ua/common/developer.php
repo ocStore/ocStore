@@ -6,7 +6,7 @@ $_['text_cache_success'] = 'Кеш очищений';
 $_['text_theme_success'] = 'Кеш теми очищений';
 $_['text_sass_success'] = 'Кеш SASS очищений';
 $_['text_image_success'] = 'Ресайзи зображень видалені';
-$_['text_all_success'] = 'Весь кеш очищений';
+$_['text_all_success'] = 'Очищено все';
 
 // Text
 $_['text_success']     = 'Налаштування змінені';
@@ -14,7 +14,7 @@ $_['text_theme']       = 'Шаблон';
 $_['text_sass']        = 'SASS';
 $_['text_cache']       = 'Кеш';
 $_['text_image']       = 'Ресайзи зображень';
-$_['text_all']         = 'Весь кеш';
+$_['text_all']         = 'Усе разом';
 
 // Column
 $_['column_component'] = 'Компонент';

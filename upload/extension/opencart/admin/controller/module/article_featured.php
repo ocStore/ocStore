@@ -149,13 +149,13 @@ class ArticleFeatured extends \Opencart\System\Engine\Controller {
 		}
 
 		$required = [
-			'module_id' => 0,
-			'name'      => '',
-			'article'   => [],
-			'limit'     => 4,
+			'module_id'          => 0,
+			'name'               => '',
+			'article'            => [],
+			'limit'              => 4,
 			'description_length' => 100,
-			'width'     => 0,
-			'height'    => 0
+			'width'              => 0,
+			'height'             => 0
 		];
 
 		$post_info = $this->request->post + $required;

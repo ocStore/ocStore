@@ -12,55 +12,53 @@ class Step4 extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function index(): void {
-        $this->load->language('install/step_4');
-        $this->load->model('install/install');
+		$this->load->language('install/step_4');
+		$this->load->model('install/install');
 
-        if ($this->request->server['REQUEST_METHOD'] == 'POST') {
+		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
 
-            $this->model_install_install->enableCountries($this->request->post['country']);
+			$this->model_install_install->enableCountries($this->request->post['country']);
 
+			$this->response->redirect($this->url->link('install/step_5'));
+		}
 
+		$this->document->setTitle($this->language->get('heading_title'));
 
-            $this->response->redirect($this->url->link('install/step_5'));
-        }
+		$data['heading_title'] = $this->language->get('heading_title');
+		$data['text_step_4'] = $this->language->get('text_step_4');
+		$data['text_yes'] = $this->language->get('text_yes');
+		$data['text_no'] = $this->language->get('text_no');
+		$data['text_select'] = $this->language->get('text_select');
+		$data['text_delete'] = $this->language->get('text_delete');
+		$data['text_select_all'] = $this->language->get('text_select_all');
+		$data['text_unselect_all'] = $this->language->get('text_unselect_all');
 
-        $this->document->setTitle($this->language->get('heading_title'));
+		$data['button_back'] = $this->language->get('button_back');
+		$data['button_continue'] = $this->language->get('button_continue');
 
-        $data['heading_title'] = $this->language->get('heading_title');
-        $data['text_step_4'] = $this->language->get('text_step_4');
-        $data['text_yes'] = $this->language->get('text_yes');
-        $data['text_no'] = $this->language->get('text_no');
-        $data['text_select'] = $this->language->get('text_select');
-        $data['text_delete'] = $this->language->get('text_delete');
-        $data['text_select_all'] = $this->language->get('text_select_all');
-        $data['text_unselect_all'] = $this->language->get('text_unselect_all');
+		$data['entry_country'] = $this->language->get('entry_country');
+		$data['help_country'] = $this->language->get('help_country');
 
-        $data['button_back'] = $this->language->get('button_back');
-        $data['button_continue'] = $this->language->get('button_continue');
+		$data['countries'] = $this->model_install_install->getCountries();
 
-        $data['entry_country'] = $this->language->get('entry_country');
-        $data['help_country'] = $this->language->get('help_country');
+		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
+			$data['country'] = !empty($this->request->post['country']) ? $this->request->post['country'] : [];
+		} else {
+			$data['country'] = [];
 
-        $data['countries'] = $this->model_install_install->getCountries();
+			foreach ($data['countries'] as $country) {
+				if ($country['status']) {
+					$data['country'][] = $country['country_id'];
+				}
+			}
+		}
 
-        if ($this->request->server['REQUEST_METHOD'] == 'POST') {
-            $data['country'] = !empty($this->request->post['country']) ? $this->request->post['country'] : array();
-        } else {
-            $data['country'] = array();
+		$data['back'] = $this->url->link('install/step_3');
 
-            foreach ($data['countries'] as $country) {
-                if ($country['status']) {
-                    $data['country'][] = $country['country_id'];
-                }
-            }
-        }
+		$data['footer'] = $this->load->controller('common/footer');
+		$data['header'] = $this->load->controller('common/header');
+		$data['column_left'] = $this->load->controller('common/column_left');
 
-        $data['back'] = $this->url->link('install/step_3');
-
-        $data['footer'] = $this->load->controller('common/footer');
-        $data['header'] = $this->load->controller('common/header');
-        $data['column_left'] = $this->load->controller('common/column_left');
-
-        $this->response->setOutput($this->load->view('install/step_4', $data));
+		$this->response->setOutput($this->load->view('install/step_4', $data));
 	}
 }

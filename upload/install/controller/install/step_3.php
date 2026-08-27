@@ -261,7 +261,7 @@ class Step3 extends \Opencart\System\Engine\Controller {
 
 			$output .= '// OpenCart API' . "\n";
 			$output .= 'define(\'OPENCART_SERVER\', \'https://www.opencart.com/\');' . "\n";
-            $output .= 'define(\'OPENCARTFORUM_SERVER\', \'https://opencartforum.com/\');';
+			$output .= 'define(\'OPENCARTFORUM_SERVER\', \'https://opencartforum.com/\');';
 
 			$file = fopen(DIR_OPENCART . 'admin/config.php', 'w');
 

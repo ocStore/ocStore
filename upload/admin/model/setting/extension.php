@@ -460,6 +460,8 @@ class Extension extends \Opencart\System\Engine\Model {
 	 *
 	 * Get the total number of total extension path records in the database.
 	 *
+	 * @param string $type
+	 * @param array  $results
 	 * @param string $path
 	 *
 	 * @return int

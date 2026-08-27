@@ -15,12 +15,12 @@ class Promotion extends \Opencart\System\Engine\Controller {
 	 */
 	public function index(): string {
 
-        $this->load->language('install/promotion');
+		$this->load->language('install/promotion');
 
-        $data['title_featured'] = $this->language->get('title_featured');
-        $data['text_by'] = $this->language->get('text_by');
-        $data['text_purchases'] = $this->language->get('text_purchases');
-        $data['text_downloads'] = $this->language->get('text_downloads');
+		$data['title_featured'] = $this->language->get('title_featured');
+		$data['text_by'] = $this->language->get('text_by');
+		$data['text_purchases'] = $this->language->get('text_purchases');
+		$data['text_downloads'] = $this->language->get('text_downloads');
 
 		$curl = curl_init();
 
@@ -48,6 +48,6 @@ class Promotion extends \Opencart\System\Engine\Controller {
 
 		unset($curl);
 
-        return $this->load->view('install/promotion', $data);
+		return $this->load->view('install/promotion', $data);
 	}
 }

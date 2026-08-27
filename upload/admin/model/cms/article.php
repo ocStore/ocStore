@@ -918,6 +918,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int             $article_id
+	 * @param int             $main_topic_id
 	 * @param array<int, int> $topics
 	 */
 	public function addTopics(int $article_id, int $main_topic_id, array $topics): void {
@@ -937,6 +939,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $article_id
+	 *
 	 * @return array<int, int>
 	 */
 	public function getTopics(int $article_id): array {
@@ -946,6 +950,7 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int             $article_id
 	 * @param array<int, int> $related
 	 */
 	public function addRelated(int $article_id, array $related): void {
@@ -968,6 +973,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $article_id
+	 *
 	 * @return array<int, int>
 	 */
 	public function getRelated(int $article_id): array {
@@ -977,6 +984,7 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int             $article_id
 	 * @param array<int, int> $products
 	 */
 	public function addProducts(int $article_id, array $products): void {
@@ -992,6 +1000,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $article_id
+	 *
 	 * @return array<int, int>
 	 */
 	public function getProducts(int $article_id): array {
@@ -1001,6 +1011,7 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int             $article_id
 	 * @param array<int, int> $downloads
 	 */
 	public function addDownloads(int $article_id, array $downloads): void {
@@ -1016,6 +1027,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $article_id
+	 *
 	 * @return array<int, int>
 	 */
 	public function getDownloads(int $article_id): array {
@@ -1025,6 +1038,7 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int             $article_id
 	 * @param array<int, int> $manufacturers
 	 */
 	public function addManufacturers(int $article_id, array $manufacturers): void {
@@ -1040,6 +1054,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $article_id
+	 *
 	 * @return array<int, int>
 	 */
 	public function getManufacturers(int $article_id): array {
@@ -1049,6 +1065,7 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int             $article_id
 	 * @param array<int, int> $categories
 	 */
 	public function addCategories(int $article_id, array $categories): void {
@@ -1064,6 +1081,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $article_id
+	 *
 	 * @return array<int, int>
 	 */
 	public function getCategories(int $article_id): array {

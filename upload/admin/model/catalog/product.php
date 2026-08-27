@@ -1551,8 +1551,9 @@ class Product extends \Opencart\System\Engine\Model {
 	 *
 	 * Create a new product category record in the database.
 	 *
-	 * @param int $product_id  primary key of the product record
-	 * @param int $category_id primary key of the category record
+	 * @param int  $product_id    primary key of the product record
+	 * @param int  $category_id   primary key of the category record
+	 * @param bool $main_category
 	 *
 	 * @return void
 	 *

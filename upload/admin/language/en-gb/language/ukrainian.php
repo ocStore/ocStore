@@ -1,7 +1,7 @@
 <?php
 // Heading
 $_['heading_title']    = 'Ukrainian Localisation';
-$_['version_extension']= '4.1.0.4b';
+$_['version_extension'] = '4.1.0.4b';
 
 // Text
 $_['text_headline']    = 'Ukrainian localisation of the storefront and admin panel';

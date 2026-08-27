@@ -98,6 +98,8 @@ class Topic extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $parent_id
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function getTopicsByParentId(int $parent_id = 0): array {
@@ -119,6 +121,8 @@ class Topic extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $topic_id
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function getPaths(int $topic_id): array {

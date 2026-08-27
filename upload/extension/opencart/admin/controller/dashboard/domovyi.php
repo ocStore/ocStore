@@ -1,10 +1,12 @@
 <?php
 /**
  * @package   Domovyi
+ *
  * @author    Dinox
  * @copyright Copyright (c) 2009 - 2026, Dinox (https://opencartforum.com/)
  * @license   https://opensource.org/licenses/GPL-3.0
- * @link      https://opencartforum.com/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu
+ *
+ * @see      https://opencartforum.com/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu
  */
 namespace Opencart\Admin\Controller\Extension\Opencart\Dashboard;
 /**
@@ -165,19 +167,19 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 	private function getIssues(): array {
 		$items = [];
 
-		$missing = count(array_filter($this->getExtensions(), fn(array $extension): bool => !$extension['status']));
+		$missing = count(array_filter($this->getExtensions(), fn (array $extension): bool => !$extension['status']));
 
 		if ($missing) {
 			$items[] = sprintf($this->language->get('text_missing'), $missing) . ' — ' . $this->language->get('text_extensions');
 		}
 
-		$below = count(array_filter($this->getLimits(), fn(array $limit): bool => !$limit['status']));
+		$below = count(array_filter($this->getLimits(), fn (array $limit): bool => !$limit['status']));
 
 		if ($below) {
 			$items[] = sprintf($this->language->get('text_below'), $below) . ' — ' . $this->language->get('text_limits');
 		}
 
-		$readonly = count(array_filter($this->getPermissions(), fn(array $permission): bool => !$permission['status']));
+		$readonly = count(array_filter($this->getPermissions(), fn (array $permission): bool => !$permission['status']));
 
 		if ($readonly) {
 			$items[] = sprintf($this->language->get('text_readonly'), $readonly) . ' — ' . $this->language->get('text_permissions');
@@ -194,7 +196,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		foreach (array_keys($this->getFolders()) as $key) {
 			$cache = $this->getCache($key);
 
-			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
+			$limit = (float)($cron[$key]['size'] ?? 0) * 1024 ** 2;
 
 			if ($cache && $limit && $cache['size'] > $limit) {
 				$items[] = $this->language->get('text_dir_' . $key);
@@ -244,7 +246,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 				'name' => $this->language->get('text_dir_' . $key)
 			];
 
-			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
+			$limit = (float)($cron[$key]['size'] ?? 0) * 1024 ** 2;
 
 			$cache = $this->getCache($key);
 
@@ -272,7 +274,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 			$data['folders'][] = $folder;
 		}
 
-		$data['phpversion'] = phpversion();
+		$data['phpversion'] = PHP_VERSION;
 
 		$query = $this->db->query("SELECT VERSION() AS `version`");
 
@@ -295,7 +297,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 
 				$limit = (float)$this->config->get('dashboard_domovyi_disk_free_space');
 
-				if ($limit && $disk_space < $limit * pow(1024, 2)) {
+				if ($limit && $disk_space < $limit * 1024 ** 2) {
 					$data['disk_free_space_warning'] = sprintf($this->language->get('text_warning_free_space'), $limit);
 				}
 			}
@@ -380,7 +382,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 
 			$cron = $this->getCron();
 
-			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
+			$limit = (float)($cron[$key]['size'] ?? 0) * 1024 ** 2;
 
 			$json['size'] = $folder['unit']['size'] . ' ' . $folder['unit']['unit'];
 			$json['percent'] = $limit ? min(100, round($folder['size'] / $limit * 100)) : 0;
@@ -476,7 +478,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		$limits = [];
 
 		foreach ($required as $name => $required_data) {
-			list($recommended, $is_size) = $required_data;
+			[$recommended, $is_size] = $required_data;
 
 			$value = (string)ini_get($name);
 
@@ -509,16 +511,16 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 	 */
 	private function getPermissions(): array {
 		$paths = [
-			'system/storage/cache'     => DIR_CACHE,
-			'system/storage/logs'      => DIR_LOGS,
-			'system/storage/session'   => DIR_SESSION,
-			'system/storage/upload'    => DIR_UPLOAD,
-			'system/storage/download'  => DIR_DOWNLOAD,
-			'system/storage/backup'    => DIR_STORAGE . 'backup/',
-			'image/cache'              => DIR_IMAGE . 'cache/',
-			'extension/ocmod'          => DIR_EXTENSION . 'ocmod/',
-			'config.php'               => DIR_OPENCART . 'config.php',
-			'admin/config.php'         => DIR_APPLICATION . 'config.php'
+			'system/storage/cache'    => DIR_CACHE,
+			'system/storage/logs'     => DIR_LOGS,
+			'system/storage/session'  => DIR_SESSION,
+			'system/storage/upload'   => DIR_UPLOAD,
+			'system/storage/download' => DIR_DOWNLOAD,
+			'system/storage/backup'   => DIR_STORAGE . 'backup/',
+			'image/cache'             => DIR_IMAGE . 'cache/',
+			'extension/ocmod'         => DIR_EXTENSION . 'ocmod/',
+			'config.php'              => DIR_OPENCART . 'config.php',
+			'admin/config.php'        => DIR_APPLICATION . 'config.php'
 		];
 
 		$permissions = [];
@@ -605,9 +607,9 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		}
 
 		return [
-			'total'    => count($lines),
-			'trimmed'  => (bool)$offset,
-			'lines'    => array_slice($lines, -5)
+			'total'   => count($lines),
+			'trimmed' => (bool)$offset,
+			'lines'   => array_slice($lines, -5)
 		];
 	}
 

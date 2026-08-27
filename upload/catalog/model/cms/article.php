@@ -520,6 +520,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $article_id
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function getRelated(int $article_id): array {
@@ -539,6 +541,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $article_id
+	 *
 	 * @return array<int, int>
 	 */
 	public function getProducts(int $article_id): array {
@@ -548,6 +552,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $product_id
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function getArticlesByProductId(int $product_id): array {
@@ -567,6 +573,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $article_id
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function getDownloads(int $article_id): array {
@@ -580,6 +588,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $manufacturer_id
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function getArticlesByManufacturerId(int $manufacturer_id): array {
@@ -599,6 +609,8 @@ class Article extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $category_id
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function getArticlesByCategoryId(int $category_id): array {

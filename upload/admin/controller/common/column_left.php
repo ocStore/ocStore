@@ -214,13 +214,13 @@ class ColumnLeft extends \Opencart\System\Engine\Controller {
 			// Extension
 			$marketplace = [];
 
-            if ($this->user->hasPermission('access', 'marketplace/opencartforum')) {
-                $marketplace[] = [
-                    'name'	   => $this->language->get('text_opencartforum'),
-                    'href'     => $this->url->link('marketplace/opencartforum', 'user_token=' . $this->session->data['user_token']),
-                    'children' => []
-                ];
-            }
+			if ($this->user->hasPermission('access', 'marketplace/opencartforum')) {
+				$marketplace[] = [
+					'name'     => $this->language->get('text_opencartforum'),
+					'href'     => $this->url->link('marketplace/opencartforum', 'user_token=' . $this->session->data['user_token']),
+					'children' => []
+				];
+			}
 
 			if ($this->user->hasPermission('access', 'marketplace/marketplace')) {
 				$marketplace[] = [

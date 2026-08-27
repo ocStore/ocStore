@@ -654,6 +654,8 @@ class Topic extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $topic_id
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function getPaths(int $topic_id): array {
@@ -663,6 +665,8 @@ class Topic extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * @param int $path_id
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function getPathsByPathId(int $path_id): array {

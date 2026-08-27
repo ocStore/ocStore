@@ -1,6 +1,7 @@
 <?php
 /**
  * @package   SeoPro
+ *
  * @author    Oclabs
  * @copyright Copyright (c) 2017, Oclabs (https://www.oclabs.pro/)
  * @copyright Copyright (c) 2026, ocStore (https://ocstore.com/)
@@ -64,6 +65,8 @@ class SeoPro {
 	/**
 	 * Єдиний екземпляр на запит. Зберігається в реєстрі, тож доступний
 	 * як $this->seo_pro з будь-якого контролера, моделі чи обробника.
+	 *
+	 * @param \Opencart\System\Engine\Registry $registry
 	 */
 	public static function getInstance(\Opencart\System\Engine\Registry $registry): self {
 		if (!$registry->has('seo_pro')) {
@@ -105,14 +108,15 @@ class SeoPro {
 
 	/**
 	 * Додає обробник SEO URL. Менший sort_order перевіряється раніше.
+	 *
+	 * @param \Opencart\System\Library\Seo\HandlerInterface $handler
+	 * @param int                                           $sort_order
 	 */
 	public function addHandler(\Opencart\System\Library\Seo\HandlerInterface $handler, int $sort_order = 100): void {
 		$this->handlers[] = ['handler' => $handler, 'sort_order' => $sort_order];
 		$this->handler_keys = [];
 
-		usort($this->handlers, function (array $a, array $b): int {
-			return $a['sort_order'] <=> $b['sort_order'];
-		});
+		usort($this->handlers, fn (array $a, array $b): int => $a['sort_order'] <=> $b['sort_order']);
 	}
 
 	/**
@@ -175,7 +179,7 @@ class SeoPro {
 		$leftover = [];
 		$found = false;
 
-		for ($i = 0; $i < $total; ) {
+		for ($i = 0; $i < $total;) {
 			$query = '';
 			$length = 0;
 
@@ -377,7 +381,7 @@ class SeoPro {
 	}
 
 	public function validate(): void {
-		if (php_sapi_name() == 'cli') {
+		if (PHP_SAPI == 'cli') {
 			return;
 		}
 
@@ -449,11 +453,7 @@ class SeoPro {
 			return true;
 		}
 
-		if (!empty($this->request->server['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$this->request->server['HTTP_X_FORWARDED_PROTO']) == 'https') {
-			return true;
-		}
-
-		return false;
+		return (bool)(!empty($this->request->server['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$this->request->server['HTTP_X_FORWARDED_PROTO']) == 'https');
 	}
 
 	private function detectAjax(): void {

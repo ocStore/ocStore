@@ -1,6 +1,6 @@
 <?php
 namespace Opencart\Install;
-if (php_sapi_name() != 'cli') {
+if (PHP_SAPI != 'cli') {
 	exit('Command line only');
 }
 
@@ -109,6 +109,7 @@ class CliBlogMigrate {
 	}
 
 	/**
+	 * @param int             $parent_id
 	 * @param array<int, int> $path
 	 */
 	private function rebuildPaths(int $parent_id, array $path): void {

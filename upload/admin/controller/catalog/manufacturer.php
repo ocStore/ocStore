@@ -362,7 +362,7 @@ class Manufacturer extends \Opencart\System\Engine\Controller {
 			'manufacturer_id'          => 0,
 			'name'                     => '',
 			'manufacturer_description' => [],
-			'product_related'      => [],
+			'product_related'          => [],
 			'manufacturer_seo_url'     => []
 		];
 

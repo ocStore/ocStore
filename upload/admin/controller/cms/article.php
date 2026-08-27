@@ -463,21 +463,21 @@ class Article extends \Opencart\System\Engine\Controller {
 		}
 
 		$required = [
-			'article_id'          => 0,
-			'article_description' => [],
-			'author'              => '',
-			'topic_id'            => 0,
-			'article_topic'       => [],
-			'article_related'     => [],
-			'article_product'     => [],
-			'article_download'    => [],
+			'article_id'           => 0,
+			'article_description'  => [],
+			'author'               => '',
+			'topic_id'             => 0,
+			'article_topic'        => [],
+			'article_related'      => [],
+			'article_product'      => [],
+			'article_download'     => [],
 			'article_manufacturer' => [],
-			'article_category'    => [],
-			'date_available'      => '',
-			'sort_order'          => 0,
-			'noindex'             => 0,
-			'status'              => 0,
-			'article_seo_url'     => []
+			'article_category'     => [],
+			'date_available'       => '',
+			'sort_order'           => 0,
+			'noindex'              => 0,
+			'status'               => 0,
+			'article_seo_url'      => []
 		];
 
 		$post_info = $this->request->post + $required;

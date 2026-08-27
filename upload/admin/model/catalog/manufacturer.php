@@ -402,7 +402,7 @@ class Manufacturer extends \Opencart\System\Engine\Model {
 	 * Link a product to the manufacturer so the featured product module can show it on its page.
 	 *
 	 * @param int $manufacturer_id primary key of the manufacturer record
-	 * @param int $product_id  primary key of the product record
+	 * @param int $product_id      primary key of the product record
 	 *
 	 * @return void
 	 *

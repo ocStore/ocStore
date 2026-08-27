@@ -139,35 +139,36 @@ class Install extends \Opencart\System\Engine\Model {
 		// Set the current years prefix
 		$db->query("UPDATE `" . $data['db_prefix'] . "setting` SET `value` = 'INV-" . date('Y') . "-00' WHERE `key` = 'config_invoice_prefix'");
 	}
-    /**
-     * @return array<int, array<string, mixed>>
-     */
-    public function getCountries(): array {
-        $query = $this->db->query("SELECT c.country_id, cd.name, c.status FROM " . DB_PREFIX . "country c LEFT JOIN " . DB_PREFIX . "country_description cd ON (c.country_id = cd.country_id) WHERE cd.language_id = '1' ORDER BY c.status = 1 DESC, LCASE(cd.name)");
 
-        return $query->rows;
-    }
+	/**
+	 * @return array<int, array<string, mixed>>
+	 */
+	public function getCountries(): array {
+		$query = $this->db->query("SELECT c.country_id, cd.name, c.status FROM " . DB_PREFIX . "country c LEFT JOIN " . DB_PREFIX . "country_description cd ON (c.country_id = cd.country_id) WHERE cd.language_id = '1' ORDER BY c.status = 1 DESC, LCASE(cd.name)");
 
-    /**
-     * @param array<int, mixed> $countries
-     */
-    public function enableCountries(array $countries): void {
-        $this->db->query("UPDATE " . DB_PREFIX . "country SET status = '0'");
+		return $query->rows;
+	}
 
-        $countries_filtered = array_map('intval', $countries);
+	/**
+	 * @param array<int, mixed> $countries
+	 */
+	public function enableCountries(array $countries): void {
+		$this->db->query("UPDATE " . DB_PREFIX . "country SET status = '0'");
 
-        $this->db->query("UPDATE " . DB_PREFIX . "country SET status = '1' WHERE country_id IN (" . implode(',', $countries_filtered) . ")");
+		$countries_filtered = array_map('intval', $countries);
 
-        $query = $this->db->query("SELECT country_id FROM " . DB_PREFIX . "country WHERE iso_code_2 = 'UA'");
+		$this->db->query("UPDATE " . DB_PREFIX . "country SET status = '1' WHERE country_id IN (" . implode(',', $countries_filtered) . ")");
 
-        $default_id = $query->num_rows ? (int)$query->row['country_id'] : 0;
+		$query = $this->db->query("SELECT country_id FROM " . DB_PREFIX . "country WHERE iso_code_2 = 'UA'");
 
-        if ($default_id && in_array($default_id, $countries_filtered)) {
-            $country_id = $default_id;
-        } else {
-            $country_id = (int)array_shift($countries_filtered);
-        }
+		$default_id = $query->num_rows ? (int)$query->row['country_id'] : 0;
 
-        $this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `value` = '" . (int)$country_id . "' WHERE `key` = 'config_country_id'");
-    }
+		if ($default_id && in_array($default_id, $countries_filtered)) {
+			$country_id = $default_id;
+		} else {
+			$country_id = (int)array_shift($countries_filtered);
+		}
+
+		$this->db->query("UPDATE `" . DB_PREFIX . "setting` SET `value` = '" . (int)$country_id . "' WHERE `key` = 'config_country_id'");
+	}
 }

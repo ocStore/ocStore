@@ -17,8 +17,6 @@ $_['text_model']                 = 'Модель';
 $_['text_customer']              = 'Покупець';
 $_['text_subscription_plan']     = 'План підписки';
 
-
-
 $_['text_product']               = 'Товар';
 $_['text_quantity']              = 'Кількість';
 
@@ -29,8 +27,6 @@ $_['text_subscription_duration'] = 'Вартість: %s; Періодичніс
 $_['text_subscription_cancel']   = 'Вартість: %s; Періодичність: %d %s; Кількість платежів: до скасування';
 $_['text_cancel']                = 'До скасування';
 
-
-
 $_['text_day']                   = 'День';
 $_['text_week']                  = 'Тиждень';
 $_['text_semi_month']            = 'Півмісяця';
@@ -40,14 +36,12 @@ $_['text_year']                  = 'Рік';
 $_['text_date_next']             = 'Дата наступного платежу';
 $_['text_remaining']             = 'Платежі, що залишилися';
 
-
 $_['text_payment_address']       = 'Платіжна адреса';
 $_['text_payment_method']        = 'Спосіб оплати';
 $_['text_payment']               = 'Будь ласка, виберіть бажаний спосіб оплати для цієї підписки';
 $_['text_shipping_address']      = 'Адреса доставки';
 $_['text_shipping_method']       = 'Спосіб доставки';
 $_['text_shipping']              = 'Будь ласка, виберіть бажаний спосіб доставки для цієї підписки';
-
 
 $_['text_history']               = 'Історія';
 $_['text_history_add']           = 'Додати історію';

@@ -173,12 +173,12 @@ class Blog extends \Opencart\System\Engine\Controller {
 			'filter_search'    => $filter_search,
 			'filter_sub_topic' => true,
 			'filter_topic_id'  => $filter_topic_id,
-			'filter_author'   => $filter_author,
-			'filter_tag'      => $filter_tag,
-			'sort'            => $sort,
-			'order'           => $order,
-			'start'           => ($page - 1) * $limit,
-			'limit'           => $limit
+			'filter_author'    => $filter_author,
+			'filter_tag'       => $filter_tag,
+			'sort'             => $sort,
+			'order'            => $order,
+			'start'            => ($page - 1) * $limit,
+			'limit'            => $limit
 		];
 
 		$this->load->model('cms/article');

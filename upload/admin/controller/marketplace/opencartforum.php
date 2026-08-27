@@ -115,7 +115,7 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 		$url .= '&domain=' . $this->request->server['HTTP_HOST'];
 		$url .= '&version=' . urlencode(VERSION);
 		$url .= '&time=' . $time;
-        $url .= '&language=' . $this->language->get('code');
+		$url .= '&language=' . $this->language->get('code');
 
 		if (isset($this->request->get['filter_search'])) {
 			$url .= '&filter_search=' . urlencode($this->request->get['filter_search']);
@@ -168,20 +168,20 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 		$extension_total = strip_tags($response_info['extension_total']);
 
 		// Categories
-        $curl = curl_init(OPENCARTFORUM_SERVER . 'marketplace/api/categories?' . $url);
+		$curl = curl_init(OPENCARTFORUM_SERVER . 'marketplace/api/categories?' . $url);
 
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
-        curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+		curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
 
-        $response = curl_exec($curl);
+		$response = curl_exec($curl);
 
-        $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-        curl_close($curl);
+		curl_close($curl);
 
-        $categories_info = json_decode($response, true);
+		$categories_info = json_decode($response, true);
 
 		$url = '';
 
@@ -217,17 +217,17 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['promotions'] = array();
+		$data['promotions'] = [];
 
-        $this->load->helper('HTMLPurifier/Bootstrap');
+		$this->load->helper('HTMLPurifier/Bootstrap');
 
-        \HTMLPurifier_Bootstrap::registerAutoload();
+		\HTMLPurifier_Bootstrap::registerAutoload();
 
-        $config = \HTMLPurifier_Config::createDefault();
+		$config = \HTMLPurifier_Config::createDefault();
 
-        $response_info = $this->strip($response_info, $config);
+		$response_info = $this->strip($response_info, $config);
 
-        $promotions = $this->strip($response_info['promotions'], $config);
+		$promotions = $this->strip($response_info['promotions'], $config);
 
 		if (isset($response_info['promotions']) && $page == 1) {
 			foreach ($response_info['promotions'] as $result) {
@@ -253,10 +253,10 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 
 		$data['extensions'] = [];
 
-        $extensions = $this->strip($response_info['extensions'], $config);
+		$extensions = $this->strip($response_info['extensions'], $config);
 
-        if ($extensions) {
-            foreach ($extensions as $result) {
+		if ($extensions) {
+			foreach ($extensions as $result) {
 				$data['extensions'][] = [
 					'name'         => $result['name'],
 					'description'  => $result['description'],
@@ -306,7 +306,7 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 			$url .= '&sort=' . $this->request->get['sort'];
 		}
 
-        $categories = $this->strip($categories_info['categories'], $config);
+		$categories = $this->strip($categories_info['categories'], $config);
 
 		$data['categories'] = [];
 
@@ -316,13 +316,13 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 			'href'  => $this->url->link('marketplace/opencartforum', 'user_token=' . $this->session->data['user_token'] . $url, true)
 		];
 
-        foreach ($categories as $category) {
-            $data['categories'][] = [
-                'text'  => $category['text'],
-                'value' => $category['value'],
-                'href'  => $this->url->link('marketplace/opencartforum', 'user_token=' . $this->session->data['user_token'] . '&filter_category='.$category['value']. $url, true)
-            ];
-        }
+		foreach ($categories as $category) {
+			$data['categories'][] = [
+				'text'  => $category['text'],
+				'value' => $category['value'],
+				'href'  => $this->url->link('marketplace/opencartforum', 'user_token=' . $this->session->data['user_token'] . '&filter_category=' . $category['value'] . $url, true)
+			];
+		}
 
 		// Licenses
 		$url = '';
@@ -497,14 +497,14 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 	/**
 	 * @return object|\Opencart\System\Engine\Action|null
 	 */
-	public function info(): object|null {
+	public function info(): ?object {
 		if (isset($this->request->get['extension_id'])) {
 			$extension_id = (int)$this->request->get['extension_id'];
 		} else {
 			$extension_id = 0;
 		}
 
-        $this->document->setTitle($this->language->get('heading_title'));
+		$this->document->setTitle($this->language->get('heading_title'));
 		$time = time();
 		$url = '&domain=' . $this->request->server['HTTP_HOST'];
 		$url .= '&version=' . urlencode(VERSION);
@@ -532,7 +532,6 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 			$this->load->language('marketplace/opencartforum');
 
 			$this->document->setTitle($this->language->get('heading_title'));
-
 
 			$data['user_token'] = $this->session->data['user_token'];
 
@@ -597,44 +596,43 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 			$data['member_image'] = $response_info['member_image'];
 			$data['filter_member'] = $this->url->link('marketplace/opencartforum', 'user_token=' . $this->session->data['user_token'] . '&filter_member=' . $response_info['member_username']);
 
-            $this->load->helper('HTMLPurifier/Bootstrap');
+			$this->load->helper('HTMLPurifier/Bootstrap');
 
-            \HTMLPurifier_Bootstrap::registerAutoload();
+			\HTMLPurifier_Bootstrap::registerAutoload();
 
-            $config = \HTMLPurifier_Config::createDefault();
-            $config->set('AutoFormat.RemoveEmpty', true);
-            $config->set('HTML.Allowed', 'div,span,p,br,hr,h1,h2,h3,h4,h5,h6,strong,b,em,i,u,s,del,ins,sub,sup,small,mark,code,kbd,samp,var,abbr,pre,blockquote,ul,ol,li,dl,dt,dd,a,img,table,thead,tbody,tfoot,tr,th,td,caption,figure,figcaption');
-            $config->set('HTML.AllowedAttributes', '*.style, *.title, abbr.title, a.href, a.target, a.rel, img.src, img.alt, img.width, img.height, td.colspan, td.rowspan, th.colspan, th.rowspan, th.scope, ol.start, li.value');
-            $config->set('CSS.AllowedProperties', 'font-size, font-weight, font-style, font-family, text-align, text-decoration, text-transform, line-height, letter-spacing, color, background-color, border, border-top, border-right, border-bottom, border-left, border-color, border-style, border-width, padding, padding-top, padding-right, padding-bottom, padding-left, margin, margin-top, margin-right, margin-bottom, margin-left, width, max-width, height, max-height, list-style-type, vertical-align, white-space');
-            $config->set('CSS.MaxImgLength', '1200px');
-            $config->set('HTML.MaxImgLength', 1200);
-            $config->set('URI.AllowedSchemes', ['http' => true, 'https' => true, 'mailto' => true]);
-            $config->set('Attr.AllowedClasses', []);
-            $config->set('HTML.Nofollow', true);
-            $config->set('HTML.TargetBlank', true);
+			$config = \HTMLPurifier_Config::createDefault();
+			$config->set('AutoFormat.RemoveEmpty', true);
+			$config->set('HTML.Allowed', 'div,span,p,br,hr,h1,h2,h3,h4,h5,h6,strong,b,em,i,u,s,del,ins,sub,sup,small,mark,code,kbd,samp,var,abbr,pre,blockquote,ul,ol,li,dl,dt,dd,a,img,table,thead,tbody,tfoot,tr,th,td,caption,figure,figcaption');
+			$config->set('HTML.AllowedAttributes', '*.style, *.title, abbr.title, a.href, a.target, a.rel, img.src, img.alt, img.width, img.height, td.colspan, td.rowspan, th.colspan, th.rowspan, th.scope, ol.start, li.value');
+			$config->set('CSS.AllowedProperties', 'font-size, font-weight, font-style, font-family, text-align, text-decoration, text-transform, line-height, letter-spacing, color, background-color, border, border-top, border-right, border-bottom, border-left, border-color, border-style, border-width, padding, padding-top, padding-right, padding-bottom, padding-left, margin, margin-top, margin-right, margin-bottom, margin-left, width, max-width, height, max-height, list-style-type, vertical-align, white-space');
+			$config->set('CSS.MaxImgLength', '1200px');
+			$config->set('HTML.MaxImgLength', 1200);
+			$config->set('URI.AllowedSchemes', ['http' => true, 'https' => true, 'mailto' => true]);
+			$config->set('Attr.AllowedClasses', []);
+			$config->set('HTML.Nofollow', true);
+			$config->set('HTML.TargetBlank', true);
 
+			$response_info = $this->strip($response_info, $config);
 
-            $response_info = $this->strip($response_info, $config);
+			foreach ($response_info as $key => $value) {
+				$data[$key] = $value;
+			}
 
-            foreach ($response_info as $key => $value) {
-                $data[$key] = $value;
-            }
+			$data['date_added'] = date($this->language->get('date_format_short'), strtotime($response_info['date_added']));
+			$data['date_modified'] = date($this->language->get('date_format_short'), strtotime($response_info['date_modified']));
+			$member_date_added = trim((string)$response_info['member_date_added']);
 
-            $data['date_added'] = date($this->language->get('date_format_short'), strtotime($response_info['date_added']));
-            $data['date_modified'] = date($this->language->get('date_format_short'), strtotime($response_info['date_modified']));
-            $member_date_added = trim((string)$response_info['member_date_added']);
+			$member_date = \DateTime::createFromFormat('!d.m.y H:i', $member_date_added);
 
-            $member_date = \DateTime::createFromFormat('d.m.y H:i', $member_date_added);
+			if (!$member_date) {
+				$member_timestamp = strtotime($member_date_added);
 
-            if (!$member_date) {
-                $member_timestamp = strtotime($member_date_added);
+				$member_date = $member_timestamp ? (new \DateTime())->setTimestamp($member_timestamp) : null;
+			}
 
-                $member_date = $member_timestamp ? (new \DateTime())->setTimestamp($member_timestamp) : null;
-            }
+			$data['member_date_added'] = $member_date ? $member_date->format($this->language->get('date_format_short')) : '';
 
-            $data['member_date_added'] = $member_date ? $member_date->format($this->language->get('date_format_short')) : '';
-
-            if (isset($response_info['comment_total'])) {
+			if (isset($response_info['comment_total'])) {
 				$data['comment_total'] = $response_info['comment_total'];
 			} else {
 				$data['comment_total'] = 0;
@@ -666,23 +664,29 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 		}
 	}
 
-    /**
-     * @return string|array
-     */
+	/**
+	 * @param mixed $string
+	 * @param mixed $config
+	 *
+	 * @return array|string
+	 */
 
-    /**
-     * @param array<mixed>|string  $string
-     * @param \HTMLPurifier_Config $config
-     *
-     * @return array<mixed>|string
-     */
-    private function strip($string, $config): string|array {
-        $purifier = new \HTMLPurifier($config);
-        if (is_array($string))  {
-            foreach ($string as $k => $v) {
-                $string[$k] = $this->strip($v, $config); } return $string;
-        }
+	/**
+	 * @param array<mixed>|string  $string
+	 * @param \HTMLPurifier_Config $config
+	 *
+	 * @return array<mixed>|string
+	 */
+	private function strip($string, $config): array|string {
+		$purifier = new \HTMLPurifier($config);
+		if (is_array($string)) {
+			foreach ($string as $k => $v) {
+				$string[$k] = $this->strip($v, $config);
+			}
 
-        return $purifier->purify($string);
-    }
+return $string;
+		}
+
+		return $purifier->purify($string);
+	}
 }

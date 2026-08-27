@@ -178,8 +178,11 @@ return $config
     ->setFinder(PhpCsFixer\Finder::create()
         ->in(__DIR__ . '/upload/')
          ->exclude([
-             __DIR__ . '/upload/system/storage/vendor/',
+             // Third party code, kept as the vendor ships it
+             'system/storage',
+             'system/helper/HTMLPurifier',
          ])
+         ->notName('HTMLPurifier.php')
         // ->append([
         //     'file-to-include',
         // ])

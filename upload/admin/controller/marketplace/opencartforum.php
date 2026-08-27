@@ -605,8 +605,7 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
             $config->set('AutoFormat.RemoveEmpty', true);
             $config->set('HTML.Allowed', 'div,span,p,br,hr,h1,h2,h3,h4,h5,h6,strong,b,em,i,u,s,del,ins,sub,sup,small,mark,code,kbd,samp,var,abbr,pre,blockquote,ul,ol,li,dl,dt,dd,a,img,table,thead,tbody,tfoot,tr,th,td,caption,figure,figcaption');
             $config->set('HTML.AllowedAttributes', '*.style, *.title, abbr.title, a.href, a.target, a.rel, img.src, img.alt, img.width, img.height, td.colspan, td.rowspan, th.colspan, th.rowspan, th.scope, ol.start, li.value');
-            $config->set('CSS.AllowedProperties', 'font-size, font-weight, font-style, font-family, text-align, text-decoration, text-transform, line-height, letter-spacing, color, background, background-color, border, border-top, border-right, border-bottom, border-left, border-color, border-style, border-width, padding, padding-top, padding-right, padding-bottom, padding-left, margin, margin-top, margin-right, margin-bottom, margin-left, width, max-width, height, max-height, list-style-type, vertical-align, white-space');
-            $config->set('CSS.AllowTracingURI', false);
+            $config->set('CSS.AllowedProperties', 'font-size, font-weight, font-style, font-family, text-align, text-decoration, text-transform, line-height, letter-spacing, color, background-color, border, border-top, border-right, border-bottom, border-left, border-color, border-style, border-width, padding, padding-top, padding-right, padding-bottom, padding-left, margin, margin-top, margin-right, margin-bottom, margin-left, width, max-width, height, max-height, list-style-type, vertical-align, white-space');
             $config->set('CSS.MaxImgLength', '1200px');
             $config->set('HTML.MaxImgLength', 1200);
             $config->set('URI.AllowedSchemes', ['http' => true, 'https' => true, 'mailto' => true]);

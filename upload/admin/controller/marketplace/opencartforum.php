@@ -53,7 +53,7 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 		if (isset($this->request->get['sort'])) {
 			$sort = (string)$this->request->get['sort'];
 		} else {
-			$sort = 'date_modified';
+			$sort = 'date_added';
 		}
 
 		if (isset($this->request->get['page'])) {
@@ -411,15 +411,15 @@ class OpenCartForum extends \Opencart\System\Engine\Controller {
 		$data['sorts'] = [];
 
 		$data['sorts'][] = [
-			'text'  => $this->language->get('text_date_modified'),
-			'value' => 'date_modified',
-			'href'  => $this->url->link('marketplace/opencartforum', 'user_token=' . $this->session->data['user_token'] . $url . '&sort=date_modified')
-		];
-
-		$data['sorts'][] = [
 			'text'  => $this->language->get('text_date_added'),
 			'value' => 'date_added',
 			'href'  => $this->url->link('marketplace/opencartforum', 'user_token=' . $this->session->data['user_token'] . $url . '&sort=date_added')
+		];
+
+		$data['sorts'][] = [
+			'text'  => $this->language->get('text_date_modified'),
+			'value' => 'date_modified',
+			'href'  => $this->url->link('marketplace/opencartforum', 'user_token=' . $this->session->data['user_token'] . $url . '&sort=date_modified')
 		];
 
 		$data['sorts'][] = [

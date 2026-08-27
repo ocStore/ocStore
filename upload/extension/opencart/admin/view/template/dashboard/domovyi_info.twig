@@ -1,67 +1,23 @@
 <div id="domovyi-launcher">
-  <button type="button" id="button-domovyi-open" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ text_open }}" class="btn btn-dark shadow">
-<svg viewBox="0 0 128 128" width="26" height="26" xmlns="http://www.w3.org/2000/svg" class="align-text-bottom me-1" role="img" aria-hidden="true">
+  <button type="button" id="button-domovyi-open" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ text_open }}" class="btn shadow">
+<svg viewBox="0 0 64 64" width="24" height="24" xmlns="http://www.w3.org/2000/svg" class="align-text-bottom me-1" role="img" aria-hidden="true">
   <defs>
-    <linearGradient id="dm-greenlauncher" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#7dffae"/>
-      <stop offset=".55" stop-color="#33e878"/>
-      <stop offset="1" stop-color="#0f9b4d"/>
-    </linearGradient>
-    <linearGradient id="dm-hatlauncher" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#4d5f7a"/>
-      <stop offset="1" stop-color="#232e3f"/>
-    </linearGradient>
-    <linearGradient id="dm-facelauncher" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#42506650"/>
-      <stop offset="0" stop-color="#425066"/>
-      <stop offset="1" stop-color="#1e2735"/>
-    </linearGradient>
-    <linearGradient id="dm-beardlauncher" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".45" stop-color="#dbe4ef"/>
-      <stop offset="1" stop-color="#a4b2c6"/>
-    </linearGradient>
-    <filter id="dm-blurlauncher" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="2.6"/>
-    </filter>
+    <mask id="dm-mlauncher" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#000"/>
+      <path d="M32 2.5 8.5 20h47z" fill="#fff"/>
+      <rect x="7" y="18" width="50" height="5.5" rx="2.75" fill="#fff"/>
+      <circle cx="10.5" cy="33" r="5" fill="#fff"/>
+      <circle cx="53.5" cy="33" r="5" fill="#fff"/>
+      <rect x="12.5" y="21" width="39" height="33" rx="13.5" fill="#fff"/>
+      <rect x="19.5" y="30" width="9" height="12.5" rx="4.5" fill="#000"/>
+      <rect x="35.5" y="30" width="9" height="12.5" rx="4.5" fill="#000"/>
+      <path d="M25 46.5c2.4 3 4.7 4.5 7 4.5s4.6-1.5 7-4.5" stroke="#000" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+      <path d="M32 22.6l3 3-3 3-3-3z" fill="#000"/>
+      <circle cx="10.5" cy="33" r="1.8" fill="#000"/>
+      <circle cx="53.5" cy="33" r="1.8" fill="#000"/>
+    </mask>
   </defs>
-
-  <path d="M64 14.5 106.5 30v34.5c0 25.8-17.8 42.4-42.5 50.5C39.3 106.9 21.5 90.3 21.5 64.5V30z" fill="#2ee36a" fill-opacity=".07" stroke="url(#dm-greenlauncher)" stroke-width="2.4"/>
-  <circle cx="64" cy="14.5" r="2.8" fill="url(#dm-greenlauncher)"/>
-  <circle cx="106.5" cy="30" r="2.4" fill="url(#dm-greenlauncher)"/>
-  <circle cx="21.5" cy="30" r="2.4" fill="url(#dm-greenlauncher)"/>
-
-  <path d="M64 26 42 43.5h44z" fill="url(#dm-hatlauncher)" stroke="#8fa2bd" stroke-opacity=".45" stroke-width="1.2" stroke-linejoin="round"/>
-  <path d="M64 26 42 43.5h22z" fill="#ffffff" fill-opacity=".1"/>
-  <rect x="37.5" y="42.5" width="53" height="9" rx="4.5" fill="url(#dm-hatlauncher)" stroke="#8fa2bd" stroke-opacity=".45" stroke-width="1.2"/>
-  <path d="M47 47l2.6-2.6L52.2 47l-2.6 2.6zM57 47l2.6-2.6L62.2 47l-2.6 2.6zM67 47l2.6-2.6L72.2 47l-2.6 2.6zM77 47l2.6-2.6L82.2 47l-2.6 2.6z" fill="url(#dm-greenlauncher)"/>
-
-  <path d="M44 60c0-4.4 3.6-8 8-8h24c4.4 0 8 3.6 8 8v11c0 8.8-8.1 15-20 15s-20-6.2-20-15z" fill="url(#dm-facelauncher)" stroke="#8fa2bd" stroke-opacity=".4" stroke-width="1.2"/>
-  <rect x="47.5" y="55.5" width="13.5" height="4.2" rx="2.1" fill="#b9c7db" transform="rotate(-7 54 57.6)"/>
-  <rect x="67" y="55.5" width="13.5" height="4.2" rx="2.1" fill="#b9c7db" transform="rotate(7 74 57.6)"/>
-
-  <g filter="url(#dm-blurlauncher)" opacity=".9">
-    <rect x="50.5" y="61.5" width="9" height="12" rx="4.5" fill="#3ff58c"/>
-    <rect x="68.5" y="61.5" width="9" height="12" rx="4.5" fill="#3ff58c"/>
-  </g>
-  <rect x="50.5" y="61.5" width="9" height="12" rx="4.5" fill="url(#dm-greenlauncher)"/>
-  <rect x="68.5" y="61.5" width="9" height="12" rx="4.5" fill="url(#dm-greenlauncher)"/>
-  <rect x="52.6" y="63.4" width="3" height="4" rx="1.5" fill="#ffffff" fill-opacity=".9"/>
-  <rect x="70.6" y="63.4" width="3" height="4" rx="1.5" fill="#ffffff" fill-opacity=".9"/>
-
-  <path d="M40.5 76c-1.6 12.6.6 22.4 6.6 29.4 4.6 5.4 10.5 8.4 16.9 8.4s12.3-3 16.9-8.4c6-7 8.2-16.8 6.6-29.4-2.4 5.4-6.6 9.1-12.6 11.1-3.5 1.2-7.1 1.8-10.9 1.8s-7.4-.6-10.9-1.8c-6-2-10.2-5.7-12.6-11.1z" fill="url(#dm-beardlauncher)" stroke="#8394ab" stroke-opacity=".6" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M53.5 112c2.4-3.6 3.7-8.5 3.9-14.8M74.5 112c-2.4-3.6-3.7-8.5-3.9-14.8M64 114.5V98" stroke="#8394ab" stroke-opacity=".5" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-  <path d="M52.5 76.5c3 3.6 6.8 5.4 11.5 5.4s8.5-1.8 11.5-5.4" fill="#ffffff" stroke="#8394ab" stroke-opacity=".55" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M55.5 78.8c2.3 2.2 5.1 3.3 8.5 3.3s6.2-1.1 8.5-3.3" stroke="#98a7bb" stroke-opacity=".65" stroke-width="1.3" stroke-linecap="round" fill="none"/>
-
-  <path d="M52 92v8M64 95.5v9M76 92v8" stroke="url(#dm-greenlauncher)" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="52" cy="101.8" r="2" fill="url(#dm-greenlauncher)"/>
-  <circle cx="76" cy="101.8" r="2" fill="url(#dm-greenlauncher)"/>
-  <path d="M64 106l3.6 3.6-3.6 3.6-3.6-3.6z" fill="url(#dm-greenlauncher)"/>
-
-  <path d="M44 65h-9M84 65h9" stroke="url(#dm-greenlauncher)" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="32.5" cy="65" r="2.6" fill="url(#dm-greenlauncher)"/>
-  <circle cx="95.5" cy="65" r="2.6" fill="url(#dm-greenlauncher)"/>
+  <rect width="64" height="64" fill="currentColor" mask="url(#dm-mlauncher)"/>
 </svg>
     {{ heading_title }}
     {% if issues.total %}
@@ -73,68 +29,24 @@
 </div>
 <div id="offcanvas-domovyi" class="offcanvas offcanvas-end" style="width: 780px; max-width: 100%;" tabindex="-1">
   <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title text-truncate d-flex align-items-center gap-2"><svg viewBox="0 0 128 128" width="30" height="30" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+    <h5 class="offcanvas-title text-truncate d-flex align-items-center gap-2"><svg viewBox="0 0 64 64" width="28" height="28" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
   <defs>
-    <linearGradient id="dm-greenpanel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#7dffae"/>
-      <stop offset=".55" stop-color="#33e878"/>
-      <stop offset="1" stop-color="#0f9b4d"/>
-    </linearGradient>
-    <linearGradient id="dm-hatpanel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#4d5f7a"/>
-      <stop offset="1" stop-color="#232e3f"/>
-    </linearGradient>
-    <linearGradient id="dm-facepanel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#42506650"/>
-      <stop offset="0" stop-color="#425066"/>
-      <stop offset="1" stop-color="#1e2735"/>
-    </linearGradient>
-    <linearGradient id="dm-beardpanel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".45" stop-color="#dbe4ef"/>
-      <stop offset="1" stop-color="#a4b2c6"/>
-    </linearGradient>
-    <filter id="dm-blurpanel" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="2.6"/>
-    </filter>
+    <mask id="dm-mpanel" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#000"/>
+      <path d="M32 2.5 8.5 20h47z" fill="#fff"/>
+      <rect x="7" y="18" width="50" height="5.5" rx="2.75" fill="#fff"/>
+      <circle cx="10.5" cy="33" r="5" fill="#fff"/>
+      <circle cx="53.5" cy="33" r="5" fill="#fff"/>
+      <rect x="12.5" y="21" width="39" height="33" rx="13.5" fill="#fff"/>
+      <rect x="19.5" y="30" width="9" height="12.5" rx="4.5" fill="#000"/>
+      <rect x="35.5" y="30" width="9" height="12.5" rx="4.5" fill="#000"/>
+      <path d="M25 46.5c2.4 3 4.7 4.5 7 4.5s4.6-1.5 7-4.5" stroke="#000" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+      <path d="M32 22.6l3 3-3 3-3-3z" fill="#000"/>
+      <circle cx="10.5" cy="33" r="1.8" fill="#000"/>
+      <circle cx="53.5" cy="33" r="1.8" fill="#000"/>
+    </mask>
   </defs>
-
-  <path d="M64 14.5 106.5 30v34.5c0 25.8-17.8 42.4-42.5 50.5C39.3 106.9 21.5 90.3 21.5 64.5V30z" fill="#2ee36a" fill-opacity=".07" stroke="url(#dm-greenpanel)" stroke-width="2.4"/>
-  <circle cx="64" cy="14.5" r="2.8" fill="url(#dm-greenpanel)"/>
-  <circle cx="106.5" cy="30" r="2.4" fill="url(#dm-greenpanel)"/>
-  <circle cx="21.5" cy="30" r="2.4" fill="url(#dm-greenpanel)"/>
-
-  <path d="M64 26 42 43.5h44z" fill="url(#dm-hatpanel)" stroke="#8fa2bd" stroke-opacity=".45" stroke-width="1.2" stroke-linejoin="round"/>
-  <path d="M64 26 42 43.5h22z" fill="#ffffff" fill-opacity=".1"/>
-  <rect x="37.5" y="42.5" width="53" height="9" rx="4.5" fill="url(#dm-hatpanel)" stroke="#8fa2bd" stroke-opacity=".45" stroke-width="1.2"/>
-  <path d="M47 47l2.6-2.6L52.2 47l-2.6 2.6zM57 47l2.6-2.6L62.2 47l-2.6 2.6zM67 47l2.6-2.6L72.2 47l-2.6 2.6zM77 47l2.6-2.6L82.2 47l-2.6 2.6z" fill="url(#dm-greenpanel)"/>
-
-  <path d="M44 60c0-4.4 3.6-8 8-8h24c4.4 0 8 3.6 8 8v11c0 8.8-8.1 15-20 15s-20-6.2-20-15z" fill="url(#dm-facepanel)" stroke="#8fa2bd" stroke-opacity=".4" stroke-width="1.2"/>
-  <rect x="47.5" y="55.5" width="13.5" height="4.2" rx="2.1" fill="#b9c7db" transform="rotate(-7 54 57.6)"/>
-  <rect x="67" y="55.5" width="13.5" height="4.2" rx="2.1" fill="#b9c7db" transform="rotate(7 74 57.6)"/>
-
-  <g filter="url(#dm-blurpanel)" opacity=".9">
-    <rect x="50.5" y="61.5" width="9" height="12" rx="4.5" fill="#3ff58c"/>
-    <rect x="68.5" y="61.5" width="9" height="12" rx="4.5" fill="#3ff58c"/>
-  </g>
-  <rect x="50.5" y="61.5" width="9" height="12" rx="4.5" fill="url(#dm-greenpanel)"/>
-  <rect x="68.5" y="61.5" width="9" height="12" rx="4.5" fill="url(#dm-greenpanel)"/>
-  <rect x="52.6" y="63.4" width="3" height="4" rx="1.5" fill="#ffffff" fill-opacity=".9"/>
-  <rect x="70.6" y="63.4" width="3" height="4" rx="1.5" fill="#ffffff" fill-opacity=".9"/>
-
-  <path d="M40.5 76c-1.6 12.6.6 22.4 6.6 29.4 4.6 5.4 10.5 8.4 16.9 8.4s12.3-3 16.9-8.4c6-7 8.2-16.8 6.6-29.4-2.4 5.4-6.6 9.1-12.6 11.1-3.5 1.2-7.1 1.8-10.9 1.8s-7.4-.6-10.9-1.8c-6-2-10.2-5.7-12.6-11.1z" fill="url(#dm-beardpanel)" stroke="#8394ab" stroke-opacity=".6" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M53.5 112c2.4-3.6 3.7-8.5 3.9-14.8M74.5 112c-2.4-3.6-3.7-8.5-3.9-14.8M64 114.5V98" stroke="#8394ab" stroke-opacity=".5" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-  <path d="M52.5 76.5c3 3.6 6.8 5.4 11.5 5.4s8.5-1.8 11.5-5.4" fill="#ffffff" stroke="#8394ab" stroke-opacity=".55" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M55.5 78.8c2.3 2.2 5.1 3.3 8.5 3.3s6.2-1.1 8.5-3.3" stroke="#98a7bb" stroke-opacity=".65" stroke-width="1.3" stroke-linecap="round" fill="none"/>
-
-  <path d="M52 92v8M64 95.5v9M76 92v8" stroke="url(#dm-greenpanel)" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="52" cy="101.8" r="2" fill="url(#dm-greenpanel)"/>
-  <circle cx="76" cy="101.8" r="2" fill="url(#dm-greenpanel)"/>
-  <path d="M64 106l3.6 3.6-3.6 3.6-3.6-3.6z" fill="url(#dm-greenpanel)"/>
-
-  <path d="M44 65h-9M84 65h9" stroke="url(#dm-greenpanel)" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="32.5" cy="65" r="2.6" fill="url(#dm-greenpanel)"/>
-  <circle cx="95.5" cy="65" r="2.6" fill="url(#dm-greenpanel)"/>
+  <rect width="64" height="64" fill="currentColor" mask="url(#dm-mpanel)"/>
 </svg> {{ heading_title }}</h5>
     <div class="ms-auto d-flex align-items-center gap-2">
       <button type="button" id="button-about" data-bs-toggle="tooltip" title="{{ text_about }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-circle-info"></i></button>
@@ -150,134 +62,46 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title d-flex align-items-center gap-2"><svg viewBox="0 0 128 128" width="30" height="30" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+        <h5 class="modal-title d-flex align-items-center gap-2"><svg viewBox="0 0 64 64" width="28" height="28" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
   <defs>
-    <linearGradient id="dm-greenmodaltitle" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#7dffae"/>
-      <stop offset=".55" stop-color="#33e878"/>
-      <stop offset="1" stop-color="#0f9b4d"/>
-    </linearGradient>
-    <linearGradient id="dm-hatmodaltitle" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#4d5f7a"/>
-      <stop offset="1" stop-color="#232e3f"/>
-    </linearGradient>
-    <linearGradient id="dm-facemodaltitle" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#42506650"/>
-      <stop offset="0" stop-color="#425066"/>
-      <stop offset="1" stop-color="#1e2735"/>
-    </linearGradient>
-    <linearGradient id="dm-beardmodaltitle" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".45" stop-color="#dbe4ef"/>
-      <stop offset="1" stop-color="#a4b2c6"/>
-    </linearGradient>
-    <filter id="dm-blurmodaltitle" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="2.6"/>
-    </filter>
+    <mask id="dm-mmodaltitle" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#000"/>
+      <path d="M32 2.5 8.5 20h47z" fill="#fff"/>
+      <rect x="7" y="18" width="50" height="5.5" rx="2.75" fill="#fff"/>
+      <circle cx="10.5" cy="33" r="5" fill="#fff"/>
+      <circle cx="53.5" cy="33" r="5" fill="#fff"/>
+      <rect x="12.5" y="21" width="39" height="33" rx="13.5" fill="#fff"/>
+      <rect x="19.5" y="30" width="9" height="12.5" rx="4.5" fill="#000"/>
+      <rect x="35.5" y="30" width="9" height="12.5" rx="4.5" fill="#000"/>
+      <path d="M25 46.5c2.4 3 4.7 4.5 7 4.5s4.6-1.5 7-4.5" stroke="#000" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+      <path d="M32 22.6l3 3-3 3-3-3z" fill="#000"/>
+      <circle cx="10.5" cy="33" r="1.8" fill="#000"/>
+      <circle cx="53.5" cy="33" r="1.8" fill="#000"/>
+    </mask>
   </defs>
-
-  <path d="M64 14.5 106.5 30v34.5c0 25.8-17.8 42.4-42.5 50.5C39.3 106.9 21.5 90.3 21.5 64.5V30z" fill="#2ee36a" fill-opacity=".07" stroke="url(#dm-greenmodaltitle)" stroke-width="2.4"/>
-  <circle cx="64" cy="14.5" r="2.8" fill="url(#dm-greenmodaltitle)"/>
-  <circle cx="106.5" cy="30" r="2.4" fill="url(#dm-greenmodaltitle)"/>
-  <circle cx="21.5" cy="30" r="2.4" fill="url(#dm-greenmodaltitle)"/>
-
-  <path d="M64 26 42 43.5h44z" fill="url(#dm-hatmodaltitle)" stroke="#8fa2bd" stroke-opacity=".45" stroke-width="1.2" stroke-linejoin="round"/>
-  <path d="M64 26 42 43.5h22z" fill="#ffffff" fill-opacity=".1"/>
-  <rect x="37.5" y="42.5" width="53" height="9" rx="4.5" fill="url(#dm-hatmodaltitle)" stroke="#8fa2bd" stroke-opacity=".45" stroke-width="1.2"/>
-  <path d="M47 47l2.6-2.6L52.2 47l-2.6 2.6zM57 47l2.6-2.6L62.2 47l-2.6 2.6zM67 47l2.6-2.6L72.2 47l-2.6 2.6zM77 47l2.6-2.6L82.2 47l-2.6 2.6z" fill="url(#dm-greenmodaltitle)"/>
-
-  <path d="M44 60c0-4.4 3.6-8 8-8h24c4.4 0 8 3.6 8 8v11c0 8.8-8.1 15-20 15s-20-6.2-20-15z" fill="url(#dm-facemodaltitle)" stroke="#8fa2bd" stroke-opacity=".4" stroke-width="1.2"/>
-  <rect x="47.5" y="55.5" width="13.5" height="4.2" rx="2.1" fill="#b9c7db" transform="rotate(-7 54 57.6)"/>
-  <rect x="67" y="55.5" width="13.5" height="4.2" rx="2.1" fill="#b9c7db" transform="rotate(7 74 57.6)"/>
-
-  <g filter="url(#dm-blurmodaltitle)" opacity=".9">
-    <rect x="50.5" y="61.5" width="9" height="12" rx="4.5" fill="#3ff58c"/>
-    <rect x="68.5" y="61.5" width="9" height="12" rx="4.5" fill="#3ff58c"/>
-  </g>
-  <rect x="50.5" y="61.5" width="9" height="12" rx="4.5" fill="url(#dm-greenmodaltitle)"/>
-  <rect x="68.5" y="61.5" width="9" height="12" rx="4.5" fill="url(#dm-greenmodaltitle)"/>
-  <rect x="52.6" y="63.4" width="3" height="4" rx="1.5" fill="#ffffff" fill-opacity=".9"/>
-  <rect x="70.6" y="63.4" width="3" height="4" rx="1.5" fill="#ffffff" fill-opacity=".9"/>
-
-  <path d="M40.5 76c-1.6 12.6.6 22.4 6.6 29.4 4.6 5.4 10.5 8.4 16.9 8.4s12.3-3 16.9-8.4c6-7 8.2-16.8 6.6-29.4-2.4 5.4-6.6 9.1-12.6 11.1-3.5 1.2-7.1 1.8-10.9 1.8s-7.4-.6-10.9-1.8c-6-2-10.2-5.7-12.6-11.1z" fill="url(#dm-beardmodaltitle)" stroke="#8394ab" stroke-opacity=".6" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M53.5 112c2.4-3.6 3.7-8.5 3.9-14.8M74.5 112c-2.4-3.6-3.7-8.5-3.9-14.8M64 114.5V98" stroke="#8394ab" stroke-opacity=".5" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-  <path d="M52.5 76.5c3 3.6 6.8 5.4 11.5 5.4s8.5-1.8 11.5-5.4" fill="#ffffff" stroke="#8394ab" stroke-opacity=".55" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M55.5 78.8c2.3 2.2 5.1 3.3 8.5 3.3s6.2-1.1 8.5-3.3" stroke="#98a7bb" stroke-opacity=".65" stroke-width="1.3" stroke-linecap="round" fill="none"/>
-
-  <path d="M52 92v8M64 95.5v9M76 92v8" stroke="url(#dm-greenmodaltitle)" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="52" cy="101.8" r="2" fill="url(#dm-greenmodaltitle)"/>
-  <circle cx="76" cy="101.8" r="2" fill="url(#dm-greenmodaltitle)"/>
-  <path d="M64 106l3.6 3.6-3.6 3.6-3.6-3.6z" fill="url(#dm-greenmodaltitle)"/>
-
-  <path d="M44 65h-9M84 65h9" stroke="url(#dm-greenmodaltitle)" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="32.5" cy="65" r="2.6" fill="url(#dm-greenmodaltitle)"/>
-  <circle cx="95.5" cy="65" r="2.6" fill="url(#dm-greenmodaltitle)"/>
+  <rect width="64" height="64" fill="currentColor" mask="url(#dm-mmodaltitle)"/>
 </svg> {{ heading_title }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="text-center text-body mb-3"><svg viewBox="0 0 128 128" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+        <div class="text-center text-body mb-3"><svg viewBox="0 0 64 64" width="120" height="120" xmlns="http://www.w3.org/2000/svg" class="text-success" role="img" aria-hidden="true">
   <defs>
-    <linearGradient id="dm-greenmodal" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#7dffae"/>
-      <stop offset=".55" stop-color="#33e878"/>
-      <stop offset="1" stop-color="#0f9b4d"/>
-    </linearGradient>
-    <linearGradient id="dm-hatmodal" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#4d5f7a"/>
-      <stop offset="1" stop-color="#232e3f"/>
-    </linearGradient>
-    <linearGradient id="dm-facemodal" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#42506650"/>
-      <stop offset="0" stop-color="#425066"/>
-      <stop offset="1" stop-color="#1e2735"/>
-    </linearGradient>
-    <linearGradient id="dm-beardmodal" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".45" stop-color="#dbe4ef"/>
-      <stop offset="1" stop-color="#a4b2c6"/>
-    </linearGradient>
-    <filter id="dm-blurmodal" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="2.6"/>
-    </filter>
+    <mask id="dm-mmodal" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#000"/>
+      <path d="M32 2.5 8.5 20h47z" fill="#fff"/>
+      <rect x="7" y="18" width="50" height="5.5" rx="2.75" fill="#fff"/>
+      <circle cx="10.5" cy="33" r="5" fill="#fff"/>
+      <circle cx="53.5" cy="33" r="5" fill="#fff"/>
+      <rect x="12.5" y="21" width="39" height="33" rx="13.5" fill="#fff"/>
+      <rect x="19.5" y="30" width="9" height="12.5" rx="4.5" fill="#000"/>
+      <rect x="35.5" y="30" width="9" height="12.5" rx="4.5" fill="#000"/>
+      <path d="M25 46.5c2.4 3 4.7 4.5 7 4.5s4.6-1.5 7-4.5" stroke="#000" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+      <path d="M32 22.6l3 3-3 3-3-3z" fill="#000"/>
+      <circle cx="10.5" cy="33" r="1.8" fill="#000"/>
+      <circle cx="53.5" cy="33" r="1.8" fill="#000"/>
+    </mask>
   </defs>
-
-  <path d="M64 14.5 106.5 30v34.5c0 25.8-17.8 42.4-42.5 50.5C39.3 106.9 21.5 90.3 21.5 64.5V30z" fill="#2ee36a" fill-opacity=".07" stroke="url(#dm-greenmodal)" stroke-width="2.4"/>
-  <circle cx="64" cy="14.5" r="2.8" fill="url(#dm-greenmodal)"/>
-  <circle cx="106.5" cy="30" r="2.4" fill="url(#dm-greenmodal)"/>
-  <circle cx="21.5" cy="30" r="2.4" fill="url(#dm-greenmodal)"/>
-
-  <path d="M64 26 42 43.5h44z" fill="url(#dm-hatmodal)" stroke="#8fa2bd" stroke-opacity=".45" stroke-width="1.2" stroke-linejoin="round"/>
-  <path d="M64 26 42 43.5h22z" fill="#ffffff" fill-opacity=".1"/>
-  <rect x="37.5" y="42.5" width="53" height="9" rx="4.5" fill="url(#dm-hatmodal)" stroke="#8fa2bd" stroke-opacity=".45" stroke-width="1.2"/>
-  <path d="M47 47l2.6-2.6L52.2 47l-2.6 2.6zM57 47l2.6-2.6L62.2 47l-2.6 2.6zM67 47l2.6-2.6L72.2 47l-2.6 2.6zM77 47l2.6-2.6L82.2 47l-2.6 2.6z" fill="url(#dm-greenmodal)"/>
-
-  <path d="M44 60c0-4.4 3.6-8 8-8h24c4.4 0 8 3.6 8 8v11c0 8.8-8.1 15-20 15s-20-6.2-20-15z" fill="url(#dm-facemodal)" stroke="#8fa2bd" stroke-opacity=".4" stroke-width="1.2"/>
-  <rect x="47.5" y="55.5" width="13.5" height="4.2" rx="2.1" fill="#b9c7db" transform="rotate(-7 54 57.6)"/>
-  <rect x="67" y="55.5" width="13.5" height="4.2" rx="2.1" fill="#b9c7db" transform="rotate(7 74 57.6)"/>
-
-  <g filter="url(#dm-blurmodal)" opacity=".9">
-    <rect x="50.5" y="61.5" width="9" height="12" rx="4.5" fill="#3ff58c"/>
-    <rect x="68.5" y="61.5" width="9" height="12" rx="4.5" fill="#3ff58c"/>
-  </g>
-  <rect x="50.5" y="61.5" width="9" height="12" rx="4.5" fill="url(#dm-greenmodal)"/>
-  <rect x="68.5" y="61.5" width="9" height="12" rx="4.5" fill="url(#dm-greenmodal)"/>
-  <rect x="52.6" y="63.4" width="3" height="4" rx="1.5" fill="#ffffff" fill-opacity=".9"/>
-  <rect x="70.6" y="63.4" width="3" height="4" rx="1.5" fill="#ffffff" fill-opacity=".9"/>
-
-  <path d="M40.5 76c-1.6 12.6.6 22.4 6.6 29.4 4.6 5.4 10.5 8.4 16.9 8.4s12.3-3 16.9-8.4c6-7 8.2-16.8 6.6-29.4-2.4 5.4-6.6 9.1-12.6 11.1-3.5 1.2-7.1 1.8-10.9 1.8s-7.4-.6-10.9-1.8c-6-2-10.2-5.7-12.6-11.1z" fill="url(#dm-beardmodal)" stroke="#8394ab" stroke-opacity=".6" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M53.5 112c2.4-3.6 3.7-8.5 3.9-14.8M74.5 112c-2.4-3.6-3.7-8.5-3.9-14.8M64 114.5V98" stroke="#8394ab" stroke-opacity=".5" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-  <path d="M52.5 76.5c3 3.6 6.8 5.4 11.5 5.4s8.5-1.8 11.5-5.4" fill="#ffffff" stroke="#8394ab" stroke-opacity=".55" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M55.5 78.8c2.3 2.2 5.1 3.3 8.5 3.3s6.2-1.1 8.5-3.3" stroke="#98a7bb" stroke-opacity=".65" stroke-width="1.3" stroke-linecap="round" fill="none"/>
-
-  <path d="M52 92v8M64 95.5v9M76 92v8" stroke="url(#dm-greenmodal)" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="52" cy="101.8" r="2" fill="url(#dm-greenmodal)"/>
-  <circle cx="76" cy="101.8" r="2" fill="url(#dm-greenmodal)"/>
-  <path d="M64 106l3.6 3.6-3.6 3.6-3.6-3.6z" fill="url(#dm-greenmodal)"/>
-
-  <path d="M44 65h-9M84 65h9" stroke="url(#dm-greenmodal)" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="32.5" cy="65" r="2.6" fill="url(#dm-greenmodal)"/>
-  <circle cx="95.5" cy="65" r="2.6" fill="url(#dm-greenmodal)"/>
+  <rect width="64" height="64" fill="currentColor" mask="url(#dm-mmodal)"/>
 </svg></div>
         <p>{{ text_about_intro }}</p>
         <p class="fw-semibold">{{ text_about_community }}</p>
@@ -301,9 +125,18 @@
 }
 
 #domovyi-launcher .btn {
+	border: 0;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
 	padding: 0.5rem 1rem;
+	color: #fff;
+	background: linear-gradient(180deg, #2fb862, #17994b);
+}
+
+#domovyi-launcher .btn:hover,
+#domovyi-launcher .btn:focus {
+	color: #fff;
+	background: linear-gradient(180deg, #37cc6f, #1caa55);
 }
 </style>
 <script type="text/javascript"><!--

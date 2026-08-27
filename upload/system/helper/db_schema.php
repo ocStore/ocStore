@@ -7842,7 +7842,7 @@ function oc_db_schema() {
 			],
 			[
 				'name' => 'permission',
-				'type' => 'text'
+				'type' => 'mediumtext'
 			]
 		],
 		'primary' => [

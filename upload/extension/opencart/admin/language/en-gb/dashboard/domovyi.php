@@ -14,7 +14,6 @@ $_['text_extension']              = 'Extensions';
 $_['text_success']                = 'Success: You have modified the dashboard!';
 $_['text_edit']                   = 'Edit';
 $_['text_state']                  = 'State';
-$_['text_setting']                = 'Domovyi settings';
 $_['text_server']                 = 'Server settings';
 $_['text_dir_logs']               = 'Log directory';
 $_['text_dir_cache']              = 'System cache directory';

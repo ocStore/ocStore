@@ -1,6 +1,7 @@
 <div id="domovyi" class="card mb-3">
   <div class="card-header">
     <div class="float-end">
+      <button type="button" id="button-about" data-bs-toggle="tooltip" title="{{ text_about }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-circle-info"></i></button>
       <button type="button" id="button-phpinfo" data-bs-toggle="tooltip" title="{{ text_phpinfo }}" class="btn btn-outline-secondary btn-sm">phpinfo</button>
       <a href="{{ setting }}" data-bs-toggle="tooltip" title="{{ text_setting }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-cog"></i></a>
     </div>
@@ -57,10 +58,13 @@
           <div class="col"><button type="button" value="image" data-bs-toggle="tooltip" title="{{ entry_imagecache }}" class="btn btn-outline-secondary w-100 text-truncate button-developer"><i class="fa-regular fa-image"></i> {{ text_cache_image }}</button></div>
           <div class="col-12"><button type="button" value="all" data-bs-toggle="tooltip" title="{{ entry_allcache }}" class="btn btn-outline-danger w-100 text-truncate button-developer"><i class="fa-solid fa-broom"></i> {{ text_cache_all }}</button></div>
         </div>
-        <div class="form-check form-switch mb-4">
-          <input type="hidden" name="developer_sass" value="0"/>
-          <input type="checkbox" name="developer_sass" value="1" id="input-domovyi-sass" class="form-check-input"{% if developer_sass %} checked{% endif %}/>
-          <label for="input-domovyi-sass" class="form-check-label">{{ text_sass }}</label>
+        <div class="mb-4">
+          <div class="form-check form-switch">
+            <input type="hidden" name="developer_sass" value="0"/>
+            <input type="checkbox" name="developer_sass" value="1" id="input-domovyi-sass" class="form-check-input"{% if developer_sass %} checked{% endif %}/>
+            <label for="input-domovyi-sass" class="form-check-label">{{ entry_sass_cache }}</label>
+          </div>
+          <div class="form-text">{{ help_sass_cache }}</div>
         </div>
         <h6 class="text-uppercase text-muted small">{{ text_folders }}</h6>
         {% for folder in folders %}
@@ -224,7 +228,33 @@
     </div>
   </div>
 </div>
+<div id="modal-domovyi-about" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fa-solid fa-house-chimney-crack"></i> {{ heading_title }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ text_about_intro }}</p>
+        <p class="fw-semibold">{{ text_about_community }}</p>
+        <blockquote class="border-start border-3 ps-3 text-body-secondary fst-italic">{{ text_about_inspire }}</blockquote>
+        <div class="d-grid gap-2">
+          <a href="https://opencartforum.com/profile/3769-dinox/" target="_blank" rel="noopener" class="btn btn-outline-secondary"><i class="fa-solid fa-user"></i> {{ text_about_author }}</a>
+          <a href="https://opencartforum.com/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu" target="_blank" rel="noopener" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> {{ text_about_updates }}</a>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center"><small class="text-muted">{{ text_copyright }}</small></div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript"><!--
+$('#modal-domovyi-about').appendTo('body');
+
+$('#button-about').on('click', function() {
+    new bootstrap.Modal('#modal-domovyi-about').show();
+});
+
 function domovyi_alert(json) {
     $('#domovyi-alert').html('');
 

@@ -1124,13 +1124,10 @@ td {
     white-space: nowrap;
 }
 
-#search .dropdown-toggle {
-    border-color: var(--bs-border-color);
-}
-
-#search .dropdown-toggle::after {
-    margin-left: 0.4em;
-    vertical-align: 0.15em;
+#search .dropdown-toggle .fa-caret-down {
+    margin-left: 0.35em;
+    font-size: 0.85em;
+    opacity: 0.75;
 }
 
 #search-result {

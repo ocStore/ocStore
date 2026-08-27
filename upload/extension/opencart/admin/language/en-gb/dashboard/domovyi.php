@@ -49,6 +49,7 @@ $_['text_cache_ocmod']            = 'OCMOD';
 $_['text_cache_all']              = 'Clear everything';
 $_['text_cache_image']            = 'Resizes';
 $_['text_widget']                 = 'Widget';
+$_['text_dashboard']              = 'Dashboard';
 $_['text_unit_mb']                = 'MB';
 $_['text_unit_min']               = 'min';
 $_['text_folders']                = 'Directories';

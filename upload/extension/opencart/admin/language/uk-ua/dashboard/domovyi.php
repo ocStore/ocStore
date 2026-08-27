@@ -49,6 +49,7 @@ $_['text_cache_ocmod']            = 'OCMOD';
 $_['text_cache_all']              = 'Очистити все';
 $_['text_cache_image']            = 'Ресайзи';
 $_['text_widget']                 = 'Віджет';
+$_['text_dashboard']              = 'Панель керування';
 $_['text_unit_mb']                = 'Мб';
 $_['text_unit_min']               = 'хв';
 $_['text_folders']                = 'Теки';

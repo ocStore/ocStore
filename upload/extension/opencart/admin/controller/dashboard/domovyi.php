@@ -42,6 +42,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 
 		$data['save'] = $this->url->link('extension/opencart/dashboard/domovyi.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=dashboard');
+		$data['dashboard'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']);
 
 		$cron = $this->getCron();
 

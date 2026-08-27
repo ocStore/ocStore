@@ -43,7 +43,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		$data['save'] = $this->url->link('extension/opencart/dashboard/domovyi.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=dashboard');
 
-		$cron = (array)$this->config->get('dashboard_domovyi_cron');
+		$cron = $this->getCron();
 
 		$data['folders'] = [];
 
@@ -122,7 +122,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 
 		$data['setting'] = $this->url->link('extension/opencart/dashboard/domovyi', 'user_token=' . $this->session->data['user_token']);
 
-		$cron = (array)$this->config->get('dashboard_domovyi_cron');
+		$cron = $this->getCron();
 
 		$data['folders'] = [];
 
@@ -134,7 +134,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 
 			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
 
-			$cache = (array)$this->config->get('domovyi_folders_' . $key);
+			$cache = $this->getCache($key);
 
 			// Recalculate the folder once the period set by the user has passed
 			if (!empty($cron[$key]['status']) && $this->dateDiff(date('Y-m-d H:i:s'), (string)($cache['date'] ?? '')) > (float)($cron[$key]['time'] ?? 0) * 60) {
@@ -257,7 +257,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			$folder = $this->calcFolder($key);
 
-			$cron = (array)$this->config->get('dashboard_domovyi_cron');
+			$cron = $this->getCron();
 
 			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
 
@@ -297,6 +297,36 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		$data['phpinfo'] = preg_replace('@<style[^>]*?>.*?</style>@si', '', $data['phpinfo']);
 
 		$this->response->setOutput($this->load->view('extension/opencart/dashboard/phpinfo', $data));
+	}
+
+	/**
+	 * Get Cron
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	private function getCron(): array {
+		$cron = $this->config->get('dashboard_domovyi_cron');
+
+		return is_array($cron) ? $cron : [];
+	}
+
+	/**
+	 * Get Cache
+	 *
+	 * The last measurement of the folder, empty while it has never been measured.
+	 *
+	 * @param string $key
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function getCache(string $key): array {
+		$cache = $this->config->get('domovyi_folders_' . $key);
+
+		if (!is_array($cache) || !isset($cache['size'], $cache['files'], $cache['date'], $cache['unit']['size'], $cache['unit']['unit'])) {
+			return [];
+		}
+
+		return $cache;
 	}
 
 	/**

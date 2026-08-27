@@ -1,6 +1,6 @@
 <?php
 /**
- * @package   Domovyk
+ * @package   Domovyi
  * @author    Dinox
  * @copyright Copyright (c) 2009 - 2026, Dinox (https://opencartforum.com/)
  * @license   https://opensource.org/licenses/GPL-3.0

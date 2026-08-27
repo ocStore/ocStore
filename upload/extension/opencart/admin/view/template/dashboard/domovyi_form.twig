@@ -21,9 +21,9 @@
           <div class="row mb-3">
             <label for="input-width" class="col-sm-2 col-form-label">{{ entry_width }}</label>
             <div class="col-sm-10">
-              <select name="dashboard_domovyk_width" id="input-width" class="form-select">
+              <select name="dashboard_domovyi_width" id="input-width" class="form-select">
                 {% for column in columns %}
-                  <option value="{{ column }}"{% if column == dashboard_domovyk_width %} selected{% endif %}>{{ column }}</option>
+                  <option value="{{ column }}"{% if column == dashboard_domovyi_width %} selected{% endif %}>{{ column }}</option>
                 {% endfor %}
               </select>
             </div>
@@ -32,15 +32,15 @@
             <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
             <div class="col-sm-10">
               <div class="form-check form-switch form-switch-lg">
-                <input type="hidden" name="dashboard_domovyk_status" value="0"/>
-                <input type="checkbox" name="dashboard_domovyk_status" value="1" id="input-status" class="form-check-input"{% if dashboard_domovyk_status %} checked{% endif %}/>
+                <input type="hidden" name="dashboard_domovyi_status" value="0"/>
+                <input type="checkbox" name="dashboard_domovyi_status" value="1" id="input-status" class="form-check-input"{% if dashboard_domovyi_status %} checked{% endif %}/>
               </div>
             </div>
           </div>
           <div class="row mb-3">
             <label for="input-sort-order" class="col-sm-2 col-form-label">{{ entry_sort_order }}</label>
             <div class="col-sm-10">
-              <input type="text" name="dashboard_domovyk_sort_order" value="{{ dashboard_domovyk_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
+              <input type="text" name="dashboard_domovyi_sort_order" value="{{ dashboard_domovyi_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
             </div>
           </div>
           {% for folder in folders %}
@@ -50,21 +50,21 @@
                 <label class="col-sm-2 col-form-label">{{ entry_folder_cron_status }}</label>
                 <div class="col-sm-10">
                   <div class="form-check form-switch form-switch-lg">
-                    <input type="hidden" name="dashboard_domovyk_cron[{{ folder.key }}][status]" value="0"/>
-                    <input type="checkbox" name="dashboard_domovyk_cron[{{ folder.key }}][status]" value="1" id="input-cron-status-{{ folder.key }}" class="form-check-input"{% if folder.status %} checked{% endif %}/>
+                    <input type="hidden" name="dashboard_domovyi_cron[{{ folder.key }}][status]" value="0"/>
+                    <input type="checkbox" name="dashboard_domovyi_cron[{{ folder.key }}][status]" value="1" id="input-cron-status-{{ folder.key }}" class="form-check-input"{% if folder.status %} checked{% endif %}/>
                   </div>
                 </div>
               </div>
               <div class="row mb-3">
                 <label for="input-cron-size-{{ folder.key }}" class="col-sm-2 col-form-label">{{ entry_folder_space_limit }}</label>
                 <div class="col-sm-10">
-                  <input type="text" name="dashboard_domovyk_cron[{{ folder.key }}][size]" value="{{ folder.size }}" id="input-cron-size-{{ folder.key }}" class="form-control"/>
+                  <input type="text" name="dashboard_domovyi_cron[{{ folder.key }}][size]" value="{{ folder.size }}" id="input-cron-size-{{ folder.key }}" class="form-control"/>
                 </div>
               </div>
               <div class="row mb-3">
                 <label for="input-cron-time-{{ folder.key }}" class="col-sm-2 col-form-label">{{ entry_folder_calc_time }}</label>
                 <div class="col-sm-10">
-                  <input type="text" name="dashboard_domovyk_cron[{{ folder.key }}][time]" value="{{ folder.time }}" id="input-cron-time-{{ folder.key }}" class="form-control"/>
+                  <input type="text" name="dashboard_domovyi_cron[{{ folder.key }}][time]" value="{{ folder.time }}" id="input-cron-time-{{ folder.key }}" class="form-control"/>
                 </div>
               </div>
             </fieldset>
@@ -75,15 +75,15 @@
               <label class="col-sm-2 col-form-label">{{ entry_free_space_status }}</label>
               <div class="col-sm-10">
                 <div class="form-check form-switch form-switch-lg">
-                  <input type="hidden" name="dashboard_domovyk_free_space_status" value="0"/>
-                  <input type="checkbox" name="dashboard_domovyk_free_space_status" value="1" id="input-free-space-status" class="form-check-input"{% if dashboard_domovyk_free_space_status %} checked{% endif %}/>
+                  <input type="hidden" name="dashboard_domovyi_free_space_status" value="0"/>
+                  <input type="checkbox" name="dashboard_domovyi_free_space_status" value="1" id="input-free-space-status" class="form-check-input"{% if dashboard_domovyi_free_space_status %} checked{% endif %}/>
                 </div>
               </div>
             </div>
             <div class="row mb-3">
               <label for="input-free-space" class="col-sm-2 col-form-label">{{ entry_disk_free_space_limit }}</label>
               <div class="col-sm-10">
-                <input type="text" name="dashboard_domovyk_disk_free_space" value="{{ dashboard_domovyk_disk_free_space }}" id="input-free-space" class="form-control"/>
+                <input type="text" name="dashboard_domovyi_disk_free_space" value="{{ dashboard_domovyi_disk_free_space }}" id="input-free-space" class="form-control"/>
               </div>
             </div>
           </fieldset>
@@ -92,13 +92,13 @@
             <div class="row mb-3">
               <label for="input-danger" class="col-sm-2 col-form-label">{{ entry_danger_funtions }}</label>
               <div class="col-sm-10">
-                <textarea name="dashboard_domovyk_danger_funtions" rows="10" id="input-danger" class="form-control">{{ dashboard_domovyk_danger_funtions }}</textarea>
+                <textarea name="dashboard_domovyi_danger_funtions" rows="10" id="input-danger" class="form-control">{{ dashboard_domovyi_danger_funtions }}</textarea>
               </div>
             </div>
             <div class="row mb-3">
               <label for="input-warning" class="col-sm-2 col-form-label">{{ entry_warning_funtions }}</label>
               <div class="col-sm-10">
-                <textarea name="dashboard_domovyk_warning_funtions" rows="10" id="input-warning" class="form-control">{{ dashboard_domovyk_warning_funtions }}</textarea>
+                <textarea name="dashboard_domovyi_warning_funtions" rows="10" id="input-warning" class="form-control">{{ dashboard_domovyi_warning_funtions }}</textarea>
               </div>
             </div>
           </fieldset>

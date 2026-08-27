@@ -1,19 +1,19 @@
 <?php
 /**
- * @package   Domovyk
+ * @package   Domovyi
  * @author    Dinox
  * @copyright Copyright (c) 2009 - 2026, Dinox (https://opencartforum.com/)
  * @license   https://opensource.org/licenses/GPL-3.0
  * @link      https://opencartforum.com/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu
  */
 // Heading
-$_['heading_title']               = 'Domoviy';
+$_['heading_title']               = 'Domovyi';
 
 // Text
 $_['text_extension']              = 'Extensions';
 $_['text_success']                = 'Success: You have modified the dashboard!';
 $_['text_edit']                   = 'Edit';
-$_['text_setting']                = 'Domoviy settings';
+$_['text_setting']                = 'Domovyi settings';
 $_['text_check']                  = 'not measured yet, press the green icon to check';
 $_['text_server']                 = 'Server settings';
 $_['text_dir_logs']               = 'Log directory';
@@ -43,7 +43,7 @@ $_['text_phpinfo']                = 'Click to see detailed information about PHP
 $_['text_check_function']         = 'Function check';
 $_['text_ocmod_cache_success']    = 'Success: The OCMOD cache has been rebuilt!';
 $_['text_disk_free_space']        = 'Free disk space:';
-$_['text_copyright']              = 'Domoviy 1.0.2 — Dinox [opencartforum.com]';
+$_['text_copyright']              = 'Domovyi 1.0.2 — Dinox [opencartforum.com]';
 
 // Entry
 $_['entry_status']                = 'Status';

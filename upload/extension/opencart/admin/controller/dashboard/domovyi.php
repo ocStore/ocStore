@@ -1,6 +1,6 @@
 <?php
 /**
- * @package   Domovyk
+ * @package   Domovyi
  * @author    Dinox
  * @copyright Copyright (c) 2009 - 2026, Dinox (https://opencartforum.com/)
  * @license   https://opensource.org/licenses/GPL-3.0
@@ -8,18 +8,18 @@
  */
 namespace Opencart\Admin\Controller\Extension\Opencart\Dashboard;
 /**
- * Class Domovyk
+ * Class Domovyi
  *
  * @package Opencart\Admin\Controller\Extension\Opencart\Dashboard
  */
-class Domovyk extends \Opencart\System\Engine\Controller {
+class Domovyi extends \Opencart\System\Engine\Controller {
 	/**
 	 * Index
 	 *
 	 * @return void
 	 */
 	public function index(): void {
-		$this->load->language('extension/opencart/dashboard/domovyk');
+		$this->load->language('extension/opencart/dashboard/domovyi');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -37,13 +37,13 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/opencart/dashboard/domovyk', 'user_token=' . $this->session->data['user_token'])
+			'href' => $this->url->link('extension/opencart/dashboard/domovyi', 'user_token=' . $this->session->data['user_token'])
 		];
 
-		$data['save'] = $this->url->link('extension/opencart/dashboard/domovyk.save', 'user_token=' . $this->session->data['user_token']);
+		$data['save'] = $this->url->link('extension/opencart/dashboard/domovyi.save', 'user_token=' . $this->session->data['user_token']);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=dashboard');
 
-		$cron = (array)$this->config->get('dashboard_domovyk_cron');
+		$cron = (array)$this->config->get('dashboard_domovyi_cron');
 
 		$data['folders'] = [];
 
@@ -57,11 +57,11 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 			];
 		}
 
-		$data['dashboard_domovyk_danger_funtions'] = $this->getFunctions('danger');
-		$data['dashboard_domovyk_warning_funtions'] = $this->getFunctions('warning');
+		$data['dashboard_domovyi_danger_funtions'] = $this->getFunctions('danger');
+		$data['dashboard_domovyi_warning_funtions'] = $this->getFunctions('warning');
 
-		$data['dashboard_domovyk_disk_free_space'] = $this->config->get('dashboard_domovyk_disk_free_space') ?: 500;
-		$data['dashboard_domovyk_free_space_status'] = $this->config->get('dashboard_domovyk_free_space_status');
+		$data['dashboard_domovyi_disk_free_space'] = $this->config->get('dashboard_domovyi_disk_free_space') ?: 500;
+		$data['dashboard_domovyi_free_space_status'] = $this->config->get('dashboard_domovyi_free_space_status');
 
 		$data['columns'] = [];
 
@@ -69,15 +69,15 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 			$data['columns'][] = $i;
 		}
 
-		$data['dashboard_domovyk_width'] = $this->config->get('dashboard_domovyk_width');
-		$data['dashboard_domovyk_status'] = $this->config->get('dashboard_domovyk_status');
-		$data['dashboard_domovyk_sort_order'] = $this->config->get('dashboard_domovyk_sort_order');
+		$data['dashboard_domovyi_width'] = $this->config->get('dashboard_domovyi_width');
+		$data['dashboard_domovyi_status'] = $this->config->get('dashboard_domovyi_status');
+		$data['dashboard_domovyi_sort_order'] = $this->config->get('dashboard_domovyi_sort_order');
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/opencart/dashboard/domovyk_form', $data));
+		$this->response->setOutput($this->load->view('extension/opencart/dashboard/domovyi_form', $data));
 	}
 
 	/**
@@ -86,11 +86,11 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function save(): void {
-		$this->load->language('extension/opencart/dashboard/domovyk');
+		$this->load->language('extension/opencart/dashboard/domovyi');
 
 		$json = [];
 
-		if (!$this->user->hasPermission('modify', 'extension/opencart/dashboard/domovyk')) {
+		if (!$this->user->hasPermission('modify', 'extension/opencart/dashboard/domovyi')) {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
@@ -98,7 +98,7 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 			// Setting
 			$this->load->model('setting/setting');
 
-			$this->model_setting_setting->editSetting('dashboard_domovyk', $this->request->post);
+			$this->model_setting_setting->editSetting('dashboard_domovyi', $this->request->post);
 
 			$json['success'] = $this->language->get('text_success');
 		}
@@ -114,15 +114,15 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 	 */
 	public function dashboard(): string {
 		$this->load->language('common/developer');
-		$this->load->language('extension/opencart/dashboard/domovyk');
+		$this->load->language('extension/opencart/dashboard/domovyi');
 
 		$data['user_token'] = $this->session->data['user_token'];
 
 		$data['developer_sass'] = $this->config->get('developer_sass');
 
-		$data['setting'] = $this->url->link('extension/opencart/dashboard/domovyk', 'user_token=' . $this->session->data['user_token']);
+		$data['setting'] = $this->url->link('extension/opencart/dashboard/domovyi', 'user_token=' . $this->session->data['user_token']);
 
-		$cron = (array)$this->config->get('dashboard_domovyk_cron');
+		$cron = (array)$this->config->get('dashboard_domovyi_cron');
 
 		$data['folders'] = [];
 
@@ -134,7 +134,7 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 
 			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
 
-			$cache = (array)$this->config->get('domovyk_folders_' . $key);
+			$cache = (array)$this->config->get('domovyi_folders_' . $key);
 
 			// Recalculate the folder once the period set by the user has passed
 			if (!empty($cron[$key]['status']) && $this->dateDiff(date('Y-m-d H:i:s'), (string)($cache['date'] ?? '')) > (float)($cron[$key]['time'] ?? 0) * 60) {
@@ -174,13 +174,13 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 		$data['disk_free_space'] = [];
 		$data['disk_free_space_warning'] = '';
 
-		if (function_exists('disk_free_space') && $this->config->get('dashboard_domovyk_free_space_status')) {
+		if (function_exists('disk_free_space') && $this->config->get('dashboard_domovyi_free_space_status')) {
 			$disk_space = disk_free_space('/');
 
 			if ($disk_space !== false) {
 				$data['disk_free_space'] = $this->formatSize($disk_space);
 
-				$limit = (float)$this->config->get('dashboard_domovyk_disk_free_space');
+				$limit = (float)$this->config->get('dashboard_domovyi_disk_free_space');
 
 				if ($limit && $disk_space < $limit * pow(1024, 2)) {
 					$data['disk_free_space_warning'] = sprintf($this->language->get('text_warning_free_space'), $limit);
@@ -191,7 +191,7 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 		$data['danger_funtions'] = $this->checkFunc((array)preg_split('/\R/', $this->getFunctions('danger')));
 		$data['warning_funtions'] = $this->checkFunc((array)preg_split('/\R/', $this->getFunctions('warning')));
 
-		return $this->load->view('extension/opencart/dashboard/domovyk_info', $data);
+		return $this->load->view('extension/opencart/dashboard/domovyi_info', $data);
 	}
 
 	/**
@@ -200,11 +200,11 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function clear(): void {
-		$this->load->language('extension/opencart/dashboard/domovyk');
+		$this->load->language('extension/opencart/dashboard/domovyi');
 
 		$json = [];
 
-		if (!$this->user->hasPermission('modify', 'extension/opencart/dashboard/domovyk')) {
+		if (!$this->user->hasPermission('modify', 'extension/opencart/dashboard/domovyi')) {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
@@ -240,11 +240,11 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function calc(): void {
-		$this->load->language('extension/opencart/dashboard/domovyk');
+		$this->load->language('extension/opencart/dashboard/domovyi');
 
 		$json = [];
 
-		if (!$this->user->hasPermission('modify', 'extension/opencart/dashboard/domovyk')) {
+		if (!$this->user->hasPermission('modify', 'extension/opencart/dashboard/domovyi')) {
 			$json['error'] = $this->language->get('error_permission');
 		}
 
@@ -257,7 +257,7 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 		if (!$json) {
 			$folder = $this->calcFolder($key);
 
-			$cron = (array)$this->config->get('dashboard_domovyk_cron');
+			$cron = (array)$this->config->get('dashboard_domovyi_cron');
 
 			$limit = (float)($cron[$key]['size'] ?? 0) * pow(1024, 2);
 
@@ -280,9 +280,9 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function phpinfo(): void {
-		$this->load->language('extension/opencart/dashboard/domovyk');
+		$this->load->language('extension/opencart/dashboard/domovyi');
 
-		if (!$this->user->hasPermission('access', 'extension/opencart/dashboard/domovyk')) {
+		if (!$this->user->hasPermission('access', 'extension/opencart/dashboard/domovyi')) {
 			$this->response->setOutput($this->language->get('error_permission'));
 
 			return;
@@ -314,7 +314,7 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 			'warning' => "diskfreespace\r\ndisk_total_space\r\nfileperms\r\nfopen\r\nphpversion\r\nopendir\r\nposix_getpwuid\r\nposix_uname"
 		];
 
-		return (string)($this->config->get('dashboard_domovyk_' . $type . '_funtions') ?: $default[$type]);
+		return (string)($this->config->get('dashboard_domovyi_' . $type . '_funtions') ?: $default[$type]);
 	}
 
 	/**
@@ -352,11 +352,11 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 		// Setting
 		$this->load->model('setting/setting');
 
-		$setting_data = $this->model_setting_setting->getSetting('domovyk');
+		$setting_data = $this->model_setting_setting->getSetting('domovyi');
 
-		$setting_data['domovyk_folders_' . $key] = $folder;
+		$setting_data['domovyi_folders_' . $key] = $folder;
 
-		$this->model_setting_setting->editSetting('domovyk', $setting_data);
+		$this->model_setting_setting->editSetting('domovyi', $setting_data);
 
 		return $folder;
 	}

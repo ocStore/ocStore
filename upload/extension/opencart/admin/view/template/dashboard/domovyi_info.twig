@@ -1,10 +1,10 @@
-<div id="domovyk" class="card mb-3">
+<div id="domovyi" class="card mb-3">
   <div class="card-header">
     <div class="float-end"><a href="{{ setting }}" data-bs-toggle="tooltip" title="{{ text_setting }}" class="text-reset"><i class="fa-solid fa-cog"></i></a></div>
     <i class="fa-solid fa-house-chimney-crack"></i> {{ heading_title }}
   </div>
   <div class="card-body pb-0">
-    <div id="domovyk-alert"></div>
+    <div id="domovyi-alert"></div>
     <div class="d-flex flex-wrap gap-2 mb-3">
       <button type="button" id="button-phpinfo" data-bs-toggle="tooltip" title="{{ text_phpinfo }}" class="btn btn-info btn-sm">phpinfo</button>
       {% if phpversion %}
@@ -31,7 +31,7 @@
             <td>
               <div class="form-check form-switch d-inline-block align-middle me-2">
                 <input type="hidden" name="developer_sass" value="0"/>
-                <input type="checkbox" name="developer_sass" value="1" id="input-domovyk-sass" class="form-check-input"{% if developer_sass %} checked{% endif %}/>
+                <input type="checkbox" name="developer_sass" value="1" id="input-domovyi-sass" class="form-check-input"{% if developer_sass %} checked{% endif %}/>
               </div>
               {{ entry_sass }}
             </td>
@@ -86,19 +86,19 @@
   </ul>
 </div>
 <script type="text/javascript"><!--
-function domovyk_alert(json) {
-    $('#domovyk-alert').html('');
+function domovyi_alert(json) {
+    $('#domovyi-alert').html('');
 
     if (json['error']) {
-        $('#domovyk-alert').html('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+        $('#domovyi-alert').html('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
     }
 
     if (json['success']) {
-        $('#domovyk-alert').html('<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+        $('#domovyi-alert').html('<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
     }
 }
 
-$('#domovyk [data-oc-copy]').on('click', function() {
+$('#domovyi [data-oc-copy]').on('click', function() {
     var element = this;
     var text = $($(element).attr('data-oc-copy')).text();
 
@@ -115,7 +115,7 @@ $('#button-phpinfo').on('click', function() {
     var element = this;
 
     $.ajax({
-        url: 'index.php?route=extension/opencart/dashboard/domovyk.phpinfo&user_token={{ user_token }}',
+        url: 'index.php?route=extension/opencart/dashboard/domovyi.phpinfo&user_token={{ user_token }}',
         dataType: 'html',
         beforeSend: function() {
             $(element).button('loading');
@@ -136,7 +136,7 @@ $('#button-phpinfo').on('click', function() {
     });
 });
 
-$('#domovyk .button-developer').on('click', function() {
+$('#domovyi .button-developer').on('click', function() {
     var element = this;
 
     $.ajax({
@@ -149,7 +149,7 @@ $('#domovyk .button-developer').on('click', function() {
             $(element).button('reset');
         },
         success: function(json) {
-            domovyk_alert(json);
+            domovyi_alert(json);
         },
         error: function(xhr, ajaxOptions, thrownError) {
             console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -157,20 +157,20 @@ $('#domovyk .button-developer').on('click', function() {
     });
 });
 
-$('#input-domovyk-sass').on('change', function() {
+$('#input-domovyi-sass').on('change', function() {
     $.ajax({
         url: 'index.php?route=common/developer.edit&user_token={{ user_token }}',
         type: 'post',
-        data: $('#domovyk input[name=\'developer_sass\']:checked'),
+        data: $('#domovyi input[name=\'developer_sass\']:checked'),
         dataType: 'json',
         beforeSend: function() {
-            $('#input-domovyk-sass').prop('disabled', true);
+            $('#input-domovyi-sass').prop('disabled', true);
         },
         complete: function() {
-            $('#input-domovyk-sass').prop('disabled', false);
+            $('#input-domovyi-sass').prop('disabled', false);
         },
         success: function(json) {
-            domovyk_alert(json);
+            domovyi_alert(json);
         },
         error: function(xhr, ajaxOptions, thrownError) {
             console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -195,7 +195,7 @@ $('#button-ocmod').on('click', function() {
                 json['success'] = '{{ text_ocmod_cache_success }}';
             }
 
-            domovyk_alert(json);
+            domovyi_alert(json);
         },
         error: function(xhr, ajaxOptions, thrownError) {
             console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -203,9 +203,9 @@ $('#button-ocmod').on('click', function() {
     });
 });
 
-function domovyk_calc(element) {
+function domovyi_calc(element) {
     $.ajax({
-        url: 'index.php?route=extension/opencart/dashboard/domovyk.calc&dir=' + encodeURIComponent($(element).val()) + '&user_token={{ user_token }}',
+        url: 'index.php?route=extension/opencart/dashboard/domovyi.calc&dir=' + encodeURIComponent($(element).val()) + '&user_token={{ user_token }}',
         dataType: 'json',
         beforeSend: function() {
             $(element).button('loading');
@@ -215,11 +215,11 @@ function domovyk_calc(element) {
         },
         success: function(json) {
             if (json['error']) {
-                domovyk_alert(json);
+                domovyi_alert(json);
             }
 
             if (json['success']) {
-                $('#domovyk [data-oc-folder=\'' + $(element).val() + '\']').text(json['success']);
+                $('#domovyi [data-oc-folder=\'' + $(element).val() + '\']').text(json['success']);
             }
         },
         error: function(xhr, ajaxOptions, thrownError) {
@@ -228,15 +228,15 @@ function domovyk_calc(element) {
     });
 }
 
-$('#domovyk .button-calc').on('click', function() {
-    domovyk_calc(this);
+$('#domovyi .button-calc').on('click', function() {
+    domovyi_calc(this);
 });
 
-$('#domovyk .button-clear').on('click', function() {
+$('#domovyi .button-clear').on('click', function() {
     var element = this;
 
     $.ajax({
-        url: 'index.php?route=extension/opencart/dashboard/domovyk.clear&dir=' + encodeURIComponent($(element).val()) + '&user_token={{ user_token }}',
+        url: 'index.php?route=extension/opencart/dashboard/domovyi.clear&dir=' + encodeURIComponent($(element).val()) + '&user_token={{ user_token }}',
         dataType: 'json',
         beforeSend: function() {
             $(element).button('loading');
@@ -245,10 +245,10 @@ $('#domovyk .button-clear').on('click', function() {
             $(element).button('reset');
         },
         success: function(json) {
-            domovyk_alert(json);
+            domovyi_alert(json);
 
             if (json['success']) {
-                domovyk_calc($('#domovyk .button-calc[value=\'' + $(element).val() + '\']'));
+                domovyi_calc($('#domovyi .button-calc[value=\'' + $(element).val() + '\']'));
             }
         },
         error: function(xhr, ajaxOptions, thrownError) {

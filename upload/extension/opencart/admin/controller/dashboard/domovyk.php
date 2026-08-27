@@ -1,4 +1,11 @@
 <?php
+/**
+ * @package   Domovyk
+ * @author    Dinox
+ * @copyright Copyright (c) 2009 - 2026, Dinox (https://opencartforum.com/)
+ * @license   https://opensource.org/licenses/GPL-3.0
+ * @link      https://opencartforum.com/
+ */
 namespace Opencart\Admin\Controller\Extension\Opencart\Dashboard;
 /**
  * Class Domovyk
@@ -181,8 +188,8 @@ class Domovyk extends \Opencart\System\Engine\Controller {
 			}
 		}
 
-		$data['danger_funtions'] = $this->checkFunc(explode("\r\n", $this->getFunctions('danger')));
-		$data['warning_funtions'] = $this->checkFunc(explode("\r\n", $this->getFunctions('warning')));
+		$data['danger_funtions'] = $this->checkFunc((array)preg_split('/\R/', $this->getFunctions('danger')));
+		$data['warning_funtions'] = $this->checkFunc((array)preg_split('/\R/', $this->getFunctions('warning')));
 
 		return $this->load->view('extension/opencart/dashboard/domovyk_info', $data);
 	}

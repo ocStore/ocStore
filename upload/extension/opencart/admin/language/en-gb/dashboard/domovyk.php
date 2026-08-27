@@ -1,4 +1,11 @@
 <?php
+/**
+ * @package   Domovyk
+ * @author    Dinox
+ * @copyright Copyright (c) 2009 - 2026, Dinox (https://opencartforum.com/)
+ * @license   https://opensource.org/licenses/GPL-3.0
+ * @link      https://opencartforum.com/
+ */
 // Heading
 $_['heading_title']               = 'Domovyk';
 
@@ -36,6 +43,7 @@ $_['text_phpinfo']                = 'Click to see detailed information about PHP
 $_['text_check_function']         = 'Function check';
 $_['text_ocmod_cache_success']    = 'Success: The OCMOD cache has been rebuilt!';
 $_['text_disk_free_space']        = 'Free disk space:';
+$_['text_copyright']              = 'Domovyk 1.0.2 — Dinox [opencartforum.com]';
 
 // Entry
 $_['entry_status']                = 'Status';

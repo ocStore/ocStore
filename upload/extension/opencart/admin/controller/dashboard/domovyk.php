@@ -4,7 +4,7 @@
  * @author    Dinox
  * @copyright Copyright (c) 2009 - 2026, Dinox (https://opencartforum.com/)
  * @license   https://opensource.org/licenses/GPL-3.0
- * @link      https://opencartforum.com/
+ * @link      https://opencartforum.com/ru/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu/
  */
 namespace Opencart\Admin\Controller\Extension\Opencart\Dashboard;
 /**

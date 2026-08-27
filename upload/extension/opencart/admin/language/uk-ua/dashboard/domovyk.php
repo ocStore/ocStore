@@ -4,16 +4,16 @@
  * @author    Dinox
  * @copyright Copyright (c) 2009 - 2026, Dinox (https://opencartforum.com/)
  * @license   https://opensource.org/licenses/GPL-3.0
- * @link      https://opencartforum.com/
+ * @link      https://opencartforum.com/ru/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu/
  */
 // Heading
-$_['heading_title']               = 'Домовик';
+$_['heading_title']               = 'Домовий';
 
 // Text
 $_['text_extension']              = 'Доповнення';
 $_['text_success']                = 'Налаштування змінені';
 $_['text_edit']                   = 'Редагування';
-$_['text_setting']                = 'Налаштування Домовика';
+$_['text_setting']                = 'Налаштування Домового';
 $_['text_check']                  = 'ще не перевірялася, натисніть зелену іконку для перевірки';
 $_['text_server']                 = 'Параметри сервера';
 $_['text_dir_logs']               = 'Тека логів';
@@ -43,7 +43,7 @@ $_['text_phpinfo']                = 'Натисніть, щоб переглян
 $_['text_check_function']         = 'Перевірка функцій';
 $_['text_ocmod_cache_success']    = 'Кеш модифікаторів OCMOD перебудований';
 $_['text_disk_free_space']        = 'Вільне місце на диску:';
-$_['text_copyright']              = 'Домовик 1.0.2 — Dinox [opencartforum.com]';
+$_['text_copyright']              = 'Домовий 1.0.2 — Dinox [opencartforum.com]';
 
 // Entry
 $_['entry_status']                = 'Статус';

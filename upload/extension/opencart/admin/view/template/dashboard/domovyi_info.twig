@@ -12,36 +12,10 @@
 <div id="offcanvas-domovyi" class="offcanvas offcanvas-end" style="width: 780px; max-width: 100%;" tabindex="-1">
   <div class="offcanvas-header border-bottom">
     <h5 class="offcanvas-title text-truncate d-flex align-items-center gap-2"><img src="../extension/opencart/admin/view/image/domovyi.png" alt="{{ heading_title }}" height="30"/> {{ heading_title }}</h5>
-    <div class="ms-auto d-flex align-items-center gap-2">
-      <button type="button" id="button-about" data-bs-toggle="tooltip" title="{{ text_about }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-circle-info"></i></button>
-      <a href="{{ setting }}" data-bs-toggle="tooltip" title="{{ text_setting }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-cog"></i></a>
-      <button type="button" class="btn-close ms-1" data-bs-dismiss="offcanvas"></button>
-    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas"></button>
   </div>
   <div class="offcanvas-body" id="offcanvas-domovyi-body">
     <div class="text-center text-muted py-5"><i class="fa-solid fa-circle-notch fa-spin fa-2x"></i></div>
-  </div>
-</div>
-<div id="modal-domovyi-about" class="modal fade">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title d-flex align-items-center gap-2"><img src="../extension/opencart/admin/view/image/domovyi.png" alt="{{ heading_title }}" height="30"/> {{ heading_title }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="text-center mb-3"><img src="../extension/opencart/admin/view/image/domovyi.png" alt="{{ heading_title }}" height="160"/></div>
-        <p>{{ text_about_intro }}</p>
-        <p class="fw-semibold">{{ text_about_community }}</p>
-        <blockquote class="border-start border-3 ps-3 text-body-secondary fst-italic">{{ text_about_inspire }}</blockquote>
-        <div class="d-grid gap-2">
-          <a href="https://opencartforum.com/profile/3769-dinox/" target="_blank" rel="noopener" class="btn btn-outline-secondary"><i class="fa-solid fa-user"></i> {{ text_about_author }}</a>
-          <a href="https://opencartforum.com/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu" target="_blank" rel="noopener" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> {{ text_about_updates }}</a>
-          <a href="https://opencartforum.com/files/developer/3769-dinox/" target="_blank" rel="noopener" class="btn btn-outline-secondary"><i class="fa-solid fa-puzzle-piece"></i> {{ text_about_files }}</a>
-        </div>
-      </div>
-      <div class="modal-footer justify-content-center"><small class="text-muted">{{ text_copyright }}</small></div>
-    </div>
   </div>
 </div>
 <style>
@@ -68,11 +42,7 @@
 }
 </style>
 <script type="text/javascript"><!--
-$('#domovyi-launcher, #offcanvas-domovyi, #modal-domovyi-about').appendTo('body');
-
-$('#button-about').on('click', function() {
-    new bootstrap.Modal('#modal-domovyi-about').show();
-});
+$('#domovyi-launcher, #offcanvas-domovyi').appendTo('body');
 
 $('#offcanvas-domovyi').on('show.bs.offcanvas', function() {
     if (!$(this).attr('data-oc-loaded')) {

@@ -44,6 +44,23 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=dashboard');
 		$data['dashboard'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']);
 
+		$data['fields'] = $this->getFields();
+
+		$data['header'] = $this->load->controller('common/header');
+		$data['column_left'] = $this->load->controller('common/column_left');
+		$data['footer'] = $this->load->controller('common/footer');
+
+		$this->response->setOutput($this->load->view('extension/opencart/dashboard/domovyi_form', $data));
+	}
+
+	/**
+	 * Get Fields
+	 *
+	 * The settings form itself, shared by the standalone page and the slide-out panel.
+	 *
+	 * @return string
+	 */
+	private function getFields(): string {
 		$cron = $this->getCron();
 
 		$data['folders'] = [];
@@ -68,11 +85,7 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 		$data['dashboard_domovyi_status'] = $this->config->get('dashboard_domovyi_status');
 		$data['dashboard_domovyi_sort_order'] = $this->config->get('dashboard_domovyi_sort_order');
 
-		$data['header'] = $this->load->controller('common/header');
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['footer'] = $this->load->controller('common/footer');
-
-		$this->response->setOutput($this->load->view('extension/opencart/dashboard/domovyi_form', $data));
+		return $this->load->view('extension/opencart/dashboard/domovyi_fields', $data);
 	}
 
 	/**
@@ -217,7 +230,9 @@ class Domovyi extends \Opencart\System\Engine\Controller {
 
 		$data['developer_sass'] = $this->config->get('developer_sass');
 
-		$data['setting'] = $this->url->link('extension/opencart/dashboard/domovyi', 'user_token=' . $this->session->data['user_token']);
+		$data['save'] = $this->url->link('extension/opencart/dashboard/domovyi.save', 'user_token=' . $this->session->data['user_token']);
+
+		$data['fields'] = $this->getFields();
 
 		$cron = $this->getCron();
 

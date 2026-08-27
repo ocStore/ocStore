@@ -13,6 +13,7 @@ $_['heading_title']               = 'Domovyi 1.1.0';
 $_['text_extension']              = 'Extensions';
 $_['text_success']                = 'Success: You have modified the dashboard!';
 $_['text_edit']                   = 'Edit';
+$_['text_state']                  = 'State';
 $_['text_setting']                = 'Domovyi settings';
 $_['text_server']                 = 'Server settings';
 $_['text_dir_logs']               = 'Log directory';

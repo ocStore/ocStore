@@ -19,77 +19,7 @@
       <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
       <div class="card-body">
         <form id="form-dashboard" action="{{ save }}" method="post" data-oc-toggle="ajax">
-          <input type="hidden" name="dashboard_domovyi_width" value="{{ dashboard_domovyi_width }}"/>
-          <input type="hidden" name="dashboard_domovyi_sort_order" value="{{ dashboard_domovyi_sort_order }}"/>
-          <h6 class="text-uppercase text-muted small">{{ text_widget }}</h6>
-          <div class="row g-3 mb-4">
-            <div class="col-md-4">
-              <label class="form-label">{{ entry_status }}</label>
-              <div class="form-check form-switch form-switch-lg">
-                <input type="hidden" name="dashboard_domovyi_status" value="0"/>
-                <input type="checkbox" name="dashboard_domovyi_status" value="1" id="input-status" class="form-check-input"{% if dashboard_domovyi_status %} checked{% endif %}/>
-              </div>
-              <div class="form-text">{{ help_status }}</div>
-            </div>
-          </div>
-          <h6 class="text-uppercase text-muted small">{{ text_folders }}</h6>
-          <div class="row row-cols-1 row-cols-lg-3 g-3 mb-4">
-            {% for folder in folders %}
-              <div class="col">
-                <div class="card h-100">
-                  <div class="card-header d-flex align-items-center justify-content-between">
-                    <span class="text-truncate">{{ folder.name }}</span>
-                    <div class="form-check form-switch m-0 ms-2" data-bs-toggle="tooltip" title="{{ entry_folder_watch }}">
-                      <input type="hidden" name="dashboard_domovyi_cron[{{ folder.key }}][status]" value="0"/>
-                      <input type="checkbox" name="dashboard_domovyi_cron[{{ folder.key }}][status]" value="1" id="input-cron-status-{{ folder.key }}" class="form-check-input"{% if folder.status %} checked{% endif %}/>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <label for="input-cron-size-{{ folder.key }}" class="form-label">{{ entry_folder_limit }}</label>
-                    <div class="input-group mb-3">
-                      <input type="text" name="dashboard_domovyi_cron[{{ folder.key }}][size]" value="{{ folder.size }}" id="input-cron-size-{{ folder.key }}" class="form-control"/>
-                      <span class="input-group-text">{{ text_unit_mb }}</span>
-                    </div>
-                    <label for="input-cron-time-{{ folder.key }}" class="form-label">{{ entry_folder_period }}</label>
-                    <div class="input-group">
-                      <input type="text" name="dashboard_domovyi_cron[{{ folder.key }}][time]" value="{{ folder.time }}" id="input-cron-time-{{ folder.key }}" class="form-control"/>
-                      <span class="input-group-text">{{ text_unit_min }}</span>
-                    </div>
-                    <div class="form-text">{{ help_folder_period }}</div>
-                  </div>
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-          <h6 class="text-uppercase text-muted small">{{ text_server }}</h6>
-          <div class="row g-3 mb-4">
-            <div class="col-md-4">
-              <label for="input-free-space" class="form-label">{{ entry_disk_free_space_limit }}</label>
-              <div class="input-group">
-                <input type="text" name="dashboard_domovyi_disk_free_space" value="{{ dashboard_domovyi_disk_free_space }}" id="input-free-space" class="form-control"/>
-                <span class="input-group-text">{{ text_unit_mb }}</span>
-              </div>
-            </div>
-            <div class="col-md-8">
-              <label class="form-label">{{ entry_free_space_status }}</label>
-              <div class="form-check form-switch form-switch-lg">
-                <input type="hidden" name="dashboard_domovyi_free_space_status" value="0"/>
-                <input type="checkbox" name="dashboard_domovyi_free_space_status" value="1" id="input-free-space-status" class="form-check-input"{% if dashboard_domovyi_free_space_status %} checked{% endif %}/>
-              </div>
-              <div class="form-text">{{ help_free_space_status }}</div>
-            </div>
-          </div>
-          <h6 class="text-uppercase text-muted small">{{ text_check_function }}</h6>
-          <div class="row row-cols-1 row-cols-lg-2 g-3">
-            <div class="col">
-              <label for="input-danger" class="form-label"><span class="badge text-bg-danger">{{ text_warning }}</span> {{ entry_danger_funtions }}</label>
-              <textarea name="dashboard_domovyi_danger_funtions" rows="10" id="input-danger" class="form-control font-monospace">{{ dashboard_domovyi_danger_funtions }}</textarea>
-            </div>
-            <div class="col">
-              <label for="input-warning" class="form-label"><span class="badge text-bg-warning">{{ text_warning }}</span> {{ entry_warning_funtions }}</label>
-              <textarea name="dashboard_domovyi_warning_funtions" rows="10" id="input-warning" class="form-control font-monospace">{{ dashboard_domovyi_warning_funtions }}</textarea>
-            </div>
-          </div>
+          {{ fields }}
         </form>
       </div>
       <div class="card-footer text-center"><strong><a href="https://opencartforum.com/files/file/8732-domoviy-vidzhet-dlya-monitoringu-stanu-magazinu" target="_blank" rel="noopener" class="text-reset">{{ text_copyright }}</a></strong></div>

@@ -1152,3 +1152,11 @@ td {
     color: #6c757d;
     white-space: nowrap;
 }
+
+.handle {
+    cursor: grab !important;
+}
+
+.handle-active select {
+    border: solid 1px #222;
+}

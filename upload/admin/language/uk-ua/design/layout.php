@@ -15,6 +15,7 @@ $_['text_content_top']    = 'Верх сторінки';
 $_['text_content_bottom'] = 'Низ сторінки';
 $_['text_column_left']    = 'Ліва колонка';
 $_['text_column_right']   = 'Права колонка';
+$_['text_move']         = 'Перетягніть для зміни сортування';
 
 // Column
 $_['column_name']         = 'Назва макету';

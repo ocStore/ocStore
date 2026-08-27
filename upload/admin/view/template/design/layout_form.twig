@@ -287,6 +287,8 @@ function addModule(type) {
         $(element).val(i);
     });
 
+    addHandles();
+
     $('#module-' + type + ' select:last').trigger('change');
 
     module_row++;
@@ -300,6 +302,63 @@ $('#module-column-left, #module-column-right, #module-content-top, #module-conte
     } else {
         $(this).parent().find('a').attr('href', 'index.php?route=extension/' + part[0] + '/module/' + part[1] + '&user_token={{ user_token }}&module_id=' + part[2]);
     }
+});
+
+// Перетягування модулів для зміни порядку
+var dragged = null;
+
+function addHandles() {
+    $('table[id^=\'module-\'] tbody tr').each(function () {
+        if (!$(this).find('.handle').length) {
+            $(this).find('.input-group').prepend('<button type="button" data-bs-toggle="tooltip" title="{{ text_move }}" class="btn btn-light btn-sm handle"><i class="fa-solid fa-grip-vertical fa-fw"></i></button>');
+        }
+    });
+}
+
+addHandles();
+
+$(document).on('mousedown', '.handle', function () {
+    $(this).closest('tr').attr('draggable', true);
+});
+
+$(document).on('dragstart', 'table[id^=\'module-\'] tbody tr', function (e) {
+    dragged = this;
+
+    e.originalEvent.dataTransfer.effectAllowed = 'move';
+
+    $(this).addClass('handle-active');
+});
+
+$(document).on('dragover', 'table[id^=\'module-\'] tbody tr', function (e) {
+    e.preventDefault();
+
+    if (!dragged || dragged === this || dragged.parentNode !== this.parentNode) {
+        return;
+    }
+
+    var rect = this.getBoundingClientRect();
+
+    if (e.originalEvent.clientY - rect.top < rect.height / 2) {
+        this.parentNode.insertBefore(dragged, this);
+    } else {
+        this.parentNode.insertBefore(dragged, this.nextSibling);
+    }
+});
+
+$(document).on('drop dragend', 'table[id^=\'module-\'] tbody tr', function (e) {
+    e.preventDefault();
+
+    if (!dragged) {
+        return;
+    }
+
+    $(dragged).removeClass('handle-active').removeAttr('draggable');
+
+    $(dragged).closest('tbody').find('input[name*=\'sort_order\']').each(function (i, element) {
+        $(element).val(i);
+    });
+
+    dragged = null;
 });
 //--></script>
 {{ footer }}

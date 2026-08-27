@@ -40,6 +40,121 @@ class Modification extends \Opencart\System\Engine\Model {
 	}
 
 	/**
+	 * Edit Modification
+	 *
+	 * Edit modification record in the database.
+	 *
+	 * @param int                  $modification_id primary key of the modification record
+	 * @param array<string, mixed> $data            array of data
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/modification');
+	 *
+	 * $this->model_setting_modification->editModification($modification_id, $modification_data);
+	 */
+	public function editModification(int $modification_id, array $data): void {
+		$this->db->query("UPDATE `" . DB_PREFIX . "modification` SET `name` = '" . $this->db->escape(html_entity_decode((string)$data['name'], ENT_QUOTES, 'UTF-8')) . "', `xml` = '" . $this->db->escape(html_entity_decode((string)$data['xml'], ENT_QUOTES, 'UTF-8')) . "' WHERE `modification_id` = '" . (int)$modification_id . "'");
+	}
+
+	/**
+	 * Add Backup
+	 *
+	 * Keep the current version of the modification code before it is overwritten.
+	 *
+	 * @param int                  $modification_id primary key of the modification record
+	 * @param array<string, mixed> $data            array of data
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/modification');
+	 *
+	 * $this->model_setting_modification->addBackup($modification_id, $modification_info);
+	 */
+	public function addBackup(int $modification_id, array $data): void {
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "modification_backup` SET `modification_id` = '" . (int)$modification_id . "', `code` = '" . $this->db->escape((string)$data['code']) . "', `xml` = '" . $this->db->escape(html_entity_decode((string)$data['xml'], ENT_QUOTES, 'UTF-8')) . "', `date_added` = NOW()");
+	}
+
+	/**
+	 * Restore
+	 *
+	 * Put the code of a backup back into the modification record.
+	 *
+	 * @param int    $modification_id primary key of the modification record
+	 * @param string $xml             modification code
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/modification');
+	 *
+	 * $this->model_setting_modification->restore($modification_id, $xml);
+	 */
+	public function restore(int $modification_id, string $xml): void {
+		$this->db->query("UPDATE `" . DB_PREFIX . "modification` SET `xml` = '" . $this->db->escape($xml) . "' WHERE `modification_id` = '" . (int)$modification_id . "'");
+	}
+
+	/**
+	 * Delete Backups
+	 *
+	 * @param int $modification_id primary key of the modification record
+	 *
+	 * @return void
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/modification');
+	 *
+	 * $this->model_setting_modification->deleteBackups($modification_id);
+	 */
+	public function deleteBackups(int $modification_id): void {
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "modification_backup` WHERE `modification_id` = '" . (int)$modification_id . "'");
+	}
+
+	/**
+	 * Get Backup
+	 *
+	 * @param int $backup_id primary key of the backup record
+	 *
+	 * @return array<string, mixed> backup record that has backup ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/modification');
+	 *
+	 * $backup_info = $this->model_setting_modification->getBackup($backup_id);
+	 */
+	public function getBackup(int $backup_id): array {
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "modification_backup` WHERE `backup_id` = '" . (int)$backup_id . "'");
+
+		return $query->row;
+	}
+
+	/**
+	 * Get Backups
+	 *
+	 * @param int $modification_id primary key of the modification record
+	 *
+	 * @return array<int, array<string, mixed>> backup records that have modification ID
+	 *
+	 * @example
+	 *
+	 * $this->load->model('setting/modification');
+	 *
+	 * $backups = $this->model_setting_modification->getBackups($modification_id);
+	 */
+	public function getBackups(int $modification_id): array {
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "modification_backup` WHERE `modification_id` = '" . (int)$modification_id . "' ORDER BY `date_added` DESC");
+
+		return $query->rows;
+	}
+
+	/**
 	 * Delete Modification
 	 *
 	 * Delete modification record in the database.
@@ -55,6 +170,8 @@ class Modification extends \Opencart\System\Engine\Model {
 	 * $this->model_setting_modification->deleteModification($modification_id);
 	 */
 	public function deleteModification(int $modification_id): void {
+		$this->model_setting_modification->deleteBackups($modification_id);
+
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "modification` WHERE `modification_id` = '" . (int)$modification_id . "'");
 	}
 

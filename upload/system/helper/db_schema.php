@@ -4229,6 +4229,40 @@ function oc_db_schema() {
 	];
 
 	$tables[] = [
+		'name'  => 'modification_backup',
+		'field' => [
+			[
+				'name'           => 'backup_id',
+				'type'           => 'int(11)',
+				'not_null'       => true,
+				'auto_increment' => true
+			],
+			[
+				'name' => 'modification_id',
+				'type' => 'int(11)'
+			],
+			[
+				'name' => 'code',
+				'type' => 'varchar(64)'
+			],
+			[
+				'name' => 'xml',
+				'type' => 'mediumtext'
+			],
+			[
+				'name' => 'date_added',
+				'type' => 'datetime'
+			]
+		],
+		'primary' => [
+			'backup_id'
+		],
+		'engine'  => 'InnoDB',
+		'charset' => 'utf8mb4',
+		'collate' => 'utf8mb4_unicode_ci'
+	];
+
+	$tables[] = [
 		'name'  => 'module',
 		'field' => [
 			[

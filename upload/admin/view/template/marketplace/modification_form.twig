@@ -1,0 +1,233 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="button" id="button-update" data-bs-toggle="tooltip" title="{{ button_update }}" class="btn btn-success"><i class="fa-solid fa-check"></i></button>
+        <button type="submit" form="form-modification" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_form }}</div>
+      <div class="card-body">
+        <form id="form-modification" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <ul class="nav nav-tabs">
+            <li class="nav-item"><a href="#tab-general" data-bs-toggle="tab" class="nav-link active">{{ tab_general }}</a></li>
+            <li class="nav-item"><a href="#tab-backup" data-bs-toggle="tab" class="nav-link">{{ tab_backup }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="tab-general" class="tab-pane active">
+              <div class="row mb-3 required">
+                <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+                  <div id="error-name" class="invalid-feedback"></div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="input-xml" class="col-sm-2 col-form-label">{{ entry_xml }}</label>
+                <div class="col-sm-10">
+                  <textarea name="xml" placeholder="{{ entry_xml }}" rows="25" id="input-xml" class="form-control codemirror">{{ xml }}</textarea>
+                </div>
+              </div>
+            </div>
+            <div id="tab-backup" class="tab-pane">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>{{ column_id }}</th>
+                      <th>{{ column_code }}</th>
+                      <th>{{ column_date_added }}</th>
+                      <th class="text-end">{{ column_restore }} <button type="button" id="button-history" value="{{ history }}" data-bs-toggle="tooltip" title="{{ button_history }}" class="btn btn-light"><i class="fa-regular fa-trash-can"></i></button></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if backups %}
+                      {% for backup in backups %}
+                        <tr>
+                          <td>{{ backup.backup_id }}</td>
+                          <td>{{ backup.code }}</td>
+                          <td>{{ backup.date_added }}</td>
+                          <td class="text-end"><button type="button" value="{{ backup.restore }}" data-bs-toggle="tooltip" title="{{ button_restore }}" class="btn btn-primary button-restore"><i class="fa-solid fa-share-from-square"></i></button></td>
+                        </tr>
+                      {% endfor %}
+                    {% else %}
+                      <tr>
+                        <td class="text-center" colspan="4">{{ text_no_results }}</td>
+                      </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<link href="view/javascript/codemirror/lib/codemirror.css" rel="stylesheet"/>
+<link href="view/javascript/codemirror/theme/monokai.css" rel="stylesheet"/>
+<script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script>
+<script type="text/javascript" src="view/javascript/codemirror/mode/xml/xml.js"></script>
+<script type="text/javascript" src="view/javascript/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script type="text/javascript" src="view/javascript/codemirror/addon/edit/matchbrackets.js"></script>
+<script type="text/javascript"><!--
+// Initialize codemirrror
+var codemirror = CodeMirror.fromTextArea(document.getElementById('input-xml'), {
+    mode: 'text/xml',
+    lineNumbers: true,
+    lineWrapping: true,
+    autofocus: false,
+    matchBrackets: true,
+    theme: 'monokai'
+});
+
+codemirror.setSize('100%', '600px');
+
+$('#form-modification').on('submit', function() {
+    codemirror.save();
+});
+
+function alert_response(json) {
+    $('.alert-dismissible').remove();
+
+    if (json['error']) {
+        $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+    }
+
+    if (json['success']) {
+        $('#alert').prepend('<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+    }
+}
+
+function refresh(element) {
+    $.ajax({
+        url: '{{ refresh }}',
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        complete: function() {
+            $(element).button('reset');
+        },
+        success: function(json) {
+            alert_response(json);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+}
+
+$('#button-update').on('click', function(e) {
+    e.preventDefault();
+
+    var element = this;
+
+    codemirror.save();
+
+    $.ajax({
+        url: $('#form-modification').attr('action'),
+        type: 'post',
+        data: $('#form-modification').serialize(),
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        success: function(json) {
+            $('.alert-dismissible').remove();
+            $('.is-invalid').removeClass('is-invalid');
+            $('.invalid-feedback').removeClass('d-block');
+
+            if (json['error']) {
+                if (json['error']['warning']) {
+                    $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error']['warning'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+                }
+
+                for (key in json['error']) {
+                    $('#error-' + key.replaceAll('_', '-')).html(json['error'][key]).addClass('d-block');
+                    $('#input-' + key.replaceAll('_', '-')).addClass('is-invalid');
+                }
+
+                $(element).button('reset');
+            }
+
+            if (json['success']) {
+                refresh(element);
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(element).button('reset');
+
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$('.button-restore').on('click', function(e) {
+    e.preventDefault();
+
+    var element = this;
+
+    $.ajax({
+        url: this.value,
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        success: function(json) {
+            alert_response(json);
+
+            if (json['success']) {
+                location.reload();
+            } else {
+                $(element).button('reset');
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(element).button('reset');
+
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$('#button-history').on('click', function(e) {
+    e.preventDefault();
+
+    var element = this;
+
+    $.ajax({
+        url: this.value,
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        success: function(json) {
+            alert_response(json);
+
+            if (json['success']) {
+                location.reload();
+            } else {
+                $(element).button('reset');
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(element).button('reset');
+
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+//--></script>
+{{ footer }}

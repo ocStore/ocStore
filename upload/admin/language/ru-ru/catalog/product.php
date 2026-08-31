@@ -1,0 +1,137 @@
+<?php
+// Heading
+$_['heading_title']              = 'Товары';
+
+// Text
+$_['text_success']               = 'Готово: Вы изменили товары!';
+$_['text_variant']               = 'Обратите внимание, что поскольку это вариант товара, вы должны переопределить данные <a href="%s" target="_blank" class="alert-link">основного товара</a>. В противном случае данные будут заменены данными <a href="%s" target="_blank" class="alert-link">основного товара</a> при сохранении.';
+$_['text_list']                  = 'Список товаров';
+$_['text_add']                   = 'Добавить товар';
+$_['text_edit']                  = 'Редактировать товар';
+$_['text_variant_add']           = 'Добавить вариант';
+$_['text_model']                 = 'Модель';
+$_['text_price']                 = 'Цена';
+$_['text_stock']                 = 'Наличие';
+$_['text_specification']         = 'Характеристики';
+$_['text_filter']                = 'Фильтр';
+$_['text_default']               = 'По умолчанию';
+$_['text_keyword']               = 'Не используйте пробелы, вместо этого заменяйте пробелы на - и убедитесь, что SEO-URL является уникальным.';
+$_['text_option_add']            = 'Добавить опцию';
+$_['text_option_value']          = 'Значение опции';
+$_['text_select']                = 'Выпадающий список';
+$_['text_radio']                 = 'Радиокнопка';
+$_['text_checkbox']              = 'Флажок';
+$_['text_input']                 = 'Поле ввода';
+$_['text_text']                  = 'Текст';
+$_['text_textarea']              = 'Многострочное поле';
+$_['text_file']                  = 'Файл';
+$_['text_date']                  = 'Дата';
+$_['text_datetime']              = 'Дата &amp; Время';
+$_['text_time']                  = 'Время';
+$_['text_fixed']                 = 'Фиксированная сумма';
+$_['text_subtract']              = 'Вычитать';
+$_['text_percentage']            = 'Процент';
+$_['text_image']                 = 'Изображение';
+$_['text_image_additional']      = 'Дополнительные изображения';
+$_['text_reward']                = 'Баллы покупки';
+$_['text_points']                = 'Баллы бонусной программы';
+$_['text_from']                  = 'С';
+$_['text_to']                    = 'По';
+$_['text_subscription_trial']    = '%s каждые %d %s(ов) для %d платежей(а) затем ';
+$_['text_subscription_duration'] = '%s каждые %d %s(ов) для %d платежей(а)';
+$_['text_subscription_cancel']   = '%s каждые %d %s(ов) до отмены';
+$_['text_day']                   = 'день';
+$_['text_week']                  = 'неделя';
+$_['text_semi_month']            = 'полмесяца';
+$_['text_month']                 = 'месяц';
+$_['text_year']                  = 'год';
+$_['text_report']                = 'Отчёты';
+
+// Column
+$_['column_name']                = 'Название товара';
+$_['column_model']               = 'Модель';
+$_['column_image']               = 'Изображение';
+$_['column_price']               = 'Цена';
+$_['column_quantity']            = 'Количество';
+$_['column_status']              = 'Статус';
+$_['column_ip']                  = 'IP';
+$_['column_store']               = 'Магазин';
+$_['column_country']             = 'Страна';
+$_['column_date_added']          = 'Дата добавления';
+$_['column_action']              = 'Действие';
+
+// Entry
+$_['entry_name']                 = 'Название товара';
+$_['entry_description']          = 'Описание';
+$_['entry_meta_title']           = 'Мета-заголовок';
+$_['entry_meta_keyword']         = 'Мета-ключевые слова';
+$_['entry_meta_description']     = 'Мета-описание';
+$_['entry_store']                = 'Магазины';
+$_['entry_keyword']              = 'Ключевое слово';
+$_['entry_model']                = 'Модель';
+$_['entry_product_code']         = 'Коды товара';
+$_['entry_location']             = 'Расположение';
+$_['entry_shipping']             = 'Требуется доставка';
+$_['entry_manufacturer']         = 'Производитель';
+$_['entry_date_available']       = 'Дата доступности';
+$_['entry_quantity']             = 'Количество';
+$_['entry_minimum']              = 'Минимальное количество';
+$_['entry_stock_status']         = 'Статус отсутствия на складе';
+$_['entry_price']                = 'Цена';
+$_['entry_trial_price']          = 'Пробная цена';
+$_['entry_tax_class']            = 'Налоговый класс';
+$_['entry_points']               = 'Баллы';
+$_['entry_subtract']             = 'Вычитать со склада';
+$_['entry_weight_class']         = 'Класс веса';
+$_['entry_weight']               = 'Вес';
+$_['entry_dimension']            = 'Размеры (Д x Ш x В)';
+$_['entry_length_class']         = 'Класс длины';
+$_['entry_length']               = 'Длина';
+$_['entry_width']                = 'Ширина';
+$_['entry_height']               = 'Высота';
+$_['entry_option']               = 'Опция';
+$_['entry_option_value']         = 'Значение опции';
+$_['entry_customer_group']       = 'Группа покупателей';
+$_['entry_special']              = 'Специальное предложение';
+$_['entry_type']                 = 'Тип';
+$_['entry_date_start']           = 'Дата начала';
+$_['entry_date_end']             = 'Дата окончания';
+$_['entry_priority']             = 'Приоритет';
+$_['entry_attribute']            = 'Атрибут';
+$_['entry_attribute_group']      = 'Группа атрибутов';
+$_['entry_image']                = 'Изображение';
+$_['entry_text']                 = 'Текст';
+$_['entry_required']             = 'Обязательное';
+$_['entry_status']               = 'Статус';
+$_['entry_sort_order']           = 'Порядок сортировки';
+$_['entry_category']             = 'Категории';
+$_['entry_filter']               = 'Фильтры';
+$_['entry_download']             = 'Загрузки';
+$_['entry_related']              = 'Связанные товары';
+$_['entry_tag']                  = 'Теги товара';
+$_['entry_reward']               = 'Баллы бонусной программы';
+$_['entry_layout']               = 'Переопределение макета';
+$_['entry_subscription']         = 'План подписки';
+
+// Help
+$_['help_tag']                   = 'Через запятую';
+$_['help_minimum']               = 'Принудительный минимальный заказанный объём';
+$_['help_stock_status']          = 'Статус, отображаемый при отсутствии товара на складе';
+$_['help_manufacturer']          = '(Автодополнение)';
+$_['help_category']              = '(Автодополнение)';
+$_['help_filter']                = '(Автодополнение)';
+$_['help_download']              = '(Автодополнение)';
+$_['help_related']               = '(Автодополнение)';
+$_['help_option']                = '(Автодополнение)';
+$_['help_points']                = 'Количество баллов, необходимых для покупки этого товара. Если вы не хотите, чтобы этот товар покупался за баллы, оставьте значение 0.';
+
+// Error
+$_['error_warning']              = 'Внимание: Пожалуйста, внимательно проверьте форму на наличие ошибок!';
+$_['error_permission']           = 'Внимание: У вас нет прав для изменения товаров!';
+$_['error_name']                 = 'Название товара должно содержать более 1 и менее 255 символов!';
+$_['error_meta_title']           = 'Мета-заголовок должен содержать более 1 и менее 255 символов!';
+$_['error_model']                = 'Модель товара должна содержать более 1 и менее 64 символов!';
+$_['error_keyword']              = 'SEO-URL должен содержать от 1 до 64 символов!';
+$_['error_keyword_exists']       = 'SEO-URL должен быть уникальным!';
+$_['error_keyword_character']    = 'Ключевое слово может содержать только символы a-z, 0-9, - и _!';
+$_['error_required']             = 'Требуется %s!';
